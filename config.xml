@@ -21,8 +21,6 @@
     <gap:config-file platform="android" parent="/manifest">
         <application android:theme="@android:style/Theme.NoTitleBar"></application>
     </gap:config-file>
-
-    <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0" />
     <plugin name="cordova-plugin-imagepicker" source="npm" />
     <gap:plugin name="org.apache.cordova.camera" source="npm" />
