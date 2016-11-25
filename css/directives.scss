@@ -1,0 +1,61 @@
+// sourceMap true
+$darkblue: #32475a;
+$dark: #313131;
+$lightblue: #11c1f3;
+$lightgrey: #e6e7e6;
+
+.de-select {
+    border-bottom: 1px solid #e8e8e8;
+    border-top: 1px solid #e8e8e8;
+    margin-top: 10px;
+
+    .de-input {
+        background: #fff url('../img/directives/dropdown.png') no-repeat center right 10px;
+
+        &.de-item {
+            border-top: none;
+            height: 39px;
+        }
+    }
+
+    .de-container {
+        height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: height 0.3s ease-in, opacity 0.3s ease-in;
+    }
+
+    .de-item {
+        height: 34px;
+        width: 100%;
+        padding: 0 12px;
+        line-height: 34px;
+        border-top: 1px solid #aaa;
+    }
+
+    &.de-active {
+        // .de-input {
+        //     color: #c9c9c9;
+        // }
+        .de-container {
+            opacity: 1;
+            transition: height 0.3s ease-out, opacity 0.3s ease-in;
+        }
+    }
+}
+
+.pp-date {
+    background: #fff url("../img/forms/calendar.png") no-repeat center right 15px;
+
+    input {
+        background-color: transparent !important;
+    }
+}
+
+.pp-time {
+    background: #fff url("../img/forms/time.png") no-repeat center right 15px;
+
+    input {
+        background-color: transparent !important;
+    }
+}

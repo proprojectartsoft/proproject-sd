@@ -1,0 +1,57 @@
+<ion-view hide-back-button="true" cache-view="false" overflow-scroll="true">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('ohs')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">OH and S</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-form sd-form-withfields">
+        <div class="sd-group">
+            OH and S
+        </div>
+        <div class="sd-container">
+            <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
+                <div class="sd-title">Type</div>
+                <de-select de-options="vm.type" de-title="vm.local.type"></de-select>
+            </div>
+            <label class="sd-label">
+                <div class="sd-title">Type</div>
+                <input placeholder="No Data" ng-model="vm.type.name">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Reference</div>
+                <input ng-disabled="(vm.diaryId) && (!vm.editMode)" placeholder="Tap to add reference" ng-model="vm.ref">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Task completed</div>
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.task_completed" class="checkbox-calm">
+                    <span ng-if="vm.task_completed">Yes</span>
+                    <span ng-if="!vm.task_completed">No</span>
+                </ion-checkbox>
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Form to be completed</div>
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.form_complete" class="checkbox-calm">
+                    <span ng-if="vm.form_complete">Yes</span>
+                    <span ng-if="!vm.form_complete">No</span>
+                </ion-checkbox>
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Action required</div>
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.action_required" class="checkbox-calm">
+                    <span ng-if="vm.action_required">Yes</span>
+                    <span ng-if="!vm.action_required">No</span>
+                </ion-checkbox>
+            </label>
+            <label class="sd-label" ng-if="vm.action_required">
+                <input ng-disabled="(vm.diaryId) && (!vm.editMode)"  placeholder="Tap to add action message" ng-model="vm.action_message">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Comment</div>
+                <input ng-disabled="(vm.diaryId) && (!vm.editMode)" placeholder="Tap to add comment" ng-model="vm.comment">
+            </label>
+        </div>
+        <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.save()">
+            Save
+        </button>
+    </ion-content>
+</ion-view>

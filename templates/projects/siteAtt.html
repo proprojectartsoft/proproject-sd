@@ -1,0 +1,88 @@
+<ion-view hide-back-button="true" cache-view="false">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Site Attendance</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader has-tabs sd-list">
+        <ion-list ng-if="vm.staff" can-swipe="true">
+            <ion-item ng-repeat="item in vm.staffList track by $index" ng-click="vm.go('staffMember',$index)" class="sd-item-tile">
+                <div class="sd-group">
+                  <span class="sd-tile">
+                    {{item.first_name | limitTo:1 | uppercase}}
+                    {{item.last_name | limitTo:1 | uppercase}}
+                  </span>
+                    <div class="sd-content">
+                        <div class="sd-title">{{item.first_name}} {{item.last_name}}</div>
+                        <div class="sd-description">
+                            {{item.company_name}}&nbsp;|&nbsp;{{item.trade}}
+                            <br/>
+                            Start:{{item.start_time}}&nbsp;|&nbsp;Finish:{{item.finish_time}}&nbsp;|&nbsp;Total:{{item.total_time}}
+                        </div>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div ng-if="!vm.staffList.length && vm.staff" class="sd-nodata">
+            <span>There are no staff members added</span>
+        </div>
+        <ion-list ng-if="vm.contractors" can-swipe="true">
+            <ion-item ng-repeat="item in vm.companyList track by $index" ng-click="vm.go('contractor',$index)" class="sd-item-tile">
+                <div class="sd-group">
+                  <span class="sd-tile">
+                    {{item.first_name | limitTo:1 | uppercase}}
+                    {{item.last_name | limitTo:1 | uppercase}}
+                  </span>
+                    <div class="sd-content">
+                        <div class="sd-title">{{item.first_name}} {{item.last_name}}</div>
+                        <div class="sd-description">
+                            {{item.companyName}}&nbsp;|&nbsp;{{item.trade}}
+                            <br/>
+                            Start:{{item.start}}&nbsp;|&nbsp;Finish:{{item.finish}}&nbsp;|&nbsp;Total:{{item.total}}
+                        </div>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div ng-if="!vm.companyList.length && vm.contractors" class="sd-nodata">
+            <span>There are no contractors added</span>
+        </div>
+        <ion-list ng-if="vm.visitors" can-swipe="true">
+            <ion-item ng-repeat="item in vm.visitorList" class="sd-item-tile">
+                <div class="sd-group">
+                  <span class="sd-tile">
+                    {{item.first_name | limitTo:1 | uppercase}}
+                    {{item.last_name | limitTo:1 | uppercase}}
+                  </span>
+                    <div class="sd-content">
+                        <div class="sd-title">{{item.first_name}} {{item.last_name}}</div>
+                        <div class="sd-description">{{item.note}}</div>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div ng-if="!vm.visitorList.length && vm.visitors" class="sd-nodata">
+            <span>There are no visitors added</span>
+        </div>
+    </ion-content>
+    <span class="sd-actionbtnATT" ng-if="(vm.staff) && ((!vm.diaryId)||(vm.editMode))" ng-click="vm.go('staffMember', 'create')">
+        <i class="ion-ios-plus-empty"></i>
+    </span>
+    <span class="sd-actionbtnATT" ng-if="(vm.contractors) && ((!vm.diaryId) ||(vm.editMode))" ng-click="vm.go('contractor', 'create')">
+        <i class="ion-ios-plus-empty"></i>
+    </span>
+    <span class="sd-actionbtnATT" ng-if="(vm.visitors) && ((!vm.diaryId) ||(vm.editMode))" ng-click="vm.go('visitors', 'create')">
+        <i class="ion-ios-plus-empty"></i>
+    </span>
+    <div class="tabs tabs-calm">
+        <a class="tab-item" ng-class="{'active': vm.staff}" ng-click="vm.show('staff')">
+            Staff
+        </a>
+        <a class="tab-item" ng-class="{'active': vm.contractors}" ng-click="vm.show('contractors')">
+            Contractors
+        </a>
+        <a class="tab-item" ng-class="{'active': vm.visitors}" ng-click="vm.show('visitors')">
+            Visitors
+        </a>
+    </div>
+</ion-view>

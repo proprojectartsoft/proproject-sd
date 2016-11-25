@@ -1,0 +1,28 @@
+<ion-view hide-back-button="true" cache-view="false">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary',item.id)">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Incidents</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-list-bubble">
+        <ion-list>
+            <ion-item ng-repeat="incident in vm.incidents track by $index" ng-click="vm.go('incident', $index)">
+                    <div class="sd-title">{{incident.type.name}}</div>
+                    <div class="sd-description">
+                        <span>{{incident.description}}</span>
+                    </div>
+                    <div class="sd-description">
+                        <span>{{incident.quantity}}
+                            {{incident.unit_name}}</span>
+                        <span>{{incident.action_required.name}}</span>
+                    </div>
+            </ion-item>
+        </ion-list>
+        <div ng-if="!vm.incidents.length" class="sd-nodata">
+            <span>No incidents</span>
+        </div>
+    </ion-content>
+    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ds-actionbtn" ng-click="vm.go('incident', 'create')">
+        <i class="ion-ios-plus-empty"></i>
+    </span>
+</ion-view>

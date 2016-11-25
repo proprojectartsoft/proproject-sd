@@ -1,0 +1,295 @@
+// sourceMap true
+$darkblue: #32475a;
+$darkblueactive: #2d3f4e;
+$dark: #313131;
+$lightblue: #11c1f3;
+$lightgrey: #eaeaea;
+
+.bar-subheader.item-button-left {
+    padding-left: 18px;
+
+    .ion-ios-arrow-left {
+        font-size: 30px;
+        line-height: 36px;
+    }
+}
+.mt-0{
+  margin-top:0px !important;
+  margin-bottom: 0px !important;
+}
+.tabs {
+    background-color: $darkblue;
+    background-image: none;
+
+    .tab-item {
+        opacity: 1;
+
+        img {
+            height: 30px;
+            margin-top: 8px;
+        }
+
+        &.pp-active {
+            background-color: $darkblueactive;
+            transition: background-color 0.2s ease-in;
+        }
+    }
+}
+
+.bar-subheader {
+    .title {
+        text-align: left;
+        padding-left: 10px;
+    }
+}
+
+.pp-tablist {
+    padding: 4px;
+
+    .item {
+        margin-bottom: 4px;
+        border-radius: 3px;
+        border-left: 4px solid $lightblue;
+        background-color: #fff;
+        padding: 5px 10px 7px;
+
+        .pp-title {
+            font-weight: 400;
+            margin-bottom: 2px;
+        }
+
+        .pp-tag {
+            background-color: $lightblue;
+            padding: 1px 4px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #fff;
+        }
+    }
+}
+.sd-projects .item{
+  font-size:18px;
+}
+
+.pp-form {
+    padding: 4px;
+
+    .item {
+        padding: 0;
+        border: none;
+        background-color: transparent !important;
+        margin-bottom: 4px;
+
+        .pp-title {
+            max-width: calc(100% - 20px);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .pp-description {
+            max-width: calc(100% - 20px);
+            white-space: pre-line;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        &.pp-active {
+            .pp-group {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                position: relative;
+
+                &:after {
+                    content: '';
+                    z-index: 9;
+                    position: absolute;
+                    bottom: -8px;
+                    left: 12px;
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 9px 7px 2px 7px;
+                    border-color: $lightblue transparent transparent transparent;
+                }
+            }
+        }
+    }
+
+    .pp-group {
+        border-radius: 3px;
+        border-color: $lightblue;
+        padding: 5px 10px 7px;
+        background-color: $lightblue!important;
+        color: #fff;
+        background: transparent url("../img/forms/down-chevron.png") no-repeat center right 10px;
+    }
+
+    .pp-group-container {
+        background-color: #fff;
+
+        .pp-field {
+            background-color: $lightgrey;
+            padding: 5px 12px;
+            position: relative;
+
+            .pp-title {
+                font-weight: 100;
+            }
+
+            .pp-description {
+                // color: #8e8e8e;
+                font-weight: 100;
+                font-size: 15px;
+            }
+
+            &:after {
+                content: '';
+                z-index: 9;
+                position: absolute;
+                bottom: -8px;
+                left: 12px;
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 9px 7px 2px 7px;
+                border-color: $lightgrey transparent transparent transparent;
+            }
+        }
+
+        input {
+            width: 100%;
+            padding: 0 12px;
+            font-weight: 100;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 28px;
+            padding: 0;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 9px 12px;
+            height: 34px;
+            resize: none;
+            font-weight: 100;
+        }
+
+        select {
+            width: 100%;
+            border: none;
+            height: 34px;
+        }
+    }
+}
+
+field > div {
+    border-bottom: 1px solid $lightgrey;
+}
+
+field .pp-input {
+    width: 100%;
+    padding: 0 12px;
+    height: 34px;
+    line-height: 34px;
+}
+
+field label.pp-checkbox:nth-child(1),
+field label.pp-checkbox:nth-child(2) {
+    border-top: none;
+}
+
+.pp-checkbox {
+    width: 100%;
+    display: block;
+    border-top: 1px solid #aaa;
+
+    .pp-field {
+        width: calc(100% - 50px);
+        display: inline-block;
+        background-color: #fff !important;
+        vertical-align: middle;
+        padding: 5px 0 5px 12px !important;
+
+        .pp-title {
+            max-width: 100%;
+        }
+
+        &:after {
+            content: none !important;
+        }
+    }
+
+    .checkbox input:after,
+    .checkbox-icon:after {
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+    }
+
+    .checkbox input:before,
+    .checkbox-icon:before {
+        border-color: #11c1f3;
+    }
+
+    .checkbox input:checked + .checkbox-icon:before,
+    .checkbox input:checked:before {
+        background-color: #11c1f3;
+    }
+
+    .checkbox input:before,
+    .checkbox-icon:before {
+        -webkit-transition: background-color 0.1s ease-in;
+        transition: background-color 0.1s ease-in;
+    }
+
+    .checkbox {
+        vertical-align: middle;
+    }
+}
+
+.sd-projects {
+
+    .item {
+        padding: 13px;
+    }
+
+    .sd-title {
+        font-size: 18px;
+        font-weight: 100;
+    }
+
+    .sd-description {
+        padding-top: 5px;
+        vertical-align: middle;
+
+        .wrench{
+          font-size: 16px;
+        }
+
+        .check{
+          font-size: 26px;
+        }
+
+        img {
+            padding-right: 5px;
+            vertical-align: middle;
+        }
+
+        i {
+            padding-right: 5px;
+            font-size: 21px;
+            vertical-align: middle;
+        }
+
+        span {
+            font-size: 15px;
+            font-weight: 300;
+            vertical-align: middle;
+            padding-right: 30px;
+        }
+    }
+}

@@ -1,0 +1,52 @@
+<ion-view hide-back-button="true" cache-view="false">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('project')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Side diary name</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-form">
+        <ion-item ng-click="vm.go('weather')" class="sd-group">
+            Weather
+        </ion-item>
+        <ion-item ng-click="vm.go('siteAttendance')" class="sd-group">
+            Site Attendance
+        </ion-item>
+        <ion-item ng-click="vm.go('materials')" class="sd-group">
+            Plant and materials used
+        </ion-item>
+        <ion-item ng-click="vm.go('contractNotes')" class="sd-group">
+            Contract notes
+        </ion-item>
+        <ion-item ng-click="vm.go('sitenotes')" class="sd-group">
+            Site notes
+        </ion-item>
+        <ion-item class="sd-group" ng-click="vm.go('goods')">
+            Goods received/Plant Off-Hired
+        </ion-item>
+        <ion-item ng-click="vm.go('incidents')" class="sd-group">
+            Incidents
+        </ion-item>
+        <ion-item ng-click="vm.go('ohs')" class="sd-group">
+            OH and S
+        </ion-item>
+        <ion-item class="sd-group sd-comments text-white" ng-click="vm.go('comments')">
+            Comments
+        </ion-item>
+        <ion-item ng-click="vm.go('attachements')" class="sd-group">
+            Attachments
+        </ion-item>
+        <ion-item ng-if="vm.enableCreate" class="button button-bar pp-formbtn" ng-click="vm.saveCreate()">
+            Create
+        </ion-item>
+        <ion-item ng-if="!vm.enableCreate && !vm.edit" class="button button-bar pp-formbtn" ng-click="vm.toggle()">
+            Edit
+        </ion-item>
+        <ion-item ng-if="!vm.enableCreate && vm.edit" class="button button-bar pp-formbtn" ng-click="vm.saveEdit()">
+            Save
+        </ion-item>
+        <ion-item ng-if="!vm.enableCreate && vm.edit" class="button button-bar pp-formbtn" ng-click="vm.toggle()">
+            Cancel
+        </ion-item>
+    </ion-content>
+
+</ion-view>

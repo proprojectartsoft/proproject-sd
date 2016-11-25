@@ -1,0 +1,207 @@
+// sourceMap true
+$lightblue: #11c1f3;
+
+.sd-list {
+    padding: 6px 5px;
+
+    .sd-nodata {
+        text-align: center;
+        padding-top: 50%;
+        font-size: 25px !important;
+        font-weight: 100;
+        color: #7b8b93;
+    }
+
+    .sd-tile {
+        background-color: crimson;
+        width: 50px;
+        display: inline-block;
+        height: 50px;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 23px !important;
+        color: #fff;
+        font-weight: 100;
+        padding-top: 15px;
+    }
+
+    .item {
+        padding: 0;
+        background-color: #ffffff;
+        border: none;
+        margin-bottom: 5px;
+        border-radius: 3px;
+
+        .sd-group {
+            border-left: 4px $lightblue solid;
+            padding: 5px 10px;
+            border-radius: 2px;
+
+            .sd-title {
+                font-size: 18px;
+                color: #333;
+                margin-bottom: 5px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                margin: 3px 0 2px;
+            }
+
+            .sd-description {
+                margin-bottom: 2px;
+
+                span {
+                    font-size: 14px;
+                    vertical-align: middle;
+                    margin-right: 5px;
+                    font-weight: 400;
+                }
+
+                i {
+                    font-size: 17px;
+                    vertical-align: middle;
+                }
+
+                img {
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+}
+
+.sd-item-tile {
+    .item-content {
+        padding: 0;
+    }
+
+    .sd-group {
+        padding-left: 5px !important;
+
+        .sd-tile {
+            background-color: $lightblue;
+        }
+
+        .sd-content {
+            width: calc(100% - 55px);
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 3px;
+
+            .sd-description {
+                font-size: 15px;
+            }
+        }
+    }
+}
+
+.sd-form {
+    padding: 6px 5px;
+
+    .sd-nodata {
+        text-align: center;
+        padding-top: 50%;
+        font-size: 25px !important;
+        font-weight: 100;
+        color: #7b8b93;
+
+        span {
+            display: block;
+            font-size: 30px !important;
+            font-weight: 100;
+            line-height: 37px;
+        }
+    }
+
+    .item-checkbox {
+        font-weight: 100;
+    }
+
+    .sd-group {
+        border: none;
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 12px 10px;
+        color: #fff;
+        background: $lightblue url('../img/forms/right-chevron.png') no-repeat right 10px center;
+
+        &.sd-comments {
+            background: $lightblue url('../img/action/comments.png') no-repeat right 10px center;
+        }
+    }
+
+    &.sd-form-withfields {
+        .sd-group {
+            margin-bottom: 0;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            background: $lightblue url('../img/forms/down-chevron.png') no-repeat right 10px center;
+            font-size: 18px;
+        }
+
+        .sd-container {
+            padding: 1px;
+            background-color: #fff;
+
+            .sd-filler {
+                height: 40px;
+                border-top: 1px solid #e8e8e8;
+                padding: 10px 14px;
+            }
+
+            .sd-label {
+                .sd-line {
+                    height: 40px;
+                    padding: 10px 15px;
+                }
+
+                .de-item {
+                    height: 40px;
+                    border-top: 1px solid #e8e8e8;
+                    padding: 4px 14px;
+                }
+
+                .sd-title {
+                    font-weight: 100;
+                    background: #e8e8e8;
+                    line-height: 30px;
+                    color: #333333;
+                    font-size: 16px;
+                    margin: 0 !important;
+                    padding: 5px 15px;
+                    position: relative;
+
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        bottom: -8px;
+                        left: 10px;
+                        width: 0;
+                        height: 0;
+                        border-style: solid;
+                        border-width: 8px 8px 0 8px;
+                        border-color: #e8e8e8 transparent transparent transparent;
+                    }
+                }
+
+                input {
+                    background: #fff;
+                    padding: 15px;
+                    color: #333333;
+                    width: 90%;
+                    border: none;
+                }
+
+                .ion-ios-paperplane {
+                    font-size: 22px;
+                    height: 40px;
+                    width: 40px;
+                }
+
+                .de-select {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+}

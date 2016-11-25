@@ -1,0 +1,72 @@
+<ion-view hide-back-button="true" cache-view="false" overflow-scroll="true">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Weather</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-form sd-form-withfields">
+        <div class="sd-group">
+            Weather
+        </div>
+        <div class="sd-container">
+          <label class="sd-label">
+              <div class="sd-title">Perfect weather</div>
+              <ion-checkbox ng-disabled="vm.diaryId && !vm.editMode" ng-model="vm.perfectWeather" class="checkbox-calm">
+                  <span ng-if="vm.perfectWeather">Yes</span>
+                  <span ng-if="!vm.perfectWeather">No</span>
+              </ion-checkbox>
+          </label>
+            <label class="sd-label">
+                <div class="sd-title">Maximum temperature</div>
+                <input ng-disabled="vm.diaryId && !vm.editMode" placeholder="Tap to add temperature" ng-model="vm.max_temp">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Minimum temperature</div>
+                <input ng-disabled="vm.diaryId && !vm.editMode" placeholder="Tap to add temperature" ng-model="vm.min_temp">
+            </label>
+            <div class="sd-label" ng-if="!vm.diaryId || vm.editMode">
+                <div class="sd-title">Morning</div>
+                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.morning" de-title="vm.morning"></de-select>
+            </div>
+            <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
+                <div class="sd-title">Morning</div>
+                <input disabled placeholder="Tap to add temperature" ng-model="vm.local.morning">
+            </label>
+            <div class="sd-label" ng-if="!vm.diaryId || vm.editMode">
+                <div class="sd-title">Midday</div>
+                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.midday" de-title="vm.midday"></de-select>
+            </div>
+            <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
+                <div class="sd-title">Midday</div>
+                <input disabled placeholder="Tap to add temperature" ng-model="vm.local.midday">
+            </label>
+            <div class="sd-label" ng-if="!vm.diaryId || vm.editMode">
+                <div class="sd-title">Afternoon</div>
+                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.afternoon" de-title="vm.afternoon"></de-select>
+            </div>
+            <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
+                <div class="sd-title">Afternoon</div>
+                <input disabled placeholder="Tap to add temperature" ng-model="vm.local.afternoon">
+            </label>
+            <div class="sd-label" ng-if="!vm.diaryId || vm.editMode">
+                <div class="sd-title">Evening</div>
+                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.evening" de-title="vm.evening"></de-select>
+            </div>
+            <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
+                <div class="sd-title">Evening</div>
+                <input disabled placeholder="Tap to add temperature" ng-model="vm.local.evening">
+            </label>
+            <div class="sd-label" ng-if="!vm.diaryId || vm.editMode">
+                <div class="sd-title">On and off</div>
+                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.on_and_off" de-title="vm.onOff"></de-select>
+            </div>
+            <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
+                <div class="sd-title">On and Off</div>
+                <input disabled placeholder="Tap to add temperature" ng-model="vm.local.onOff">
+            </label>
+        </div>
+        <button ng-if="!vm.diaryId || vm.editMode" class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-click="vm.save()">
+            Save
+        </button>
+    </ion-content>
+</ion-view>

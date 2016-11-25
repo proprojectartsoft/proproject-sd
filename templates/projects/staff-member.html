@@ -1,0 +1,73 @@
+<ion-view hide-back-button="true" cache-view="false">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('siteAttendance')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Staff</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-form sd-form-withfields">
+        <div class="sd-group">
+            Add staff member
+        </div>
+        <div class="sd-container">
+            <label class="sd-label">
+                <div class="sd-title">Name</div>
+                <input placeholder="Tap to add name" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.local.data.staff_name">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Company</div>
+                <input  placeholder="Tap to add company" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.company_name">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Trade</div>
+                <input placeholder="Tap to add trade" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.trade">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Hourly rate</div>
+                <input placeholder="Tap to add hourly rate" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate">
+            </label>
+            <div class="sd-label">
+                <div class="sd-title">Start</div>
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}"  ng-model="vm.local.data.model_start" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
+                    <div class="sd-line" ng-if="vm.local.data.model_start">{{vm.local.data.model_start | date: 'HH:mm'}}</div>
+                    <div class="sd-line" ng-if="!vm.local.data.model_start">
+                        Tap here to select a date.</div>
+                </div>
+            </div>
+            <div class="sd-label">
+                <div class="sd-title">Break</div>
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}" ng-model="vm.local.data.model_break" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
+                    <div class="sd-line" ng-if="vm.local.data.model_break">{{vm.local.data.model_break | date: 'HH:mm'}}</div>
+                    <div class="sd-line" ng-if="!vm.local.data.model_break">
+                        Tap here to select a date.</div>
+                </div>
+            </div>
+            <div class="sd-label">
+                <div class="sd-title">Finish</div>
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}" ng-model="vm.local.data.model_finish" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
+                    <div class="sd-line" ng-if="vm.local.data.model_finish">{{vm.local.data.model_finish | date: 'HH:mm'}}</div>
+                    <div class="sd-line" ng-if="!vm.local.data.model_finish">
+                        Tap here to select a date.</div>
+                </div>
+            </div>
+            <label class="sd-label">
+                <div class="sd-title">Total</div>
+                <input disabled placeholder="Total" ng-model="vm.local.data.total_time">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Note</div>
+                <input placeholder="Tap to add note" ng-model="vm.local.data.note">
+            </label>
+            <div class="sd-label" ng-if="(!vm.diaryId) || (vm.editMode)">
+                <div class="sd-title">Absence</div>
+                <de-select de-options="vm.absence" de-title="vm.local.absence"></de-select>
+            </div>
+            <label ng-if="(vm.diaryId) && !(vm.editMode)" class="sd-label">
+                <div class="sd-title">Absence</div>
+                <input disabled placeholder="Tap to add note" ng-model="vm.local.data.absence">
+            </label>
+        </div>
+        <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.save()">
+            Save
+        </button>
+    </ion-content>
+</ion-view>

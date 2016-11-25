@@ -1,0 +1,32 @@
+<ion-view hide-back-button="true" cache-view="false">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Site Diary list</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-list ">
+        <ion-list can-swipe="true">
+            <ion-item ng-repeat="item in vm.local.list" class="sd-item-tile">
+                <div class="sd-group">
+                    <span class="sd-tile">
+                        {{vm.getInitials(item.first_name)}}
+                    </span>
+                    <div class="sd-content">
+                        <div class="sd-title">{{item.name}} <span class="sd-data">{{item.date | date}}</span></div>
+                        <div class="sd-description">{{item.comment}}</div>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div ng-if="!vm.local.list.length" class="sd-nodata">
+            <span>There are no messages</span>
+        </div>
+    </ion-content>
+    <div class="bar bar-footer sd-footer">
+        <input placeholder="Type comment here" ng-model="vm.local.comment" ng-keydown="vm.addComentAtEnter($event)">
+        <div class="sd-actions" ng-click="vm.addComment()">
+          <img src="img/action/send.png">
+        </div>
+
+    </div>
+</ion-view>

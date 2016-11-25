@@ -1,0 +1,32 @@
+<ion-view hide-back-button="true" cache-view="false" overflow-scroll="true">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary', id)">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Attachements</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-form sd-form-withfields">
+        <ion-item ng-repeat="item in vm.pictures" ng-click="go(item)">
+            <span class="sd-img">
+                <img ng-src="{{item.url}}">
+            </span>
+            <h3>
+                <div>{{item.title}}</div>
+                <div class="sd-tags">Tags</div>
+                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis arcu tortor, efficitur molestie tellus nec, luctus bibendum ipsum. Maecenas id nunc dapibus, accumsan massa vitae, auctor lorem. Sed malesuada quam id luctus condimentum. Proin a
+                    porttitor ipsum. Nulla at rhoncus ipsum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam eleifend imperdiet
+                    dapibus. Quisque pharetra lacus non convallis euismod.</div>
+            </h3>
+        </ion-item>
+        <div ng-if="!vm.pictures.length" class="sd-nodata">
+            <span>No attachments</span>
+        </div>
+
+    </ion-content>
+    <div class="bar sd-footer">
+        <span>Add Pictures</span>
+        <div class="sd-actions">
+            <img src="img/use/takePicture.png">
+            <img src="img/use/cameraRoll.png">
+        </div>
+    </div>
+</ion-view>

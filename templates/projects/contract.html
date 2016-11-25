@@ -1,0 +1,50 @@
+<ion-view hide-back-button="true" cache-view="false">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Contract notes</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-form sd-form-withfields">
+        <div class="sd-group">
+            Contract notes
+        </div>
+        <div class="sd-container">
+            <div class="sd-label">
+                <div class="sd-title">Instructions</div>
+                <input ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add instruction" ng-model="vm.input1">
+                <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+            </div>
+            <div class="sd-filler" ng-if="vm.instructions.comments.length > 0">
+              <span class="de-item"  ng-repeat="option in vm.instructions.comments track by $index">{{option}} ;  </span>
+            </div>
+            <div class="sd-filler" ng-if="vm.instructions.comments.length === 0 && vm.diaryId">
+              <span class="de-item">There is no instructions information</span>
+            </div>
+            <div class="sd-label">
+                <div class="sd-title">Extension time</div>
+                <input ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add extension time" ng-model="vm.input2">
+                <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+            </div>
+            <div class="sd-filler" ng-if="vm.extensions.comments.length > 0">
+              <span class="de-item"  ng-repeat="option in vm.extensions.comments track by $index">{{option}} ;  </span>
+            </div>
+            <div class="sd-filler" ng-if="vm.extensions.comments.length === 0 && vm.diaryId">
+              <span class="de-item">There is no extension time information</span>
+            </div>
+            <div class="sd-label">
+                <div class="sd-title">Variations</div>
+                <input ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add variations" ng-model="vm.input3">
+                <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+            </div>
+            <div class="sd-filler" ng-if="vm.variations.comments.length > 0">
+              <span class="de-item"  ng-repeat="option in vm.variations.comments track by $index">{{option}} ;  </span>
+            </div>
+            <div class="sd-filler" ng-if="vm.variations.comments.length === 0 && vm.diaryId">
+              <span class="de-item">There is no variation information</span>
+            </div>
+        </div>
+        <button ng-if="(!vm.diaryId) || (vm.editMode)" class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-click="vm.save()">
+            Save
+        </button>
+    </ion-content>
+</ion-view>

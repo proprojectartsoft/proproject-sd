@@ -1,0 +1,49 @@
+<ion-view hide-back-button="true" cache-view="false" overflow-scroll="true">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('materials')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Plant and materials used</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-form sd-form-withfields">
+        <div class="sd-group">
+            Plant and materials used
+        </div>
+        <div class="sd-container">
+            <label class="sd-label">
+                <div class="sd-title">Materials</div>
+                <input placeholder="Tap to add a material" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.material.name">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Description</div>
+                <input placeholder="Tap to add a description" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.description">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Quantity</div>
+                <input placeholder="Tap to add number of pieces" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.quantity">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Unit</div>
+                <input placeholder="Tap to add goods" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearchUnit()" ng-model="vm.material.unit_name">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Cost per unit</div>
+                <input placeholder="Tap to add cost per unit" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.unitCost">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Subtotal cost</div>
+                <input placeholder="Subtotal cost" disabled value="{{vm.material.quantity * vm.material.unitCost}}">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Tax</div>
+                <input placeholder="Tax" disabled ng-model="vm.material.tax">
+            </label>
+            <label class="sd-label">
+                <div class="sd-title">Total</div>
+                <input placeholder="Total cost" disabled value="{{(vm.material.quantity * vm.material.unitCost)+((vm.material.quantity * vm.material.unitCost) *(vm.material.tax/100))}}">
+            </label>
+        </div>
+        <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.save()">
+            Save
+        </button>
+    </ion-content>
+</ion-view>

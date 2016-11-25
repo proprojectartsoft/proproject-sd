@@ -1,0 +1,20 @@
+<ion-view hide-back-button="true" cache-view="false">
+    <ion-content class="has-header sd-list">
+        <ion-list>
+            <ion-item ng-repeat="project in vm.projects" ng-click="vm.go(project.id)">
+                <div class="sd-group">
+                    <div class="sd-title">{{project.project_no}}&nbsp;|&nbsp;{{project.name}}</div>
+                    <div class="sd-description">
+                        <img src="img/action/description.png">
+                        <span>{{project.date_of_last_completed || 'No date'}}</span>
+                        <i class="ion-ios-checkmark-empty"></i>
+                        <span>{{project.no_of_sd_completed}}</span>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    <span class="ds-actionbtn" ng-click="vm.showProject()">
+        <i class="ion-ios-plus-empty"></i>
+    </span>
+</ion-view>

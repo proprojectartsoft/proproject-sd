@@ -1,0 +1,51 @@
+<ion-view hide-back-button="true" cache-view="false">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Site Diary notes</span>
+        </button>
+    </div>
+    <ion-content class="has-subheader sd-form sd-form-withfields">
+        <div class="sd-group">
+            Site Diary notes
+        </div>
+        <div class="sd-container">
+            <div class="sd-label">
+                <div class="sd-title">Delays</div>
+                <input ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add delays" ng-model="vm.input1">
+                <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+
+            </div>
+            <div class="sd-filler" ng-if="vm.delays.length > 0">
+              <span class="de-item"  ng-repeat="option in vm.delays track by $index">{{option}};  </span>
+            </div>
+            <div class="sd-filler" ng-if="vm.delays.length === 0 && vm.diaryId">
+              <span class="de-item">{{vm.delays}}</span>
+            </div>
+            <div class="sd-label">
+                <div class="sd-title">Tools used</div>
+                <input ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add tools used"  ng-model="vm.input2">
+                <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+            </div>
+            <div class="sd-filler" ng-if="vm.tools.length > 0">
+              <span class="de-item"  ng-repeat="option in vm.tools track by $index">{{option}} ;  </span>
+            </div>
+            <div class="sd-filler" ng-if="vm.tools.length === 0 && vm.diaryId">
+              <span class="de-item">{{vm.tools}}</span>
+            </div>
+            <div class="sd-label">
+                <div class="sd-title">Materials requested</div>
+                <input ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add materials requested"   ng-model="vm.input3">
+                <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+            </div>
+            <div class="sd-filler" ng-if="vm.materials.length > 0">
+              <span class="de-item"  ng-repeat="option in vm.materials track by $index">{{option}} ;  </span>
+            </div>
+            <div class="sd-filler" ng-if="vm.materials.length === 0 && vm.diaryId">
+              <span class="de-item">{{vm.materials}}</span>
+            </div>
+        </div>
+        <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.save()">
+            Save
+        </button>
+    </ion-content>
+</ion-view>

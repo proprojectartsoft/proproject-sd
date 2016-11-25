@@ -1,0 +1,59 @@
+<ion-modal-view class='sd-createPopover'>
+    <ion-header-bar class="bar-header bar-calm item-button-left">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white" ng-click="vm.backDiary()"></button>
+        <div class="h1 title sd-title">Create new Site Diary</div>
+    </ion-header-bar>
+    <ion-content class="has-header">
+        <div>
+            <form class="list">
+                <div class="sd-input-container sd-mt-15">
+                    <input type="text" required="required">
+                    <strong></strong>
+                    <label class="label-bar">First name</label>
+                </div>
+                <div class="sd-input-container">
+                    <input type="text" required="required">
+                    <strong></strong>
+                    <label class="label-bar">Surname</label>
+                </div>
+                <div class="sd-input-container">
+                    <input type="text" required="required">
+                    <strong></strong>
+                    <label class="label-bar">Company name</label>
+                </div>
+                <div class="sd-input-container">
+                    <input type="number" required="required">
+                    <strong></strong>
+                    <label class="label-bar">Trade</label>
+                </div>
+                <div class="sd-input-container">
+                    <input type="number" required="required">
+                    <strong></strong>
+                    <label class="label-bar">Hourly rate</label>
+                </div>
+                <div ng-required="vmd.data.required" ion-datetime-picker time ng-model="vmd.data.model_start" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container">
+                    <div class="sd-input" ng-if="vmd.data.model_start">{{vmd.data.model_start | date: 'shortTime'}}</div>
+                    <div class="sd-input" ng-if="!vmd.data.model_start">
+                        Tap here to select a date.</div>
+                    <label class="label-bar">Start</label>
+                </div>
+                <div ng-required="vmd.data.required" ion-datetime-picker time ng-model="vmd.data.model_break" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container">
+                    <div class="sd-input" ng-if="vmd.data.model_break">{{vmd.data.model_break | date: 'shortTime'}}</div>
+                    <div class="sd-input" ng-if="!vmd.data.model_break">
+                        Tap here to select a date.</div>
+                    <label class="label-bar">Break</label>
+                </div>
+                <div ng-required="vmd.data.required" ion-datetime-picker time ng-model="vmd.data.model_finish" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container">
+                    <div class="sd-input" ng-if="vmd.data.model_finish">{{vmd.data.model_finish | date: 'shortTime'}}</div>
+                    <div class="sd-input" ng-if="!vmd.data.model_finish">
+                        Tap here to select a date.</div>
+                    <label class="label-bar">Finish</label>
+                </div>
+                <de-select de-options="vm.selectOpt"></de-select>
+                <div class="sd-total">
+                    <span>Total</span>
+                </div>
+            </form>
+        </div>
+        <div></ion-content>
+    </ion-modal-view>

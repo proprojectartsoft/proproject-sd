@@ -1,0 +1,22 @@
+<ion-view hide-back-button="true" cache-view="false">
+  <div class="bar bar-subheader bar-calm" ng-click="vm.go('goods')">
+      <button class="button button-icon ion-ios-arrow-left sd-text-white">
+          <span style="margin-left:10px;">Suplier</span>
+      </button>
+  </div>
+    <ion-content class="has-subheader sd-list">
+        <ion-list>
+            <ion-item ng-repeat="item in vm.goods  track by $index" ng-click="vm.go('item',vm.index, $index)">
+                <div class="sd-group">
+                    <div class="sd-title">{{item.details}}</div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div ng-if="!vm.goods.length" class="sd-nodata">
+            <span>There are no goods added</span>
+        </div>
+    </ion-content>
+    <span class="ds-actionbtn" ng-if="(!vm.diaryId) || (vm.editMode) ">
+      <i class="ion-ios-plus-empty" ng-click="vm.go('item',vm.index,'create')"></i>
+  </span>
+</ion-view>
