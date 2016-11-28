@@ -22,6 +22,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
+    console.log(vm.create.site_attendance.staffs);
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
@@ -39,7 +40,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             total_time: vm.create.site_attendance.staffs[vm.index].total_time,
             note: vm.create.site_attendance.staffs[vm.index].note,
             absence: vm.create.site_attendance.staffs[vm.index].absence.reason,
-            trade: vm.create.site_attendance.staffs[vm.index].trade,
+            trade: vm.create.site_attendance.staffs[vm.index].role,
             hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate
         }
     } else {
@@ -72,22 +73,51 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     function save() {
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
-        vm.local.total_time = vm.calcParse();
-        vm.member = {
-            first_name: vm.local.data.staff_name.split(" ", 2)[0],
-            last_name: vm.local.data.staff_name.split(" ", 2)[1],
-            company_name: vm.local.data.company_name,
-            role: vm.local.data.role,
-            hourly_rate: vm.local.data.hourly_rate,
-            start_time: vm.filteredStart,
-            break_time: vm.filteredBreak,
-            finish_time: vm.filteredFinish,
-            total_time: vm.local.total_time,
-            absence: vm.local.data.absence[0],
-            note: vm.local.data.note
-
+        if((vm.local.data.model_start) && (vm.local.data.model_finish)){
+          console.log('inhere');
+            vm.local.total_time = vm.calcParse();
         }
-        vm.create.site_attendance.staffs.push(vm.member);
+        if(vm.local.data.staff_name){
+          vm.member = {
+              first_name: vm.local.data.staff_name.split(" ", 2)[0],
+              last_name: vm.local.data.staff_name.split(" ", 2)[1],
+              company_name: vm.local.data.company_name,
+              role: vm.local.data.role,
+              hourly_rate: vm.local.data.hourly_rate,
+              start_time: vm.filteredStart,
+              break_time: vm.filteredBreak,
+              finish_time: vm.filteredFinish,
+              total_time: vm.local.data.total_time,
+              absence: vm.local.data.absence[0],
+              note: vm.local.data.note
+
+          }
+        } else {
+            vm.member = {
+              first_name: '',
+              last_name: '',
+              company_name: vm.local.data.company_name,
+              role: vm.local.data.role,
+              hourly_rate: vm.local.data.hourly_rate,
+              start_time: vm.filteredStart,
+              break_time: vm.filteredBreak,
+              finish_time: vm.filteredFinish,
+              total_time: vm.local.data.total_time,
+              absence: vm.local.data.absence[0],
+              note: vm.local.data.note
+            }
+        }
+
+        if(vm.editMode){
+          if(vm.index === 'create'){
+            vm.create.site_attendance.staffs.push(vm.member);
+          } else {
+            vm.create.site_attendance.staffs[vm.index] = vm.member;
+          }
+        } else {
+          vm.create.site_attendance.staffs.push(vm.member);
+        }
+
         localStorage.setObject('sd.diary.create', vm.create)
         vm.go('siteAttendance');
     }
@@ -112,11 +142,29 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function calcTime(start, finish, breakTime) {
+        var hhmm = ''
         var stringBreak = breakTime.split(":");
         var stringStart = start.split(":");
         var stringFinish = finish.split(":");
-        var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
-        return Math.floor(totalTime / 60) + ':' + totalTime % 60;
+        var initTotalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
+        var hh = Math.floor(totalTime / 60)
+        var mm = totalTime % 60
+        if (hh<10){
+          hhmm = '0' +hh+ ':';
+          if (mm<10){
+            hhmm = hhmm + '0'+mm;
+          } else{
+            hhmm = hhmm + mm;
+          }
+        } else {
+          hhmm = hh+':';
+          if (mm<10){
+            hhmm = hhmm + '0'+mm;
+          } else{
+            hhmm = hhmm + mm;
+          }
+        }
+        return hhmm;
     }
 
     function go(predicate, id) {

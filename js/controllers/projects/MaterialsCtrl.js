@@ -24,17 +24,24 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.local.search = '';
     vm.data = {};
     vm.settings = '';
-    if (!isNaN(vm.index)) {
+    vm.material = {}
+    if (!isNaN(vm.index) &&(vm.index !== 'create')) {
+
         vm.material = {
             name: vm.create.plant_and_material_used[vm.index].name,
             description: vm.create.plant_and_material_used[vm.index].description,
             unitCost: vm.create.plant_and_material_used[vm.index].cost_per_unit,
+            unit_id: vm.create.plant_and_material_used[vm.index].unit_id,
+            unit_name: vm.create.plant_and_material_used[vm.index].unit_name,
             quantity: vm.create.plant_and_material_used[vm.index].quantity,
             tax: vm.create.plant_and_material_used[vm.index].tax,
         };
+        console.log(vm.material);
     }
 
     vm.materials = vm.create.plant_and_material_used;
+    console.log(vm.materials)
+
 
     SiteDiaryService.get_resources().then(function(result) {
         vm.searchModal = $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
@@ -97,10 +104,18 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             tax: vm.material.tax,
             total: (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100))
         }
+        console.log(vm.material);
         if(vm.editMode){
-          vm.create.plant_and_material_used[vm.index] = vm.material
+          if(vm.index === 'create'){
+            vm.create.plant_and_material_used.push(vm.material);
+          }else {
+            console.log('Edit Mode and no Create',vm.materials,vm.material);
+            vm.create.plant_and_material_used[vm.index] = vm.material
+          }
+
         } else{
           vm.create.plant_and_material_used.push(vm.material);
+          console.log('Material was pushed: ',vm.create.plant_and_material_used )
         }
 
         localStorage.setObject('sd.diary.create', vm.create);

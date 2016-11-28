@@ -14,6 +14,7 @@ function SiteNotesCtrl($rootScope, $state) {
     vm.editMode = localStorage.getObject('editMode');
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
+    console.log(vm.create);
 
     function add() {
         if (vm.input1) {

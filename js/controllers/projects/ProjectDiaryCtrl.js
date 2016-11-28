@@ -26,15 +26,19 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
       vm.enableCreate = true;
       localStorage.setObject('diaryId', false);
         if (vm.createInit === null) {
-            vm.createInit = {};
-            vm.createInit.site_attendance = {}
+            vm.createInit = {
+              weather: {},
+              contract_notes: {},
+              site_notes: {},
+              site_attendance: {},
+              incidents: [],
+              plant_and_material_used: [],
+              goods_received: [],
+              oh_and_s: []
+            };
             vm.createInit.site_attendance.staffs = [];
             vm.createInit.site_attendance.contractors = [];
             vm.createInit.site_attendance.visitors = [];
-            vm.createInit.incidents = [];
-            vm.createInit.plant_and_material_used = [];
-            vm.createInit.goods_received = [];
-            vm.createInit.oh_and_s = [];
             localStorage.setObject('sd.diary.create', vm.createInit)
         }
     }

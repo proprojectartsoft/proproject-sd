@@ -13,6 +13,7 @@
                     </div>
                     <div class="sd-description">
                         <span>{{material.quantity}}</span>
+                        <span>{{material.unit_name}}</span>
                         <span>{{material.total}}</span>
                     </div>
             </ion-item>
@@ -21,7 +22,7 @@
             <span>There are no materials added</span>
         </div>
     </ion-content>
-    <span class="ds-actionbtn" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.go('material', null)">
+    <span class="ds-actionbtn" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.go('material', 'create')">
         <i class="ion-ios-plus-empty"></i>
     </span>
 </ion-view>
