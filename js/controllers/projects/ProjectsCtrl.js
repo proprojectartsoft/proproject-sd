@@ -12,10 +12,13 @@ angular.module($APP.name).controller('ProjectsCtrl', [
         vm.backProject = backProject;
         vm.saveProject = saveProject;
         vm.go = go;
-
+        vm.header = 'Select a project'
         vm.username = localStorage.getObject('dsremember')
         vm.project = {};
-        vm.id = localStorage.getObject('id');
+        vm.local = {};
+        $rootScope.projectName = '';
+        vm.local.data = {};
+        vm.loggedIn = localStorage.getObject('loggedIn');
         vm.projectModal = $ionicModal.fromTemplateUrl('templates/projects/create.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -35,7 +38,7 @@ angular.module($APP.name).controller('ProjectsCtrl', [
             vm.projectModal.hide();
         }
 
-        ProjectService.my_account(vm.id).then(function(result) {
+        ProjectService.my_account(vm.loggedIn.id).then(function(result) {
             vm.account = result;
         });
 
@@ -54,10 +57,11 @@ angular.module($APP.name).controller('ProjectsCtrl', [
             })
         }
 
-        function go(id) {
-            localStorage.setObject('projectId', id);
+        function go(project) {
+            localStorage.setObject('projectId', project.id);
+            $rootScope.projectName = project.name;
             $state.go('app.project', {
-                id: id
+                id: project.id
             });
         }
     }

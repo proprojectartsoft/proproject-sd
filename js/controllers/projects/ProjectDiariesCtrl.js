@@ -15,6 +15,7 @@ function ProjectDiariesCtrl($scope, $ionicModal, $state, $stateParams, SiteDiary
     SettingService.clearWeather();
     localStorage.setObject('diaryId', null);
     localStorage.setObject('projectId', $stateParams.id);
+
     vm.show = false;
     vm.local = {};
     vm.local.data = {};
@@ -67,7 +68,6 @@ function ProjectDiariesCtrl($scope, $ionicModal, $state, $stateParams, SiteDiary
             vm.diaryModal = popover;
         });
         vm.diary = result;
-        console.log(result)
     })
 
     function deleteDiary(id) {

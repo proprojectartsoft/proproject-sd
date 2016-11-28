@@ -36,11 +36,9 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             quantity: vm.create.plant_and_material_used[vm.index].quantity,
             tax: vm.create.plant_and_material_used[vm.index].tax,
         };
-        console.log(vm.material);
     }
 
     vm.materials = vm.create.plant_and_material_used;
-    console.log(vm.materials)
 
 
     SiteDiaryService.get_resources().then(function(result) {
@@ -104,18 +102,15 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             tax: vm.material.tax,
             total: (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100))
         }
-        console.log(vm.material);
         if(vm.editMode){
           if(vm.index === 'create'){
             vm.create.plant_and_material_used.push(vm.material);
           }else {
-            console.log('Edit Mode and no Create',vm.materials,vm.material);
             vm.create.plant_and_material_used[vm.index] = vm.material
           }
 
         } else{
           vm.create.plant_and_material_used.push(vm.material);
-          console.log('Material was pushed: ',vm.create.plant_and_material_used )
         }
 
         localStorage.setObject('sd.diary.create', vm.create);

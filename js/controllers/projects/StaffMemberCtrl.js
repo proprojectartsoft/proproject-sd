@@ -22,7 +22,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
-    console.log(vm.create.site_attendance.staffs);
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
@@ -39,7 +38,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             total_time: vm.create.site_attendance.staffs[vm.index].total_time,
             note: vm.create.site_attendance.staffs[vm.index].note,
             absence: vm.create.site_attendance.staffs[vm.index].absence.reason,
-            trade: vm.create.site_attendance.staffs[vm.index].role,
+            role: vm.create.site_attendance.staffs[vm.index].trade,
             hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate
         }
         if(vm.create.site_attendance.staffs[vm.index].break_time){
@@ -59,6 +58,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             vm.searchModal = popover;
         });
         vm.staff = result;
+        console.log(result)
     })
 
     function showSearch() {
@@ -73,13 +73,13 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         vm.local.data.role = item.role;
         vm.local.data.staff_name = item.name;
         vm.local.data.staff_id = item.id;
+        vm.local.data.hourly_rate = item.direct_cost;
         vm.searchModal.hide();
     }
 
     function save() {
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
         if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
-            console.log('inhere');
             vm.local.total_time = vm.calcParse();
         }
         if (vm.local.data.staff_name) {
@@ -87,7 +87,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 first_name: vm.local.data.staff_name.split(" ", 2)[0],
                 last_name: vm.local.data.staff_name.split(" ", 2)[1],
                 company_name: vm.local.data.company_name,
-                role: vm.local.data.role,
+                trade: vm.local.data.role,
                 hourly_rate: vm.local.data.hourly_rate,
                 start_time: vm.filteredStart,
                 break_time: vm.filteredBreak,
@@ -102,7 +102,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 first_name: '',
                 last_name: '',
                 company_name: vm.local.data.company_name,
-                role: vm.local.data.role,
+                trade: vm.local.data.role,
                 hourly_rate: vm.local.data.hourly_rate,
                 start_time: vm.filteredStart,
                 break_time: vm.filteredBreak,

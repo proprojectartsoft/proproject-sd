@@ -1,7 +1,7 @@
 <ion-view hide-back-button="true" cache-view="false">
     <ion-content class="has-header sd-list">
         <ion-list>
-            <ion-item ng-repeat="project in vm.projects" ng-click="vm.go(project.id)">
+            <ion-item ng-repeat="project in vm.projects" ng-click="vm.go(project)">
                 <div class="sd-group">
                     <div class="sd-title">{{project.project_no}}&nbsp;|&nbsp;{{project.name}}</div>
                     <div class="sd-description">

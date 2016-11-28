@@ -10,6 +10,8 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
     vm.saveEdit = saveEdit;
     vm.createInit = localStorage.getObject('sd.diary.create');
     vm.cancelEdit = false;
+    vm.local = {};
+    vm.local.data = {};
     vm.edit = localStorage.getObject('editMode');
     if ($stateParams.id) {
         localStorage.setObject('diaryId', $stateParams.id);
@@ -39,6 +41,8 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
             vm.createInit.site_attendance.staffs = [];
             vm.createInit.site_attendance.contractors = [];
             vm.createInit.site_attendance.visitors = [];
+            vm.comments = [];
+            localStorage.setObject('sd.comments',vm.comments)
             localStorage.setObject('sd.diary.create', vm.createInit)
         }
     }
@@ -52,7 +56,15 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
         vm.create.summary = "Please"
         vm.create.project_id = localStorage.getObject('projectId');
         SiteDiaryService.add_diary(vm.create).then(function(result) {
-            vm.go('project');
+          vm.local.data.comments = localStorage.getObject('sd.comments');
+          angular.forEach(vm.local.data.comments, function(value){
+            var request = {
+              site_diary_id: result.data.id,
+              comment: value,
+            };
+            SiteDiaryService.add_comments(request).then(function(result){});
+          })
+          vm.go('project');
         })
     }
     function saveEdit(){

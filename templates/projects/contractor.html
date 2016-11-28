@@ -27,7 +27,7 @@
             </label>
             <div class="sd-label">
                 <div class="sd-title">Start</div>
-                <div ng-required="vm.data.required" ion-datetime-picker time ng-model="vm.data.model_start" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container">
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-model="vm.data.model_start" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
                     <div class="sd-line" ng-if="vm.data.model_start">{{vm.data.model_start | date: 'HH:mm'}}</div>
                     <div class="sd-line" ng-if="!vm.data.model_start">
                         Tap here to select a date.</div>
@@ -35,7 +35,7 @@
             </div>
             <div class="sd-label">
                 <div class="sd-title">Break</div>
-                <div ng-required="vm.data.required" ion-datetime-picker time ng-model="vm.data.model_break" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container">
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-model="vm.data.model_break" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
                     <div class="sd-line" ng-if="vm.data.model_break">{{vm.data.model_break | date: 'HH:mm'}}</div>
                     <div class="sd-line" ng-if="!vm.data.model_break">
                         Tap here to select a date.</div>
@@ -43,7 +43,7 @@
             </div>
             <div class="sd-label">
                 <div class="sd-title">Finish</div>
-                <div ng-required="vm.data.required" ion-datetime-picker time ng-model="vm.data.model_finish" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container">
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-model="vm.data.model_finish" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
                     <div class="sd-line" ng-if="vm.data.model_finish">{{vm.data.model_finish | date: 'HH:mm'}}</div>
                     <div class="sd-line" ng-if="!vm.data.model_finish">
                         Tap here to select a date.</div>
@@ -51,7 +51,7 @@
             </div>
             <label class="sd-label">
                 <div class="sd-title">Total</div>
-                <input placeholder="Total" ng-model="vm.calcParse()">
+                <input placeholder="Total" ng-model="vm.local.total_time">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Note</div>
