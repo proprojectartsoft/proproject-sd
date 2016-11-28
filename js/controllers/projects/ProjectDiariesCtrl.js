@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ProjectDiariesCtrl', ProjectDiariesCtrl)
 
-ProjectDiariesCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$stateParams', 'SiteDiaryService', 'SettingService'];
+ProjectDiariesCtrl.$inject = ['$scope', '$ionicModal', '$state', '$stateParams', 'SiteDiaryService', 'SettingService'];
 
-function ProjectDiariesCtrl($rootScope, $ionicModal, $state, $stateParams, SiteDiaryService, SettingService) {
+function ProjectDiariesCtrl($scope, $ionicModal, $state, $stateParams, SiteDiaryService, SettingService) {
     var vm = this;
     vm.showDiary = showDiary;
     vm.backDiary = backDiary;
@@ -16,6 +16,9 @@ function ProjectDiariesCtrl($rootScope, $ionicModal, $state, $stateParams, SiteD
     localStorage.setObject('diaryId', null);
     localStorage.setObject('projectId', $stateParams.id);
     vm.show = false;
+    vm.local = {};
+    vm.local.data = {};
+    vm.local.search = '';
     vm.selectOpt = [{
         id: 0,
         name: 'Annual leave'
@@ -56,13 +59,16 @@ function ProjectDiariesCtrl($rootScope, $ionicModal, $state, $stateParams, SiteD
     SiteDiaryService.list_diaries($stateParams.id).then(function(result) {
         vm.diaries = result;
     })
-
-    vm.diaryModal = $ionicModal.fromTemplateUrl('templates/projects/diarySearch.html', {
-        scope: $rootScope,
-        animation: 'slide-in-up'
-    }).then(function(popover) {
-        vm.diaryModal = popover;
-    });
+    SiteDiaryService.list_diaries($stateParams.id).then(function(result) {
+        vm.diaryModal = $ionicModal.fromTemplateUrl('templates/projects/diarySearch.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(popover) {
+            vm.diaryModal = popover;
+        });
+        vm.diary = result;
+        console.log(result)
+    })
 
     function deleteDiary(id) {
         SiteDiaryService.delete_diary(id).then(function(result) {
@@ -85,7 +91,7 @@ function ProjectDiariesCtrl($rootScope, $ionicModal, $state, $stateParams, SiteD
         togglePlus();
     }
 
-    $rootScope.saveDiary = function() {
+    function saveDiary () {
         if (vm && vm.diaryModal) {
             vm.diaryModal.hide();
         }
@@ -95,5 +101,6 @@ function ProjectDiariesCtrl($rootScope, $ionicModal, $state, $stateParams, SiteD
         $state.go('app.' + predicate, {
             id: id
         });
+        vm.diaryModal.hide();
     }
 }

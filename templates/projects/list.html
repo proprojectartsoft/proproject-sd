@@ -6,7 +6,7 @@
                     <div class="sd-title">{{project.project_no}}&nbsp;|&nbsp;{{project.name}}</div>
                     <div class="sd-description">
                         <img src="img/action/description.png">
-                        <span>{{project.date_of_last_completed || 'No date'}}</span>
+                        <span>{{project.date_of_last_completed || 'No date' | date}}</span>
                         <i class="ion-ios-checkmark-empty"></i>
                         <span>{{project.no_of_sd_completed}}</span>
                     </div>

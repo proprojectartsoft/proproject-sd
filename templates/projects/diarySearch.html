@@ -8,10 +8,10 @@
     <ion-content>
             <ion-list>
                 <label class="sd-status">
-                    <input class="sd-input" type="search" placeholder="Search" ng-change="search()" ng-model="local.search">
+                    <input class="sd-input" type="search" placeholder="Search" ng-change="search()" ng-model="vm.local.search">
                 </label>
                 <div class="list">
-                    <ion-item class="item" ng-repeat="diary in vm.diaries | filter:local.search" ng-click="vm.go('diary', diary.id)"></ion-item>
+                    <ion-item class="item" ng-repeat="item in vm.diary | filter:vm.local.search" ng-click="vm.go('diary',item.id)">{{item.date | date}}</ion-item>
                 </div>
             </ion-list>
     </ion-content>

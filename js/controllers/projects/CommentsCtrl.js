@@ -11,6 +11,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService) {
 
     vm.local = {};
     vm.diaryId = localStorage.getObject('diaryId');
+    vm.editMode = localStorage.getObject('editMode');
 
     SiteDiaryService.list_comments(vm.diaryId).then(function(result){
       vm.local.list = result;
@@ -42,9 +43,15 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService) {
       return (aux[0][0]+aux[1][0]).toUpperCase();
     }
 
-    function go(predicate,id) {
+    function go(predicate, id) {
+      if((predicate ==='diary') && (vm.diaryId)){
         $state.go('app.'+predicate, {
+            id: vm.diaryId
+        });
+      }else{
+        $state.go('app.' + predicate, {
             id: id
         });
+      }
     }
 }

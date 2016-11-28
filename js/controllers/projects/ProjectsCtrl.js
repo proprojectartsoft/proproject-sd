@@ -15,6 +15,7 @@ angular.module($APP.name).controller('ProjectsCtrl', [
 
         vm.username = localStorage.getObject('dsremember')
         vm.project = {};
+        vm.id = localStorage.getObject('id');
         vm.projectModal = $ionicModal.fromTemplateUrl('templates/projects/create.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -34,7 +35,7 @@ angular.module($APP.name).controller('ProjectsCtrl', [
             vm.projectModal.hide();
         }
 
-        ProjectService.my_account(vm.username.id).then(function(result) {
+        ProjectService.my_account(vm.id).then(function(result) {
             vm.account = result;
         });
 

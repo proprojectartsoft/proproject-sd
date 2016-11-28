@@ -14,10 +14,6 @@
                 <de-select de-options="vm.type" de-title="vm.local.type"></de-select>
             </div>
             <label class="sd-label">
-                <div class="sd-title">Type</div>
-                <input placeholder="No Data" ng-model="vm.type.name">
-            </label>
-            <label class="sd-label">
                 <div class="sd-title">Reference</div>
                 <input ng-disabled="(vm.diaryId) && (!vm.editMode)" placeholder="Tap to add reference" ng-model="vm.ref">
             </label>
@@ -46,7 +42,7 @@
                 <input ng-disabled="(vm.diaryId) && (!vm.editMode)"  placeholder="Tap to add action message" ng-model="vm.action_message">
             </label>
             <label class="sd-label">
-                <div class="sd-title">Comment</div>
+                <div class="sd-title">Note</div>
                 <input ng-disabled="(vm.diaryId) && (!vm.editMode)" placeholder="Tap to add comment" ng-model="vm.comment">
             </label>
         </div>

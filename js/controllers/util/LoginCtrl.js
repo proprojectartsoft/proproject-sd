@@ -16,6 +16,7 @@ angular.module($APP.name).controller('LoginCtrl', [
     $scope.login = function () {
       if($scope.user.username && $scope.user.password){
         AuthService.login($scope.user).then(function(result){
+          localStorage.setObject('id',result.id)
           if($scope.user.remember){
             localStorage.setObject('dsremember', $scope.user);
           }
@@ -23,6 +24,7 @@ angular.module($APP.name).controller('LoginCtrl', [
             localStorage.removeItem('dsremember');
           }
           $state.go('app.home');
+          localStorage.setObject('id',result.id)
         })
       }
     };
