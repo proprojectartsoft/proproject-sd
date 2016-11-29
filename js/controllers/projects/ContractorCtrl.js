@@ -19,6 +19,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter,$state
     vm.local.search = '';
     vm.data = {};
     vm.settings = 'contractor';
+    vm.emptyAbsence = [{id:'',reason:'', name:''}];
+    localStorage.setObject('sd.diary.absence',vm.emptyAbsence);
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');

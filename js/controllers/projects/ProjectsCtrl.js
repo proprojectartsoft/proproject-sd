@@ -52,7 +52,7 @@ angular.module($APP.name).controller('ProjectsCtrl', [
                 addr_thirdline: vm.project.addr_thirdline,
                 addr_forthline: vm.project.addr_forthline
             }
-            if ((vm.project.project_number > 0) && (vm.project.name.length > 0) && (vm.project.addr_firstline > 0)) {
+            if ((vm.project.project_number > 0) && (vm.project.name.length > 0) && (vm.project.addr_firstline.length > 0)) {
                 ProjectService.add_projects(vm.project).then(function(result) {
                     vm.projectModal.hide();
                     ProjectService.projects().then(function(result) {
