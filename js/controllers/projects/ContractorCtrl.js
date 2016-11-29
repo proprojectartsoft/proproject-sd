@@ -12,6 +12,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter,$state
     vm.calcParse = calcParse;
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
+    vm.addStaff1 = addStaff1;
 
     vm.local = {};
     vm.local.data = {};
@@ -74,6 +75,11 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter,$state
     function addStaff(item) {
         vm.local.data.contractor_name = item.name;
         vm.local.data.contractor_id = item.id;
+        vm.searchModal.hide();
+    }
+
+    function addStaff1(item) {
+        vm.local.data.contractor_name = item;
         vm.searchModal.hide();
     }
 

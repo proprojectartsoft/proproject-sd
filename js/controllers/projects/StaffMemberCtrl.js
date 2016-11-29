@@ -12,6 +12,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.calcParse = calcParse;
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
+    vm.addStaff1 = addStaff1;
 
     SiteDiaryService.absence_list().then(function(result) {
         angular.forEach(result, function(value) {
@@ -74,6 +75,11 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         vm.local.data.staff_name = item.name;
         vm.local.data.staff_id = item.id;
         vm.local.data.hourly_rate = item.direct_cost;
+        vm.searchModal.hide();
+    }
+
+    function addStaff1(item) {
+        vm.local.data.staff_name = item;
         vm.searchModal.hide();
     }
 
