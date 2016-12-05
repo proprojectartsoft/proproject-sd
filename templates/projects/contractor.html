@@ -11,7 +11,7 @@
         <div class="sd-container">
             <label class="sd-label">
                 <div class="sd-title">Company representant</div>
-                <input placeholder="Tap to add representant" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.local.data.contractor_name">
+                <input placeholder="Tap to add representant" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.local.data.staff_name">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Company name</div>
@@ -19,7 +19,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Trade</div>
-                <input placeholder="Tap to add trade" disabled ng-model="vm.local.data.trade">
+                <input placeholder="Tap to add trade" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.trade">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Hourly rate</div>

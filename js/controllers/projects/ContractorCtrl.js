@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ContractorCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$ionicModal', '$filter','$stateParams' , 'ContractorService', 'SiteDiaryService'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$ionicModal', '$filter', '$stateParams', 'ContractorService', 'SiteDiaryService'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter,$stateParams, ContractorService, SiteDiaryService) {
+function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stateParams, ContractorService, SiteDiaryService) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -19,15 +19,19 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter,$state
     vm.local.search = '';
     vm.data = {};
     vm.settings = 'contractor';
-    vm.emptyAbsence = [{id:'',reason:'', name:''}];
-    localStorage.setObject('sd.diary.absence',vm.emptyAbsence);
+    vm.emptyAbsence = [{
+        id: '',
+        reason: '',
+        name: ''
+    }];
+    localStorage.setObject('sd.diary.absence', vm.emptyAbsence);
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
     vm.index = $stateParams.id;
 
     vm.local.absence = 'absence';
-    if ((!(vm.diaryId === false) && !(vm.index === 'create'))||!(isNaN(vm.index))) {
+    if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {
             staff_name: vm.create.site_attendance.contractors[vm.index].first_name,
             company_name: vm.create.site_attendance.contractors[vm.index].company_name,
@@ -37,14 +41,14 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter,$state
             note: vm.create.site_attendance.contractors[vm.index].note,
             absence: vm.create.site_attendance.contractors[vm.index].absence.reason,
             role: vm.create.site_attendance.contractors[vm.index].trade,
+            trade: vm.create.site_attendance.contractors[vm.index].trade,
             hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate
         }
-        if(vm.create.site_attendance.contractors[vm.index].break_time){
-          vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
+        if (vm.create.site_attendance.contractors[vm.index].break_time) {
+            vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
+        } else {
+            vm.data.model_break = vm.stringToDate("00:00");
         }
-        else{
-        vm.data.model_break = vm.stringToDate("00:00");
-      }
     } else {
         vm.data.model_break = vm.stringToDate("00:00");
     }
@@ -75,13 +79,13 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter,$state
     }
 
     function addStaff(item) {
-        vm.local.data.contractor_name = item.name;
-        vm.local.data.contractor_id = item.id;
+        vm.local.data.staff_name = item.name;
+        vm.local.data.staff_id = item.id;
         vm.searchModal.hide();
     }
 
     function addStaff1(item) {
-        vm.local.data.contractor_name = item;
+        vm.local.data.staff_name = item;
         vm.searchModal.hide();
     }
 
@@ -92,7 +96,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter,$state
             vm.local.total_time = vm.calcParse();
         }
         vm.member = {
-            first_name: vm.local.data.contractor_name,
+            first_name: vm.local.data.staff_name,
             company_name: vm.local.data.company_name,
             trade: vm.local.data.trade,
             hourly_rate: vm.local.data.hourly_rate,

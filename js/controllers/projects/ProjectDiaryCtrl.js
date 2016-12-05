@@ -71,6 +71,7 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
       vm.edit = false;
       localStorage.setObject('editMode',vm.edit);
       vm.create = localStorage.getObject('sd.diary.create');
+      console.log(vm.create);
       SiteDiaryService.update_diary(vm.create).then(function(result){
         vm.go('project');
       })

@@ -41,6 +41,18 @@ function ContractCtrl($rootScope, $state) {
       }
     }
 
+    if(!vm.diaryId){
+      if(vm.create.contract_notes.instructions){
+        vm.instructions.comments = vm.create.contract_notes.instructions.comments;
+      }
+      if(vm.create.contract_notes.extensions_of_time){
+        vm.extensions.comments = vm.create.contract_notes.extensions_of_time.comments;
+      }
+      if(vm.create.contract_notes.variations){
+        vm.variations.comments = vm.create.contract_notes.variations.comments;
+      }
+    }
+
     function save(){
       vm.contract = {
         instructions: vm.instructions,

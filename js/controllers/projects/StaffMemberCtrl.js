@@ -42,6 +42,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             note: vm.create.site_attendance.staffs[vm.index].note,
             absence: vm.create.site_attendance.staffs[vm.index].absence.reason,
             role: vm.create.site_attendance.staffs[vm.index].trade,
+            trade:vm.create.site_attendance.staffs[vm.index].trade,
             hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate
         }
         if(vm.create.site_attendance.staffs[vm.index].break_time){
@@ -73,7 +74,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function addStaff(item) {
+      console.log(item);
         vm.local.data.role = item.role;
+        vm.local.data.trade = item.role;
         vm.local.data.staff_name = item.name;
         vm.local.data.staff_id = item.id;
         vm.local.data.hourly_rate = item.direct_cost;
@@ -95,7 +98,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 first_name: vm.local.data.staff_name.split(" ", 2)[0],
                 last_name: vm.local.data.staff_name.split(" ", 2)[1],
                 company_name: vm.local.data.company_name,
-                trade: vm.local.data.role,
+                trade: vm.local.data.trade,
                 hourly_rate: vm.local.data.hourly_rate,
                 start_time: vm.filteredStart,
                 break_time: vm.filteredBreak,
@@ -110,7 +113,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 first_name: '',
                 last_name: '',
                 company_name: vm.local.data.company_name,
-                trade: vm.local.data.role,
+                trade: vm.local.data.trade,
                 hourly_rate: vm.local.data.hourly_rate,
                 start_time: vm.filteredStart,
                 break_time: vm.filteredBreak,
@@ -120,7 +123,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 note: vm.local.data.note
             }
         }
-
+        console.log(vm.member);
         if (vm.editMode) {
             if (vm.index === 'create') {
                 vm.create.site_attendance.staffs.push(vm.member);

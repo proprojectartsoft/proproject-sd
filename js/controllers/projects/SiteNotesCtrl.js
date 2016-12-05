@@ -29,6 +29,7 @@ function SiteNotesCtrl($rootScope, $state) {
             vm.input3 = '';
         }
     }
+
     if(vm.diaryId){
       if(vm.create.site_notes.delays!== null){
         vm.delays = vm.create.site_notes.delays;
@@ -50,6 +51,18 @@ function SiteNotesCtrl($rootScope, $state) {
       vm.create.site_notes = vm.site_notes;
       localStorage.setObject('sd.diary.create', vm.create);
       go('diary');
+    }
+
+    if(!vm.diaryId){
+      if(vm.create.site_notes.delays){
+        vm.delays = vm.create.site_notes.delays;
+      }
+      if(vm.create.site_notes.tools_used){
+        vm.tools = vm.create.site_notes.tools_used;
+      }
+      if(vm.create.site_notes.materials_requested){
+        vm.materials = vm.create.site_notes.materials_requested;
+      }
     }
 
     function go(predicate, id) {

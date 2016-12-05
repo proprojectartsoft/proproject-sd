@@ -19,7 +19,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Trade</div>
-                <input placeholder="Tap to add trade" disabled ng-model="vm.local.data.role">
+                <input placeholder="Tap to add trade" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.role">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Hourly rate</div>
