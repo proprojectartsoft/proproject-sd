@@ -7,6 +7,7 @@ function AttachementsCtrl($state,$cordovaCamera,$timeout, AttachmentsService) {
     vm.go = go;
     vm.takePicture = takePicture;
     vm.diaryId = localStorage.getObject('diaryId');
+    vm.projectId = localStorage.getObject('projectId');
 
     vm.pictures = [];
     vm.filter = {};
@@ -29,15 +30,16 @@ function AttachementsCtrl($state,$cordovaCamera,$timeout, AttachmentsService) {
           //   title: 'Form gallery',
           //   template: 'Photo added. Check form gallery for more options.'
           //});
-          var pic = {
-            "id": 0,
-            "base64String": imageData,
+          var pic = [{
+            "path": "",
+            "base_64_string": imageData,
             "comment": "",
             "tags": "",
-            "title": " ",
-            "projectId": 0,
-            "formInstanceId": 0
-          }
+            "site_diary_id": vm.diaryId,
+            "file_name": "",
+            "title": "",
+            "project_id": vm.projectId
+          }]
           AttachmentsService.upload_attachments(pic).then(function(result){
             console.log(result);
           })

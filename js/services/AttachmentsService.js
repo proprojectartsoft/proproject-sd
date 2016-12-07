@@ -16,7 +16,7 @@ function($http) {
         upload_attachments: function(dataIn) {
             return $http({
                 method: 'POST',
-                url: $APP.server + '/api/sdattachments/uploadfiles',
+                url: $APP.server + '/api/sdattachment/uploadfiles',
                 data: dataIn
             }).then(
                 function(payload) {
@@ -27,7 +27,7 @@ function($http) {
         delete_attachments: function(dataIn) {
             return $http({
                 method: 'POST',
-                url: $APP.server + '/api/sdattachments',
+                url: $APP.server + '/api/sdattachment',
                 data: dataIn
             }).then(
                 function(payload) {
