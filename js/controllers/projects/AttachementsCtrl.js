@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
 
-AttachementsCtrl.$inject = ['$state','$cordovaCamera','$timeout'];
+AttachementsCtrl.$inject = ['$state','$cordovaCamera','$timeout','AttachmentsService'];
 
-function AttachementsCtrl($state,$cordovaCamera,$timeout) {
+function AttachementsCtrl($state,$cordovaCamera,$timeout, AttachmentsService) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -29,7 +29,7 @@ function AttachementsCtrl($state,$cordovaCamera,$timeout) {
           //   title: 'Form gallery',
           //   template: 'Photo added. Check form gallery for more options.'
           //});
-          vm.imgURI.push({
+          var pic = {
             "id": 0,
             "base64String": imageData,
             "comment": "",
@@ -37,7 +37,11 @@ function AttachementsCtrl($state,$cordovaCamera,$timeout) {
             "title": " ",
             "projectId": 0,
             "formInstanceId": 0
+          }
+          AttachmentsService.upload_attachments(pic).then(function(result){
+            console.log(result);
           })
+          vm.imgURI.push(pic);
           vm.filter.picture = vm.imgURI[vm.imgURI.length - 1];
           vm.filter.state = 'form';
           vm.filter.substate = null;
