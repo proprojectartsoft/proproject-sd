@@ -11,7 +11,7 @@ function AttachementsCtrl($state,$cordovaCamera,$timeout) {
     vm.pictures = [];
     vm.filter = {};
     vm.imgURI = [];
-    vm.takePicture = function () {
+    function takePicture()  {
       var options = {
         quality: 20,
         destinationType: Camera.DestinationType.DATA_URL,
