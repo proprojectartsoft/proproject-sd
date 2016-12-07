@@ -15,8 +15,15 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     vm.imgURI = [];
     AttachmentsService.get_attachments(vm.diaryId).then(function(result) {
         console.log(result);
+        angular.forEach(result, function (value) {
+          value.path = value.path.substring(24);
+          console.log(value);
+          value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path
+          vm.imgURI.push(value)
+        });
         vm.pictures = result;
     })
+
 
     function takePicture() {
         var options = {
@@ -49,8 +56,8 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                 AttachmentsService.upload_attachments(pic).then(function(result) {
                     console.log(result);
                 })
-                vm.imgURI.push(pic);
-                vm.filter.picture = vm.imgURI[vm.imgURI.length - 1];
+                vm.vm.pictures.push(pic);
+                vm.filter.picture = vm.vm.pictures[vm.vm.pictures.length - 1];
                 vm.filter.state = 'form';
                 vm.filter.substate = null;
             });
@@ -95,8 +102,8 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     AttachmentsService.upload_attachments(pic).then(function(result) {
                         console.log(result);
                     })
-                    vm.imgURI.push(pic);
-                    vm.filter.picture = vm.imgURI[vm.imgURI.length - 1];
+                    vm.pictures.push(pic);
+                    vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                     vm.filter.state = 'form';
                     vm.filter.substate = null;
                 });

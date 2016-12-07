@@ -5,22 +5,37 @@
         </button>
     </div>
     <ion-content class="has-subheader sd-form sd-form-withfields">
-        <ion-item ng-repeat="item in vm.pictures" ng-click="go(item)">
-            <span class="sd-img">
-                <img ng-src="{{item.url}}">
-            </span>
-            <h3>
-                <div>{{item.title}}</div>
-                <div class="sd-tags">Tags</div>
-                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis arcu tortor, efficitur molestie tellus nec, luctus bibendum ipsum. Maecenas id nunc dapibus, accumsan massa vitae, auctor lorem. Sed malesuada quam id luctus condimentum. Proin a
-                    porttitor ipsum. Nulla at rhoncus ipsum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam eleifend imperdiet
-                    dapibus. Quisque pharetra lacus non convallis euismod.</div>
-            </h3>
-        </ion-item>
-        <div ng-if="!vm.pictures.length" class="sd-nodata">
-            <span>No attachments</span>
-        </div>
-
+          <div ng-if="vm.pictures.length === 0 || !vm.pictures" style="text-align: center; padding-top:30vw">
+              <span class="all-ion-text" style="line-height: 15vw;font-size: 15vw; color:#4A6780">No images assigned</span>
+          </div>
+          <div ng-if="vm.pictures.length !== 1 || vm.pictures[0].base64String">
+              <div class="row" ng-repeat="pic in vm.pictures" ng-if="$index % 4 === 0">
+                  <div class="col col-25" ng-if="$index < vm.pictures.length"  ng-click="testPicture(vm.pictures[$index]); ">
+                      <div style="    max-height: 24vw;overflow: hidden;">
+                          <img ng-src="{{vm.pictures[$index + 1].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                      </div>
+                      <button class="button button-assertive" ng-click='removePicture()' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
+                  </div>
+                  <div class="col col-25" ng-if="$index + 1 < vm.pictures.length"  ng-click="testPicture(vm.pictures[$index + 1]);">
+                      <div style="    max-height: 24vw;overflow: hidden;">
+                          <img ng-src="{{vm.pictures[$index + 1].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                      </div>
+                      <button class="button button-assertive" ng-click='removePicture()' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
+                  </div>
+                  <div class="col col-25" ng-if="$index + 2 < vm.pictures.length"  ng-click="testPicture(vm.pictures[$index + 2]); ">
+                      <div style="    max-height: 24vw;overflow: hidden;">
+                          <img ng-src="{{vm.pictures[$index + 1].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                      </div>
+                      <button class="button button-assertive" ng-click='removePicture()' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
+                  </div>
+                  <div class="col col-25" ng-if="$index + 3 < vm.pictures.length" ng-click="testPicture(vm.pictures[$index + 3]); ">
+                      <div style="    max-height: 24vw;overflow: hidden;">
+                          <img ng-src="{{vm.pictures[$index + 1].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                      </div>
+                      <button class="button button-assertive" ng-click='removePicture()' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
+                  </div>
+              </div>
+          </div>
     </ion-content>
     <div class="bar sd-footer">
         <span>Add Pictures</span>
