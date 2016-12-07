@@ -5,35 +5,42 @@
         </button>
     </div>
     <ion-content class="has-subheader sd-form sd-form-withfields">
+      <div ng-if="vm.filter.substate === 'gallery'">
           <div ng-if="vm.pictures.length === 0 || !vm.pictures" style="text-align: center; padding-top:30vw">
               <span class="all-ion-text" style="line-height: 15vw;font-size: 15vw; color:#4A6780">No images assigned</span>
           </div>
           <div ng-if="vm.pictures.length !== 1 || vm.pictures[0].url">
               <div class="row" ng-repeat="pic in vm.pictures" ng-if="$index % 4 === 0">
-                  <div class="col col-25" ng-if="$index < vm.pictures.length"  ng-click="testPicture(vm.pictures[$index]); ">
+                  <div class="col col-25" ng-if="$index < vm.pictures.length"  ng-click="vm.testPicture(vm.pictures[$index]); ">
                       <div style="    max-height: 24vw;overflow: hidden;">
                           <img ng-src="{{vm.pictures[$index].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                       </div>
                       <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index])' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
                   </div>
-                  <div class="col col-25" ng-if="$index + 1 < vm.pictures.length"  ng-click="testPicture(vm.pictures[$index + 1]);">
+                  <div class="col col-25" ng-if="$index + 1 < vm.pictures.length"  ng-click="vm.testPicture(vm.pictures[$index + 1]);">
                       <div style="    max-height: 24vw;overflow: hidden;">
                           <img ng-src="{{vm.pictures[$index + 1].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                       </div>
                       <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 1])' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
                   </div>
-                  <div class="col col-25" ng-if="$index + 2 < vm.pictures.length"  ng-click="testPicture(vm.pictures[$index + 2]); ">
+                  <div class="col col-25" ng-if="$index + 2 < vm.pictures.length"  ng-click="vm.testPicture(vm.pictures[$index + 2]); ">
                       <div style="    max-height: 24vw;overflow: hidden;">
                           <img ng-src="{{vm.pictures[$index + 2].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                       </div>
                       <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 2])' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
                   </div>
-                  <div class="col col-25" ng-if="$index + 3 < vm.pictures.length" ng-click="testPicture(vm.pictures[$index + 3]); ">
+                  <div class="col col-25" ng-if="$index + 3 < vm.pictures.length" ng-click="vm.testPicture(vm.pictures[$index + 3]); ">
                       <div style="    max-height: 24vw;overflow: hidden;">
                           <img ng-src="{{vm.pictures[$index + 3].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                       </div>
                       <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 3])' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
                   </div>
+              </div>
+          </div>
+        </div>
+          <div class="list" ng-show="vm.filter.substate === 'pic'">
+              <div style="padding-bottom: 80px">
+                  <img ng-show="filter.picture.base64String !== ''" ng-src="{{vm.filter.picture.url}}" ng-click="vm.returnToGallery()" style="width:100%;-webkit-user-drag: inherit;">
               </div>
           </div>
     </ion-content>

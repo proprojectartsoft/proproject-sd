@@ -8,7 +8,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     vm.takePicture = takePicture;
     vm.addPicture = addPicture;
     vm.removePicture = removePicture;
+    vm.testPicture = testPicture;
     vm.populate = populate;
+    vm.returnToGallery = returnToGallery;
     vm.diaryId = localStorage.getObject('diaryId');
     vm.projectId = localStorage.getObject('projectId');
     vm.editMode = localStorage.getObject('editMode');
@@ -16,6 +18,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     vm.pictures = [];
     vm.filter = {};
     vm.imgURI = [];
+    vm.filter.substate = 'gallery'
 
     function populate(){
       AttachmentsService.get_attachments(vm.diaryId).then(function(result) {
@@ -30,7 +33,10 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     }
 
     vm.populate();
-
+    function testPicture(pic) {
+      vm.filter.substate = 'pic';
+      vm.filter.picture = pic;
+    }
     function takePicture() {
         var options = {
             quality: 20,
@@ -55,10 +61,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     "title": "",
                     "project_id": vm.projectId
                 }]
-                AttachmentsService.upload_attachments(pic).then(function(result) {
-                    console.log(result);
-                    vm.populate();
-                })
                 vm.pictures.push(pic);
                 vm.filter.picture = vm.vm.pictures[vm.vm.pictures.length - 1];
                 vm.filter.state = 'form';
@@ -91,10 +93,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                         "title": "",
                         "project_id": vm.projectId
                     }]
-                    AttachmentsService.upload_attachments(pic).then(function(result) {
-                        console.log(result);
-                        vm.populate();
-                    })
                     vm.pictures.push(pic);
                     vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                     vm.filter.state = 'form';
@@ -109,7 +107,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
             vm.populate();
           })
         }
-
+        function returnToGallery(){
+          vm.filter.substate = 'gallery';
+        }
 
         function go(predicate, id) {
             if ((vm.diaryId) && (predicate === 'diary')) {
