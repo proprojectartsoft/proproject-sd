@@ -1,5 +1,5 @@
 var $APP = $APP || {};
-$APP.server = 'http://artvm23.vmnet.ro';
+$APP.server = 'http://app.preprod.proproject.io';
 $APP.name = 'ppsd'
 
 angular.module($APP.name, [

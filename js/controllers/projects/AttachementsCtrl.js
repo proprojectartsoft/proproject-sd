@@ -61,6 +61,10 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     "title": "",
                     "project_id": vm.projectId
                 }]
+                AttachmentsService.upload_attachments(pic).then(function(result) {
+                    console.log(result);
+                    vm.populate();
+                })
                 vm.pictures.push(pic);
                 vm.filter.picture = vm.vm.pictures[vm.vm.pictures.length - 1];
                 vm.filter.state = 'form';
@@ -93,6 +97,10 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                         "title": "",
                         "project_id": vm.projectId
                     }]
+                    AttachmentsService.upload_attachments(pic).then(function(result) {
+                        console.log(result);
+                        vm.populate();
+                    })
                     vm.pictures.push(pic);
                     vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                     vm.filter.state = 'form';
