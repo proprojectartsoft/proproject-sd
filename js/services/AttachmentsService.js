@@ -2,8 +2,8 @@ angular.module($APP.name).factory('AttachmentsService', [
 '$http',
 function($http) {
     return {
-        get_attachment: function(id) {
-            return $http.get($APP.server + 'api/sdattachment', {
+        get_attachments: function(id) {
+            return $http.get($APP.server + '/api/sdattachment', {
                 params: {
                     id: id
                 }
