@@ -7,23 +7,29 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     vm.go = go;
     vm.takePicture = takePicture;
     vm.addPicture = addPicture;
+    vm.removePicture = removePicture;
+    vm.populate = populate;
     vm.diaryId = localStorage.getObject('diaryId');
     vm.projectId = localStorage.getObject('projectId');
+    vm.editMode = localStorage.getObject('editMode');
 
     vm.pictures = [];
     vm.filter = {};
     vm.imgURI = [];
-    AttachmentsService.get_attachments(vm.diaryId).then(function(result) {
-        console.log(result);
-        angular.forEach(result, function (value) {
-          value.path = value.path.substring(24);
-          console.log(value);
-          value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path
-          vm.imgURI.push(value)
-        });
-        vm.pictures = result;
-    })
 
+    function populate(){
+      AttachmentsService.get_attachments(vm.diaryId).then(function(result) {
+          console.log(result);
+          angular.forEach(result, function (value) {
+            console.log(value);
+            value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path
+            vm.imgURI.push(value)
+          });
+          vm.pictures = result;
+      })
+    }
+
+    vm.populate();
 
     function takePicture() {
         var options = {
@@ -39,10 +45,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
             $timeout(function() {
-                // var alertPopup = $ionicPopup.alert({
-                //   title: 'Form gallery',
-                //   template: 'Photo added. Check form gallery for more options.'
-                //});
                 var pic = [{
                     "path": "",
                     "base_64_string": imageData,
@@ -55,8 +57,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                 }]
                 AttachmentsService.upload_attachments(pic).then(function(result) {
                     console.log(result);
+                    vm.populate();
                 })
-                vm.vm.pictures.push(pic);
+                vm.pictures.push(pic);
                 vm.filter.picture = vm.vm.pictures[vm.vm.pictures.length - 1];
                 vm.filter.state = 'form';
                 vm.filter.substate = null;
@@ -67,17 +70,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     };
 
     function addPicture() {
-        //            window.imagePicker.getPictures(
-        //                    function (results) {
-        //                        vm.convertToDataURLviaCanvas(results[0], function (base64Img) {
-        //                            vm.item.base64String = base64Img.replace(/^data:image\/(png|jpg);base64,/, "");
-        //                        });
-        //                    }, function (error) {
-        //            }, {
-        //                maximumImagesCount: 1,
-        //                width: 800,
-        //                quality: 10
-        //            });
         var options = {
             maximumImagesCount: 1,
             quality: 20,
@@ -101,6 +93,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     }]
                     AttachmentsService.upload_attachments(pic).then(function(result) {
                         console.log(result);
+                        vm.populate();
                     })
                     vm.pictures.push(pic);
                     vm.filter.picture = vm.pictures[vm.pictures.length - 1];
@@ -108,6 +101,13 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     vm.filter.substate = null;
                 });
             });
+        }
+        function removePicture (pic){
+          var dataToDelete =[{id: pic.id}];
+          AttachmentsService.delete_attachments(dataToDelete).then(function(result){
+            console.log(result);
+            vm.populate();
+          })
         }
 
 
