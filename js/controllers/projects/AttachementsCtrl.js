@@ -96,7 +96,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     vm.pictures.push(pic);
                     vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                     vm.filter.state = 'form';
-                    vm.filter.substate = null;
                 });
             });
         }
