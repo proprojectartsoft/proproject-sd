@@ -62,10 +62,10 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     "project_id": vm.projectId
                 }
                 vm.pictures.push(pic);
+                console.log(vm.pictures);
                 vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
-                vm.filter.substate = null;
-            });
+                          });
         }, function(err) {
             // An error occured. Show a message to the user
         });
