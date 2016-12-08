@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ProjectDiaryCtrl', ProjectDiaryCtrl)
 
-ProjectDiaryCtrl.$inject = ['$rootScope', '$state', '$stateParams', 'SettingService', 'SiteDiaryService'];
+ProjectDiaryCtrl.$inject = ['$rootScope', '$state', '$stateParams', 'SettingService', 'SiteDiaryService','AttachmentsService'];
 
-function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, SiteDiaryService) {
+function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, SiteDiaryService,AttachmentsService) {
     var vm = this;
     vm.go = go;
     vm.saveCreate = saveCreate;
@@ -12,6 +12,7 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
     vm.cancelEdit = false;
     vm.local = {};
     vm.local.data = {};
+
     vm.edit = localStorage.getObject('editMode');
     if ($stateParams.id) {
         localStorage.setObject('diaryId', $stateParams.id);
@@ -21,9 +22,15 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
         }else{
           SiteDiaryService.list_diary($stateParams.id).then(function(result) {
               localStorage.setObject('sd.diary.create', result);
-          })
+          });
+          AttachmentsService.get_attachments($stateParams.id).then(function(result){
+            var att = {
+              pictures: result
+            }
+              localStorage.setObject('sd.attachments',att);
+              console.log('First DB Call',att)
+          });
         }
-
     } else {
       vm.enableCreate = true;
       localStorage.setObject('diaryId', false);
@@ -56,6 +63,20 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
         vm.create.summary = "Please"
         vm.create.project_id = localStorage.getObject('projectId');
         SiteDiaryService.add_diary(vm.create).then(function(result) {
+          var attachments = localStorage.getObject('sd.attachments');
+          var attToAdd = [];
+          angular.forEach(attachments.pictures,function(value){
+            if (!value.path){
+              value.site_diary_id= result;
+              attToAdd.push(value);
+            }
+          });
+          AttachmentsService.upload_attachments(attToAdd).then(function(result){
+            console.log(result);
+          });
+          AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result){
+            console.log(result);
+          });
           vm.local.data.comments = localStorage.getObject('sd.comments');
           angular.forEach(vm.local.data.comments, function(value){
             var request = {
@@ -65,7 +86,8 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
             SiteDiaryService.add_comments(request).then(function(result){});
           })
           vm.go('project');
-        })
+        });
+
     }
     function saveEdit(){
       vm.edit = false;
@@ -75,6 +97,20 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
       SiteDiaryService.update_diary(vm.create).then(function(result){
         vm.go('project');
       })
+      var attachments = localStorage.getObject('sd.attachments');
+      var attToAdd = [];
+      angular.forEach(attachments.pictures,function(value){
+        if (!value.path){
+          attToAdd.push(value);
+        }
+      });
+      AttachmentsService.upload_attachments(attToAdd).then(function(result){
+        console.log(result);
+      });
+      AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result){
+        console.log(result);
+      });
+
 
     }
     function toggle(){

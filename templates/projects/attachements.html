@@ -11,29 +11,33 @@
           </div>
           <div ng-if="vm.pictures.length !== 1 || vm.pictures[0].url">
               <div class="row" ng-repeat="pic in vm.pictures" ng-if="$index % 4 === 0">
-                  <div class="col col-25" ng-if="$index < vm.pictures.length"  ng-click="vm.testPicture(vm.pictures[$index]); ">
+                  <div class="col col-25" ng-if="$index < vm.pictures.length"  >
                       <div style="    max-height: 24vw;overflow: hidden;">
-                          <img ng-src="{{vm.pictures[$index].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                          <img ng-src="{{vm.pictures[$index].url}}" ng-click="vm.testPicture(vm.pictures[$index])" ng-if="vm.pictures[$index].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                          <img data-ng-src="data:image/png;base64,{{vm.pictures[$index].base64String}}" ng-click="vm.testPicture(vm.pictures[$index])" ng-if="!vm.pictures[$index].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                       </div>
-                      <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index])' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
+                      <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index],$index)' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
                   </div>
-                  <div class="col col-25" ng-if="$index + 1 < vm.pictures.length"  ng-click="vm.testPicture(vm.pictures[$index + 1]);">
+                  <div class="col col-25" ng-if="$index + 1 < vm.pictures.length"  >
                       <div style="    max-height: 24vw;overflow: hidden;">
-                          <img ng-src="{{vm.pictures[$index + 1].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                        <img ng-src="{{vm.pictures[$index+1].url}}" ng-click="vm.testPicture(vm.pictures[$index + 1])" ng-if="vm.pictures[$index + 1].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                        <img data-ng-src="data:image/png;base64,{{vm.pictures[$index+1].base64String}}" ng-click="vm.testPicture(vm.pictures[$index + 1])" ng-if="!vm.pictures[$index +1 ].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                       </div>
-                      <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 1])' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
+                      <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 1],$index + 1)' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
                   </div>
-                  <div class="col col-25" ng-if="$index + 2 < vm.pictures.length"  ng-click="vm.testPicture(vm.pictures[$index + 2]); ">
+                  <div class="col col-25" ng-if="$index + 2 < vm.pictures.length"  >
                       <div style="    max-height: 24vw;overflow: hidden;">
-                          <img ng-src="{{vm.pictures[$index + 2].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                        <img ng-src="{{vm.pictures[$index+2].url}}" ng-if="vm.pictures[$index +2].path" ng-click="vm.testPicture(vm.pictures[$index + 2])" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                        <img data-ng-src="data:image/png;base64,{{vm.pictures[$index+2].base64String}}" ng-click="vm.testPicture(vm.pictures[$index + 2])" ng-if="!vm.pictures[$index+2].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                       </div>
-                      <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 2])' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
+                      <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 2],$index + 2)' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
                   </div>
-                  <div class="col col-25" ng-if="$index + 3 < vm.pictures.length" ng-click="vm.testPicture(vm.pictures[$index + 3]); ">
+                  <div class="col col-25" ng-if="$index + 3 < vm.pictures.length">
                       <div style="    max-height: 24vw;overflow: hidden;">
-                          <img ng-src="{{vm.pictures[$index + 3].url}}" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                        <img ng-src="{{vm.pictures[$index+3].url}}" ng-if="vm.pictures[$index+3].path" ng-click="vm.testPicture(vm.pictures[$index + 3])" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                        <img data-ng-src="data:image/png;base64,{{vm.pictures[$index+3].base64String}}" ng-if="!vm.pictures[$index+3].path" ng-click="vm.testPicture(vm.pictures[$index + 3])" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                       </div>
-                      <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 3])' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
+                      <button class="button button-assertive" ng-if="vm.editMode" ng-click='vm.removePicture(vm.pictures[$index + 3],$index + 3)' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px;">Remove</button>
                   </div>
               </div>
           </div>

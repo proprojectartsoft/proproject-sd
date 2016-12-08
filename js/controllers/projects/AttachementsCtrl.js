@@ -18,18 +18,18 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     vm.pictures = [];
     vm.filter = {};
     vm.imgURI = [];
+    vm.dataToDelete = [];
     vm.filter.substate = 'gallery'
 
     function populate(){
-      AttachmentsService.get_attachments(vm.diaryId).then(function(result) {
-          console.log(result);
-          angular.forEach(result, function (value) {
-            console.log(value);
-            value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path
-            vm.imgURI.push(value)
+      vm.attachments = localStorage.getObject('sd.attachments');
+      vm.pictures = vm.attachments.pictures;
+          angular.forEach(vm.pictures, function (value) {
+            if(!value.url){
+            value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
+          }
           });
-          vm.pictures = result;
-      })
+          console.log('After forEach: ', vm.pictures)
     }
 
     vm.populate();
@@ -51,7 +51,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
             $timeout(function() {
-                var pic = [{
+                var pic = {
                     "path": "",
                     "base_64_string": imageData,
                     "comment": "",
@@ -60,13 +60,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     "file_name": "",
                     "title": "",
                     "project_id": vm.projectId
-                }]
-                AttachmentsService.upload_attachments(pic).then(function(result) {
-                    console.log(result);
-                    vm.populate();
-                })
+                }
                 vm.pictures.push(pic);
-                vm.filter.picture = vm.vm.pictures[vm.vm.pictures.length - 1];
+                vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
                 vm.filter.substate = null;
             });
@@ -87,7 +83,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
                 $timeout(function() {
-                    var pic = [{
+                    var pic = {
                         "path": "",
                         "base_64_string": imageData,
                         "comment": "",
@@ -96,11 +92,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                         "file_name": "",
                         "title": "",
                         "project_id": vm.projectId
-                    }]
-                    AttachmentsService.upload_attachments(pic).then(function(result) {
-                        console.log(result);
-                        vm.populate();
-                    })
+                    }
                     vm.pictures.push(pic);
                     vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                     vm.filter.state = 'form';
@@ -108,18 +100,26 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                 });
             });
         }
-        function removePicture (pic){
-          var dataToDelete =[{id: pic.id}];
-          AttachmentsService.delete_attachments(dataToDelete).then(function(result){
-            console.log(result);
-            vm.populate();
-          })
+        function removePicture (pic,index){
+          if(pic.id){
+            var idPic = {
+              id: pic.id
+            }
+            vm.dataToDelete.push(idPic);
+          }
+          vm.pictures.splice(index,1);
         }
         function returnToGallery(){
           vm.filter.substate = 'gallery';
         }
 
         function go(predicate, id) {
+          vm.attachments = {
+            pictures: vm.pictures,
+            toBeDeleted : vm.dataToDelete
+          }
+          console.log(vm.attachments);
+          localStorage.setObject('sd.attachments',vm.attachments);
             if ((vm.diaryId) && (predicate === 'diary')) {
                 $state.go('app.' + predicate, {
                     id: vm.diaryId
