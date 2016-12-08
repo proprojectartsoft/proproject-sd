@@ -71,7 +71,7 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
           var attToAdd = [];
           angular.forEach(attachments.pictures,function(value){
             if (!value.path){
-              value.site_diary_id= result;
+              value.site_diary_id= result.data.id;
               attToAdd.push(value);
             }
           });
