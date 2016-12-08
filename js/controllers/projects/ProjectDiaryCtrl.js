@@ -49,6 +49,10 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
             vm.createInit.site_attendance.contractors = [];
             vm.createInit.site_attendance.visitors = [];
             vm.comments = [];
+            vm.att = {
+              pictures: []
+            }
+            localStorage.setObject('sd.attachments',vm.att)
             localStorage.setObject('sd.comments',vm.comments)
             localStorage.setObject('sd.diary.create', vm.createInit)
         }

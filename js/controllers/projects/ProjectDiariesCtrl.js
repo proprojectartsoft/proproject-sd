@@ -14,6 +14,7 @@ function ProjectDiariesCtrl($scope, $ionicModal, $state, $stateParams, SiteDiary
     localStorage.setObject('editMode', null);
     SettingService.clearWeather();
     localStorage.setObject('diaryId', null);
+    localStorage.setObject('sd.attachments',null);
     localStorage.setObject('projectId', $stateParams.id);
 
     vm.show = false;
