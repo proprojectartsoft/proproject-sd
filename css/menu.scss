@@ -3,6 +3,22 @@ $darkblue: #32475a;
 $dark: #313131;
 $lightblue: #11c1f3;
 
+.account{
+  background-color: #EFEFEF;
+
+  .item{
+    height: 59px;
+  }
+
+  .account-item{
+    float: right;
+  }
+
+  .button-block{
+    border-color: #b2b2b2;
+  }
+}
+
 #ds-menu {
     .item {
         background-color: $darkblue;

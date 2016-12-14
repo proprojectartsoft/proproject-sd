@@ -6,16 +6,17 @@
     </div>
     <ion-content class="has-subheader sd-list ">
         <ion-list can-swipe="true">
-            <ion-item ng-repeat="item in vm.diaries" ng-click="vm.go('diary',item.id)" class="sd-item-tile">
+            <ion-item ng-repeat="item in vm.diaries"  class="sd-item-tile">
                 <div class="sd-group">
-                    <span class="sd-tile">
+                    <span class="sd-tile" ng-click="vm.go('diary',item.id)">
                       {{item.userName.split(' ')[0] | limitTo:1 | uppercase}}
                       {{item.userName.split(' ')[1] | limitTo:1 | uppercase}}
                     </span>
-                    <div class="sd-content">
+                    <div class="sd-content" ng-click="vm.go('diary',item.id)">
                         <div class="sd-title">{{item.date | date }}</div>
                         <div class="sd-description">Site diaries completed: {{item.sdNo}}</div>
                     </div>
+                    <div class="sd-share" ng-click = "showPopup(item)"><span class="ion-android-share-alt"></span></div>
                     <ion-option-button class="button-assertive" ng-click="vm.deleteDiary(item.id)">
                         Delete
                     </ion-option-button>

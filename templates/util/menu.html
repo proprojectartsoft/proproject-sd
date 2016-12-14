@@ -22,18 +22,17 @@
                 <img src="img/menu/synchronize.png">
                 <span>Synchronize</span>
             </ion-item>
-            <ion-item nav-clear menu-close>
+            <ion-item nav-clear menu-close ng-click="vm.go('home')">
+                <img src="img/new/projects.png">
+                <span>Projects</span>
+            </ion-item>
+            <ion-item nav-clear menu-close ng-click="vm.go('account')">
                 <img src="img/menu/user.png">
                 <span>My Account</span>
             </ion-item>
-            <ion-item nav-clear menu-close>
+            <ion-item nav-clear menu-close ng-click="vm.go('shared')">
                 <img src="img/menu/sharedDocs.png">
                 <span>My shared docs</span>
-
-            </ion-item>
-            <ion-item nav-clear menu-close>
-                <img src="img/menu/about.png">
-                <span>About</span>
             </ion-item>
             <ion-item nav-clear menu-close class="ds-invert">
                 <img src="img/menu/onweb.png">

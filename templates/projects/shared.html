@@ -1,0 +1,37 @@
+<ion-view title="About" class="all-view-bg" hide-back-button="true" id="about" cache-view="false">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('home')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
+            <span style="margin-left:10px;">Shared Library</span>
+        </button>
+    </div>
+    <ion-content class=" has-header padding sd-shared-doc">
+        <div ng-repeat="reg in vm.shared | orderBy:'-date_completed'">
+            <div class="all-field-header isOpen sd-bar" style="margin-bottom:0px !important">
+                <span>{{$index + 1}})&nbsp; {{reg.projectName}}</span></span>
+            </div>
+            <div class="item item item-input item-stacked-label calm-border" style="color: #31475A;padding: 10px !important;width: calc(100% - 2px);margin-left: 1px;background-color: #fff;margin-bottom: 5px">
+                <div class="register-value">
+                    <div>
+                        <strong>Site diary name</strong>
+                    </div>
+                    <span >{{reg.siteDiaryName}}</span>
+                </div>
+                <div class="register-value">
+                    <div>
+                        <strong>Shared to</strong>
+                    </div>
+                    <span >{{reg.shareToLogin}}</span>
+                </div>
+                <div class="register-value">
+                    <div>
+                        <strong>Shared by</strong>
+                    </div>
+                    <span >{{reg.shareByName}}</span>
+                </div>
+                <div class="register-value" ng-click="vm.go('diary', reg.siteDiaryId, reg.projectName)">
+                    <a class="button button-block button-calm" style="margin-bottom: 0px;border-color: #11C1F3">View Site Diary</a>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

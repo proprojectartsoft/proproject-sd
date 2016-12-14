@@ -25,15 +25,6 @@ angular.module($APP.name).factory('AuthService', [
                     return payload.data;
                 });
             },
-//            impersonate: function (username) {
-//                return $http.post($APP.server + '/api/impersonate', '', {
-//                    params: {username: username}
-//                }).then(
-//                        function (payload) {
-//                            return payload.data;
-//                        }
-//                );
-//            },
             login: function (user) {
                 return $http({
                     method: 'POST',

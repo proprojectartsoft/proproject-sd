@@ -17,6 +17,24 @@ function appconfig($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('app.account', {
+            url: "/account/",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/util/account.html",
+                    controller: 'AccountCtrl as vm'
+                }
+            }
+        })
+        .state('app.shared', {
+            url: "/shared/",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/projects/shared.html",
+                    controller: 'SharedCtrl as vm'
+                }
+            }
+        })
         .state('login', {
             url: "/login/",
             templateUrl: "templates/util/login.html",

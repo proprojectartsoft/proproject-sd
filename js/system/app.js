@@ -6,6 +6,7 @@ angular.module($APP.name, [
     'ionic',
     'angularMoment',
     'ion-datetime-picker',
+    'ngCordova',
 ]);
 
 angular.module($APP.name).run(apprun);
