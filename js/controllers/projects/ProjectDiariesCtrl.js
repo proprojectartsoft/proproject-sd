@@ -74,6 +74,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         vm.diary = result;
     })
 
+    $scope.filter = {};
     $scope.importContact = function (id) {
             $timeout(function () {
                 navigator.contacts.pickContact(function (contact) {
