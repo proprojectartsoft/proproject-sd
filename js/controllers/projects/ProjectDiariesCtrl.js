@@ -82,7 +82,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                             $scope.filter.email = contact.emails[0].value;
                             SharedService.share_diary(id, $scope.filter.email).then(function(result) {
                                     console.log(result)
-                                }
+                                })
                             }
                         });
                 });
