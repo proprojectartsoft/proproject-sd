@@ -79,17 +79,36 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         $timeout(function() {
             navigator.contacts.pickContact(function(contact) {
                 if (contact.emails) {
-                  var alertPopup1 = $ionicPopup.alert({
-                      title: "Sending email",
-                      template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                      content: "",
-                      buttons: []
-                  });
-                  alertPopup1.then(function(res) {});
+                    var alertPopup1 = $ionicPopup.alert({
+                        title: "Sending email",
+                        template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                        content: "",
+                        buttons: []
+                    });
+                    alertPopup1.then(function(res) {});
                     $scope.filter.email = contact.emails[0].value;
                     SharedService.share_diary(id, $scope.filter.email).then(function(result) {
                         console.log(result);
                         alertPopup1.close();
+                        if (result.message === "Site diary Shared!") {
+                            res = "";
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Share',
+                                template: 'Email sent.'
+                            });
+                            alertPopup.then(function(res) {
+                                // Custom functionality....
+                            });
+                        } else {
+                            res = "";
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Share',
+                                template: 'Form already shared to this user.'
+                            });
+                            alertPopup.then(function(res) {
+                                // Custom functionality....
+                            });
+                        }
                     })
                 }
             });
