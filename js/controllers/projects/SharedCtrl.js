@@ -6,13 +6,16 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, SharedService) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
     vm.go = go;
-    vm.username = localStorage.getObject('dsremember')
+    vm.username = localStorage.getObject('dsremember');
 
     $rootScope.projectName = '';
 
-    SharedService.shared_diary(true).then(function(result){
-      vm.shared = result;
-      console.log(result);
+    SharedService.shared_diary(false).then(function(result) {
+        vm.shared = result;
+    })
+
+    SharedService.shared_diary(true).then(function(result) {
+        vm.shared = result;
     })
 
     function go(predicate, id, project) {
@@ -25,6 +28,5 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, SharedService) {
     function toggleSidemenu($event) {
         $ionicSideMenuDelegate.toggleLeft();
     };
-
 
 }
