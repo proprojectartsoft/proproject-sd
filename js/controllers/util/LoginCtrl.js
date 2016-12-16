@@ -50,6 +50,11 @@ angular.module($APP.name).controller('LoginCtrl', [
     $scope.login = function () {
       if($scope.user.username && $scope.user.password){
         AuthService.login($scope.user).then(function(result){
+          if(result.role.id === 4){
+            $state.go('app.shared')
+          }else{
+            $state.go('app.home')
+          }
           localStorage.setObject('loggedIn', result)
           if($scope.user.remember){
             localStorage.setObject('dsremember', $scope.user);
@@ -57,8 +62,8 @@ angular.module($APP.name).controller('LoginCtrl', [
           else{
             localStorage.removeItem('dsremember');
           }
-          $state.go('app.home');
           localStorage.setObject('id',result.id)
+
         })
       }
     };

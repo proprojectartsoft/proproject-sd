@@ -13,6 +13,7 @@
                     <img src="img/menu/user_default.png">
                 </div>
                 <div class="ds-text">{{vm.username.username}}</div>
+                <div class="ds-text">{{vm.loggedIn.role.title}}</div>
             </ion-item>
             <ion-item nav-clear menu-close ng-click="vm.logout()" class="ds-btn">
                 <button class="button button-block button-calm">Logout</button>
@@ -22,7 +23,7 @@
                 <img src="img/menu/synchronize.png">
                 <span>Synchronize</span>
             </ion-item>
-            <ion-item nav-clear menu-close ng-click="vm.go('home')">
+            <ion-item ng-if="vm.loggedIn.role.id !== 4" nav-clear menu-close ng-click="vm.go('home')">
                 <img src="img/new/projects.png">
                 <span>Projects</span>
             </ion-item>

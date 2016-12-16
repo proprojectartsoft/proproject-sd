@@ -9,6 +9,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService) {
     vm.go = go;
     vm.logout = logout;
     vm.username = localStorage.getObject('dsremember')
+    vm.loggedIn = localStorage.getObject('loggedIn');
 
     function toggleSidemenu($event) {
         $ionicSideMenuDelegate.toggleLeft();
