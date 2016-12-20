@@ -37,12 +37,8 @@ function appconfig($stateProvider, $urlRouterProvider) {
         })
         .state('forgot', {
             url: "/forgot/",
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/util/forgotPassword.html",
-                    controller: 'LoginCtrl as vm'
-                }
-            }
+            templateUrl: "templates/util/forgotPassword.html",
+            controller: 'LoginCtrl as vm'
         })
         .state('login', {
             url: "/login/",

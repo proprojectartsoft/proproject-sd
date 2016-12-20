@@ -8,8 +8,7 @@ angular.module($APP.name).controller('LoginCtrl', [
   function ($rootScope, $scope, $state, $ionicModal, $ionicPopup, AuthService) {
     $scope.user ={};
     var vm = this;
-    vm.showForgot = showForgot;
-    vm.backForgot = backForgot;
+    vm.go = go;
 
     if(localStorage.getObject('dsremember')){
       $scope.user.username = localStorage.getObject('dsremember').username;
@@ -18,19 +17,8 @@ angular.module($APP.name).controller('LoginCtrl', [
       $scope.user.id = localStorage.getObject('dsremember').id;
     }
 
-    vm.projectModal = $ionicModal.fromTemplateUrl('templates/util/forgotPassword.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(popover) {
-        vm.projectModal = popover;
-    });
-
-    function showForgot() {
-        vm.projectModal.show();
-    }
-
-    function backForgot() {
-        vm.projectModal.hide();
+    function go(predicate, id) {
+        $state.go(predicate);
     }
 
     $scope.submit = function() {
@@ -42,7 +30,7 @@ angular.module($APP.name).controller('LoginCtrl', [
         });
         AuthService.forgotpassword($scope.user.username, true).then(function(result) {
             $scope.user.username = "";
-            vm.projectModal.hide();
+            vm.go('login')
             $scope.syncPopup.close();
         });
     };
