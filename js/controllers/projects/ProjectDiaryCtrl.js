@@ -12,6 +12,7 @@ function ProjectDiaryCtrl($rootScope, $state, $stateParams, SettingService, Site
     vm.cancelEdit = false;
     vm.local = {};
     vm.local.data = {};
+    vm.loggedIn = localStorage.getObject('loggedIn');
 
     vm.edit = localStorage.getObject('editMode');
     if ($stateParams.id) {

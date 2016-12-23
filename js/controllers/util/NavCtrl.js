@@ -6,8 +6,10 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
     vm.sync = sync;
+    vm.go = go;
     vm.logout = logout;
     vm.username = localStorage.getObject('dsremember')
+    vm.loggedIn = localStorage.getObject('loggedIn');
 
     function toggleSidemenu($event) {
         $ionicSideMenuDelegate.toggleLeft();
@@ -15,6 +17,11 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService) {
 
     function sync() {
     }
+
+    function go(predicate) {
+            $state.go('app.' + predicate);
+            console.log(predicate);
+        }
 
     function logout(){
       AuthService.logout().then(function(result){
@@ -31,11 +38,4 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService) {
             .toggleClass("ion-android-arrow-back");
     })
 
-
-
-    // $rootScope.$watch(function() {
-    //     return SelectService.get('header');
-    // }, function(header) {
-    //     vm.settings.header = header;
-    // })
 }

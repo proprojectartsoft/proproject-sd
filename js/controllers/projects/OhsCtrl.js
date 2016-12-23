@@ -59,8 +59,14 @@ function OhsCtrl($state, $stateParams) {
     }
 
     function go(predicate, id) {
-        $state.go('app.' + predicate, {
-            id: id
-        });
+        if ((predicate === 'diary') && (vm.diaryId)) {
+            $state.go('app.' + predicate, {
+                id: vm.diaryId
+            });
+        } else {
+            $state.go('app.' + predicate, {
+                id: id
+            });
+        }
     }
 }

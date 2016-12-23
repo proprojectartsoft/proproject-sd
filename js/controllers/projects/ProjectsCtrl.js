@@ -5,8 +5,11 @@ angular.module($APP.name).controller('ProjectsCtrl', [
     '$ionicSideMenuDelegate',
     '$timeout',
     '$ionicModal',
+    '$indexedDB',
     'ProjectService',
-    function($rootScope, $state, $scope, $ionicSideMenuDelegate, $timeout, $ionicModal, ProjectService) {
+    'SiteDiaryService',
+    'SyncService',
+    function($rootScope, $state, $scope, $ionicSideMenuDelegate, $timeout, $ionicModal, $indexedDB, ProjectService, SiteDiaryService, SyncService) {
         var vm = this;
         vm.showProject = showProject;
         vm.backProject = backProject;
@@ -18,7 +21,18 @@ angular.module($APP.name).controller('ProjectsCtrl', [
         vm.local = {};
         $rootScope.projectName = '';
         vm.local.data = {};
+        vm.test = [];
         vm.loggedIn = localStorage.getObject('loggedIn');
+        SyncService.sync();
+        $timeout(function(){
+          $indexedDB.openStore('projects', function(store) {
+              store.getAll().then(function(result) {
+                  console.log("Extracted from DB",result);
+                  vm.projects = result;
+              });
+          });
+
+        },2000)
         vm.projectModal = $ionicModal.fromTemplateUrl('templates/projects/create.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -26,8 +40,16 @@ angular.module($APP.name).controller('ProjectsCtrl', [
             vm.projectModal = popover;
         });
 
-        ProjectService.projects().then(function(result) {
-            vm.projects = result;
+        $indexedDB.openStore('this', function(store) {
+
+            store.insert({
+                "ssn": "444-222-334",
+                "name": "ISPAS",
+                "age": 23
+            }).then(function(e) {
+                console.log('IT WORKS')
+            });
+
         });
 
         function showProject() {

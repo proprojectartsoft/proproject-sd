@@ -2,9 +2,13 @@ angular.module($APP.name).controller('LoginCtrl', [
   '$rootScope',
   '$scope',
   '$state',
+  '$ionicModal',
+  '$ionicPopup',
   'AuthService',
-  function ($rootScope, $scope, $state, AuthService) {
+  function ($rootScope, $scope, $state, $ionicModal, $ionicPopup, AuthService) {
     $scope.user ={};
+    var vm = this;
+    vm.go = go;
 
     if(localStorage.getObject('dsremember')){
       $scope.user.username = localStorage.getObject('dsremember').username;
@@ -13,9 +17,32 @@ angular.module($APP.name).controller('LoginCtrl', [
       $scope.user.id = localStorage.getObject('dsremember').id;
     }
 
+    function go(predicate, id) {
+        $state.go(predicate);
+    }
+
+    $scope.submit = function() {
+        $scope.syncPopup = $ionicPopup.alert({
+            title: "Sending request",
+            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            content: "",
+            buttons: []
+        });
+        AuthService.forgotpassword($scope.user.username, true).then(function(result) {
+            $scope.user.username = "";
+            vm.go('login')
+            $scope.syncPopup.close();
+        });
+    };
+
     $scope.login = function () {
       if($scope.user.username && $scope.user.password){
         AuthService.login($scope.user).then(function(result){
+          if(result.role.id === 4){
+            $state.go('app.shared')
+          }else{
+            $state.go('app.home')
+          }
           localStorage.setObject('loggedIn', result)
           if($scope.user.remember){
             localStorage.setObject('dsremember', $scope.user);
@@ -23,8 +50,8 @@ angular.module($APP.name).controller('LoginCtrl', [
           else{
             localStorage.removeItem('dsremember');
           }
-          $state.go('app.home');
           localStorage.setObject('id',result.id)
+
         })
       }
     };

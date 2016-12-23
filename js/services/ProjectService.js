@@ -19,6 +19,18 @@ angular.module($APP.name).factory('ProjectService', [
                 }).success(function(response) {}).error(function(response) {});
             },
 
+            update_account: function(dataIn) {
+                return $http({
+                    method: 'PUT',
+                    url: $APP.server + '/api/user',
+                    data: dataIn
+                }).then(
+                    function(payload) {
+                        return payload.data;
+                    }
+                );
+            },
+
             my_account: function(id) {
                 return $http.get($APP.server + '/api/user/profile', {
                     params: {

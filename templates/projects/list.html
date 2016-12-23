@@ -3,16 +3,19 @@
         <ion-list>
             <ion-item ng-repeat="project in vm.projects" ng-click="vm.go(project)">
                 <div class="sd-group">
-                    <div class="sd-title">{{project.project_no}}&nbsp;|&nbsp;{{project.name}}</div>
+                    <div class="sd-title">{{project.value.project_no}}&nbsp;|&nbsp;{{project.value.name}}</div>
                     <div class="sd-description">
                         <img src="img/action/description.png">
-                        <span>{{project.date_of_last_completed || 'No date' | date}}</span>
+                        <span>{{project.value.date_of_last_completed || 'No date' | date}}</span>
                         <i class="ion-ios-checkmark-empty"></i>
-                        <span>{{project.no_of_sd_completed}}</span>
+                        <span>{{project.value.no_of_sd_completed}}</span>
                     </div>
                 </div>
             </ion-item>
         </ion-list>
+        <div ng-if="!vm.projects.length" class="sd-nodata">
+            <span>There are no projects</span>
+        </div>
     </ion-content>
     <span class="ds-actionbtn" ng-click="vm.showProject()">
         <i class="ion-ios-plus-empty"></i>

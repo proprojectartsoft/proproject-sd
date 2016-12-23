@@ -8,6 +8,16 @@ function appconfig($stateProvider, $urlRouterProvider) {
             templateUrl: "templates/util/menu.html",
             controller: 'NavCtrl as vm'
         })
+        .state('forgot', {
+            url: "/forgot/",
+            templateUrl: "templates/util/forgotPassword.html",
+            controller: 'LoginCtrl as vm'
+        })
+        .state('login', {
+            url: "/login/",
+            templateUrl: "templates/util/login.html",
+            controller: 'LoginCtrl as vm'
+        })
         .state('app.home', {
             url: "/home/",
             views: {
@@ -17,10 +27,23 @@ function appconfig($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('login', {
-            url: "/login/",
-            templateUrl: "templates/util/login.html",
-            controller: 'LoginCtrl as vm'
+        .state('app.account', {
+            url: "/account/",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/util/account.html",
+                    controller: 'AccountCtrl as vm'
+                }
+            }
+        })
+        .state('app.shared', {
+            url: "/shared/",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/projects/shared.html",
+                    controller: 'SharedCtrl as vm'
+                }
+            }
         })
         .state('app.project', {
             url: "/project/:id",

@@ -15,6 +15,27 @@ $lightblue: #11c1f3;
     font-weight: 100;
 }
 
+.sd-button {
+    background-color: #11c1f3;
+    color: white;
+    margin: 0 0 0 18px;
+    display: inline-block;
+    top: 36px;
+    width: calc(100% - 234px);
+
+    span {
+        font-size: 22px;
+        vertical-align: middle;
+        padding-right: 5px;
+    }
+
+    img {
+        height: 20px;
+        vertical-align: middle;
+        padding-right: 5px;
+    }
+}
+
 .pp-formbtn {
     background-color: #ffffff;
     color: #2f4759;
@@ -39,8 +60,9 @@ $lightblue: #11c1f3;
     font-size: 18px;
     font-weight: 100;
 }
-.sd-no-select{
-  pointer-events: none;
+
+.sd-no-select {
+    pointer-events: none;
 }
 
 .item-list-desc {
