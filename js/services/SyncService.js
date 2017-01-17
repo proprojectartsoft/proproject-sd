@@ -4,9 +4,10 @@ angular.module($APP.name).factory('SyncService', [
     '$timeout',
     '$indexedDB',
     '$ionicPopup',
+    '$state',
     'ProjectService',
     'SiteDiaryService',
-    function($q, $http, $timeout, $indexedDB, $ionicPopup, ProjectService, SiteDiaryService) {
+    function($q, $http, $timeout, $indexedDB, $ionicPopup,$state, ProjectService, SiteDiaryService) {
 
         var getme = function() {
             return $http.get($APP.server + '/api/me')
