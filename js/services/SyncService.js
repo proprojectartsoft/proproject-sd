@@ -107,7 +107,7 @@ angular.module($APP.name).factory('SyncService', [
                                           text:'Ok',
                                           type:'button-positive',
                                           onTap: function(e){
-                                            e.close();
+                                            offlinePopup.close();
                                           }
                                         }]
                                     });
