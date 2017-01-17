@@ -26,6 +26,7 @@ angular.module($APP.name).factory('SyncService', [
                     content: "",
                     buttons: []
                 });
+
                 $timeout(function() {
                     if (navigator.onLine) {
                         getme()
@@ -94,8 +95,17 @@ angular.module($APP.name).factory('SyncService', [
                             })
                             .error(function(data, status) {
                                 if (!navigator.online) {
-                                    var loggedIn = localStorage.getObject('loggedIn');
+                                    var loggedIn = localStorage.getObject('dsremember');
                                     console.log('Offline');
+                                    var offlinePopup = $ionicPopup.alert({
+                                        title: "Syncing",
+                                        template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                                        content: "",
+                                        buttons: []
+                                    });
+                                    $timeout(function(){
+                                      offlinePopup.close();
+                                    },3000);
                                     if (loggedIn) {
                                         $state.go('app.home');
                                     }
