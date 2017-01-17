@@ -112,6 +112,21 @@ angular.module($APP.name).factory('SyncService', [
 
                                 }
                             });
+                    } else {
+                      var loggedIn = localStorage.getObject('dsremember');
+                      console.log('Offline');
+                      var offlinePopup = $ionicPopup.alert({
+                          title: "Syncing",
+                          template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                          content: "",
+                          buttons: []
+                      });
+                      $timeout(function(){
+                        offlinePopup.close();
+                      },3000);
+                      if (loggedIn) {
+                          $state.go('app.home');
+                      }
                     }
                 })
                 return deferred.promise;
