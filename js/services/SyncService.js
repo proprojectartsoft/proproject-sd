@@ -25,14 +25,14 @@ angular.module($APP.name).factory('SyncService', [
 
                 $timeout(function() {
                     if (navigator.onLine) {
-                      var syncPopup = $ionicPopup.alert({
-                          title: "Syncing",
-                          template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                          content: "",
-                          buttons: []
-                      });
                         getme()
                             .success(function(data) {
+                              var syncPopup = $ionicPopup.alert({
+                                  title: "Syncing",
+                                  template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                                  content: "",
+                                  buttons: []
+                              });
                                 function buildData() {
                                     var def = $q.defer();
                                     ProjectService.projects().then(function(result) {
@@ -100,14 +100,17 @@ angular.module($APP.name).factory('SyncService', [
                                     var loggedIn = localStorage.getObject('dsremember');
                                     console.log('Offline');
                                     var offlinePopup = $ionicPopup.alert({
-                                        title: "Syncing",
-                                        template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                                        title: "You are offline",
+                                        template: "<center>You can sync your data when online</center>",
                                         content: "",
-                                        buttons: []
+                                        buttons: [{
+                                          text:'Ok',
+                                          type:'button-positive',
+                                          onTap: function(e){
+                                            e.close();
+                                          }
+                                        }]
                                     });
-                                    $timeout(function(){
-                                      offlinePopup.close();
-                                    },3000);
                                     if (loggedIn) {
                                         $state.go('app.home');
                                     }
@@ -130,9 +133,6 @@ angular.module($APP.name).factory('SyncService', [
                             }
                           }]
                       });
-                      $timeout(function(){
-                        offlinePopup.close();
-                      },3000);
                       if (loggedIn) {
                           $state.go('app.home');
                       }
