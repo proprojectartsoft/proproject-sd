@@ -115,6 +115,7 @@ angular.module($APP.name).factory('SyncService', [
                     } else {
                       var loggedIn = localStorage.getObject('dsremember');
                       console.log('Offline');
+                      syncPopup.close();
                       var offlinePopup = $ionicPopup.alert({
                           title: "Syncing",
                           template: "<center><ion-spinner icon='android'></ion-spinner></center>",
