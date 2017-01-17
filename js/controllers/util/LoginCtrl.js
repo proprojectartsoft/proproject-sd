@@ -17,6 +17,11 @@ angular.module($APP.name).controller('LoginCtrl', [
             $scope.user.password = localStorage.getObject('dsremember').password;
             $scope.user.remember = localStorage.getObject('dsremember').remember;
             $scope.user.id = localStorage.getObject('dsremember').id;
+            AuthService.login($scope.user).then(function(result) {
+                if (result.status) {
+                  SyncService.sync();
+                }
+              });
         }
 
         function go(predicate, id) {

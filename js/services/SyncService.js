@@ -21,15 +21,16 @@ angular.module($APP.name).factory('SyncService', [
         return {
             sync: function() {
                 var deferred = $q.defer();
-                var syncPopup = $ionicPopup.alert({
-                    title: "Syncing",
-                    template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                    content: "",
-                    buttons: []
-                });
+
 
                 $timeout(function() {
                     if (navigator.onLine) {
+                      var syncPopup = $ionicPopup.alert({
+                          title: "Syncing",
+                          template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                          content: "",
+                          buttons: []
+                      });
                         getme()
                             .success(function(data) {
                                 function buildData() {
