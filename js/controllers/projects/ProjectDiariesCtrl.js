@@ -100,6 +100,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                                 template: 'Email sent.'
                             });
                             alertPopup.then(function(res) {
+                                // Custom functionality....
                             });
                         } else {
                             res = "";

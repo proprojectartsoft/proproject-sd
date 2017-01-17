@@ -119,10 +119,16 @@ angular.module($APP.name).factory('SyncService', [
                       console.log('Offline');
                       syncPopup.close();
                       var offlinePopup = $ionicPopup.alert({
-                          title: "Syncing",
-                          template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                          title: "You are offline",
+                          template: "<center>You can sync your data when online</center>",
                           content: "",
-                          buttons: []
+                          buttons: [{
+                            text:'Ok',
+                            type:'button-positive',
+                            onTap: function(e){
+                              offlinePopup.close();
+                            }
+                          }]
                       });
                       $timeout(function(){
                         offlinePopup.close();
