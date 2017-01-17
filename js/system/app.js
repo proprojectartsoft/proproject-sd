@@ -13,8 +13,9 @@ angular.module($APP.name, [
       .connection('Site-Diary')
       .upgradeDatabase(1, function(event, db, tx){
         var objStore = db.createObjectStore('projects', {keyPath: 'id',autoIncrement: true});
+        objStore.createIndex('id_idx', 'id', {unique: true});
       });
-  });;
+  });
 
 angular.module($APP.name).run(apprun);
 

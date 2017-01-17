@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('NavCtrl', NavCtrl)
 
-NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'AuthService'];
+NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'AuthService','SyncService'];
 
-function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService) {
+function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService,SyncService) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
     vm.sync = sync;
@@ -16,6 +16,9 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService) {
     };
 
     function sync() {
+      SyncService.sync().then(function(){
+        $state.reload();
+      });
     }
 
     function go(predicate) {

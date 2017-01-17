@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ProjectDiariesCtrl', ProjectDiariesCtrl)
 
-ProjectDiariesCtrl.$inject = ['$scope', '$timeout', '$ionicModal', '$ionicPopup', '$state', '$stateParams', 'SiteDiaryService', 'SettingService', 'SharedService'];
+ProjectDiariesCtrl.$inject = ['$scope', '$timeout', '$ionicModal', '$ionicPopup', '$state', '$stateParams', '$indexedDB', 'SiteDiaryService', 'SettingService', 'SharedService'];
 
-function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, SiteDiaryService, SettingService, SharedService) {
+function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService) {
     var vm = this;
     vm.showDiary = showDiary;
     vm.backDiary = backDiary;
@@ -60,19 +60,22 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     }, {
         id: 11,
         name: 'Other'
-    }]
-    SiteDiaryService.list_diaries($stateParams.id).then(function(result) {
-        vm.diaries = result;
-    })
-    SiteDiaryService.list_diaries($stateParams.id).then(function(result) {
+    }];
+
+    $indexedDB.openStore('projects', function(store) {
         vm.diaryModal = $ionicModal.fromTemplateUrl('templates/projects/diarySearch.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(popover) {
             vm.diaryModal = popover;
         });
-        vm.diary = result;
-    })
+        vm.projectId = parseInt($stateParams.id);
+        store.find(vm.projectId).then(function(e) {
+          console.log($stateParams.id, e);
+          vm.diary = e.value.diaries;
+          vm.diaries = e.value.diaries;
+        });
+    });
 
     $scope.filter = {};
     $scope.importContact = function(id) {
@@ -97,7 +100,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                                 template: 'Email sent.'
                             });
                             alertPopup.then(function(res) {
-                                // Custom functionality....
                             });
                         } else {
                             res = "";

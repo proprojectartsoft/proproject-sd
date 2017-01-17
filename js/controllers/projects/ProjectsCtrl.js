@@ -23,16 +23,16 @@ angular.module($APP.name).controller('ProjectsCtrl', [
         vm.local.data = {};
         vm.test = [];
         vm.loggedIn = localStorage.getObject('loggedIn');
-        SyncService.sync();
-        $timeout(function(){
-          $indexedDB.openStore('projects', function(store) {
-              store.getAll().then(function(result) {
-                  console.log("Extracted from DB",result);
-                  vm.projects = result;
-              });
-          });
-
-        },2000)
+        $indexedDB.openStore('projects', function(store) {
+            store.getAll().then(function(result) {
+                console.log("Extracted from DB", result);
+                vm.projects = result;
+            });
+        });
+        // $timeout(function(){
+        //
+        //
+        // },2000)
         vm.projectModal = $ionicModal.fromTemplateUrl('templates/projects/create.html', {
             scope: $scope,
             animation: 'slide-in-up'
