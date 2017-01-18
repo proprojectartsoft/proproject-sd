@@ -81,7 +81,6 @@ angular.module($APP.name).controller('ProjectsCtrl', [
                         vm.projects = result;
                     });
                 })
-                console.log('is it in yet?')
             }
         }
 

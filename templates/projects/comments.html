@@ -9,7 +9,8 @@
             <ion-item ng-repeat="item in vm.local.list" class="sd-item-tile">
                 <div class="sd-group">
                     <span class="sd-tile">
-                        {{vm.getInitials(item.first_name)}}
+                      {{item.first_name.split(' ')[0] | limitTo:1 | uppercase}}
+                      {{item.last_name.split(' ')[0] | limitTo:1 | uppercase}}
                     </span>
                     <div class="sd-content">
                         <div class="sd-title">{{item.name}} <span class="sd-data">{{item.date | date}}</span></div>

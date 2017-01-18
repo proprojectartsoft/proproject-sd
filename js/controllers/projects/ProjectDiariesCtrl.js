@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ProjectDiariesCtrl', ProjectDiariesCtrl)
 
-ProjectDiariesCtrl.$inject = ['$scope', '$timeout', '$ionicModal', '$ionicPopup', '$state', '$stateParams', '$indexedDB', 'SiteDiaryService', 'SettingService', 'SharedService'];
+ProjectDiariesCtrl.$inject = ['$scope', '$timeout', '$ionicModal', '$ionicPopup', '$state', '$stateParams', '$indexedDB', 'SiteDiaryService', 'SettingService', 'SharedService','SyncService'];
 
-function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService) {
+function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService) {
     var vm = this;
     vm.showDiary = showDiary;
     vm.backDiary = backDiary;
@@ -17,6 +17,8 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     localStorage.setObject('sd.attachments', null);
     localStorage.setObject('projectId', $stateParams.id);
 
+    vm.offlineDiary = localStorage.getObject('diaryToSync');
+    console.log(vm.offlineDiary.data)
     vm.filter = {};
     vm.shareId = {};
     vm.state = '';
@@ -100,7 +102,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                                 template: 'Email sent.'
                             });
                             alertPopup.then(function(res) {
-                                // Custom functionality....
                             });
                         } else {
                             res = "";
@@ -184,9 +185,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     };
 
     function deleteDiary(id) {
+      console.log(id);
         SiteDiaryService.delete_diary(id).then(function(result) {
-            SiteDiaryService.list_diaries($stateParams.id).then(function(result) {
-                vm.diaries = result;
+            SyncService.sync().then(function(){
+              //vm.go('home');
+              $state.reload();
             })
         })
     }
