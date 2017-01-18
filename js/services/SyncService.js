@@ -38,7 +38,7 @@ angular.module($APP.name).factory('SyncService', [
                                 function addDiaries() {
                                     var prm = $q.defer();
                                     var diaryToAdd = localStorage.getObject('diaryToSync');
-                                    if (diaryToAdd.data) {
+                                    if (diaryToAdd && diaryToAdd.data) {
                                         SiteDiaryService.add_diary(diaryToAdd.data).then(function(result) {
                                             var attachments = diaryToAdd.attachments;
                                             var attToAdd = [];
@@ -109,7 +109,7 @@ angular.module($APP.name).factory('SyncService', [
                                     console.log("inSync");
                                     buildData().then(function(projects) {
                                         var diaryToAdd = localStorage.getObject('diaryToSync');
-                                        if (diaryToAdd.data) {
+                                        if (diaryToAdd && diaryToAdd.data) {
                                             SiteDiaryService.add_diary(diaryToAdd.data).then(function(result) {
                                                 var attachments = diaryToAdd.attachments;
                                                 var attToAdd = [];
