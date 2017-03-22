@@ -1,6 +1,6 @@
 angular.module($APP.name).controller('ProjectDiariesCtrl', ProjectDiariesCtrl)
 
-ProjectDiariesCtrl.$inject = ['$scope', '$timeout', '$ionicModal', '$ionicPopup', '$state', '$stateParams', '$indexedDB', 'SiteDiaryService', 'SettingService', 'SharedService','SyncService'];
+ProjectDiariesCtrl.$inject = ['$scope', '$timeout', '$ionicModal', '$ionicPopup', '$state', '$stateParams', '$indexedDB', 'SiteDiaryService', 'SettingService', 'SharedService', 'SyncService'];
 
 function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService) {
     var vm = this;
@@ -72,9 +72,9 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         });
         vm.projectId = parseInt($stateParams.id);
         store.find(vm.projectId).then(function(e) {
-          console.log($stateParams.id, e);
-          vm.diary = e.value.diaries;
-          vm.diaries = e.value.diaries;
+            console.log($stateParams.id, e);
+            vm.diary = e.value.diaries;
+            vm.diaries = e.value.diaries;
         });
     });
 
@@ -100,8 +100,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                                 title: 'Share',
                                 template: 'Email sent.'
                             });
-                            alertPopup.then(function(res) {
-                            });
+                            alertPopup.then(function(res) {});
                         } else {
                             res = "";
                             var alertPopup = $ionicPopup.alert({
@@ -123,7 +122,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         var myPopup = $ionicPopup.show({
             template: '<input type = "email" ng-model = "data.model">',
             title: 'Share site diary',
-            subTitle: 'Please insert an email address',
+            subTitle: 'Please enter a valid e-mail address.',
             scope: $scope,
 
             buttons: [{
@@ -134,6 +133,18 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 onTap: function(e) {
                     if (!$scope.data.model) {
                         e.preventDefault();
+                        var alertPopup = $ionicPopup.alert({
+                            title: "Share",
+                            template: "",
+                            content: "Please insert a valid e-mail address.",
+                            buttons: [{
+                                text: 'OK',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    alertPopup.close();
+                                }
+                            }]
+                        });
                     } else {
                         return $scope.data.model;
                     }
@@ -184,11 +195,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     };
 
     function deleteDiary(id) {
-      console.log(id);
+        console.log(id);
         SiteDiaryService.delete_diary(id).then(function(result) {
-            SyncService.sync().then(function(){
-              //vm.go('home');
-              $state.reload();
+            SyncService.sync().then(function() {
+                //vm.go('home');
+                $state.reload();
             })
         })
     }
