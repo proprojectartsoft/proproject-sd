@@ -18,11 +18,11 @@
           </label>
             <label class="sd-label">
                 <div class="sd-title">Maximum temperature</div>
-                <input ng-disabled="vm.diaryId && !vm.editMode" placeholder="Tap to add temperature" ng-model="vm.max_temp">
+                <input type="number" ng-disabled="vm.diaryId && !vm.editMode" placeholder="Tap to add temperature" ng-model="vm.max_temp">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Minimum temperature</div>
-                <input ng-disabled="vm.diaryId && !vm.editMode" placeholder="Tap to add temperature" ng-model="vm.min_temp">
+                <input type="number" ng-disabled="vm.diaryId && !vm.editMode" placeholder="Tap to add temperature" ng-model="vm.min_temp">
             </label>
             <div class="sd-label" ng-if="!vm.diaryId || vm.editMode">
                 <div class="sd-title">Morning</div>
