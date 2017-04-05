@@ -221,6 +221,11 @@ $lightblue: #11c1f3;
                     border: none;
                 }
 
+                input[type=number] {
+                    padding-top: 0;
+                    padding-bottom: 0;
+                }
+
                 .ion-ios-paperplane {
                     font-size: 22px;
                     height: 40px;
