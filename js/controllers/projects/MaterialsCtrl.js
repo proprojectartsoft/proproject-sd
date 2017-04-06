@@ -25,7 +25,8 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.data = {};
     vm.settings = '';
     vm.material = {}
-    if (!isNaN(vm.index) &&(vm.index !== 'create')) {
+    vm.formated_tax = "";
+    if (!isNaN(vm.index) && (vm.index !== 'create')) {
 
         vm.material = {
             name: vm.create.plant_and_material_used[vm.index].name,
@@ -36,13 +37,14 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             quantity: vm.create.plant_and_material_used[vm.index].quantity,
             tax: vm.create.plant_and_material_used[vm.index].tax,
         };
+        vm.formated_tax = vm.material.tax + "%";
     }
 
     vm.materials = vm.create.plant_and_material_used;
 
 
     SiteDiaryService.get_resources().then(function(result) {
-        vm.searchModal = $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(popover) {
@@ -52,10 +54,11 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     })
 
     SiteDiaryService.get_units().then(function(result) {
-        vm.searchModal = $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(popover) {
+            vm.searchModal = popover;
             vm.searchUnit = popover;
         });
         vm.units = result;
@@ -81,6 +84,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         vm.material.unit_name = item.unit_name;
         vm.material.unitCost = item.direct_cost;
         vm.material.tax = item.vat;
+        vm.formated_tax = vm.material.tax + "%";
         vm.searchModal.hide();
     }
 
@@ -102,15 +106,15 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             tax: vm.material.tax,
             total: (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100))
         }
-        if(vm.editMode){
-          if(vm.index === 'create'){
-            vm.create.plant_and_material_used.push(vm.material);
-          }else {
-            vm.create.plant_and_material_used[vm.index] = vm.material
-          }
+        if (vm.editMode) {
+            if (vm.index === 'create') {
+                vm.create.plant_and_material_used.push(vm.material);
+            } else {
+                vm.create.plant_and_material_used[vm.index] = vm.material
+            }
 
-        } else{
-          vm.create.plant_and_material_used.push(vm.material);
+        } else {
+            vm.create.plant_and_material_used.push(vm.material);
         }
 
         localStorage.setObject('sd.diary.create', vm.create);

@@ -55,6 +55,7 @@ $lightblue: #11c1f3;
                     vertical-align: middle;
                     margin-right: 5px;
                     font-weight: 400;
+                    white-space: normal;
                 }
 
                 i {
@@ -173,7 +174,7 @@ $lightblue: #11c1f3;
             background-color: #fff;
 
             .sd-filler {
-                height: 40px;
+                min-height: 40px;
                 border-top: 1px solid #e8e8e8;
                 padding: 10px 14px;
             }
@@ -221,9 +222,8 @@ $lightblue: #11c1f3;
                     border: none;
                 }
 
-                input[type=number] {
-                    padding-top: 0;
-                    padding-bottom: 0;
+                input[type="number"] {
+                    height: 49px;
                 }
 
                 .ion-ios-paperplane {

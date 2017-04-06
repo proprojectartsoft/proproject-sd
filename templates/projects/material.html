@@ -10,8 +10,8 @@
         </div>
         <div class="sd-container">
             <label class="sd-label">
-                <div class="sd-title">Materials</div>
-                <input placeholder="Tap to add a material" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.material.name">
+                <div class="sd-title">Resource</div>
+                <input placeholder="Tap to add a resource" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.material.name">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Description</div>
@@ -19,7 +19,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>
-                <input placeholder="Tap to add number of pieces" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.quantity">
+                <input type="number" placeholder="Tap to add number of pieces" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.quantity">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
@@ -27,11 +27,11 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Cost per unit</div>
-                <input placeholder="Tap to add cost per unit" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.unitCost">
+                <input type="number" placeholder="Tap to add cost per unit" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.unitCost">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Subtotal cost</div>
-                <input placeholder="Subtotal cost" disabled value="{{vm.material.quantity * vm.material.unitCost}}">
+                <input type="number" placeholder="Subtotal cost" disabled value="{{vm.material.quantity * vm.material.unitCost}}">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Tax</div>

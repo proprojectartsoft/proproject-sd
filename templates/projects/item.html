@@ -19,7 +19,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>
-                <input placeholder="Tap to add Quantity" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.local.data.qty">
+                <input type="number" placeholder="Tap to add Quantity" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.local.data.qty">
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div  class="sd-title">On hire</div>
