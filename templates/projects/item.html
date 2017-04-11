@@ -11,11 +11,11 @@
         <div class="sd-container">
             <label class="sd-label">
                 <div class="sd-title">Name</div>
-                <input placeholder="Tap to add goods" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.local.data.good_name">
+                <div ng-click="vm.showSearch()"><input placeholder="Tap to add goods" ng-disabled=true ng-model="vm.local.data.good_name"></div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
-                <input placeholder="Tap to add goods" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearchUnit()" ng-model="vm.local.data.good_unit">
+                <div ng-click="vm.showSearchUnit()"><input placeholder="Tap to add goods" ng-disabled=true ng-model="vm.local.data.good_unit"></div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>

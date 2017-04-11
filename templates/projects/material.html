@@ -11,7 +11,7 @@
         <div class="sd-container">
             <label class="sd-label">
                 <div class="sd-title">Resource</div>
-                <input placeholder="Tap to add a resource" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.material.name">
+                <div ng-click="vm.showSearch()"><input placeholder="Tap to add a resource" ng-disabled=true ng-model="vm.material.name"></div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Description</div>
@@ -23,7 +23,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
-                <input placeholder="Tap to add goods" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearchUnit()" ng-model="vm.material.unit_name">
+                <div ng-click="vm.showSearchUnit()"><input placeholder="Tap to add goods" ng-disabled=true ng-model="vm.material.unit_name"></div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Cost per unit</div>

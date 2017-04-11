@@ -11,7 +11,7 @@
         <div class="sd-container">
             <label class="sd-label">
                 <div class="sd-title">Company representant</div>
-                <input placeholder="Tap to add representant" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-click="vm.showSearch()" ng-model="vm.local.data.staff_name">
+                <div ng-click="vm.showSearch()"><input placeholder="Tap to add representant" ng-disabled=true ng-model="vm.local.data.staff_name"></div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Company name</div>

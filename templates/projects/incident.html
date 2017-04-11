@@ -27,7 +27,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
-                <input placeholder="Tap to add price per unit" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-click="vm.showSearchUnit()" ng-model="vm.local.unit_name">
+                <div ng-click="vm.showSearchUnit()"><input placeholder="Tap to add price per unit" ng-disabled=true ng-model="vm.local.unit_name"></div>
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div class="sd-title">Action required</div>
