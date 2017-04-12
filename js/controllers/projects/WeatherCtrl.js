@@ -57,14 +57,14 @@ function WeatherCtrl($rootScope, $ionicModal, $state) {
 
     function save() {
         vm.weather = {
-            morning: localStorage.getObject('sd.diary.weather.morning'),
-            midday: localStorage.getObject('sd.diary.weather.midday'),
-            afternoon: localStorage.getObject('sd.diary.weather.afternoon'),
-            evening: localStorage.getObject('sd.diary.weather.evening'),
+            morning: angular.extend([], vm.create.weather.morning, localStorage.getObject('sd.diary.weather.morning')),
+            midday: angular.extend([], vm.create.weather.midday, localStorage.getObject('sd.diary.weather.midday')),
+            afternoon: angular.extend([], vm.create.weather.afternoon, localStorage.getObject('sd.diary.weather.afternoon')),
+            evening: angular.extend([], vm.create.weather.evening, localStorage.getObject('sd.diary.weather.evening')),
             perfect_weather: vm.perfectWeather,
             min_temp: vm.min_temp,
             max_temp: vm.max_temp,
-            on_and_off: localStorage.getObject('sd.diary.weather.onOff')
+            on_and_off: angular.extend([], vm.create.weather.onOff, localStorage.getObject('sd.diary.weather.onOff'))
         }
         vm.create.weather = vm.weather;
         localStorage.setObject('sd.diary.create', vm.create);

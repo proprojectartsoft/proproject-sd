@@ -19,7 +19,15 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     vm.filter = {};
     vm.imgURI = [];
     vm.dataToDelete = [];
-    vm.filter.substate = 'gallery'
+    vm.filter.substate = 'gallery';
+
+    $timeout(function() {
+      $('.pull-down').each(function() {
+        var $this = $(this);
+        var h = $this.parent().height() - $this.height() - $this.prev().height();
+        $this.css('padding-top', h);
+      })
+    }, 50);
 
     function populate(){
       vm.attachments = localStorage.getObject('sd.attachments');

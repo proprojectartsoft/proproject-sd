@@ -25,8 +25,8 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             good_unit: vm.create.goods_received[vm.id].goods_details[vm.index].unit_name,
             qty: vm.create.goods_received[vm.id].goods_details[vm.index].quantity
         };
-        vm.local.off_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].off_hire, "yyyy-MM-dd");
-        vm.local.on_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].on_hire, "yyyy-MM-dd");
+        vm.local.data.off_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].off_hire, "yyyy-MM-dd");
+        vm.local.data.on_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].on_hire, "yyyy-MM-dd");
     }
     vm.local.search = '';
     vm.data = {};
