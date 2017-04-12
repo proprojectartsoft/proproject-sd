@@ -33,7 +33,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
     vm.local.absence = 'absence';
     if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {
-            staff_name: vm.create.site_attendance.contractors[vm.index].first_name,
+            staff_name: vm.create.site_attendance.contractors[vm.index].first_name + " " + vm.create.site_attendance.contractors[vm.index].last_name,
             company_name: vm.create.site_attendance.contractors[vm.index].company_name,
             model_start: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].start_time),
             model_finish: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].finish_time),
@@ -47,14 +47,17 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         if (vm.create.site_attendance.contractors[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
         } else {
-            vm.data.model_break = vm.stringToDate("00:00");
+            vm.local.data.model_break = vm.stringToDate("00:00");
         }
     } else {
-        vm.data.model_break = vm.stringToDate("00:00");
+        vm.local.data.staff_name = "";
+        vm.local.data.model_break = vm.stringToDate("00:00");
+        vm.local.data.model_start = vm.stringToDate("00:00");
+        vm.local.data.model_finish = vm.stringToDate("00:00");
     }
 
     ContractorService.list().then(function(result) {
-        vm.searchModal = $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(popover) {
@@ -93,10 +96,12 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
         if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
             console.log('inhere');
-            vm.local.total_time = vm.calcParse();
+            vm.calcParse();
         }
+
         vm.member = {
-            first_name: vm.local.data.staff_name,
+            first_name: vm.local.data.staff_name.split(" ", 2)[0],
+            last_name: vm.local.data.staff_name.split(" ", 2)[1],
             company_name: vm.local.data.company_name,
             trade: vm.local.data.trade,
             hourly_rate: vm.local.data.hourly_rate,
@@ -124,10 +129,10 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
     }
 
     function calcParse() {
-        if (vm.data.model_start && vm.data.model_break && vm.data.model_finish) {
-            vm.filteredBreak = $filter('date')(vm.data.model_break, "HH:mm");
-            vm.filteredStart = $filter('date')(vm.data.model_start, "HH:mm");
-            vm.filteredFinish = $filter('date')(vm.data.model_finish, "HH:mm");
+        if (vm.local.data.model_start && vm.local.data.model_break && vm.local.data.model_finish) {
+            vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm");
+            vm.filteredStart = $filter('date')(vm.local.data.model_start, "HH:mm");
+            vm.filteredFinish = $filter('date')(vm.local.data.model_finish, "HH:mm");
             console.log(vm.filteredStart, vm.filteredFinish, vm.filteredBreak)
             vm.local.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
         }

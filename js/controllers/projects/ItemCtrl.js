@@ -34,8 +34,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.supplier = $stateParams.id;
 
     SiteDiaryService.get_resources().then(function(result) {
-
-        vm.searchModal = $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(popover) {
@@ -45,11 +44,11 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     })
 
     SiteDiaryService.get_units().then(function(result) {
-
-        vm.searchModal = $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(popover) {
+            vm.searchModal = popover;
             vm.searchUnit = popover;
         });
         vm.units = result;
@@ -93,9 +92,9 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             on_hire: $filter('date')(vm.local.data.on_hire, "yyyy-MM-dd"),
             off_hire: $filter('date')(vm.local.data.off_hire, "yyyy-MM-dd")
         }
-        if((vm.editMode) && (vm.index !=='create')){
-          vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
-        }else{
+        if ((vm.editMode) && (vm.index !== 'create')) {
+            vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
+        } else {
             vm.create.goods_received[vm.supplier].goods_details.push(vm.item);
         }
         localStorage.setObject('sd.diary.create', vm.create);

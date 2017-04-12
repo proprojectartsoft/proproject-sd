@@ -26,7 +26,8 @@
     <div class="bar bar-footer sd-footer">
         <input placeholder="Type comment here" ng-disabled="vm.diaryId && !vm.editMode" ng-model="vm.local.comment" ng-keydown="vm.addComentAtEnter($event)">
         <div class="sd-actions" ng-click="vm.addComment()">
-          <img src="img/action/send.png">
+          <span class="ion-chatbubble-working"></span>
+          <!-- <img src="img/action/send.png"> -->
         </div>
 
     </div>

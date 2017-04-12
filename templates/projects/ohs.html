@@ -8,12 +8,12 @@
             <div class="sd-group">
                 <div class="sd-title">{{tool.type.id}}&nbsp;|&nbsp;{{tool.type.name}}</div>
                 <div class="sd-description">
-                    <i class="ion-ios-checkmark-empty check"></i>
-                    <span>{{tool.task_completed}} | </span>
-                    <i class="ion-document"></i>
-                    <span>{{tool.form_to_be_completed}} | </span>
-                    <i class="ion-wrench wrench"></i>
-                    <span>{{tool.action_required}} | </span>
+                    <i class="ion-checkmark-round check" ng-class="{greentext : tool.task_completed}"></i>
+                    <span> | </span>
+                    <i class="ion-document" ng-class="{greentext : tool.form_to_be_completed}"></i>
+                    <span> | </span>
+                    <i class="ion-wrench wrench" ng-class="{greentext : tool.action_required}"></i>
+                    <span>{{}} | </span>
                     <img src="img/action/comments.png">
                     <span>{{tool.note}}</span>
                 </div>

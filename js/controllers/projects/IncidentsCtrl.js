@@ -54,10 +54,11 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         name: 'Other'
     }];
     SiteDiaryService.get_units().then(function(result) {
-        vm.searchModal = $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(popover) {
+            vm.searchModal = popover;
             vm.searchUnit = popover;
         });
         vm.units = result;
@@ -93,10 +94,10 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             unit_id: vm.local.unit_id,
             action_required: vm.action_required[0]
         }
-        if((vm.editMode) && (vm.index !== 'create')){
-          vm.create.incidents[vm.index] = incident
+        if ((vm.editMode) && (vm.index !== 'create')) {
+            vm.create.incidents[vm.index] = incident
         } else {
-          vm.create.incidents.push(incident);
+            vm.create.incidents.push(incident);
         }
 
         localStorage.setObject('sd.diary.create', vm.create);
@@ -104,14 +105,14 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function go(predicate, id) {
-      if((predicate ==='diary') && (vm.diaryId)){
-        $state.go('app.'+predicate, {
-            id: vm.diaryId
-        });
-      }else{
-        $state.go('app.' + predicate, {
-            id: id
-        });
-      }
+        if ((predicate === 'diary') && (vm.diaryId)) {
+            $state.go('app.' + predicate, {
+                id: vm.diaryId
+            });
+        } else {
+            $state.go('app.' + predicate, {
+                id: id
+            });
+        }
     }
 }

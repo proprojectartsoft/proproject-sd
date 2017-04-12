@@ -15,6 +15,10 @@ $lightblue: #11c1f3;
     font-weight: 100;
 }
 
+.greentext {
+    color: blue;
+}
+
 .sd-button {
     background-color: #11c1f3;
     color: white;
@@ -194,6 +198,9 @@ $lightblue: #11c1f3;
     }
 
     span {
+        .ion-chatbubble-working {
+            font-size: 30px!important;
+        }
         vertical-align: middle;
         color: #fff;
         font-size: 18px !important;

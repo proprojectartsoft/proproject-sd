@@ -6,11 +6,11 @@
     </div>
     <ion-content class="has-subheader sd-form sd-form-withfields">
         <div class="sd-group">
-            Add staff member
+            Add contractor
         </div>
         <div class="sd-container">
             <label class="sd-label">
-                <div class="sd-title">Company representant</div>
+                <div class="sd-title">Company representative</div>
                 <div ng-click="vm.showSearch()"><input placeholder="Tap to add representant" ng-disabled=true ng-model="vm.local.data.staff_name"></div>
             </label>
             <label class="sd-label">
@@ -23,29 +23,29 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Hourly rate</div>
-                <input placeholder="Tap to add hourly rate" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate">
+                <input type="number" placeholder="Tap to add hourly rate" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate">
             </label>
             <div class="sd-label">
                 <div class="sd-title">Start</div>
-                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}" ng-model="vm.data.model_start" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
-                    <div class="sd-line" ng-if="vm.data.model_start">{{vm.data.model_start | date: 'HH:mm'}}</div>
-                    <div class="sd-line" ng-if="!vm.data.model_start">
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}" ng-model="vm.local.data.model_start" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
+                    <div class="sd-line" ng-if="vm.local.data.model_start">{{vm.local.data.model_start | date: 'HH:mm'}}</div>
+                    <div class="sd-line" ng-if="!vm.local.data.model_start">
                         Tap here to select a date.</div>
                 </div>
             </div>
             <div class="sd-label">
                 <div class="sd-title">Break</div>
-                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}" ng-model="vm.data.model_break" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
-                    <div class="sd-line" ng-if="vm.data.model_break">{{vm.data.model_break | date: 'HH:mm'}}</div>
-                    <div class="sd-line" ng-if="!vm.data.model_break">
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}" ng-model="vm.local.data.model_break" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
+                    <div class="sd-line" ng-if="vm.local.data.model_break">{{vm.local.data.model_break | date: 'HH:mm'}}</div>
+                    <div class="sd-line" ng-if="!vm.local.data.model_break">
                         Tap here to select a date.</div>
                 </div>
             </div>
             <div class="sd-label">
                 <div class="sd-title">Finish</div>
-                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}" ng-model="vm.data.model_finish" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
-                    <div class="sd-line" ng-if="vm.data.model_finish">{{vm.data.model_finish | date: 'HH:mm'}}</div>
-                    <div class="sd-line" ng-if="!vm.data.model_finish">
+                <div ng-required="vm.data.required" ion-datetime-picker time ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}" ng-model="vm.local.data.model_finish" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container" ng-change="vm.calcParse()">
+                    <div class="sd-line" ng-if="vm.local.data.model_finish">{{vm.local.data.model_finish | date: 'HH:mm'}}</div>
+                    <div class="sd-line" ng-if="!vm.local.data.model_finish">
                         Tap here to select a date.</div>
                 </div>
             </div>

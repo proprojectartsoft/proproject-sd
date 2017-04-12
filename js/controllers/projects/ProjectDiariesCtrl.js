@@ -1,8 +1,20 @@
 angular.module($APP.name).controller('ProjectDiariesCtrl', ProjectDiariesCtrl)
 
-ProjectDiariesCtrl.$inject = ['$scope', '$timeout', '$ionicModal', '$ionicPopup', '$state', '$stateParams', '$indexedDB', 'SiteDiaryService', 'SettingService', 'SharedService', 'SyncService'];
+ProjectDiariesCtrl.$inject = [
+  '$scope',
+'$timeout',
+'$ionicModal',
+'$ionicPopup',
+'$state',
+'$stateParams',
+'$indexedDB',
+'SiteDiaryService',
+'SettingService',
+'SharedService',
+'SyncService',
+'orderByFilter'];
 
-function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService) {
+function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService, orderBy) {
     var vm = this;
     vm.showDiary = showDiary;
     vm.backDiary = backDiary;
@@ -74,7 +86,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         store.find(vm.projectId).then(function(e) {
             console.log($stateParams.id, e);
             vm.diary = e.value.diaries;
-            vm.diaries = e.value.diaries;
+            vm.diaries = orderBy(e.value.diaries, 'date' , true);
         });
     });
 
