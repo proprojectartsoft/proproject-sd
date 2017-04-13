@@ -27,19 +27,22 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Cost per unit</div>
-                <input type="number" placeholder="Tap to add cost per unit" ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.unitCost">
+                <input type="number" placeholder="Tap to add cost per unit" ng-if="(vm.diaryId) && (vm.editMode)" ng-model="vm.material.unitCost">
+                <input placeholder="Tap to add cost per unit" ng-if="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.unitCost_formated">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Subtotal cost</div>
-                <input type="number" placeholder="Subtotal cost" disabled value="{{vm.material.quantity * vm.material.unitCost}}">
+                <input placeholder="Subtotal cost" disabled value="{{vm.subtotal_formated}}">
+                <!-- {{vm.material.quantity * vm.material.unitCost}} -->
             </label>
             <label class="sd-label">
                 <div class="sd-title">Tax</div>
-                <input placeholder="Tax" disabled ng-model="vm.material.tax">
+                <input placeholder="Tax" disabled ng-model="vm.material.tax_formated">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Total</div>
-                <input placeholder="Total cost" disabled value="{{(vm.material.quantity * vm.material.unitCost)+((vm.material.quantity * vm.material.unitCost) *(vm.material.tax/100))}}">
+                <input placeholder="Total cost" disabled value="{{vm.total_formated}}">
+                <!-- {{(vm.material.quantity * vm.material.unitCost)+((vm.material.quantity * vm.material.unitCost) *(vm.material.tax/100))}} -->
             </label>
         </div>
         <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.save()">

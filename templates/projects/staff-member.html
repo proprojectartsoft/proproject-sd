@@ -23,7 +23,8 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Hourly rate</div>
-                <input type="number" placeholder="Tap to add hourly rate" ng-disabled="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate">
+                <input type="number" placeholder="Tap to add hourly rate" ng-if="(vm.diaryId) && (vm.editMode)" ng-model="vm.local.data.hourly_rate">
+                <input placeholder="Tap to add hourly rate" ng-if="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate_formated">
             </label>
             <div class="sd-label">
                 <div class="sd-title">Start</div>
@@ -59,7 +60,7 @@
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId) || (vm.editMode)">
                 <div class="sd-title">Absence</div>
-                <de-select de-options="vm.absence"  de-title="vm.local.absence"></de-select>
+                <de-select de-options="vm.absence" de-title="vm.local.absence"></de-select>
             </div>
             <label ng-if="(vm.diaryId) && !(vm.editMode)" class="sd-label">
                 <div class="sd-title">Absence</div>

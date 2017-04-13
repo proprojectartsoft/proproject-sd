@@ -25,9 +25,23 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.data = {};
     vm.settings = '';
     vm.material = {}
-    vm.formated_tax = "";
-    if (!isNaN(vm.index) && (vm.index !== 'create')) {
+    vm.total_formated = '';
+    vm.subtotal_formated = '';
 
+    $scope.$watch(function() {
+        var t = (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100)) | '';
+        var st = vm.material.quantity * vm.material.unitCost | '';
+        if (t !== 0)
+            vm.total_formated = t; //+ " CURRENCY";
+        else
+            vm.total_formated = '';
+        if (st !== 0)
+            vm.subtotal_formated = st;// + " CURRENCY";
+        else
+            vm.subtotal_formated = '';
+    })
+
+    if (!isNaN(vm.index) && (vm.index !== 'create')) {
         vm.material = {
             name: vm.create.plant_and_material_used[vm.index].name,
             description: vm.create.plant_and_material_used[vm.index].description,
@@ -36,12 +50,12 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             unit_name: vm.create.plant_and_material_used[vm.index].unit_name,
             quantity: vm.create.plant_and_material_used[vm.index].quantity,
             tax: vm.create.plant_and_material_used[vm.index].tax,
+            tax_formated: vm.create.plant_and_material_used[vm.index].tax + " %",
+            unitCost_formated: vm.create.plant_and_material_used[vm.index].cost_per_unit// + " CURRENCY"
         };
-        vm.formated_tax = vm.material.tax + "%";
     }
 
     vm.materials = vm.create.plant_and_material_used;
-
 
     SiteDiaryService.get_resources().then(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
@@ -84,7 +98,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         vm.material.unit_name = item.unit_name;
         vm.material.unitCost = item.direct_cost;
         vm.material.tax = item.vat;
-        vm.formated_tax = vm.material.tax + "%";
+        vm.material.tax_formated = vm.material.tax + " %";
         vm.searchModal.hide();
     }
 

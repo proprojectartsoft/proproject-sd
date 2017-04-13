@@ -31,9 +31,10 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
     vm.index = $stateParams.id;
 
     vm.local.absence = 'absence';
+
     if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {
-            staff_name: vm.create.site_attendance.contractors[vm.index].first_name + " " + vm.create.site_attendance.contractors[vm.index].last_name,
+            staff_name: vm.create.site_attendance.contractors[vm.index].first_name,
             company_name: vm.create.site_attendance.contractors[vm.index].company_name,
             model_start: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].start_time),
             model_finish: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].finish_time),
@@ -42,7 +43,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
             absence: vm.create.site_attendance.contractors[vm.index].absence.reason,
             role: vm.create.site_attendance.contractors[vm.index].trade,
             trade: vm.create.site_attendance.contractors[vm.index].trade,
-            hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate
+            hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
+            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate// +  CURRENCY
         }
         if (vm.create.site_attendance.contractors[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
@@ -56,15 +58,27 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         vm.local.data.model_finish = vm.stringToDate("00:00");
     }
 
-    ContractorService.list().then(function(result) {
+
+
+    SiteDiaryService.list_diary(vm.diaryId).then(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(popover) {
             vm.searchModal = popover;
         });
-        vm.contractor = result;
+        vm.contractor = result.site_attendance.contractors;
     })
+
+    // ContractorService.list().then(function(result) {
+    //     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+    //         scope: $scope,
+    //         animation: 'slide-in-up'
+    //     }).then(function(popover) {
+    //         vm.searchModal = popover;
+    //     });
+    //     vm.contractor = result;
+    // })
 
     SiteDiaryService.absence_list().then(function(result) {
         angular.forEach(result, function(value) {
@@ -100,8 +114,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         }
 
         vm.member = {
-            first_name: vm.local.data.staff_name.split(" ", 2)[0],
-            last_name: vm.local.data.staff_name.split(" ", 2)[1],
+            first_name: vm.local.data.staff_name,
+            // last_name: vm.local.data.staff_name.split(" ", 2)[1],
             company_name: vm.local.data.company_name,
             trade: vm.local.data.trade,
             hourly_rate: vm.local.data.hourly_rate,
