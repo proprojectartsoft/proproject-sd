@@ -11,15 +11,15 @@
         <div class="sd-container">
             <label class="sd-label">
                 <div class="sd-title">Name</div>
-                <div ng-click="vm.showSearch()"><input placeholder="Tap to add goods" ng-disabled=true ng-model="vm.local.data.good_name"></div>
+                <div ng-click="vm.showSearch()"><input placeholder="Tap to add goods" ng-readonly=true ng-model="vm.local.data.good_name"></div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
-                <div ng-click="vm.showSearchUnit()"><input placeholder="Tap to add goods" ng-disabled=true ng-model="vm.local.data.good_unit"></div>
+                <div ng-click="vm.showSearchUnit()"><input placeholder="Tap to add goods" ng-readonly=true ng-model="vm.local.data.good_unit"></div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>
-                <input ng-disabled="(vm.diaryId) && !(vm.editMode)" type="number" placeholder="Tap to add Quantity" ng-model="vm.local.data.qty">
+                <input ng-readonly="(vm.diaryId) && !(vm.editMode)" type="number" placeholder="Tap to add Quantity" ng-model="vm.local.data.qty">
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div  class="sd-title">On hire</div>
@@ -31,7 +31,7 @@
             </div>
             <label ng-if="(vm.diaryId) && (!vm.editMode)" class="sd-label">
                 <div class="sd-title">On hire</div>
-                <input placeholder="No On hire date" disabled ng-model="vm.local.on_hire">
+                <input placeholder="No On hire date" ng-readonly=true ng-model="vm.local.on_hire">
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div class="sd-title">Off hire</div>
@@ -43,7 +43,7 @@
             </div>
             <label ng-if="(vm.diaryId) && (!vm.editMode)" class="sd-label">
                 <div class="sd-title">Off hire</div>
-                <input placeholder="No Off-hire date" disabled ng-model="vm.local.off_hire">
+                <input placeholder="No Off-hire date" ng-readonly=true ng-model="vm.local.off_hire">
             </label>
         </div>
         <button ng-if="(!vm.diaryId) || (vm.editMode)" class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-click="vm.saveItem()">
