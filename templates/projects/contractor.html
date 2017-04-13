@@ -24,7 +24,7 @@
             <label class="sd-label">
                 <div class="sd-title">Hourly rate</div>
                 <input type="number" placeholder="Tap to add hourly rate" ng-if="(vm.diaryId) && (vm.editMode)" ng-model="vm.local.data.hourly_rate">
-                <input placeholder="Tap to add hourly rate" ng-if="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate_formated">
+                <input ng-readonly=true placeholder="Tap to add hourly rate" ng-if="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate_formated">
             </label>
             <div class="sd-label">
                 <div class="sd-title">Start</div>
