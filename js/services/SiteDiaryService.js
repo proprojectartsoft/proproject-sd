@@ -79,6 +79,14 @@ angular.module($APP.name).factory('SiteDiaryService', [
                 );
             },
 
+            get_currency: function() {
+                return $http.get($APP.server + '/api/companysettings', {}).then(
+                    function(payload) {
+                        return payload.data;
+                    }
+                )
+            },
+
             get_absenteeism: function() {
                 return $http.get($APP.server + '/api/absenteeismreasons/list', {}).then(
                     function(payload) {

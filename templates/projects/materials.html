@@ -7,15 +7,16 @@
     <ion-content class="has-subheader sd-list-bubble">
         <ion-list>
             <ion-item ng-repeat="material in vm.materials track by $index" ng-click="vm.go('material', $index)">
-                    <div class="sd-title">{{material.name}}</div>
-                    <div class="sd-description">
-                        <span>{{material.description}}</span>
-                    </div>
-                    <div class="sd-description">
-                        <span>{{material.quantity}}</span>
-                        <span>{{material.unit_name}}</span>
-                        <span>{{material.total}}</span>
-                    </div>
+                <div class="sd-title">{{material.name}}</div>
+                <div class="sd-description">
+                    <span>{{material.description}}</span>
+                </div>
+                <div class="sd-description">
+                    <span>{{material.quantity}}</span>
+                    <span>{{material.unit_name}}</span>
+                    <span>{{material.total}}</span>
+                    <span>{{vm.currency}}</span>
+                </div>
             </ion-item>
         </ion-list>
         <div ng-if="!vm.materials.length" class="sd-nodata">

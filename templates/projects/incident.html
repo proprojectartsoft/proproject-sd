@@ -9,13 +9,13 @@
             Incidents
         </div>
         <div class="sd-container">
-            <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
+            <div ng-if="!vm.diaryId || vm.editMode" class="sd-label">
                 <div class="sd-title">Type</div>
                 <de-select de-options="vm.local.type" de-title="vm.type"></de-select>
             </div>
-            <label ng-if="(vm.diaryId) && (!vm.editMode)" class="sd-label">
+            <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
                 <div class="sd-title">Type</div>
-                <input placeholder="Tap to add quantity" ng-readonly=true ng-model="vm.incident.type.name">
+                <input placeholder="Tap to add incident type" ng-readonly=true ng-model="vm.incident.type.name">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Description</div>
@@ -27,7 +27,9 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
-                <div ng-click="vm.showSearchUnit()"><input placeholder="Tap to add price per unit" ng-readonly=true ng-model="vm.local.unit_name"></div>
+                <div ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearchUnit()">
+                  <input placeholder="Tap to add unit" ng-readonly=true ng-model="vm.local.unit_name">
+                </div>
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div class="sd-title">Action required</div>

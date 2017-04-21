@@ -13,7 +13,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
-
+    vm.currency = localStorage.getObject('currency');
+    
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
@@ -44,7 +45,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
             role: vm.create.site_attendance.contractors[vm.index].trade,
             trade: vm.create.site_attendance.contractors[vm.index].trade,
             hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
-            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate// +  CURRENCY
+            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate + " " + localStorage.getObject('currency')
         }
         if (vm.create.site_attendance.contractors[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
@@ -57,8 +58,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         vm.local.data.model_start = vm.stringToDate("00:00");
         vm.local.data.model_finish = vm.stringToDate("00:00");
     }
-
-
 
     SiteDiaryService.list_diary(vm.diaryId).then(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
@@ -161,9 +160,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
             date.setMinutes(mm);
             date.setHours(hh);
         }
-
         return date;
-
     }
 
     function calcTime(start, finish, breakTime) {

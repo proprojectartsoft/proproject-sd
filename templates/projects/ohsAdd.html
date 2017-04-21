@@ -19,21 +19,21 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Task completed</div>
-                <ion-checkbox ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.task_completed" class="checkbox-calm">
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.task_completed" class="checkbox-calm">
                     <span ng-if="vm.task_completed">Yes</span>
                     <span ng-if="!vm.task_completed">No</span>
                 </ion-checkbox>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Form to be completed</div>
-                <ion-checkbox ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.form_complete" class="checkbox-calm">
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.form_complete" class="checkbox-calm">
                     <span ng-if="vm.form_complete">Yes</span>
                     <span ng-if="!vm.form_complete">No</span>
                 </ion-checkbox>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Action required</div>
-                <ion-checkbox ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.action_required" class="checkbox-calm">
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.action_required" class="checkbox-calm">
                     <span ng-if="vm.action_required">Yes</span>
                     <span ng-if="!vm.action_required">No</span>
                 </ion-checkbox>

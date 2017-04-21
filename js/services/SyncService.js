@@ -5,10 +5,12 @@ angular.module($APP.name).factory('SyncService', [
     '$indexedDB',
     '$ionicPopup',
     '$state',
+    '$filter',
     'ProjectService',
     'SiteDiaryService',
     'AttachmentsService',
-    function($q, $http, $timeout, $indexedDB, $ionicPopup, $state, ProjectService, SiteDiaryService, AttachmentsService) {
+    'SettingService',
+    function($q, $http, $timeout, $indexedDB, $ionicPopup, $state, $filter, ProjectService, SiteDiaryService, AttachmentsService, SettingService) {
 
         var getme = function() {
             return $http.get($APP.server + '/api/me')
@@ -22,7 +24,6 @@ angular.module($APP.name).factory('SyncService', [
         return {
             sync: function() {
                 var deferred = $q.defer();
-
 
                 $timeout(function() {
                     if (navigator.onLine) {
@@ -71,9 +72,22 @@ angular.module($APP.name).factory('SyncService', [
                                     return prm.promise;
                                 }
 
+                                function setCurrencySymbol() {
+                                    SiteDiaryService.get_currency().then(function(curr) {
+                                        localStorage.setObject('currency',
+                                            SettingService.get_currency_symbol(
+                                                $filter('filter')(curr, {
+                                                    name: "currency"
+                                                })[0]
+                                            )
+                                        )
+                                    })
+                                }
+
                                 function buildData() {
                                     var def = $q.defer();
                                     addDiaries().then(function() {
+                                        setCurrencySymbol();
                                         ProjectService.projects().then(function(result) {
                                             console.log(result);
                                             //def.resolve(result);
@@ -81,7 +95,9 @@ angular.module($APP.name).factory('SyncService', [
                                                 SiteDiaryService.list_diaries(value.id).then(function(diaries) {
                                                     value.diaries = diaries;
                                                     if ((result[result.length - 1] === value)) {
-                                                        $timeout(function(){def.resolve(result)},5000);
+                                                        $timeout(function() {
+                                                            def.resolve(result)
+                                                        }, 5000);
                                                     }
                                                     if (value.diaries.length) {
                                                         angular.forEach(diaries, function(diary) {
@@ -103,6 +119,7 @@ angular.module($APP.name).factory('SyncService', [
                                     })
                                     return def.promise;
                                 }
+
                                 $indexedDB.openStore('projects', function(store) {
                                     store.clear();
                                 }).then(function(e) {
@@ -165,10 +182,8 @@ angular.module($APP.name).factory('SyncService', [
                                                 });
                                             })
                                         }
-
                                     });
                                 });
-
                             })
                             .error(function(data, status) {
                                 if (!navigator.online) {
@@ -189,7 +204,6 @@ angular.module($APP.name).factory('SyncService', [
                                     if (loggedIn) {
                                         $state.go('app.home');
                                     }
-
                                 }
                             });
                     } else {

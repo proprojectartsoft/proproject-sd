@@ -23,7 +23,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Hourly rate</div>
-                <input type="number" placeholder="Tap to add hourly rate" ng-if="(vm.diaryId) && (vm.editMode)" ng-model="vm.local.data.hourly_rate">
+                <input type="number" placeholder="Tap to add hourly rate ({{vm.currency}})" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.local.data.hourly_rate">
                 <input ng-readonly=true placeholder="Tap to add hourly rate" ng-if="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate_formated">
             </label>
             <div class="sd-label">
@@ -52,7 +52,7 @@
             </div>
             <label class="sd-label">
                 <div class="sd-title">Total</div>
-                <input placeholder="Total" ng-readonly=true ng-model="vm.local.total_time">
+                <input placeholder="Total" disabled ng-model="vm.local.total_time">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Note</div>
@@ -64,7 +64,7 @@
             </div>
             <label ng-if="(vm.diaryId) && !(vm.editMode)" class="sd-label">
                 <div class="sd-title">Absence</div>
-                <input ng-readonly=true placeholder="Tap to add note" ng-model="vm.local.data.absence">
+                <input readonly placeholder="Tap to add note" ng-model="vm.local.data.absence">
             </label>
         </div>
         <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-click="vm.save()">

@@ -13,6 +13,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
+    vm.currency = localStorage.getObject('currency');
 
     SiteDiaryService.absence_list().then(function(result) {
         angular.forEach(result, function(value) {
@@ -36,6 +37,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.settings = 'staff';
     vm.local.absence = 'absence';
     vm.index = $stateParams.id;
+
+
     if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {
             staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""), //TODO:
@@ -48,7 +51,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             role: vm.create.site_attendance.staffs[vm.index].trade,
             trade: vm.create.site_attendance.staffs[vm.index].trade,
             hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate,
-            hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate // + " CURRENCY"
+            hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate + " " + localStorage.getObject('currency')
         }
         if (vm.create.site_attendance.staffs[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.staffs[vm.index].break_time;
@@ -87,6 +90,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         vm.local.data.staff_name = item.name;
         vm.local.data.staff_id = item.id;
         vm.local.data.hourly_rate = item.direct_cost;
+        vm.local.data.company_name = item.employee_name;
         vm.searchModal.hide();
     }
 

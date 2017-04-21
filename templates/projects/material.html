@@ -11,7 +11,7 @@
         <div class="sd-container">
             <label class="sd-label">
                 <div class="sd-title">Resource</div>
-                <div ng-click="vm.showSearch()"><input placeholder="Tap to add a resource" ng-readonly=true ng-model="vm.material.name"></div>
+                <div ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearch()"><input placeholder="Tap to add a resource" ng-readonly=true ng-model="vm.material.name"></div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Description</div>
@@ -23,25 +23,27 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
-                <div ng-click="vm.showSearchUnit()"><input placeholder="Tap to add goods" ng-readonly=true ng-model="vm.material.unit_name"></div>
+                <div ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearchUnit()">
+                  <input placeholder="Tap to add goods" ng-readonly=true ng-model="vm.material.unit_name">
+                </div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Cost per unit</div>
-                <input type="number" placeholder="Tap to add cost per unit" ng-if="(vm.diaryId) && (vm.editMode)" ng-model="vm.material.unitCost">
+                <input type="number" placeholder="Tap to add cost per unit ({{vm.currency}})" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.material.unitCost">
                 <input ng-readonly=true placeholder="Tap to add cost per unit" ng-if="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.unitCost_formated">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Subtotal cost</div>
-                <input placeholder="Subtotal cost" ng-readonly=true value="{{vm.subtotal_formated}}">
+                <input placeholder="Subtotal cost ({{vm.currency}})" ng-readonly=true value="{{vm.subtotal_formated}}">
                 <!-- {{vm.material.quantity * vm.material.unitCost}} -->
             </label>
             <label class="sd-label">
                 <div class="sd-title">Tax</div>
-                <input placeholder="Tax" ng-readonly=true ng-model="vm.material.tax_formated">
+                <input placeholder="Tax (%)" ng-readonly=true ng-model="vm.material.tax_formated">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Total</div>
-                <input placeholder="Total cost" ng-readonly=true value="{{vm.total_formated}}">
+                <input placeholder="Total cost ({{vm.currency}})" ng-readonly=true value="{{vm.total_formated}}">
                 <!-- {{(vm.material.quantity * vm.material.unitCost)+((vm.material.quantity * vm.material.unitCost) *(vm.material.tax/100))}} -->
             </label>
         </div>
