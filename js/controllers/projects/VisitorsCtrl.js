@@ -13,8 +13,7 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope) {
     vm.create = localStorage.getObject('sd.diary.create');
 
     $scope.$watch(function() {
-        if (vm.editMode)
-            SettingService.show_focus();
+        SettingService.show_focus();
     });
 
     function save() {
