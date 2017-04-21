@@ -11,11 +11,15 @@
         <div class="sd-container">
             <label class="sd-label">
                 <div class="sd-title">Name</div>
-                <div ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearch()"><input placeholder="Tap to add goods" ng-readonly=true ng-model="vm.local.data.good_name"></div>
+                <div class="showSearch" ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearch()">
+                  <input placeholder="Tap to add goods" ng-readonly=true ng-model="vm.local.data.good_name">
+                </div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
-                <div ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearchUnit()"><input placeholder="Tap to add unit" ng-readonly=true ng-model="vm.local.data.good_unit"></div>
+                <div class="showSearch" ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearchUnit()">
+                  <input placeholder="Tap to add unit" ng-readonly=true ng-model="vm.local.data.good_unit">
+                </div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>

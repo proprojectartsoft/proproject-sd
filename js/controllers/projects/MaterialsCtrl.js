@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('MaterialsCtrl', MaterialsCtrl)
 
-MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService'];
+MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService'];
 
-function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService) {
+function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService) {
     var vm = this;
     vm.go = go;
     vm.unit = "materials.unit";
@@ -28,6 +28,11 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.material = {}
     vm.total_formated = '';
     vm.subtotal_formated = '';
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
 
     $scope.$watch(function() {
         var t = (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100)) | '';

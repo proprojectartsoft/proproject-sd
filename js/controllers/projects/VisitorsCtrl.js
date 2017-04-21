@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('VisitorsCtrl', VisitorsCtrl)
 
-VisitorsCtrl.$inject = ['$rootScope','$state'];
+VisitorsCtrl.$inject = ['$rootScope', '$state', 'SettingService', '$scope'];
 
-function VisitorsCtrl($rootScope, $state) {
+function VisitorsCtrl($rootScope, $state, SettingService, $scope) {
     var vm = this;
     vm.go = go;
     vm.save = save;
@@ -11,6 +11,11 @@ function VisitorsCtrl($rootScope, $state) {
     vm.local.data = {};
     vm.data = {};
     vm.create = localStorage.getObject('sd.diary.create');
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
 
     function save() {
         vm.member = {
@@ -23,8 +28,8 @@ function VisitorsCtrl($rootScope, $state) {
         vm.go('siteAttendance');
     }
 
-    function go(predicate,id) {
-        $state.go('app.'+predicate, {
+    function go(predicate, id) {
+        $state.go('app.' + predicate, {
             id: id
         });
     }

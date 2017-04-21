@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('OhsCtrl', OhsCtrl)
 
-OhsCtrl.$inject = ['$state', '$stateParams'];
+OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService'];
 
-function OhsCtrl($state, $stateParams) {
+function OhsCtrl($state, $stateParams, $scope, SettingService) {
     var vm = this;
     vm.save = save;
     vm.go = go;
@@ -12,6 +12,12 @@ function OhsCtrl($state, $stateParams) {
     vm.diaryId = localStorage.getObject('diaryId');
     vm.index = $stateParams.id
     vm.editMode = localStorage.getObject('editMode');
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
+
     if (!isNaN(vm.index) && !(vm.index === null)) {
         vm.type = vm.create.oh_and_s[vm.index].type;
         vm.task_completed = vm.create.oh_and_s[vm.index].task_completed;

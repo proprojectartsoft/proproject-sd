@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('WeatherCtrl', WeatherCtrl)
 
-WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state'];
+WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$scope', 'SettingService'];
 
-function WeatherCtrl($rootScope, $ionicModal, $state) {
+function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService) {
     var vm = this;
     vm.save = save;
     vm.go = go;
@@ -25,6 +25,11 @@ function WeatherCtrl($rootScope, $ionicModal, $state) {
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
 
     vm.deOptions = [{
         id: 0,
@@ -76,7 +81,7 @@ function WeatherCtrl($rootScope, $ionicModal, $state) {
         vm.max_temp = vm.create.weather.max_temp;
         vm.min_temp = vm.create.weather.min_temp;
         angular.forEach(vm.create.weather.morning, function(value) {
-            vm.local.morning = vm.local.morning  + value.name + ', ';
+            vm.local.morning = vm.local.morning + value.name + ', ';
         })
         angular.forEach(vm.create.weather.midday, function(value) {
             vm.local.midday = vm.local.midday + value.name + ', ';
@@ -90,14 +95,14 @@ function WeatherCtrl($rootScope, $ionicModal, $state) {
         angular.forEach(vm.create.weather.on_and_off, function(value) {
             vm.local.onOff = vm.local.onOff + value.name + ', ';
         })
-      }
+    }
 
     if (vm.diaryId) {
         vm.perfectWeather = vm.create.weather.perfect_weather;
         vm.max_temp = vm.create.weather.max_temp;
         vm.min_temp = vm.create.weather.min_temp;
         angular.forEach(vm.create.weather.morning, function(value) {
-            vm.local.morning = vm.local.morning  + value.name + ', ';
+            vm.local.morning = vm.local.morning + value.name + ', ';
         })
         angular.forEach(vm.create.weather.midday, function(value) {
             vm.local.midday = vm.local.midday + value.name + ', ';

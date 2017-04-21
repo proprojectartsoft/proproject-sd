@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ContractorCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$ionicModal', '$filter', '$stateParams', 'ContractorService', 'SiteDiaryService'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$ionicModal', '$filter', '$stateParams', 'ContractorService', 'SiteDiaryService', 'SettingService'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stateParams, ContractorService, SiteDiaryService) {
+function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stateParams, ContractorService, SiteDiaryService, SettingService) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -14,7 +14,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
     vm.currency = localStorage.getObject('currency');
-    
+
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
@@ -32,6 +32,11 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
     vm.index = $stateParams.id;
 
     vm.local.absence = 'absence';
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
 
     if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {

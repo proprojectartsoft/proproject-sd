@@ -9,7 +9,8 @@ angular.module($APP.name).controller('ProjectsCtrl', [
     'ProjectService',
     'SiteDiaryService',
     'SyncService',
-    function($rootScope, $state, $scope, $ionicSideMenuDelegate, $timeout, $ionicModal, $indexedDB, ProjectService, SiteDiaryService, SyncService) {
+    function($rootScope, $state, $scope, $ionicSideMenuDelegate, $timeout, $ionicModal, $indexedDB, ProjectService,
+        SiteDiaryService, SyncService) {
         var vm = this;
         vm.showProject = showProject;
         vm.backProject = backProject;
@@ -23,16 +24,26 @@ angular.module($APP.name).controller('ProjectsCtrl', [
         vm.local.data = {};
         vm.test = [];
         vm.loggedIn = localStorage.getObject('loggedIn');
+
+        $scope.$watch(function() {
+            $('input').on('focus', function() {
+                $(this).addClass("focus");
+                $(this).next('.sd-createPopover.sd-input-container label').addClass("focus");
+            })
+        });
+        $scope.$watch(function() {
+            $('input').on('blur', function() {
+                $(this).removeClass("focus");
+            })
+        });
+
         $indexedDB.openStore('projects', function(store) {
             store.getAll().then(function(result) {
                 console.log("Extracted from DB", result);
                 vm.projects = result;
             });
         });
-        // $timeout(function(){
-        //
-        //
-        // },2000)
+
         vm.projectModal = $ionicModal.fromTemplateUrl('templates/projects/create.html', {
             scope: $scope,
             animation: 'slide-in-up'

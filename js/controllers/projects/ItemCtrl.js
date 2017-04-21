@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ItemCtrl', ItemCtrl)
 
-ItemCtrl.$inject = ['$rootScope', '$scope', '$ionicModal', '$filter', '$state', '$stateParams', 'SiteDiaryService'];
+ItemCtrl.$inject = ['$rootScope', '$scope', '$ionicModal', '$filter', '$state', '$stateParams', 'SiteDiaryService', 'SettingService'];
 
-function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams, SiteDiaryService) {
+function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams, SiteDiaryService, SettingService) {
     var vm = this;
     vm.go = go
     vm.showSearch = showSearch;
@@ -19,6 +19,12 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.local.data = {};
     vm.id = $stateParams.id;
     vm.index = $stateParams.index;
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
+
     if (vm.index !== 'create') {
         vm.local.data = {
             good_name: vm.create.goods_received[vm.id].goods_details[vm.index].details,

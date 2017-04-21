@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('StaffMemberCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', 'SiteDiaryService'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, SiteDiaryService) {
+function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, SiteDiaryService, SettingService) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -14,6 +14,11 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
     vm.currency = localStorage.getObject('currency');
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
 
     SiteDiaryService.absence_list().then(function(result) {
         angular.forEach(result, function(value) {

@@ -11,7 +11,9 @@
         <div class="sd-container">
             <label class="sd-label">
                 <div class="sd-title">Name</div>
-                <div ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearch()"><input placeholder="Tap to add name" ng-readonly=true ng-model="vm.local.data.staff_name"></div>
+                <div class="showSearch" ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearch()">
+                  <input placeholder="Tap to add name" ng-readonly=true ng-model="vm.local.data.staff_name">
+                </div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Company</div>
