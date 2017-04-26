@@ -20,6 +20,10 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService) {
             SettingService.show_focus();
     });
 
+    $scope.autoExpand = function(e) {
+        $(e.target).height(e.target.scrollHeight - 30);
+    };
+
     function add() {
         if (vm.input1) {
             vm.delays.push(vm.input1);
@@ -33,6 +37,7 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService) {
             vm.materials.push(vm.input3);
             vm.input3 = '';
         }
+        $('textarea').height('initial');
     }
 
     if (vm.diaryId) {

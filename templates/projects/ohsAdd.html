@@ -15,7 +15,7 @@
             </div>
             <label class="sd-label">
                 <div class="sd-title">Reference</div>
-                <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="Tap to add reference" ng-model="vm.ref">
+                <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add reference' ||''}}" ng-model="vm.ref">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Task completed</div>
@@ -43,7 +43,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Note</div>
-                <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="Tap to add comment" ng-model="vm.comment">
+                <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add comment' ||''}}" ng-model="vm.comment">
             </label>
         </div>
         <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.save()">

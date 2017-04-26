@@ -15,20 +15,20 @@
             </div>
             <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
                 <div class="sd-title">Type</div>
-                <input placeholder="Tap to add incident type" ng-readonly=true ng-model="vm.incident.type.name">
+                <input ng-readonly=true ng-model="vm.incident.type.name">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Description</div>
-                <input placeholder="Tap to add description" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.incident.description">
+                <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add description' || ''}}" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.incident.description">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>
-                <input type="number" placeholder="Tap to add quantity" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.incident.quantity">
+                <input type="number" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add quantity' || ''}}" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.incident.quantity">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
                 <div class="showSearch" ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearchUnit()">
-                  <input placeholder="Tap to add unit" ng-readonly=true ng-model="vm.local.unit_name">
+                  <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add unit' || ''}}" ng-readonly=true ng-model="vm.local.unit_name">
                 </div>
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
@@ -37,7 +37,7 @@
             </div>
             <label ng-if="(vm.diaryId) && (!vm.editMode)" class="sd-label">
                 <div class="sd-title">Action Required</div>
-                <input placeholder="Tap to add quantity" ng-readonly=true ng-model="vm.incident.action_required.name">
+                <input ng-readonly=true ng-model="vm.incident.action_required.name">
             </label>
         </div>
         <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.saveIncident()">

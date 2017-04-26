@@ -12,21 +12,21 @@
             <label class="sd-label">
                 <div class="sd-title">Name</div>
                 <div class="showSearch" ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearch()">
-                  <input placeholder="Tap to add name" ng-readonly=true ng-model="vm.local.data.staff_name">
+                  <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add name' || ''}}" ng-readonly=true ng-model="vm.local.data.staff_name">
                 </div>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Company</div>
-                <input placeholder="Tap to add company" ng-readonly="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.company_name">
+                <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add company' || ''}}" ng-readonly="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.company_name">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Trade</div>
-                <input placeholder="Tap to add trade" ng-readonly="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.role">
+                <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add trade' || ''}}" ng-readonly="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.role">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Hourly rate</div>
                 <input type="number" placeholder="Tap to add hourly rate ({{vm.currency}})" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.local.data.hourly_rate">
-                <input ng-readonly=true placeholder="Tap to add hourly rate" ng-if="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate_formated">
+                <input ng-readonly=true ng-if="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate_formated">
             </label>
             <div class="sd-label">
                 <div class="sd-title">Start</div>
@@ -58,7 +58,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Note</div>
-                <input ng-readonly="(vm.diaryId) && !(vm.editMode)" placeholder="Tap to add note" ng-model="vm.local.data.note">
+                <input ng-readonly="(vm.diaryId) && !(vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add note' || ''}}" ng-model="vm.local.data.note">
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId) || (vm.editMode)">
                 <div class="sd-title">Absence</div>
@@ -66,7 +66,7 @@
             </div>
             <label ng-if="(vm.diaryId) && !(vm.editMode)" class="sd-label">
                 <div class="sd-title">Absence</div>
-                <input readonly placeholder="Tap to add note" ng-model="vm.local.data.absence">
+                <input readonly ng-model="vm.local.data.absence">
             </label>
         </div>
         <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.save()">

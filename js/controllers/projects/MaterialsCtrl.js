@@ -56,8 +56,8 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             unit_name: vm.create.plant_and_material_used[vm.index].unit_name,
             quantity: vm.create.plant_and_material_used[vm.index].quantity,
             tax: vm.create.plant_and_material_used[vm.index].tax,
-            tax_formated: vm.create.plant_and_material_used[vm.index].tax + " %",
-            unitCost_formated: vm.create.plant_and_material_used[vm.index].cost_per_unit + " " + localStorage.getObject('currency')
+            tax_formated: vm.create.plant_and_material_used[vm.index].tax && (vm.create.plant_and_material_used[vm.index].tax + " %") || '',
+            unitCost_formated: vm.create.plant_and_material_used[vm.index].cost_per_unit && (vm.create.plant_and_material_used[vm.index].cost_per_unit + " " + localStorage.getObject('currency')) || ''
         };
     }
 

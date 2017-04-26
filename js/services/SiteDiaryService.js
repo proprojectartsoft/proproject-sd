@@ -79,7 +79,7 @@ angular.module($APP.name).factory('SiteDiaryService', [
                 );
             },
 
-            get_currency: function() {
+            get_company_settings: function() {
                 return $http.get($APP.server + '/api/companysettings', {}).then(
                     function(payload) {
                         return payload.data;

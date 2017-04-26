@@ -56,7 +56,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             role: vm.create.site_attendance.staffs[vm.index].trade,
             trade: vm.create.site_attendance.staffs[vm.index].trade,
             hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate,
-            hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate + " " + localStorage.getObject('currency')
+            hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate && (vm.create.site_attendance.staffs[vm.index].hourly_rate + " " + localStorage.getObject('currency')) || ''
         }
         if (vm.create.site_attendance.staffs[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.staffs[vm.index].break_time;
@@ -65,9 +65,18 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         }
     } else {
         vm.local.data.staff_name = "";
-        vm.local.data.model_break = vm.stringToDate("00:00");
-        vm.local.data.model_start = vm.stringToDate("00:00");
-        vm.local.data.model_finish = vm.stringToDate("00:00");
+        SiteDiaryService.get_company_settings().then(function(sett) {
+            vm.local.data.model_break = $filter('filter')(sett, {
+                name: "break"
+            })[0].value;
+            vm.local.data.model_start = $filter('filter')(sett, {
+                name: "start"
+            })[0].value;
+            vm.local.data.model_finish = $filter('filter')(sett, {
+                name: "finish"
+            })[0].value;
+
+        })
     }
     SiteDiaryService.get_staff().then(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {

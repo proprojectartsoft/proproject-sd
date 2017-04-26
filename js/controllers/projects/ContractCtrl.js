@@ -1,14 +1,13 @@
 angular.module($APP.name).controller('ContractCtrl', ContractCtrl)
 
-ContractCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService'];
+ContractCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService', '$timeout'];
 
-function ContractCtrl($rootScope, $state, $scope, SettingService) {
+function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout) {
     var vm = this;
     vm.go = go;
     vm.add = add;
     vm.save = save;
-
-    vm.editMode = localStorage.getObject('editMode')
+    vm.editMode = localStorage.getObject('editMode');
     vm.instructions = {
         comments: []
     };
@@ -26,6 +25,10 @@ function ContractCtrl($rootScope, $state, $scope, SettingService) {
             SettingService.show_focus();
     });
 
+    $scope.autoExpand = function(e) {
+        $(e.target).height(e.target.scrollHeight - 30);
+    };
+
     function add() {
         if (vm.input1) {
             vm.instructions.comments.push(vm.input1);
@@ -39,6 +42,7 @@ function ContractCtrl($rootScope, $state, $scope, SettingService) {
             vm.variations.comments.push(vm.input3);
             vm.input3 = '';
         }
+        $('textarea').height('initial');
     }
 
     if (vm.diaryId) {

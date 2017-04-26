@@ -50,7 +50,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
             role: vm.create.site_attendance.contractors[vm.index].trade,
             trade: vm.create.site_attendance.contractors[vm.index].trade,
             hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
-            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate + " " + localStorage.getObject('currency')
+            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (vm.create.site_attendance.contractors[vm.index].hourly_rate + " " + localStorage.getObject('currency')) || ''
         }
         if (vm.create.site_attendance.contractors[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
@@ -59,9 +59,17 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         }
     } else {
         vm.local.data.staff_name = "";
-        vm.local.data.model_break = vm.stringToDate("00:00");
-        vm.local.data.model_start = vm.stringToDate("00:00");
-        vm.local.data.model_finish = vm.stringToDate("00:00");
+        SiteDiaryService.get_company_settings().then(function(sett) {
+            vm.local.data.model_break = $filter('filter')(sett, {
+                name: "break"
+            })[0].value;
+            vm.local.data.model_start = $filter('filter')(sett, {
+                name: "start"
+            })[0].value;
+            vm.local.data.model_finish = $filter('filter')(sett, {
+                name: "finish"
+            })[0].value;
+        })
     }
 
     SiteDiaryService.list_diary(vm.diaryId).then(function(result) {
@@ -113,22 +121,19 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
     function save() {
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
         if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
-            console.log('inhere');
             vm.calcParse();
         }
 
         vm.member = {
             first_name: vm.local.data.staff_name,
-            // last_name: vm.local.data.staff_name.split(" ", 2)[1],
             company_name: vm.local.data.company_name,
             trade: vm.local.data.trade,
             hourly_rate: vm.local.data.hourly_rate,
             start_time: vm.filteredStart,
             break_time: vm.filteredBreak,
             finish_time: vm.filteredFinish,
-            total_time: vm.local.total_time,
+            total_time: vm.local.data.total_time,
             absence: vm.local.data.absence[0],
-            //abscence_comment:,
             note: vm.local.data.note
 
         }
@@ -143,6 +148,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         }
 
         localStorage.setObject('sd.diary.create', vm.create);
+        localStorage.setObject('siteAttendance.tab', 'contractors');
         vm.go('siteAttendance');
     }
 
@@ -151,8 +157,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
             vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm");
             vm.filteredStart = $filter('date')(vm.local.data.model_start, "HH:mm");
             vm.filteredFinish = $filter('date')(vm.local.data.model_finish, "HH:mm");
-            console.log(vm.filteredStart, vm.filteredFinish, vm.filteredBreak)
-            vm.local.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
+            vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
         }
     }
 

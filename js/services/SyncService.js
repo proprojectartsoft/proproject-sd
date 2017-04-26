@@ -73,7 +73,7 @@ angular.module($APP.name).factory('SyncService', [
                                 }
 
                                 function setCurrencySymbol() {
-                                    SiteDiaryService.get_currency().then(function(curr) {
+                                    SiteDiaryService.get_company_settings().then(function(curr) {
                                         localStorage.setObject('currency',
                                             SettingService.get_currency_symbol(
                                                 $filter('filter')(curr, {

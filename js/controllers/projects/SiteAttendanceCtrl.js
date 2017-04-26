@@ -6,7 +6,8 @@ function SiteAttendanceCtrl($rootScope, $state) {
     var vm = this;
     vm.go = go;
     vm.show = show;
-    vm.staff = true;
+    show(localStorage.getObject('siteAttendance.tab') || "staff");
+    localStorage.setObject('siteAttendance.tab', '');
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');

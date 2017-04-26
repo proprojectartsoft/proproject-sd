@@ -18,11 +18,11 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Maximum temperature</div>
-                <input type="number" ng-readonly="(vm.diaryId && !vm.editMode) || vm.perfectWeather" placeholder="Tap to add temperature" ng-model="vm.max_temp">
+                <input type="number" ng-readonly="(vm.diaryId && !vm.editMode) || vm.perfectWeather" placeholder="{{(!vm.diaryId || (vm.editMode && !vm.perfectWeather)) && 'Tap to add temperature' || ''}}" ng-model="vm.max_temp">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Minimum temperature</div>
-                <input type="number" ng-readonly="(vm.diaryId && !vm.editMode) || vm.perfectWeather" placeholder="Tap to add temperature" ng-model="vm.min_temp">
+                <input type="number" ng-readonly="(vm.diaryId && !vm.editMode) || vm.perfectWeather" placeholder="{{(!vm.diaryId || (vm.editMode && !vm.perfectWeather)) && 'Tap to add temperature' || ''}}" ng-model="vm.min_temp">
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">Morning</div>
@@ -30,7 +30,7 @@
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">Morning</div>
-                <input ng-readonly=true placeholder="Tap to add temperature" ng-model="vm.local.morning">
+                <input ng-readonly=true ng-model="vm.local.morning">
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">Midday</div>
@@ -38,7 +38,7 @@
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">Midday</div>
-                <input ng-readonly=true placeholder="Tap to add temperature" ng-model="vm.local.midday">
+                <input ng-readonly=true ng-model="vm.local.midday">
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">Afternoon</div>
@@ -46,7 +46,7 @@
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">Afternoon</div>
-                <input ng-readonly=true placeholder="Tap to add temperature" ng-model="vm.local.afternoon">
+                <input ng-readonly=true ng-model="vm.local.afternoon">
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">Evening</div>
@@ -54,7 +54,7 @@
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">Evening</div>
-                <input ng-readonly=true placeholder="Tap to add temperature" ng-model="vm.local.evening">
+                <input ng-readonly=true ng-model="vm.local.evening">
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">On and off</div>
@@ -62,7 +62,7 @@
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">On and Off</div>
-                <input ng-readonly=true placeholder="Tap to add temperature" ng-model="vm.local.onOff">
+                <input ng-readonly=true ng-model="vm.local.onOff">
             </label>
         </div>
         <button ng-if="!vm.diaryId || vm.editMode" class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-click="vm.save()">

@@ -184,6 +184,33 @@ $lightblue: #11c1f3;
             }
 
             .sd-label {
+                .textarea-div {
+                    display: inline-block;
+                    width: 100%;
+                    position: relative;
+
+                    textarea {
+                        width: 90%;
+                        padding: 15px;
+                        max-height: 200px;
+                        resize: none;
+                        height: auto;
+                        line-height: 2em;
+                        -webkit-transition: height 2s ease;
+                        -moz-transition: height 2s ease;
+                        -ms-transition: height 2s ease;
+                        -o-transition: height 2s ease;
+                        transition: height 2s ease;
+                    }
+
+                    span {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        padding-top: 15px;
+                    }
+                }
+
                 .sd-line {
                     height: 40px;
                     padding: 10px 15px;

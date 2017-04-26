@@ -38,7 +38,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService) {
         name: 'Incident/Accident Report'
     }, {
         id: 3,
-        name: 'PFE Discussion'
+        name: 'PPE Discussion'
     }];
     vm.tools = vm.create.oh_and_s;
 
@@ -46,8 +46,8 @@ function OhsCtrl($state, $stateParams, $scope, SettingService) {
         vm.newType = localStorage.getObject('sd.diary.ohs.type');
         vm.oh_and_s = {
             type: {
-                id: vm.newType[0].id,
-                name: vm.newType[0].name
+                id: vm.newType && vm.newType[0].id || '',
+                name: vm.newType && vm.newType[0].name || ''
             },
             task_completed: vm.task_completed,
             form_to_be_completed: vm.form_complete,

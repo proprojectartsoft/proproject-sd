@@ -91,14 +91,14 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         vm.action_required = localStorage.getObject('sd.diary.incident.actionReq')
         var incident = {
             type: {
-                id: vm.newType[0].id,
-                name: vm.newType[0].name
+                id: vm.newType && vm.newType[0].id || '',
+                name: vm.newType && vm.newType[0].name || ''
             },
-            description: vm.incident.description,
-            quantity: vm.incident.quantity,
+            description: vm.incident && vm.incident.description || '',
+            quantity: vm.incident && vm.incident.quantity || '',
             unit_name: vm.local.unit_name,
             unit_id: vm.local.unit_id,
-            action_required: vm.action_required[0]
+            action_required: vm.action_required && vm.action_required[0] || ''
         }
         if ((vm.editMode) && (vm.index !== 'create')) {
             vm.create.incidents[vm.index] = incident

@@ -24,6 +24,7 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope) {
         }
         vm.create.site_attendance.visitors.push(vm.member);
         localStorage.setObject('sd.diary.create', vm.create);
+        localStorage.setObject('siteAttendance.tab', 'visitors');
         vm.go('siteAttendance');
     }
 
