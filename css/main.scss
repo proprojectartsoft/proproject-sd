@@ -15,8 +15,40 @@ $lightblue: #11c1f3;
     font-weight: 100;
 }
 
+.date-item {
+    background-color: inherit!important;
+    border-color: $darkblue!important;
+    color: white;
+
+    .ion-calendar {
+        padding-left: 15px;
+        font-size: 20px;
+    }
+}
+
 .greentext {
     color: green;
+}
+
+.search-input-item {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.item {
+    .search-input {
+        border: none;
+        width: 90%;
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
+    }
+
+    .ion-forward {
+        float: right;
+        font-size: 21px;
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
+    }
 }
 
 .sd-button {
@@ -211,7 +243,7 @@ $lightblue: #11c1f3;
     }
 
     .comment-action {
-        padding-top: 0px !important;
+        padding-top: 0 !important;
     }
 
     .sd-actions {

@@ -11,6 +11,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.showSearchUnit = showSearchUnit;
     vm.backSearch = backSearch;
     vm.addGood = addGood;
+    vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
     vm.save = save;
 
@@ -21,13 +22,12 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.currency = localStorage.getObject('currency');
 
     vm.local = {};
-    vm.local.data = {};
     vm.local.search = '';
-    vm.data = {};
     vm.settings = '';
     vm.material = {}
     vm.total_formated = '';
     vm.subtotal_formated = '';
+    vm.newGood = '';
 
     $scope.$watch(function() {
         if (vm.editMode)
@@ -108,6 +108,11 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         vm.searchModal.hide();
     }
 
+    function addNewGood() {
+        vm.material.name = vm.newGood;
+        vm.searchModal.hide();
+    }
+
     function addUnit(item) {
         vm.material.unit_id = item.id;
         vm.material.unit_name = item.name;
@@ -132,7 +137,6 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             } else {
                 vm.create.plant_and_material_used[vm.index] = vm.material
             }
-
         } else {
             vm.create.plant_and_material_used.push(vm.material);
         }

@@ -50,9 +50,7 @@ angular.module($APP.name).factory('SyncService', [
                                                 }
                                             });
                                             if (attToAdd) {
-                                                AttachmentsService.upload_attachments(attToAdd).then(function(result) {
-                                                    console.log(result);
-                                                });
+                                                AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
                                             }
                                             var comments = diaryToAdd.comments;
                                             angular.forEach(comments, function(value) {
@@ -89,25 +87,21 @@ angular.module($APP.name).factory('SyncService', [
                                     addDiaries().then(function() {
                                         setCurrencySymbol();
                                         ProjectService.projects().then(function(result) {
-                                            console.log(result);
-                                            //def.resolve(result);
                                             angular.forEach(result, function(value) {
                                                 SiteDiaryService.list_diaries(value.id).then(function(diaries) {
+                                                    // console.log("buildData - list diaries for proj:");
                                                     value.diaries = diaries;
                                                     if ((result[result.length - 1] === value)) {
                                                         $timeout(function() {
+                                                            // console.log("buildData - resolve 1");
                                                             def.resolve(result)
                                                         }, 5000);
                                                     }
                                                     if (value.diaries.length) {
                                                         angular.forEach(diaries, function(diary) {
+                                                            // console.log("buildData - foreach diary:");
                                                             SiteDiaryService.list_diary(diary.id).then(function(data) {
                                                                 diary.data = data;
-                                                                console.log('Diary downloaded');
-                                                                if ((diaries[diaries.length - 1] === diary) && (result[result.length - 1] === value)) {
-                                                                    def.resolve(result);
-                                                                    console.log("The final result: ", result)
-                                                                }
                                                             });
                                                         });
                                                     } else {
@@ -123,7 +117,6 @@ angular.module($APP.name).factory('SyncService', [
                                 $indexedDB.openStore('projects', function(store) {
                                     store.clear();
                                 }).then(function(e) {
-                                    console.log("inSync");
                                     buildData().then(function(projects) {
                                         var diaryToAdd = localStorage.getObject('diaryToSync');
                                         if (diaryToAdd && diaryToAdd.data) {
@@ -137,9 +130,7 @@ angular.module($APP.name).factory('SyncService', [
                                                     }
                                                 });
                                                 if (attToAdd) {
-                                                    AttachmentsService.upload_attachments(attToAdd).then(function(result) {
-                                                        console.log(result);
-                                                    });
+                                                    AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
                                                 }
                                                 var comments = diaryToAdd.comments;
                                                 angular.forEach(comments, function(value) {
@@ -153,7 +144,6 @@ angular.module($APP.name).factory('SyncService', [
                                                 localStorage.setObject('diaryToSync', diaryToAdd);
                                                 angular.forEach(projects, function(project) {
                                                     $indexedDB.openStore('projects', function(store) {
-                                                        console.log(project);
                                                         store.insert({
                                                             "id": project.id,
                                                             "value": project,
@@ -169,7 +159,6 @@ angular.module($APP.name).factory('SyncService', [
                                         } else {
                                             angular.forEach(projects, function(project) {
                                                 $indexedDB.openStore('projects', function(store) {
-                                                    console.log(project);
                                                     store.insert({
                                                         "id": project.id,
                                                         "value": project,

@@ -9,6 +9,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.showSearchUnit = showSearchUnit;
     vm.backSearch = backSearch;
     vm.addGood = addGood;
+    vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
     vm.saveItem = saveItem;
 
@@ -19,6 +20,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.local.data = {};
     vm.id = $stateParams.id;
     vm.index = $stateParams.index;
+    vm.newGood = '';
 
     $scope.$watch(function() {
         if (vm.editMode)
@@ -82,6 +84,11 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         vm.searchModal.hide();
     }
 
+    function addNewGood() {
+        vm.local.data.good_name = vm.newGood;
+        vm.searchModal.hide();
+    }
+
     function addUnit(item) {
         vm.local.data.unit_id = item.id;
         vm.local.data.good_unit = item.name;
@@ -89,7 +96,6 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     }
 
     function saveItem() {
-
         vm.item = {
             details: vm.local.data.good_name,
             unit_name: vm.local.data.good_unit,

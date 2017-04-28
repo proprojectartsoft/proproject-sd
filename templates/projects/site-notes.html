@@ -13,7 +13,7 @@
                 <div class="sd-title">Delays</div>
                 <div class="textarea-div">
                     <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add delays" ng-model="vm.input1"></textarea>
-                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.delays.length > 0">
@@ -26,7 +26,7 @@
                 <div class="sd-title">Tools used</div>
                 <div class="textarea-div">
                     <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add tools used" ng-model="vm.input2"></textarea>
-                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.tools.length > 0">
@@ -39,7 +39,7 @@
                 <div class="sd-title">Materials requested</div>
                 <div class="textarea-div">
                     <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add materials requested" ng-model="vm.input3"></textarea>
-                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-ios-paperplane" ng-click="vm.add()"></span>
+                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.materials.length > 0">

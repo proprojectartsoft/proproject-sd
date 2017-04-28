@@ -1,9 +1,9 @@
 angular.module($APP.name).controller('ProjectDiaryCtrl', ProjectDiaryCtrl)
 
 
-ProjectDiaryCtrl.$inject = ['$rootScope','$ionicPopup','$timeout', '$state', '$stateParams', '$indexedDB', 'SettingService', 'SiteDiaryService', 'AttachmentsService','SyncService'];
+ProjectDiaryCtrl.$inject = ['$rootScope', '$ionicPopup', '$timeout', '$state', '$stateParams', '$indexedDB', '$scope', 'SettingService', 'SiteDiaryService', 'AttachmentsService', 'SyncService'];
 
-function ProjectDiaryCtrl($rootScope,$ionicPopup,$timeout, $state, $stateParams, $indexedDB, SettingService, SiteDiaryService, AttachmentsService,SyncService) {
+function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParams, $indexedDB, $scope, SettingService, SiteDiaryService, AttachmentsService, SyncService) {
 
     var vm = this;
     vm.go = go;
@@ -18,45 +18,43 @@ function ProjectDiaryCtrl($rootScope,$ionicPopup,$timeout, $state, $stateParams,
     vm.projectId = localStorage.getObject('projectId');
     vm.diaryStateId = $stateParams.id
 
-
-
+    vm.created_for_date = '';
     vm.edit = localStorage.getObject('editMode');
-    if ($stateParams.id) {
-      if($stateParams.id === 'offline'){
-        var offDiary = localStorage.getObject('diaryToSync');
-        vm.create = offDiary.data;
-        localStorage.setObject('sd.diary.create', vm.create);
-      } else {
-        localStorage.setObject('diaryId', $stateParams.id);
-        vm.enableCreate = false;
-        if (vm.edit) {
-            vm.create = localStorage.getObject('sd.diary.create');
-        } else {
-            $indexedDB.openStore('projects', function(store) {
-                vm.projectId = parseInt(vm.projectId);
-                store.find(vm.projectId).then(function(e) {
-                    vm.diaries = e.value.diaries;
-                    angular.forEach(vm.diaries, function(diary) {
-                        if (diary.id == $stateParams.id) {
-                            localStorage.setObject('sd.diary.create', diary.data);
-                        }
-                    })
-                    console.log(vm.diaries);
-                });
-            });
 
-            // SiteDiaryService.list_diary($stateParams.id).then(function(result) {
-            //     localStorage.setObject('sd.diary.create', result);
-            // });
-            AttachmentsService.get_attachments($stateParams.id).then(function(result) {
-                var att = {
-                    pictures: result
-                }
-                localStorage.setObject('sd.attachments', att);
-                console.log('First DB Call', att)
-            });
+    if ($stateParams.id) {
+        if ($stateParams.id === 'offline') {
+            var offDiary = localStorage.getObject('diaryToSync');
+            vm.create = offDiary.data;
+            localStorage.setObject('sd.diary.create', vm.create);
+        } else {
+            localStorage.setObject('diaryId', $stateParams.id);
+            vm.enableCreate = false;
+            if (vm.edit) {
+                vm.create = localStorage.getObject('sd.diary.create');
+            } else {
+                $indexedDB.openStore('projects', function(store) {
+                    vm.projectId = parseInt(vm.projectId);
+                    store.find(vm.projectId).then(function(e) {
+                        vm.diaries = e.value.diaries;
+                        angular.forEach(vm.diaries, function(diary) {
+                            if (diary.id == $stateParams.id) {
+                                localStorage.setObject('sd.diary.create', diary.data);
+                            }
+                        })
+                    });
+                });
+
+                // SiteDiaryService.list_diary($stateParams.id).then(function(result) {
+                //     localStorage.setObject('sd.diary.create', result);
+                // });
+                AttachmentsService.get_attachments($stateParams.id).then(function(result) {
+                    var att = {
+                        pictures: result
+                    }
+                    localStorage.setObject('sd.attachments', att);
+                });
+            }
         }
-      }
 
     } else {
         vm.enableCreate = true;
@@ -85,12 +83,12 @@ function ProjectDiaryCtrl($rootScope,$ionicPopup,$timeout, $state, $stateParams,
         }
     }
 
-
-
+    vm.diaryId = localStorage.getObject('diaryId');
 
     function saveCreate() {
         vm.create = localStorage.getObject('sd.diary.create');
         vm.create.date = new Date().getTime();
+        vm.create.created_for_date = vm.created_for_date;
         vm.create.summary = "Please"
         vm.create.project_id = localStorage.getObject('projectId');
         SiteDiaryService.add_diary(vm.create).then(function(result) {
@@ -118,38 +116,37 @@ function ProjectDiaryCtrl($rootScope,$ionicPopup,$timeout, $state, $stateParams,
                 };
                 SiteDiaryService.add_comments(request).then(function(result) {});
             })
-            SyncService.sync().then(function(){
-              vm.go('project');
+            SyncService.sync().then(function() {
+                vm.go('project');
             })
 
 
-        },function(response){
-          var attStorage = localStorage.getObject('sd.attachments');
-          var commStorage = localStorage.getObject('sd.comments');
-          vm.diaryToSync = {
-            data: vm.create
-          };
-          if(attStorage){
-            vm.diaryToSync.attachments = attStorage;
-          }
-          if(commStorage){
-            vm.diaryToSync.comments = commStorage;
-          }
-          localStorage.setObject('diaryToSync',vm.diaryToSync);
-          var offlinePopup = $ionicPopup.alert({
-              title: "You are offline",
-              template: "<center>You can sync your data when online</center>",
-              content: "",
-              buttons: [{
-                  text: 'Ok',
-                  type: 'button-positive',
-                  onTap: function(e) {
-                      offlinePopup.close();
-                  }
-              }]
-          });
-          vm.go('project');
-
+        }, function(response) {
+            var attStorage = localStorage.getObject('sd.attachments');
+            var commStorage = localStorage.getObject('sd.comments');
+            vm.diaryToSync = {
+                data: vm.create
+            };
+            if (attStorage) {
+                vm.diaryToSync.attachments = attStorage;
+            }
+            if (commStorage) {
+                vm.diaryToSync.comments = commStorage;
+            }
+            localStorage.setObject('diaryToSync', vm.diaryToSync);
+            var offlinePopup = $ionicPopup.alert({
+                title: "You are offline",
+                template: "<center>You can sync your data when online</center>",
+                content: "",
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        offlinePopup.close();
+                    }
+                }]
+            });
+            vm.go('project');
         });
 
     }
@@ -158,6 +155,7 @@ function ProjectDiaryCtrl($rootScope,$ionicPopup,$timeout, $state, $stateParams,
         vm.edit = false;
         localStorage.setObject('editMode', vm.edit);
         vm.create = localStorage.getObject('sd.diary.create');
+        // vm.create.created_for_date = vm.created_for_date;
         console.log(vm.create);
         SiteDiaryService.update_diary(vm.create).then(function(result) {
             vm.go('project');
@@ -175,14 +173,11 @@ function ProjectDiaryCtrl($rootScope,$ionicPopup,$timeout, $state, $stateParams,
         AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
             console.log(result);
         });
-
-
     }
 
     function toggle() {
         vm.edit = !vm.edit;
-        localStorage.setObject('editMode', vm.edit)
-
+        localStorage.setObject('editMode', vm.edit);
     }
 
     function go(predicate, id) {

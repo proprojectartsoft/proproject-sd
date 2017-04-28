@@ -70,6 +70,7 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout) {
     }
 
     function save() {
+        add();
         vm.contract = {
             instructions: vm.instructions,
             extensions_of_time: vm.extensions,

@@ -53,6 +53,7 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService) {
     }
 
     function save() {
+        add();
         vm.site_notes = {
             delays: vm.delays,
             tools_used: vm.tools,
