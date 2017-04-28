@@ -33,8 +33,8 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             good_unit: vm.create.goods_received[vm.id].goods_details[vm.index].unit_name,
             qty: vm.create.goods_received[vm.id].goods_details[vm.index].quantity
         };
-        vm.local.data.off_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].off_hire, "yyyy-MM-dd");
-        vm.local.data.on_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].on_hire, "yyyy-MM-dd");
+        vm.local.data.off_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].off_hire, "dd/MM/yyyy");
+        vm.local.data.on_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].on_hire, "dd/MM/yyyy");
     }
     vm.local.search = '';
     vm.data = {};
@@ -101,8 +101,8 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             unit_name: vm.local.data.good_unit,
             unit_id: vm.local.data.good_id,
             quantity: vm.local.data.qty,
-            on_hire: $filter('date')(vm.local.data.on_hire, "yyyy-MM-dd"),
-            off_hire: $filter('date')(vm.local.data.off_hire, "yyyy-MM-dd")
+            on_hire: $filter('date')(vm.local.data.on_hire, "dd/MM/yyyy"),
+            off_hire: $filter('date')(vm.local.data.off_hire, "dd/MM/yyyy")
         }
         if ((vm.editMode) && (vm.index !== 'create')) {
             vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
