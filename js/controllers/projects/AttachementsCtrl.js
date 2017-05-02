@@ -24,10 +24,10 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     $timeout(function() {
       $('.pull-down').each(function() {
         var $this = $(this);
-        var h = $this.parent().height() - $this.height() - $this.prev().height();
+        var h = $this.parent().height() - $this.height() - $this.next().height();
         $this.css('padding-top', h);
       })
-    }, 50);
+    }, 100);
 
     function populate(){
       vm.attachments = localStorage.getObject('sd.attachments');
