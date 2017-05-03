@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('IncidentsCtrl', IncidentsCtrl)
 
-IncidentsCtrl.$inject = ['$scope', '$state', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService'];
+IncidentsCtrl.$inject = ['$scope', '$state', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter'];
 
-function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryService, SettingService) {
+function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter) {
     var vm = this;
     vm.showSearchUnit = showSearchUnit;
     vm.backSearch = backSearch;
@@ -100,13 +100,26 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             unit_id: vm.local.unit_id,
             action_required: vm.action_required && vm.action_required[0] || ''
         }
+
         if ((vm.editMode) && (vm.index !== 'create')) {
-            vm.create.incidents[vm.index] = incident
+            vm.create.incidents[vm.index] = incident;
         } else {
             vm.create.incidents.push(incident);
         }
-
         localStorage.setObject('sd.diary.create', vm.create);
+
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            if ((vm.editMode) && (vm.index !== 'create')) {
+                diary.data.incidents[vm.index] = incident;
+            } else {
+                diary.data.incidents.push(incident);
+            }
+            localStorage.setObject('currentProj', proj);
+        }
         vm.go('incidents');
     }
 

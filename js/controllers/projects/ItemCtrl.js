@@ -31,10 +31,12 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         vm.local.data = {
             good_name: vm.create.goods_received[vm.id].goods_details[vm.index].details,
             good_unit: vm.create.goods_received[vm.id].goods_details[vm.index].unit_name,
-            qty: vm.create.goods_received[vm.id].goods_details[vm.index].quantity
+            qty: vm.create.goods_received[vm.id].goods_details[vm.index].quantity,
+            on_hire: vm.create.goods_received[vm.id].goods_details[vm.index].on_hire,
+            off_hire: vm.create.goods_received[vm.id].goods_details[vm.index].off_hire,
+            offHireAsString: $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].off_hire, "dd/MM/yyyy"),
+            onHireAsString: $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].on_hire, "dd/MM/yyyy")
         };
-        vm.local.data.off_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].off_hire, "dd/MM/yyyy");
-        vm.local.data.on_hire = $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].on_hire, "dd/MM/yyyy");
     }
     vm.local.search = '';
     vm.data = {};
@@ -101,15 +103,31 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             unit_name: vm.local.data.good_unit,
             unit_id: vm.local.data.good_id,
             quantity: vm.local.data.qty,
-            on_hire: $filter('date')(vm.local.data.on_hire, "dd/MM/yyyy"),
-            off_hire: $filter('date')(vm.local.data.off_hire, "dd/MM/yyyy")
+            on_hire: vm.local.data.on_hire,
+            off_hire: vm.local.data.off_hire,
+            onHireAsString: $filter('date')(vm.local.data.on_hire, "dd/MM/yyyy"),
+            offHireAsString: $filter('date')(vm.local.data.off_hire, "dd/MM/yyyy")
         }
+
         if ((vm.editMode) && (vm.index !== 'create')) {
             vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
         } else {
             vm.create.goods_received[vm.supplier].goods_details.push(vm.item);
         }
         localStorage.setObject('sd.diary.create', vm.create);
+
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            if ((vm.editMode) && (vm.index !== 'create')) {
+                diary.data.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
+            } else {
+                diary.data.goods_received[vm.supplier].goods_details.push(vm.item);
+            }
+            localStorage.setObject('currentProj', proj);
+        }
         vm.go('goodsUsed', vm.supplier);
     }
 

@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('StaffMemberCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$indexedDB'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, SiteDiaryService, SettingService) {
+function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, SiteDiaryService, SettingService, $indexedDB) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -86,7 +86,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             vm.searchModal = popover;
         });
         vm.staff = result;
-        console.log(result)
     })
 
     function showSearch() {
@@ -98,7 +97,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function addStaff(item) {
-        console.log(item);
         vm.local.data.role = item.role;
         vm.local.data.trade = item.role;
         vm.local.data.staff_name = item.name;
@@ -131,7 +129,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             absence: vm.local.data.absence[0],
             note: vm.local.data.note
         }
-        console.log(vm.member);
         if (vm.editMode) {
             if (vm.index === 'create') {
                 vm.create.site_attendance.staffs.push(vm.member);
@@ -142,7 +139,21 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             vm.create.site_attendance.staffs.push(vm.member);
         }
 
-        localStorage.setObject('sd.diary.create', vm.create)
+        localStorage.setObject('sd.diary.create', vm.create);
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            if (vm.editMode) {
+                if (vm.index === 'create') {
+                    diary.data.site_attendance.staffs.push(vm.member);
+                } else {
+                    diary.data.site_attendance.staffs[vm.index] = vm.member;
+                }
+            }
+            localStorage.setObject('currentProj', proj);
+        }
         vm.go('siteAttendance');
     }
 

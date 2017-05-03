@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('MaterialsCtrl', MaterialsCtrl)
 
-MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService'];
+MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter'];
 
-function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService) {
+function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter) {
     var vm = this;
     vm.go = go;
     vm.unit = "materials.unit";
@@ -131,6 +131,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             tax: vm.material.tax,
             total: (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100))
         }
+
         if (vm.editMode) {
             if (vm.index === 'create') {
                 vm.create.plant_and_material_used.push(vm.material);
@@ -140,8 +141,24 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         } else {
             vm.create.plant_and_material_used.push(vm.material);
         }
-
         localStorage.setObject('sd.diary.create', vm.create);
+
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            if (vm.editMode) {
+                if (vm.index === 'create') {
+                    diary.data.plant_and_material_used.push(vm.material);
+                } else {
+                    diary.data.plant_and_material_used[vm.index] = vm.material;
+                }
+            } else {
+                diary.data.plant_and_material_used.push(vm.material);
+            }
+            localStorage.setObject('currentProj', proj);
+        }
         vm.go('materials');
     }
 

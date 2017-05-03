@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('OhsCtrl', OhsCtrl)
 
-OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService'];
+OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter'];
 
-function OhsCtrl($state, $stateParams, $scope, SettingService) {
+function OhsCtrl($state, $stateParams, $scope, SettingService, $filter) {
     var vm = this;
     vm.save = save;
     vm.go = go;
@@ -55,12 +55,27 @@ function OhsCtrl($state, $stateParams, $scope, SettingService) {
             action: vm.action_message,
             note: vm.comment
         }
+
         if ((vm.editMode) && (vm.index !== 'create')) {
             vm.create.oh_and_s[vm.index] = vm.oh_and_s;
         } else {
             vm.create.oh_and_s.push(vm.oh_and_s);
         }
         localStorage.setObject('sd.diary.create', vm.create);
+
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            if ((vm.editMode) && (vm.index !== 'create')) {
+                diary.data.oh_and_s[vm.index] = vm.oh_and_s;
+            } else {
+                diary.data.oh_and_s.push(vm.oh_and_s);
+            }
+            localStorage.setObject('currentProj', proj);
+        }
+
         vm.go('ohs');
     }
 

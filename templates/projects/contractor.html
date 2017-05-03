@@ -52,7 +52,7 @@
             </div>
             <label class="sd-label">
                 <div class="sd-title">Total</div>
-                <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Total' || ''}}" disabled ng-model="vm.local.data.total_time">
+                <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Total' || ''}}" ng-readonly=true ng-model="vm.local.data.total_time">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Note</div>

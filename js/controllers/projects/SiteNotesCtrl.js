@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('SiteNotesCtrl', SiteNotesCtrl)
 
-SiteNotesCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService'];
+SiteNotesCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService', '$filter'];
 
-function SiteNotesCtrl($rootScope, $state, $scope, SettingService) {
+function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
     var vm = this;
     vm.go = go;
     vm.add = add;
@@ -60,6 +60,14 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService) {
             materials_requested: vm.materials
         }
         vm.create.site_notes = vm.site_notes;
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            diary.data.site_notes = vm.site_notes;
+            localStorage.setObject('currentProj', proj);
+        }
         localStorage.setObject('sd.diary.create', vm.create);
         go('diary');
     }

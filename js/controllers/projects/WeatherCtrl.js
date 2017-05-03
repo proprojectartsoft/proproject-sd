@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('WeatherCtrl', WeatherCtrl)
 
-WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$scope', 'SettingService'];
+WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$scope', 'SettingService', '$indexedDB', '$ionicPopup', '$filter'];
 
-function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService) {
+function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $indexedDB, $ionicPopup, $filter) {
     var vm = this;
     vm.save = save;
     vm.go = go;
@@ -73,6 +73,16 @@ function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService) {
         }
         vm.create.weather = vm.weather;
         localStorage.setObject('sd.diary.create', vm.create);
+
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            diary.data.weather = vm.weather;
+            localStorage.setObject('currentProj', proj);
+        }
+
         vm.go('diary');
     }
 

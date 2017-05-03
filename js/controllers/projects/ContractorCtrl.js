@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ContractorCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$ionicModal', '$filter', '$stateParams', 'ContractorService', 'SiteDiaryService', 'SettingService'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$stateParams', 'ContractorService', 'SiteDiaryService', 'SettingService'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stateParams, ContractorService, SiteDiaryService, SettingService) {
+function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, ContractorService, SiteDiaryService, SettingService) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -72,26 +72,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         })
     }
 
-    SiteDiaryService.list_diary(vm.diaryId).then(function(result) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-        });
-        vm.contractor = result.site_attendance.contractors;
-    })
-
-    // ContractorService.list().then(function(result) {
-    //     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-    //         scope: $scope,
-    //         animation: 'slide-in-up'
-    //     }).then(function(popover) {
-    //         vm.searchModal = popover;
-    //     });
-    //     vm.contractor = result;
-    // })
-
     SiteDiaryService.absence_list().then(function(result) {
         angular.forEach(result, function(value) {
             value.name = value.reason;
@@ -135,8 +115,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
             total_time: vm.local.data.total_time,
             absence: vm.local.data.absence[0],
             note: vm.local.data.note
-
         }
+
         if (vm.editMode) {
             if (vm.index === 'create') {
                 vm.create.site_attendance.contractors.push(vm.member);
@@ -146,9 +126,25 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
         } else {
             vm.create.site_attendance.contractors.push(vm.member);
         }
-
         localStorage.setObject('sd.diary.create', vm.create);
         localStorage.setObject('siteAttendance.tab', 'contractors');
+
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            if (vm.editMode) {
+                if (vm.index === 'create') {
+                    diary.data.site_attendance.contractors.push(vm.member);
+                } else {
+                    diary.data.site_attendance.contractors[vm.index] = vm.member;
+                }
+            } else {
+                diary.data.site_attendance.contractors.push(vm.member);
+            }
+            localStorage.setObject('currentProj', proj);
+        }
         vm.go('siteAttendance');
     }
 
@@ -200,6 +196,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $ionicModal, $filter, $stat
     }
 
     function go(predicate, id) {
+        localStorage.setObject('siteAttendance.tab', 'contractors');
         $state.go('app.' + predicate, {
             id: id
         });

@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('VisitorsCtrl', VisitorsCtrl)
 
-VisitorsCtrl.$inject = ['$rootScope', '$state', 'SettingService', '$scope'];
+VisitorsCtrl.$inject = ['$rootScope', '$state', 'SettingService', '$scope', '$indexedDB', '$filter'];
 
-function VisitorsCtrl($rootScope, $state, SettingService, $scope) {
+function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $filter) {
     var vm = this;
     vm.go = go;
     vm.save = save;
@@ -25,10 +25,20 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope) {
         vm.create.site_attendance.visitors.push(vm.member);
         localStorage.setObject('sd.diary.create', vm.create);
         localStorage.setObject('siteAttendance.tab', 'visitors');
+
+        var proj = localStorage.getObject('currentProj');
+        if (localStorage.getObject('diaryId')) {
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (localStorage.getObject('diaryId'))
+            })[0];
+            diary.data.site_attendance.visitors.push(vm.member);
+            localStorage.setObject('currentProj', proj);
+        }
         vm.go('siteAttendance');
     }
 
     function go(predicate, id) {
+        localStorage.setObject('siteAttendance.tab', 'visitors');
         $state.go('app.' + predicate, {
             id: id
         });

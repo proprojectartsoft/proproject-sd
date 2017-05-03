@@ -12,8 +12,8 @@
     <ion-content class="has-subheader sd-form">
         <ion-item class="date-item">
             <div class="sd-label">
-                <div ng-required="vm.data.required" ion-datetime-picker date ng-class="{'sd-no-select': vm.diaryId && !vm.edit}" ng-model="vm.sd_date" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container">
-                    <div class="sd-title">Site Diary Date - {{vm.sd_date | date: 'dd/MM/yyyy'}}<span class="ion-calendar"></span></div>
+                <div ng-required="vm.data.required" ion-datetime-picker date ng-class="{'sd-no-select': vm.diaryId && !vm.edit}" ng-model="vm.created_for_date" month-step="1" hour-step="1" minute-step="1" second-step="1" class="sd-input-container">
+                    <div class="sd-title">Site Diary Date - {{vm.created_for_date | date: 'dd/MM/yyyy'}}<span class="ion-calendar"></span></div>
                 </div>
             </div>
         </ion-item>

@@ -43,10 +43,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         })
                     });
                 });
-
-                // SiteDiaryService.list_diary($stateParams.id).then(function(result) {
-                //     localStorage.setObject('sd.diary.create', result);
-                // });
                 AttachmentsService.get_attachments($stateParams.id).then(function(result) {
                     var att = {
                         pictures: result
@@ -55,7 +51,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 });
             }
         }
-
     } else {
         vm.enableCreate = true;
         localStorage.setObject('diaryId', false);
@@ -88,66 +83,65 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     function saveCreate() {
         vm.create = localStorage.getObject('sd.diary.create');
         vm.create.date = new Date().getTime();
-        vm.create.created_for_date = vm.created_for_date;
+        // vm.create.created_for_date = vm.created_for_date; TODO:
         vm.create.summary = "Please"
         vm.create.project_id = localStorage.getObject('projectId');
-        SiteDiaryService.add_diary(vm.create).then(function(result) {
-            var attachments = localStorage.getObject('sd.attachments');
-            var attToAdd = [];
-            angular.forEach(attachments.pictures, function(value) {
-                if (!value.path) {
-                    value.site_diary_id = result.data.id;
-                    attToAdd.push(value);
-                }
-            });
-            AttachmentsService.upload_attachments(attToAdd).then(function(result) {
-                console.log(result);
-            });
-            if (attachments.toBeDeleted) {
-                AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
+        SiteDiaryService.add_diary(vm.create)
+            .success(function(result) {
+                var attachments = localStorage.getObject('sd.attachments');
+                var attToAdd = [];
+                angular.forEach(attachments.pictures, function(value) {
+                    if (!value.path) {
+                        value.site_diary_id = result.data.id;
+                        attToAdd.push(value);
+                    }
+                });
+                AttachmentsService.upload_attachments(attToAdd).then(function(result) {
                     console.log(result);
                 });
-            }
-            vm.local.data.comments = localStorage.getObject('sd.comments');
-            angular.forEach(vm.local.data.comments, function(value) {
-                var request = {
-                    site_diary_id: result.data.id,
-                    comment: value,
+                if (attachments.toBeDeleted) {
+                    AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
+                        console.log(result);
+                    });
+                }
+                vm.local.data.comments = localStorage.getObject('sd.comments');
+                angular.forEach(vm.local.data.comments, function(value) {
+                    var request = {
+                        site_diary_id: result.data.id,
+                        comment: value,
+                    };
+                    SiteDiaryService.add_comments(request).success(function(result) {});
+                })
+                SyncService.sync().then(function() {
+                    vm.go('project');
+                })
+            }).error(function(response) {
+                var attStorage = localStorage.getObject('sd.attachments');
+                var commStorage = localStorage.getObject('sd.comments');
+                vm.diaryToSync = {
+                    data: vm.create
                 };
-                SiteDiaryService.add_comments(request).then(function(result) {});
-            })
-            SyncService.sync().then(function() {
+                if (attStorage) {
+                    vm.diaryToSync.attachments = attStorage;
+                }
+                if (commStorage) {
+                    vm.diaryToSync.comments = commStorage;
+                }
+                localStorage.setObject('diaryToSync', vm.diaryToSync);
+                var offlinePopup = $ionicPopup.alert({
+                    title: "You are offline",
+                    template: "<center>You can sync your data when online</center>",
+                    content: "",
+                    buttons: [{
+                        text: 'Ok',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            offlinePopup.close();
+                        }
+                    }]
+                });
                 vm.go('project');
-            })
-
-
-        }, function(response) {
-            var attStorage = localStorage.getObject('sd.attachments');
-            var commStorage = localStorage.getObject('sd.comments');
-            vm.diaryToSync = {
-                data: vm.create
-            };
-            if (attStorage) {
-                vm.diaryToSync.attachments = attStorage;
-            }
-            if (commStorage) {
-                vm.diaryToSync.comments = commStorage;
-            }
-            localStorage.setObject('diaryToSync', vm.diaryToSync);
-            var offlinePopup = $ionicPopup.alert({
-                title: "You are offline",
-                template: "<center>You can sync your data when online</center>",
-                content: "",
-                buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        offlinePopup.close();
-                    }
-                }]
             });
-            vm.go('project');
-        });
 
     }
 
@@ -155,8 +149,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         vm.edit = false;
         localStorage.setObject('editMode', vm.edit);
         vm.create = localStorage.getObject('sd.diary.create');
-        // vm.create.created_for_date = vm.created_for_date;
-        console.log(vm.create);
+
+        // vm.create.created_for_date = vm.created_for_date; TODO
         SiteDiaryService.update_diary(vm.create).then(function(result) {
             vm.go('project');
         })
@@ -170,18 +164,26 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         AttachmentsService.upload_attachments(attToAdd).then(function(result) {
             console.log(result);
         });
-        AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
-            console.log(result);
-        });
+        if (attachments.toBeDeleted) {
+            AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
+                console.log(result);
+            });
+        }
+
+        saveChanges(localStorage.getObject('currentProj'));
+        localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
     }
 
     function toggle() {
         vm.edit = !vm.edit;
         localStorage.setObject('editMode', vm.edit);
+        if (!vm.edit)
+            localStorage.setObject('currentProj', localStorage.getObject('initialProj'));
     }
 
     function go(predicate, id) {
         if (predicate === 'project') {
+            localStorage.setObject('currentProj', localStorage.getObject('initialProj'));
             $state.go('app.' + predicate, {
                 id: vm.projectId
             });
@@ -190,5 +192,27 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 id: id
             });
         }
+    }
+
+    function saveChanges(project) {
+        $indexedDB.openStore('projects', function(store) {
+            store.upsert(project).then(
+                function(e) {},
+                function(err) {
+                    var offlinePopup = $ionicPopup.alert({
+                        title: "Unexpected error",
+                        template: "<center>An unexpected error occurred while trying to update weather.</center>",
+                        content: "",
+                        buttons: [{
+                            text: 'Ok',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                offlinePopup.close();
+                            }
+                        }]
+                    });
+                }
+            )
+        })
     }
 }

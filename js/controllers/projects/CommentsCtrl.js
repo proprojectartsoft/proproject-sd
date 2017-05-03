@@ -14,8 +14,8 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService, Projec
     vm.editMode = localStorage.getObject('editMode');
     vm.local.comments = localStorage.getObject('sd.comments');
     vm.loggedIn = localStorage.getObject('loggedIn')
-    ProjectService.my_account(vm.loggedIn.id).then(function(result){
-      vm.myProfile = result;
+    ProjectService.my_account(vm.loggedIn.id).then(function(result) {
+        vm.myProfile = result;
     })
 
     SiteDiaryService.list_comments(vm.diaryId).then(function(result) {
@@ -44,17 +44,18 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService, Projec
                     site_diary_id: vm.diaryId,
                     comment: vm.local.comment,
                 };
-                SiteDiaryService.add_comments(request).then(function(result) {
-                    vm.local.comment = '';
-                    SiteDiaryService.list_comments(vm.diaryId).then(function(result) {
-                        vm.local.list = result
+                SiteDiaryService.add_comments(request)
+                    .success(function(result) {
+                        vm.local.comment = '';
+                        SiteDiaryService.list_comments(vm.diaryId).then(function(result) {
+                            vm.local.list = result
+                        })
+                    }).error(function(err) {
+                        console.log("An unexpected error occured while adding a new comment");
                     })
-                })
             }
         }
     }
-
-
 
     function addComentAtEnter(event) {
         if (event.keyCode === 13) {

@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ContractCtrl', ContractCtrl)
 
-ContractCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService', '$timeout'];
+ContractCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService', '$timeout', '$filter'];
 
-function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout) {
+function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $filter) {
     var vm = this;
     vm.go = go;
     vm.add = add;
@@ -78,6 +78,15 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout) {
         }
         vm.create.contract_notes = vm.contract;
         localStorage.setObject('sd.diary.create', vm.create);
+
+        if (vm.diaryId) {
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            diary.data.contract_notes = vm.contract;
+            localStorage.setObject('currentProj', proj);
+        }
         vm.go('diary');
     }
 

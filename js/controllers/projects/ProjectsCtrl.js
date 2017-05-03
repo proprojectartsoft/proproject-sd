@@ -20,6 +20,8 @@ angular.module($APP.name).controller('ProjectsCtrl', [
 
         function go(project) {
             localStorage.setObject('projectId', project.id);
+            localStorage.setObject('currentProj', project);
+            localStorage.setObject('initialProj', project);
             $rootScope.projectName = project.value.name;
             $state.go('app.project', {
                 id: project.id
