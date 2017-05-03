@@ -92,17 +92,14 @@ angular.module($APP.name).factory('SyncService', [
                                         ProjectService.projects().then(function(result) {
                                             angular.forEach(result, function(value) {
                                                 SiteDiaryService.list_diaries(value.id).then(function(diaries) {
-                                                    // console.log("buildData - list diaries for proj:");
                                                     value.diaries = diaries;
                                                     if ((result[result.length - 1] === value)) {
                                                         $timeout(function() {
-                                                            // console.log("buildData - resolve 1");
                                                             def.resolve(result)
                                                         }, 5000);
                                                     }
                                                     if (value.diaries.length) {
                                                         angular.forEach(diaries, function(diary) {
-                                                            // console.log("buildData - foreach diary:");
                                                             SiteDiaryService.list_diary(diary.id).then(function(data) {
                                                                 diary.data = data;
                                                             });
@@ -158,7 +155,6 @@ angular.module($APP.name).factory('SyncService', [
                                                         });
                                                     })
                                                 }).error(function(err) {
-                                                    console.log('Err 2');
                                                     syncPopup.close();
                                                     deferred.resolve('sync_done');
                                                 })

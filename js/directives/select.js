@@ -14,7 +14,6 @@ function myExample() {
         controllerAs: 'vms',
         bindToController: true
     };
-
     return directive;
 }
 
@@ -29,12 +28,12 @@ function ExampleController($ionicScrollDelegate, $timeout) {
     vms.parameter = '';
 
     vms.weather = localStorage.getObject('sd.diary.weather.morning'),
-    vms.settings = {};
+        vms.settings = {};
     vms.settings.show = false;
-    vms.settings.placeholderActive = 'Choose your option';
-    vms.settings.placeholderClosed = 'Tap to choose an option';
-    getHeight()
     vms.localPath = 'sd.diary.' + vms.deTitle;
+    vms.settings.placeholderActive = 'Choose your option';
+    vms.settings.placeholderClosed = localStorage.getObject(vms.localPath)[0].name || 'Tap to choose an option';
+    getHeight()
 
     function toggle() {
         vms.settings.show = !vms.settings.show;
@@ -59,16 +58,15 @@ function ExampleController($ionicScrollDelegate, $timeout) {
             vms.settings.title = vms.settings.placeholderActive;
         } else {
             if (vms.selected) {
-                vms.settings.title = vms.selected;
+                vms.settings.title = vms.selected.length == 0 ? vms.settings.placeholderClosed : vms.selected;
             } else {
                 vms.settings.title = vms.settings.placeholderClosed;
             }
         }
     }
-
     vms.selected = [];
-    if(vms.deParameter){
-      vms.selected = vms.deParameter;
+    if (vms.deParameter) {
+        vms.selected = vms.deParameter;
     }
 
     function select(option) {
@@ -97,9 +95,6 @@ function ExampleController($ionicScrollDelegate, $timeout) {
         localStorage.setObject(vms.localPath, vms.selected);
         toggle();
     }
-    // angular.forEach(vms.deParameter,function(value){
-    //   vms.select(value);
-    // })
 }
 
 // de-options - list of objects for the select
