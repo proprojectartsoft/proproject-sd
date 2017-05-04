@@ -11,7 +11,7 @@
         <div class="sd-container">
             <div ng-if="!vm.diaryId || vm.editMode" class="sd-label">
                 <div class="sd-title">Type</div>
-                <de-select de-options="vm.local.type" de-title="vm.type"></de-select>
+                <de-select de-options="vm.local.type" de-title="vm.type" de-selected="vm.incident.type.name"></de-select>
             </div>
             <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
                 <div class="sd-title">Type</div>
@@ -33,7 +33,7 @@
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div class="sd-title">Action required</div>
-                <de-select de-options="vm.actions" de-title="vm.actionReq"></de-select>
+                <de-select de-options="vm.actions" de-title="vm.actionReq" de-selected="vm.incident.action_required.name"></de-select>
             </div>
             <label ng-if="(vm.diaryId) && (!vm.editMode)" class="sd-label">
                 <div class="sd-title">Action Required</div>

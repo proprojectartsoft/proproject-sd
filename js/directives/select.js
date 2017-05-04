@@ -27,12 +27,12 @@ function ExampleController($ionicScrollDelegate, $timeout) {
     vms.select = select;
     vms.parameter = '';
 
-    vms.weather = localStorage.getObject('sd.diary.weather.morning'),
-        vms.settings = {};
+    vms.weather = localStorage.getObject('sd.diary.weather.morning');
+    vms.settings = {};
     vms.settings.show = false;
     vms.localPath = 'sd.diary.' + vms.deTitle;
     vms.settings.placeholderActive = 'Choose your option';
-    vms.settings.placeholderClosed = localStorage.getObject(vms.localPath)[0].name || 'Tap to choose an option';
+    vms.settings.placeholderClosed = 'Tap to choose an option';
     getHeight()
 
     function toggle() {
@@ -57,11 +57,7 @@ function ExampleController($ionicScrollDelegate, $timeout) {
         if (vms.settings.show) {
             vms.settings.title = vms.settings.placeholderActive;
         } else {
-            if (vms.selected) {
-                vms.settings.title = vms.selected.length == 0 ? vms.settings.placeholderClosed : vms.selected;
-            } else {
-                vms.settings.title = vms.settings.placeholderClosed;
-            }
+            vms.settings.title = vms.deSelected || vms.settings.placeholderClosed;
         }
     }
     vms.selected = [];

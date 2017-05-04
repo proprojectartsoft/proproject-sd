@@ -27,7 +27,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter) {
         vm.action_message = vm.create.oh_and_s[vm.index].action;
         vm.comment = vm.create.oh_and_s[vm.index].note;
     }
-    vm.type = [{
+    vm.types = [{
         id: 0,
         name: 'Toolbox Talk'
     }, {

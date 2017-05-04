@@ -11,8 +11,12 @@
         <div class="sd-container">
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div class="sd-title">Type</div>
-                <de-select de-options="vm.type" de-title="vm.local.type"></de-select>
+                <de-select de-options="vm.types" de-title="vm.local.type" de-selected="vm.type.name"></de-select>
             </div>
+            <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
+                <div class="sd-title">Type</div>
+                <input ng-readonly=true ng-model="vm.type.name">
+            </label>
             <label class="sd-label">
                 <div class="sd-title">Reference</div>
                 <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add reference' ||''}}" ng-model="vm.ref">
