@@ -22,36 +22,38 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     vm.filter.substate = 'gallery';
 
     $timeout(function() {
-      $('.pull-down').each(function() {
-        var $this = $(this);
-        var h = $this.parent().height() - $this.height() - $this.next().height();
-        $this.css('padding-top', h);
-      })
+        $('.pull-down').each(function() {
+            var $this = $(this);
+            console.log("each attachement");
+            var h = $this.parent().height() - $this.height() - $this.next().height();
+            $this.css('padding-top', h);
+        })
     }, 100);
 
-    function populate(){
-      vm.attachments = localStorage.getObject('sd.attachments');
-      vm.pictures = vm.attachments.pictures;
-          angular.forEach(vm.pictures, function (value) {
-            if(!value.url){
-            value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
-          }
-          });
-          console.log('After forEach: ', vm.pictures)
+    function populate() {
+        vm.attachments = localStorage.getObject('sd.attachments');
+        vm.pictures = vm.attachments.pictures;
+        angular.forEach(vm.pictures, function(value) {
+            if (!value.url) {
+                value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
+            }
+        });
     }
 
     vm.populate();
+
     function testPicture(pic) {
-      vm.filter.substate = 'pic';
-      vm.filter.picture = pic;
+        vm.filter.substate = 'pic';
+        vm.filter.picture = pic;
     }
+
     function takePicture() {
         var options = {
             quality: 20,
             destinationType: Camera.DestinationType.DATA_URL,
             sourceType: Camera.PictureSourceType.CAMERA,
             allowEdit: false,
-            encodingType: Camera.EncodingType.JPEG,
+            encodingType: Camera.EncodingType.PNG,
             popoverOptions: CameraPopoverOptions,
             saveToPhotoAlbum: true,
             correctOrientation: true
@@ -70,12 +72,22 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
                     "project_id": vm.projectId
                 }
                 vm.pictures.push(pic);
-                console.log(vm.pictures);
                 vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
-                          });
+            });
         }, function(err) {
-            // An error occured. Show a message to the user
+            var attachementPopup = $ionicPopup.alert({
+                title: "Take pictures",
+                template: "<center>Some unexpected error occured while trying to add pictures.</center>",
+                content: "",
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        attachementPopup.close();
+                    }
+                }]
+            });
         });
     };
 
@@ -90,51 +102,80 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
         };
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
-                $timeout(function() {
-                    var pic = {
-                        "path": "",
-                        "base_64_string": imageData,
-                        "comment": "",
-                        "tags": "",
-                        "site_diary_id": vm.diaryId,
-                        "file_name": "",
-                        "title": "",
-                        "project_id": vm.projectId
+            console.log(imageData);
+            console.log(options);
+            var attachementPopup = $ionicPopup.alert({
+                title: "Img Data",
+                template: imageData,
+                content: "",
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        attachementPopup.close();
                     }
-                    vm.pictures.push(pic);
-                    vm.filter.picture = vm.pictures[vm.pictures.length - 1];
-                    vm.filter.state = 'form';
-                });
+                }]
             });
-        }
-        function removePicture (pic,index){
-          if(pic.id){
+            $timeout(function() {
+                var pic = {
+                    "path": "",
+                    "base_64_string": imageData,
+                    "comment": "",
+                    "tags": "",
+                    "site_diary_id": vm.diaryId,
+                    "file_name": "",
+                    "title": "",
+                    "project_id": vm.projectId
+                }
+                vm.pictures.push(pic);
+                vm.filter.picture = vm.pictures[vm.pictures.length - 1];
+                vm.filter.state = 'form';
+            });
+        }, function(err) {
+            var attachementPopup = $ionicPopup.alert({
+                title: "Add pictures",
+                template: "<center>Some unexpected error occured while trying to add pictures.</center>",
+                content: "",
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        attachementPopup.close();
+                    }
+                }]
+            });
+        });
+    }
+
+    function removePicture(pic, index) {
+        if (pic.id) {
             var idPic = {
-              id: pic.id
+                id: pic.id
             }
             vm.dataToDelete.push(idPic);
-          }
-          vm.pictures.splice(index,1);
         }
-        function returnToGallery(){
-          vm.filter.substate = 'gallery';
-        }
+        vm.pictures.splice(index, 1);
+    }
 
-        function go(predicate, id) {
-          vm.attachments = {
+    function returnToGallery() {
+        vm.filter.substate = 'gallery';
+    }
+
+    function go(predicate, id) {
+        vm.attachments = {
             pictures: vm.pictures,
-            toBeDeleted : vm.dataToDelete
-          }
-          console.log(vm.attachments);
-          localStorage.setObject('sd.attachments',vm.attachments);
-            if ((vm.diaryId) && (predicate === 'diary')) {
-                $state.go('app.' + predicate, {
-                    id: vm.diaryId
-                });
-            } else {
-                $state.go('app.' + predicate, {
-                    id: id
-                });
-            }
+            toBeDeleted: vm.dataToDelete
+        }
+        console.log(vm.attachments);
+        localStorage.setObject('sd.attachments', vm.attachments);
+        if ((vm.diaryId) && (predicate === 'diary')) {
+            $state.go('app.' + predicate, {
+                id: vm.diaryId
+            });
+        } else {
+            $state.go('app.' + predicate, {
+                id: id
+            });
         }
     }
+}
