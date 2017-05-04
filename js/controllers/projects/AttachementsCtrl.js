@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
 
-AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', 'AttachmentsService'];
+AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', 'AttachmentsService', '$ionicPopup'];
 
-function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) {
+function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -102,20 +102,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
         };
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
-            console.log(imageData);
-            console.log(options);
-            var attachementPopup = $ionicPopup.alert({
-                title: "Img Data",
-                template: imageData,
-                content: "",
-                buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        attachementPopup.close();
-                    }
-                }]
-            });
             $timeout(function() {
                 var pic = {
                     "path": "",
