@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
 
-AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', 'AttachmentsService', '$ionicPopup'];
+AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', 'AttachmentsService'];
 
-function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, $ionicPopup) {
+function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -21,14 +21,8 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, 
     vm.dataToDelete = [];
     vm.filter.substate = 'gallery';
 
-    $timeout(function() {
-        $('.pull-down').each(function() {
-            var $this = $(this);
-            console.log("each attachement");
-            var h = $this.parent().height() - $this.height() - $this.next().height();
-            $this.css('padding-top', h);
-        })
-    }, 100);
+    vm.populate();
+    pullDown();
 
     function populate() {
         vm.attachments = localStorage.getObject('sd.attachments');
@@ -39,8 +33,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, 
             }
         });
     }
-
-    vm.populate();
 
     function testPicture(pic) {
         vm.filter.substate = 'pic';
@@ -53,7 +45,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, 
             destinationType: Camera.DestinationType.DATA_URL,
             sourceType: Camera.PictureSourceType.CAMERA,
             allowEdit: false,
-            encodingType: Camera.EncodingType.PNG,
+            encodingType: Camera.EncodingType.JPEG,
             popoverOptions: CameraPopoverOptions,
             saveToPhotoAlbum: true,
             correctOrientation: true
@@ -74,21 +66,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, 
                 vm.pictures.push(pic);
                 vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
+                pullDown();
             });
-        }, function(err) {
-            var attachementPopup = $ionicPopup.alert({
-                title: "Take pictures",
-                template: "<center>Some unexpected error occured while trying to add pictures.</center>",
-                content: "",
-                buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        attachementPopup.close();
-                    }
-                }]
-            });
-        });
+        }, function(err) {});
     };
 
     function addPicture() {
@@ -116,21 +96,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, 
                 vm.pictures.push(pic);
                 vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
+                pullDown();
             });
-        }, function(err) {
-            var attachementPopup = $ionicPopup.alert({
-                title: "Add pictures",
-                template: "<center>Some unexpected error occured while trying to add pictures.</center>",
-                content: "",
-                buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        attachementPopup.close();
-                    }
-                }]
-            });
-        });
+        }, function(err) {});
     }
 
     function removePicture(pic, index) {
@@ -141,9 +109,11 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, 
             vm.dataToDelete.push(idPic);
         }
         vm.pictures.splice(index, 1);
+        pullDown();
     }
 
     function returnToGallery() {
+        pullDown();
         vm.filter.substate = 'gallery';
     }
 
@@ -163,5 +133,16 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService, 
                 id: id
             });
         }
+    }
+
+    function pullDown() {
+        angular.element(document).ready(function() {
+            $('.pull-down').each(function() {
+                var $this = $(this);
+                var h = $this.parent().height() - $this.height() - $this.next().height();
+                console.log($this, $this.parent().height(), $this.height());
+                $this.css('padding-top', h);
+            })
+        })
     }
 }
