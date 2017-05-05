@@ -12,7 +12,7 @@
             <div ng-if="vm.pictures.length !== 1 || vm.pictures[0].url || vm.pictures[0].base_64_string">
                 <div class="row" ng-repeat="pic in vm.pictures" ng-if="$index % 2 === 0">
                     <div class="col col-50" ng-if="$index < vm.pictures.length">
-                        <div class="pull-down" style="max-height: 24vw;overflow: hidden;">
+                        <div class="pull-down" style="max-height: 50vw;overflow: hidden;">
                             <img ng-src="{{vm.pictures[$index].url}}" ng-click="vm.testPicture(vm.pictures[$index])" ng-if="vm.pictures[$index].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                             <img data-ng-src="data:image/png;base64,{{vm.pictures[$index].base_64_string}}" ng-click="vm.testPicture(vm.pictures[$index])" ng-if="!vm.pictures[$index].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);"
                             />
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="col col-50" ng-if="$index + 1 < vm.pictures.length">
-                        <div class="pull-down" style="max-height: 24vw;overflow: hidden;">
+                        <div class="pull-down" style="max-height: 50vw;overflow: hidden;">
                             <img ng-src="{{vm.pictures[$index+1].url}}" ng-click="vm.testPicture(vm.pictures[$index + 1])" ng-if="vm.pictures[$index + 1].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                             <img data-ng-src="data:image/png;base64,{{vm.pictures[$index+1].base_64_string}}" ng-click="vm.testPicture(vm.pictures[$index + 1])" ng-if="!vm.pictures[$index +1 ].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);"
                             />
