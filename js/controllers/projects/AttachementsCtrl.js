@@ -137,12 +137,15 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
 
     function pullDown() {
         angular.element(document).ready(function() {
-            $('.pull-down').each(function() {
-                var $this = $(this);
-                var h = $this.parent().height() - $this.height() - $this.next().height();
-                console.log($this, $this.parent().height(), $this.height());
-                $this.css('padding-top', h);
-            })
+            $timeout(function() {
+                console.log("wait");
+                $('.pull-down').each(function() {
+                    var $this = $(this);
+                    var h = $this.parent().height() - $this.height() - $this.next().height();
+                    console.log($this, $this.parent().height(), $this.height());
+                    $this.css('padding-top', h);
+                })
+            }, 100);
         })
     }
 }
