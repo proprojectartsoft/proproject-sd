@@ -41,7 +41,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
 
     function takePicture() {
         var options = {
-            quality: 20,
+            quality: 40,
             destinationType: Camera.DestinationType.DATA_URL,
             sourceType: Camera.PictureSourceType.CAMERA,
             allowEdit: false,
@@ -74,7 +74,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     function addPicture() {
         var options = {
             maximumImagesCount: 1,
-            quality: 20,
+            quality: 40,
             destinationType: Camera.DestinationType.DATA_URL,
             sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
             correctOrientation: true,
@@ -136,15 +136,21 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
     }
 
     function pullDown() {
+        $('html').css({
+            'visibility': 'hidden'
+        });
+
         angular.element(document).ready(function() {
             $timeout(function() {
                 console.log("wait");
                 $('.pull-down').each(function() {
                     var $this = $(this);
                     var h = $this.parent().height() - $this.height() - $this.next().height();
-                    console.log($this, $this.parent().height(), $this.height());
-                    $this.css('padding-top', h);
+                    $this.css({
+                        'padding-top': h
+                    });
                 })
+                document.getElementsByTagName("html")[0].style.visibility = "visible";
             }, 100);
         })
     }
