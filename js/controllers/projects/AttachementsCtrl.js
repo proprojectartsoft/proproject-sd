@@ -31,6 +31,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
             if (!value.url) {
                 value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
             }
+            if (!value.base64String) {
+                value.base64String = $APP.server + '/pub/siteDiaryPhotos/' + value.base_64_string;
+            }
         });
     }
 
@@ -116,7 +119,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
         pullDown();
         //save title and comments TODO:
         var crtPic = $filter('filter')(vm.pictures, {
-          id: vm.filter.picture.id
+            id: vm.filter.picture.id
         })[0];
         crtPic.title = vm.filter.picture.title;
         crtPic.comment = vm.filter.picture.comment;
