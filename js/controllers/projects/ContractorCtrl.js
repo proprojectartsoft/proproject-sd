@@ -49,7 +49,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
             role: vm.create.site_attendance.contractors[vm.index].trade,
             trade: vm.create.site_attendance.contractors[vm.index].trade,
             hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
-            hourly_rate_formated: (localStorage.getObject('currency')) || '') + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate && (vm.create.site_attendance.contractors[vm.index].hourly_rate
+            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (localStorage.getObject('currency') + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate ) || ''
         }
         if (vm.create.site_attendance.contractors[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;

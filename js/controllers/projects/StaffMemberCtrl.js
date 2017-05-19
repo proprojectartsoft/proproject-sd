@@ -55,7 +55,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             role: vm.create.site_attendance.staffs[vm.index].trade,
             trade: vm.create.site_attendance.staffs[vm.index].trade,
             hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate,
-            hourly_rate_formated: (localStorage.getObject('currency')) || '') + " " + vm.create.site_attendance.staffs[vm.index].hourly_rate && (vm.create.site_attendance.staffs[vm.index].hourly_rate
+            hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate && (localStorage.getObject('currency') + " " + vm.create.site_attendance.staffs[vm.index].hourly_rate) || ''
         }
         if (vm.create.site_attendance.staffs[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.staffs[vm.index].break_time;
