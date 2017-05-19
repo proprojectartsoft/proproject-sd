@@ -38,11 +38,11 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         var t = (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100)) | '';
         var st = vm.material.quantity * vm.material.unitCost | '';
         if (t !== 0)
-            vm.total_formated = t + " " + localStorage.getObject('currency');
+            vm.total_formated = localStorage.getObject('currency') + " " + t;
         else
             vm.total_formated = '';
         if (st !== 0)
-            vm.subtotal_formated = st + " " + localStorage.getObject('currency');
+            vm.subtotal_formated = localStorage.getObject('currency') + " " + st;
         else
             vm.subtotal_formated = '';
     })
@@ -57,7 +57,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             quantity: vm.create.plant_and_material_used[vm.index].quantity,
             tax: vm.create.plant_and_material_used[vm.index].tax,
             tax_formated: vm.create.plant_and_material_used[vm.index].tax && (vm.create.plant_and_material_used[vm.index].tax + " %") || '',
-            unitCost_formated: vm.create.plant_and_material_used[vm.index].cost_per_unit && (vm.create.plant_and_material_used[vm.index].cost_per_unit + " " + localStorage.getObject('currency')) || ''
+            unitCost_formated: (localStorage.getObject('currency')) || '') + " " + vm.create.plant_and_material_used[vm.index].cost_per_unit && (vm.create.plant_and_material_used[vm.index].cost_per_unit
         };
     }
 
