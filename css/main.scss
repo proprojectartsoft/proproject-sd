@@ -26,6 +26,21 @@ $lightblue: #11c1f3;
     }
 }
 
+.item-stacked-label {
+    textarea {
+        height: auto;
+        border-radius: 0!important;
+    }
+
+    textarea[readonly]:not(.cloned-text-input) {
+        background-color: #fff;
+    }
+
+    .input-label {
+        color: #fff;
+    }
+}
+
 .greentext {
     color: green;
 }
@@ -105,111 +120,6 @@ $lightblue: #11c1f3;
     font-size: 14px;
     font-weight: 100;
 }
-// .sd-tabslist {
-//     .item-checkbox {
-//         background-color: #f8f8f8;
-//         font-size: 15px!important;
-//         font-family: 'Roboto Condensed', sans-serif !important;
-//         font-weight: 500;
-//     }
-//
-//     .item-content {
-//         padding-left: 36px;
-//         font-family: 'Roboto Condensed', sans-serif !important;
-//         font-weight: 500;
-//     }
-//
-//     .sd-content {
-//         background-color: #e6e7e6;
-//         padding: 7px 15px 4px;
-//         font-family: 'Roboto Condensed', sans-serif !important;
-//         position: relative;
-//         font-weight: 500;
-//     }
-//
-//     .sd-content:after {
-//         content: '';
-//         z-index: 9;
-//         position: absolute;
-//         bottom: -8px;
-//         left: 12px;
-//         width: 0;
-//         height: 0;
-//         border-style: solid;
-//         border-width: 11px 7px 0 7px;
-//         border-color: #e6e7e6 transparent transparent transparent;
-//     }
-//
-//     .checkbox input:checked + .checkbox-icon:before,
-//     .checkbox input:checked:before {
-//         background: #11c1f3;
-//         border-color: #11c1f3;
-//     }
-//
-//     input {
-//         background-color: #f8f8f8;
-//         display: block;
-//         width: 100%!important;
-//         height: 40px!important;
-//         border: none;
-//         padding: 0 12px !important;
-//         font-weight: 100;
-//     }
-//
-//     ::-webkit-input-placeholder {
-//         color: #000;
-//     }
-//
-//     .de-select {
-//         margin-top: 0;
-//
-//         .de-item {
-//             background-color: #f8f8f8;
-//             height: 40px!important;
-//             line-height: 40px!important;
-//         }
-//     }
-// }
-// .sd-tabslist ion-item img {
-//     height: 35px;
-//     vertical-align: middle;
-// }
-//
-// .sd-tabslist ion-item h3 {
-//     display: inline-block;
-//     vertical-align: middle;
-//     padding-left: 8px;
-//     text-transform: capitalize;
-//     width: calc(100% - 50px);
-// }
-//
-// .sd-tabslist ion-item h3 div:last-child {
-//     font-weight: 100;
-// }
-//
-// .sd-tabslist ion-item h3 .sd-description span {
-//     font-weight: 100;
-//     border-right: 1px solid #aaa;
-//     padding-right: 5px;
-// }
-//
-// .sd-tabslist ion-item h3 .sd-description i {
-//     font-weight: 400;
-//     font-style: normal;
-// }
-//
-// .sd-tabslist ion-item .sd-date {
-//     margin-top: -3px;
-//     font-weight: 100;
-//     border: none !important;
-// }
-//
-// .sd-tabslist ion-item img {
-//     height: 16px;
-//     position: relative;
-//     right: -5px;
-//     padding: 0 3px;
-// }
 
 .sd-footer {
     bottom: 0;
@@ -252,9 +162,9 @@ $lightblue: #11c1f3;
         padding: 7px;
 
         img {
-            height: 35px;
+            height: 30px;
             margin-left: 15px;
-            margin-top: -7px;
+            margin-top: -5px;
         }
     }
 }

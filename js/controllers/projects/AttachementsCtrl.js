@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
 
-AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', 'AttachmentsService'];
+AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService'];
 
-function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) {
+function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, AttachmentsService) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -114,6 +114,14 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, AttachmentsService) 
 
     function returnToGallery() {
         pullDown();
+        //save title and comments TODO:
+        var crtPic = $filter('filter')(vm.pictures, {
+          id: vm.filter.picture.id
+        })[0];
+        crtPic.title = vm.filter.picture.title;
+        crtPic.comment = vm.filter.picture.comment;
+
+
         vm.filter.substate = 'gallery';
     }
 
