@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.delays.length > 0">
-                <span class="de-item" ng-repeat="option in vm.delays track by $index">{{option}};  </span>
+                <span class="de-item" ng-repeat="option in vm.delays track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
             <div class="sd-filler" ng-if="vm.delays.length === 0 && vm.diaryId">
                 <span class="de-item">There is no delay information</span>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.tools.length > 0">
-                <span class="de-item" ng-repeat="option in vm.tools track by $index">{{option}} ;  </span>
+                <span class="de-item" ng-repeat="option in vm.tools track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
             <div class="sd-filler" ng-if="vm.tools.length === 0 && vm.diaryId">
                 <span class="de-item">There is no tools used information</span>
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.materials.length > 0">
-                <span class="de-item" ng-repeat="option in vm.materials track by $index">{{option}} ;  </span>
+                <span class="de-item" ng-repeat="option in vm.materials track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
             <div class="sd-filler" ng-if="vm.materials.length === 0 && vm.diaryId">
                 <span class="de-item">There is no material information</span>

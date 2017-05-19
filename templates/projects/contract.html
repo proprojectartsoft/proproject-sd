@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.instructions.comments.length > 0">
-                <span class="de-item" ng-repeat="option in vm.instructions.comments track by $index">{{option}} ;  </span>
+                <span class="de-item" ng-repeat="option in vm.instructions.comments track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
             <div class="sd-filler" ng-if="vm.instructions.comments.length === 0 && vm.diaryId">
                 <span class="de-item">There is no instructions information</span>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.extensions.comments.length > 0">
-                <span class="de-item" ng-repeat="option in vm.extensions.comments track by $index">{{option}} ;  </span>
+                <span class="de-item" ng-repeat="option in vm.extensions.comments track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
             <div class="sd-filler" ng-if="vm.extensions.comments.length === 0 && vm.diaryId">
                 <span class="de-item">There is no extension time information</span>
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="sd-filler" ng-if="vm.variations.comments.length > 0">
-                <span class="de-item" ng-repeat="option in vm.variations.comments track by $index">{{option}} ;  </span>
+                <span class="de-item" ng-repeat="option in vm.variations.comments track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
             <div class="sd-filler" ng-if="vm.variations.comments.length === 0 && vm.diaryId">
                 <span class="de-item">There is no variation information</span>
