@@ -125,7 +125,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             break_time: vm.filteredBreak,
             finish_time: vm.filteredFinish,
             total_time: vm.local.data.total_time,
-            absence: vm.local.data.absence[0],
+            absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
         }
         if (vm.editMode) {

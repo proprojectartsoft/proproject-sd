@@ -92,7 +92,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 var attToAdd = [];
                 angular.forEach(attachments.pictures, function(value) {
                     if (!value.path) {
-                        value.site_diary_id = result.data.id;
+                        value.site_diary_id = result.id;
                         attToAdd.push(value);
                     }
                 });
@@ -107,7 +107,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 vm.local.data.comments = localStorage.getObject('sd.comments');
                 angular.forEach(vm.local.data.comments, function(value) {
                     var request = {
-                        site_diary_id: result.data.id,
+                        site_diary_id: result.id,
                         comment: value,
                     };
                     SiteDiaryService.add_comments(request).success(function(result) {});
