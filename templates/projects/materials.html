@@ -15,7 +15,7 @@
                     <span>{{material.quantity}}</span>
                     <span>{{material.unit_name}}</span>
                     <span ng-if="material.total">{{vm.currency}}</span>
-                    <span>{{material.total}}</span>                
+                    <span>{{material.total | number:2}}</span>
                 </div>
             </ion-item>
         </ion-list>
