@@ -13,8 +13,8 @@
                       {{item.userName.split(' ')[1] | limitTo:1 | uppercase}}
                     </span>
                     <div class="sd-content" ng-click="vm.go('diary',item.id)">
-                        <div class="sd-title">{{item.date | date }}</div>
-                        <div class="sd-description">SD - {{item.sdNo}} - {{item.date | date }}</div>
+                        <div class="sd-title">{{item.date | date}}</div>
+                        <div class="sd-description">SD - {{item.sdNo}} - {{((item.created_for_date != 0) && item.created_for_date || item.date) | date:'mediumDate':'UTC'}}</div>
                     </div>
                     <div class="sd-share" ng-click = "showPopup(item)"><span class="ion-android-share-alt"></span></div>
                     <ion-option-button class="button-assertive" ng-click="vm.deleteDiary(item.id)">
