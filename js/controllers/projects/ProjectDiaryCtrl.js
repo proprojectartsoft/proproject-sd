@@ -24,14 +24,14 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         if ($stateParams.id === 'offline') {
             var offDiary = localStorage.getObject('diaryToSync');
             vm.create = offDiary.data;
-            vm.created_for_date = (vm.create.created_for_date != 0) && vm.created_for_date || '';
+            vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
             localStorage.setObject('sd.diary.create', vm.create);
         } else {
             localStorage.setObject('diaryId', $stateParams.id);
             vm.enableCreate = false;
             if (vm.edit) {
                 vm.create = localStorage.getObject('sd.diary.create');
-                vm.created_for_date = (vm.create.created_for_date != 0) && vm.created_for_date || '';
+                vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
             } else {
                 $indexedDB.openStore('projects', function(store) {
                     vm.projectId = parseInt(vm.projectId);
