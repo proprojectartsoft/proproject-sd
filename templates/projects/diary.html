@@ -47,13 +47,13 @@
         <ion-item ng-click="vm.go('attachements')" class="sd-group">
             Attachments
         </ion-item>
-        <ion-item ng-if="vm.enableCreate" class="button button-bar pp-formbtn" ng-click="vm.saveCreate()">
+        <ion-item ng-if="vm.enableCreate" class="button button-bar pp-formbtn create-btn" ng-click="vm.saveCreate()">
             Create
         </ion-item>
         <ion-item ng-if="!vm.enableCreate && !vm.edit && vm.loggedIn.role.id !== 4 && vm.diaryStateId !== 'offline'" class="button button-bar pp-formbtn" ng-click="vm.toggle()">
             Edit
         </ion-item>
-        <ion-item ng-if="!vm.enableCreate && vm.edit" class="button button-bar pp-formbtn" ng-click="vm.saveEdit()">
+        <ion-item ng-if="!vm.enableCreate && vm.edit" class="button button-bar pp-formbtn save-btn" ng-click="vm.saveEdit()">
             Save
         </ion-item>
         <ion-item ng-if="!vm.enableCreate && vm.edit" class="button button-bar pp-formbtn" ng-click="vm.toggle()">

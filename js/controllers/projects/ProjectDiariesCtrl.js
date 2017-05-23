@@ -209,10 +209,12 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     };
 
     function deleteDiary(id) {
+        $('.delete-btn').attr("disabled", true);
         console.log(id);
         SiteDiaryService.delete_diary(id).then(function(result) {
             SyncService.sync().then(function() {
                 //vm.go('home');
+                $('.delete-btn').attr("disabled", false);
                 $state.reload();
             })
         })

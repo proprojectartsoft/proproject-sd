@@ -23,26 +23,28 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService, Projec
     })
 
     function addComment() {
+        var comment = vm.local.comment;
+        vm.local.comment = "";
         if (!vm.diaryId) {
-            if (vm.local.comment) {
+            if (comment) {
                 var request = {
                     site_diary_id: vm.diaryId,
-                    comment: vm.local.comment,
+                    comment: comment,
                 };
                 var aux = {
-                    comment: vm.local.comment,
+                    comment: comment,
                     first_name: vm.myProfile.first_name,
                     date: new Date()
                 }
-                vm.local.comments.push(vm.local.comment);
+                vm.local.comments.push(comment);
                 vm.local.list.push(aux);
                 localStorage.setObject('sd.comments', vm.local.comments);
             }
         } else {
-            if (vm.local.comment) {
+            if (comment) {
                 var request = {
                     site_diary_id: vm.diaryId,
-                    comment: vm.local.comment,
+                    comment: comment,
                 };
                 SiteDiaryService.add_comments(request)
                     .success(function(result) {

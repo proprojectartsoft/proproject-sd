@@ -85,6 +85,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.diaryId = localStorage.getObject('diaryId');
 
     function saveCreate() {
+        $('.create-btn').attr("disabled", true);
         vm.create = localStorage.getObject('sd.diary.create');
         vm.create.date = new Date().getTime();
         vm.create.summary = "Please"
@@ -117,6 +118,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     SiteDiaryService.add_comments(request).success(function(result) {});
                 })
                 SyncService.sync().then(function() {
+                    $('.create-btn').attr("disabled", false);
                     vm.go('project');
                 })
             }).error(function(response) {
@@ -144,11 +146,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         }
                     }]
                 });
+                $('.create-btn').attr("disabled", false);
                 vm.go('project');
             });
     }
 
     function saveEdit() {
+        $('.save-btn').attr("disabled", true);
         vm.edit = false;
         localStorage.setObject('editMode', vm.edit);
         vm.create = localStorage.getObject('sd.diary.create');
@@ -185,6 +189,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         localStorage.setObject('currentProj', proj);
         saveChanges(localStorage.getObject('currentProj'));
         localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
+        $('.save-btn').attr("disabled", false);
     }
 
     function setCreatedDateFor() {
