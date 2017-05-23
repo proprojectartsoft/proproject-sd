@@ -19,6 +19,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
     vm.filter = {};
     vm.imgURI = [];
     vm.dataToDelete = [];
+    vm.dataToUpdate = [];
     vm.filter.substate = 'gallery';
 
     vm.populate();
@@ -121,17 +122,22 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
         var crtPic = $filter('filter')(vm.pictures, {
             id: vm.filter.picture.id
         })[0];
-        crtPic.title = vm.filter.picture.title;
-        crtPic.comment = vm.filter.picture.comment;
-
-
+        var upd = '';
+        if (upd = $filter('filter')(vm.dataToUpdate, {
+                id: vm.filter.picture.id
+            })[0]) {
+            upd = crtPic;
+        } else {
+            vm.dataToUpdate.push(crtPic);
+        }
         vm.filter.substate = 'gallery';
     }
 
     function go(predicate, id) {
         vm.attachments = {
             pictures: vm.pictures,
-            toBeDeleted: vm.dataToDelete
+            toBeDeleted: vm.dataToDelete,
+            toBeUpdated: vm.dataToUpdate
         }
         console.log(vm.attachments);
         localStorage.setObject('sd.attachments', vm.attachments);
