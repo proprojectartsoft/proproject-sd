@@ -25,14 +25,12 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService) {
             goods_details: []
         }
         vm.create.goods_received.push(vm.supplier);
-        if (vm.diaryId) {
-            var proj = localStorage.getObject('currentProj');
-            var diary = $filter('filter')(proj.value.diaries, {
-                id: (vm.diaryId)
-            })[0];
-            diary.data.goods_received.push(vm.supplier);
-            localStorage.setObject('currentProj', proj);
-        }
+        var proj = localStorage.getObject('currentProj');
+        var diary = $filter('filter')(proj.value.diaries, {
+            id: (vm.create.id)
+        })[0];
+        diary.data.goods_received.push(vm.supplier);
+        localStorage.setObject('currentProj', proj);
         localStorage.setObject('sd.diary.create', vm.create);
         vm.go('goods');
     }
