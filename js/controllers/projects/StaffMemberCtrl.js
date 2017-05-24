@@ -20,7 +20,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             SettingService.show_focus();
     });
 
-    SiteDiaryService.absence_list().then(function(result) {
+    SiteDiaryService.absence_list().success(function(result) {
         angular.forEach(result, function(value) {
             value.name = value.reason;
         })
@@ -77,7 +77,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
         })
     }
-    SiteDiaryService.get_staff().then(function(result) {
+    SiteDiaryService.get_staff().success(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -85,6 +85,13 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             vm.searchModal = popover;
         });
         vm.staff = result;
+    }).error(function(err) {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(popover) {
+            vm.searchModal = popover;
+        });
     })
 
     function showSearch() {

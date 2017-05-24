@@ -59,7 +59,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         id: 3,
         name: 'Other'
     }];
-    SiteDiaryService.get_units().then(function(result) {
+    SiteDiaryService.get_units().success(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -68,6 +68,14 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             vm.searchUnit = popover;
         });
         vm.units = result;
+    }).error(function(err) {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(popover) {
+            vm.searchModal = popover;
+            vm.searchUnit = popover;
+        });
     })
 
     function showSearchUnit() {

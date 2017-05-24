@@ -48,51 +48,41 @@ angular.module($APP.name).factory('SiteDiaryService', [
             },
 
             get_resources: function() {
-                return $http.get($APP.server + '/api/resource', {}).then(
-                    function(payload) {
-                        return payload.data;
-                    }
-                );
+                return $http.get($APP.server + '/api/resource', {}).success(function(payload) {
+                    return payload.data;
+                }).error(function(err) {})
             },
 
             absence_list: function() {
-                return $http.get($APP.server + '/api/absenteeismreasons/list', {}).then(
+                return $http.get($APP.server + '/api/absenteeismreasons/list', {}).success(
                     function(payload) {
                         return payload.data;
                     }
-                );
+                ).error(function(err) {})
             },
 
             get_units: function() {
-                return $http.get($APP.server + '/api/unit', {}).then(
+                return $http.get($APP.server + '/api/unit', {}).success(
                     function(payload) {
                         return payload.data;
                     }
-                );
+                ).error(function(err) {})
             },
 
             get_staff: function() {
-                return $http.get($APP.server + '/api/staff', {}).then(
+                return $http.get($APP.server + '/api/staff', {}).success(
                     function(payload) {
                         return payload.data;
                     }
-                );
+                ).error(function(err) {})
             },
 
             get_company_settings: function() {
-                return $http.get($APP.server + '/api/companysettings', {}).then(
+                return $http.get($APP.server + '/api/companysettings', {}).success(
                     function(payload) {
                         return payload.data;
                     }
-                )
-            },
-
-            get_absenteeism: function() {
-                return $http.get($APP.server + '/api/absenteeismreasons/list', {}).then(
-                    function(payload) {
-                        return payload.data;
-                    }
-                );
+                ).error(function(err) {})
             },
 
             add_diary: function(dataIn) {

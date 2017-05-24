@@ -71,7 +71,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
         })
     }
 
-    SiteDiaryService.absence_list().then(function(result) {
+    SiteDiaryService.absence_list().success(function(result) {
         angular.forEach(result, function(value) {
             value.name = value.reason;
         })

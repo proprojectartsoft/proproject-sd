@@ -63,7 +63,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 
     vm.materials = vm.create.plant_and_material_used;
 
-    SiteDiaryService.get_resources().then(function(result) {
+    SiteDiaryService.get_resources().success(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -71,9 +71,16 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             vm.searchModal = popover;
         });
         vm.goods = result;
+    }).error(function(err) {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(popover) {
+            vm.searchModal = popover;
+        });
     })
 
-    SiteDiaryService.get_units().then(function(result) {
+    SiteDiaryService.get_units().success(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -82,6 +89,14 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             vm.searchUnit = popover;
         });
         vm.units = result;
+    }).error(function(err) {
+        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(popover) {
+            vm.searchModal = popover;
+            vm.searchUnit = popover;
+        });
     })
 
     function showSearch() {
