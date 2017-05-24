@@ -117,7 +117,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     };
                     SiteDiaryService.add_comments(request).success(function(result) {});
                 })
-                SyncService.sync().then(function() {
+                SyncService.sync('Submitting').then(function() {
                     $('.create-btn').attr("disabled", false);
                     vm.go('project');
                 })
@@ -225,7 +225,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 function(err) {
                     var offlinePopup = $ionicPopup.alert({
                         title: "Unexpected error",
-                        template: "<center>An unexpected error occurred while trying to update weather.</center>",
+                        template: "<center>An unexpected error occurred while trying to update Site Diary.</center>",
                         content: "",
                         buttons: [{
                             text: 'Ok',

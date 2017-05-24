@@ -93,62 +93,28 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     });
 
     $scope.filter = {};
-    $scope.importContact = function(id) {
-        $timeout(function() {
-            navigator.contacts.pickContact(function(contact) {
-                if (contact.emails) {
-                    var alertPopup1 = $ionicPopup.alert({
-                        title: "Sending email",
-                        template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                        content: "",
-                        buttons: []
-                    });
-                    alertPopup1.then(function(res) {});
-                    $scope.filter.email = contact.emails[0].value;
-                    SharedService.share_diary(id, $scope.filter.email).then(function(result) {
-                        console.log(result);
-                        alertPopup1.close();
-                        if (result.message === "Site diary Shared!") {
-                            res = "";
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Share',
-                                template: 'Email sent.'
-                            });
-                            alertPopup.then(function(res) {});
-                        } else {
-                            res = "";
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Share',
-                                template: 'Form already shared to this user.'
-                            });
-                            alertPopup.then(function(res) {
-                                // Custom functionality....
-                            });
-                        }
-                    })
-                }
-            });
-        });
-    }
 
-    $scope.showPopup = function(predicate) {
-        $scope.data = {}
-        var myPopup = $ionicPopup.show({
-            template: '<input type = "email" ng-model = "data.model">',
-            title: 'Share site diary',
+    function createPopup(id) {
+        return {
+            template: '<input type="email" ng-model="filter.email">',
+            title: 'Share form',
             subTitle: 'Please enter a valid e-mail address.',
             scope: $scope,
-
             buttons: [{
-                text: 'Cancel'
+                text: '<i class="ion-person-add"></i>',
+                onTap: function(e) {
+                    $scope.importContact(id);
+                }
             }, {
-                text: '<b>Send</b>',
+                text: 'Cancel',
+            }, {
+                text: 'Send',
                 type: 'button-positive',
                 onTap: function(e) {
-                    if (!$scope.data.model) {
+                    if (!$scope.filter.email) {
                         e.preventDefault();
                         var alertPopup = $ionicPopup.alert({
-                            title: "Share",
+                            title: 'Share',
                             template: "",
                             content: "Please insert a valid e-mail address.",
                             buttons: [{
@@ -160,29 +126,22 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                             }]
                         });
                     } else {
-                        return $scope.data.model;
+                        sendEmail($scope.filter.email, id);
                     }
                 }
-            }, {
-                text: '<i class="ion-person-add"></i>',
-                onTap: function(e) {
-                    $scope.importContact(predicate.id);
-                }
-            }, ]
-        });
+            }]
+        }
+    }
 
-        myPopup.then(function(res) {
-            console.log('Tapped!', res);
-            if (res) {
-                var alertPopup1 = $ionicPopup.alert({
-                    title: "Sending email",
-                    template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                    content: "",
-                    buttons: []
-                });
-                alertPopup1.then(function(res) {});
-                SharedService.share_diary(predicate.id, res).then(function(result) {
-                    console.log(result)
+    function sendEmail(res, id) {
+        if (res) {
+            var alertPopup1 = $ionicPopup.alert({
+                title: "Sending email",
+                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                content: "",
+                buttons: []
+            });
+            SharedService.share_diary(id, res).then(function(response) {
                     alertPopup1.close();
                     if (result.message === "Site diary Shared!") {
                         res = "";
@@ -190,29 +149,73 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                             title: 'Share',
                             template: 'Email sent.'
                         });
-                        alertPopup.then(function(res) {
-                            // Custom functionality....
-                        });
-                    } else {
+                        alertPopup.then(function(res) {});
+                    }
+                },
+                function(err) {
+                    alertPopup1.close();
+                    if (err.status == 422) {
                         res = "";
                         var alertPopup = $ionicPopup.alert({
                             title: 'Share',
                             template: 'Form already shared to this user.'
                         });
-                        alertPopup.then(function(res) {
-                            // Custom functionality....
+                    } else {
+                        var alertPopupC = $ionicPopup.alert({
+                            title: 'Share',
+                            template: 'An unexpected error occured while sending the e-mail.'
                         });
                     }
-                })
-            }
+                });
+        }
+    }
+
+    $scope.importContact = function(id) {
+        $timeout(function() {
+            navigator.contacts.pickContact(function(contact) {
+                if (contact.emails) {
+                    $scope.filter.email = contact.emails[0].value;
+                    $timeout(function() {
+                        var popup = $ionicPopup.show(createPopup(id));
+                    });
+                } else {
+                    var alertPopup1 = $ionicPopup.alert({
+                        title: 'Share',
+                        template: "",
+                        content: "No e-mail address was found. Please enter one manually.",
+                        buttons: [{
+                            text: 'OK',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                alertPopup1.close();
+                                var popup = $ionicPopup.show(createPopup(id));
+                            }
+                        }]
+                    });
+                }
+            }, function(err) {
+                var alertPopup1 = SecuredPopups.show('alert', {
+                    title: "Import contact failed",
+                    template: 'An unexpected error occured while trying to import contact',
+                });
+                $timeout(function() {
+                    var popup = $ionicPopup.show(createPopup(id));
+                });
+            });
         });
+    }
+
+    $scope.data = {}; //TODO:
+    $scope.showPopup = function(predicate) {
+        //TODO: scope data here
+        var popup = $ionicPopup.show(createPopup(predicate.id));
     };
 
     function deleteDiary(id) {
         $('.delete-btn').attr("disabled", true);
         console.log(id);
         SiteDiaryService.delete_diary(id).then(function(result) {
-            SyncService.sync().then(function() {
+            SyncService.sync('Removing Site Diary').then(function() {
                 //vm.go('home');
                 $('.delete-btn').attr("disabled", false);
                 $state.reload();
@@ -223,23 +226,19 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     function togglePlus() {
         vm.show = !vm.show;
     }
-
     function showDiary() {
         vm.diaryModal.show();
         vm.state = 'search';
     }
-
     function backDiary() {
         vm.diaryModal.hide();
         vm.show = false;
     }
-
     function saveDiary() {
         if (vm && vm.diaryModal) {
             vm.diaryModal.hide();
         }
     };
-
     function go(predicate, id) {
         $state.go('app.' + predicate, {
             id: id

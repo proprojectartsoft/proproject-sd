@@ -16,7 +16,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService,SyncSer
     };
 
     function sync() {
-      SyncService.sync().then(function(){
+      SyncService.sync('Sync').then(function(){
         $state.reload();
       });
     }

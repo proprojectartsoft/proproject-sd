@@ -463,15 +463,30 @@ input[readonly] {
     background-color: #fff;
 }
 
-.popup {
-    .button.button-positive.button-clear {
-        background-color: transparent;
-        color: $lightblue;
-    }
+.popup-head {
+    background-color: #11c1f3;
+    /*padding: 10px;*/
+}
 
-    .button.button-positive {
-        background-color: $lightblue;
-    }
+.popup-buttons .button .button-positive {
+    border-color: #1EBDF4;
+    background-color: #1EBDF4;
+}
+
+.popup-buttons .ion-person-add {
+    color: #444;
+    font-size: 22px;
+}
+
+.popup {
+    // .button.button-positive.button-clear {
+    //     background-color: transparent;
+    //     color: $lightblue;
+    // }
+    //
+    // .button.button-positive {
+    //     background-color: $lightblue;
+    // }
 
     .ion-datetime-picker .calendar .day.selected,
     .ion-datetime-picker .calendar .day.selected.activated,

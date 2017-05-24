@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('WeatherCtrl', WeatherCtrl)
 
-WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$scope', 'SettingService', '$indexedDB', '$ionicPopup', '$filter'];
+WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$scope', 'SettingService', '$indexedDB', '$filter'];
 
-function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $indexedDB, $ionicPopup, $filter) {
+function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $indexedDB, $filter) {
     var vm = this;
     vm.save = save;
     vm.go = go;

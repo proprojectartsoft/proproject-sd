@@ -22,15 +22,15 @@ angular.module($APP.name).factory('SyncService', [
                 })
         }
         return {
-            sync: function() {
+            sync: function(title) {
                 var deferred = $q.defer();
 
                 $timeout(function() {
                     if (navigator.onLine) {
                         getme()
                             .success(function(data) {
-                                var syncPopup = $ionicPopup.alert({
-                                    title: "Syncing",
+                                var syncPopup = $ionicPopup.show({
+                                    title: title,
                                     template: "<center><ion-spinner icon='android'></ion-spinner></center>",
                                     content: "",
                                     buttons: []

@@ -19,7 +19,7 @@ angular.module($APP.name).controller('LoginCtrl', [
             $scope.user.id = localStorage.getObject('dsremember').id;
             AuthService.login($scope.user).then(function(result) {
                 if (result.status) {
-                  SyncService.sync();
+                  SyncService.sync('Sync');
                 }
               });
         }
@@ -46,14 +46,14 @@ angular.module($APP.name).controller('LoginCtrl', [
             if ($scope.user.username && $scope.user.password) {
                 AuthService.login($scope.user).then(function(result) {
                     if (result.status) {
-                      SyncService.sync();
+                      SyncService.sync('Sync');
                     } else {
                         if (result) {
                             if (result.role.id === 4) {
                                 $state.go('app.shared')
                             } else {
                                 $timeout(function() {
-                                    SyncService.sync().then(function() {
+                                    SyncService.sync('Sync').then(function() {
                                         $state.go('app.home')
                                     });
                                 });
