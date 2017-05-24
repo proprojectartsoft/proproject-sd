@@ -177,7 +177,7 @@ angular.module($APP.name).factory('SyncService', [
                                 });
                             })
                             .error(function(data, status) {
-                                if (!navigator.online) {
+                                if (!navigator.onLine) {
                                     var loggedIn = localStorage.getObject('dsremember');
                                     console.log('Offline');
                                     var offlinePopup = $ionicPopup.alert({

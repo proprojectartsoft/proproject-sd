@@ -28,6 +28,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService,SyncSer
 
     function logout(){
       AuthService.logout().then(function(result){
+        localStorage.setObject('dsremember', null)
         $state.go('login');
       })
     }
