@@ -20,7 +20,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             SettingService.show_focus();
     });
 
-    SiteDiaryService.absence_list().success(function(result) {
+    SiteDiaryService.absence_list().then(function(result) {
         angular.forEach(result, function(value) {
             value.name = value.reason;
         })
@@ -42,7 +42,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.local.absence = 'absence';
     vm.index = $stateParams.id;
 
-
     if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {
             staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""), //TODO:
@@ -51,7 +50,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             model_finish: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].finish_time),
             total_time: vm.create.site_attendance.staffs[vm.index].total_time,
             note: vm.create.site_attendance.staffs[vm.index].note,
-            absence: vm.create.site_attendance.staffs[vm.index].absence.reason,
+            absence: vm.create.site_attendance.staffs[vm.index].absence && vm.create.site_attendance.staffs[vm.index].absence.reason,
             role: vm.create.site_attendance.staffs[vm.index].trade,
             trade: vm.create.site_attendance.staffs[vm.index].trade,
             hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate,
@@ -77,7 +76,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
         })
     }
-    SiteDiaryService.get_staff().success(function(result) {
+    SiteDiaryService.get_staff().then(function(result) {
         $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -85,13 +84,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             vm.searchModal = popover;
         });
         vm.staff = result;
-    }).error(function(err) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-        });
     })
 
     function showSearch() {
@@ -160,6 +152,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             }
             localStorage.setObject('currentProj', proj);
         }
+        localStorage.setObject('sd.diary.absence', null);
         vm.go('siteAttendance');
     }
 

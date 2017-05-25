@@ -45,16 +45,16 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
             model_finish: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].finish_time),
             total_time: vm.create.site_attendance.contractors[vm.index].total_time,
             note: vm.create.site_attendance.contractors[vm.index].note,
-            absence: vm.create.site_attendance.contractors[vm.index].absence.reason,
+            absence: vm.create.site_attendance.contractors[vm.index].absence && vm.create.site_attendance.contractors[vm.index].absence.reason,
             role: vm.create.site_attendance.contractors[vm.index].trade,
             trade: vm.create.site_attendance.contractors[vm.index].trade,
             hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
-            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (localStorage.getObject('currency') + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate ) || ''
+            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (localStorage.getObject('currency') + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate) || ''
         }
         if (vm.create.site_attendance.contractors[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
         } else {
-            vm.local.data.model_break = vm.stringToDate("00:00");
+            vm.local.data.model_break = vm.stringToDate("00:30");
         }
     } else {
         vm.local.data.staff_name = "";
@@ -71,7 +71,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
         })
     }
 
-    SiteDiaryService.absence_list().success(function(result) {
+    SiteDiaryService.absence_list().then(function(result) {
         angular.forEach(result, function(value) {
             value.name = value.reason;
         })
@@ -102,7 +102,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
         if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
             vm.calcParse();
         }
-
         vm.member = {
             first_name: vm.local.data.staff_name,
             company_name: vm.local.data.company_name,
@@ -112,7 +111,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
             break_time: vm.filteredBreak,
             finish_time: vm.filteredFinish,
             total_time: vm.local.data.total_time,
-            absence: vm.local.data.absence[0],
+            absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
         }
 
@@ -144,6 +143,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
             }
             localStorage.setObject('currentProj', proj);
         }
+        localStorage.setObject('sd.diary.absence', null);
         vm.go('siteAttendance');
     }
 

@@ -17,36 +17,46 @@ angular.module($APP.name).controller('LoginCtrl', [
             $scope.user.password = localStorage.getObject('dsremember').password;
             $scope.user.remember = localStorage.getObject('dsremember').remember;
             $scope.user.id = localStorage.getObject('dsremember').id;
-            AuthService.login($scope.user).success(function(result) {
-                SyncService.sync('Sync').then(function() {
-                    $state.go('app.home')
-                });
-            }).error(function(result, status) {
-                if (status === 0 || status === -1) {
-                    SyncService.sync('Sync');
-                }
-                if (status === 502) {
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Offline',
-                        template: "<center>Server offline</center>",
+            if (!localStorage.getObject('loggedOut')) {
+                AuthService.login($scope.user).success(function(result) {
+                    SyncService.sync('Sync').then(function() {
+                        localStorage.removeItem('loggedOut');
+                        $state.go('app.home');
                     });
-                    alertPopup.then(function(res) {});
-                }
-                if (status === 400) {
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Error',
-                        template: "<center>Incorrect user data.</center>",
-                    });
-                    alertPopup.then(function(res) {});
-                }
-                if (status === 401) {
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Error',
-                        template: 'Your account has been de-activated. Contact your supervisor for further information.',
-                    });
-                    alertPopup.then(function(res) {});
-                }
-            })
+                }).error(function(result, status) {
+                    switch (status) {
+                        case 0:
+                            SyncService.sync('Sync');
+                            localStorage.removeItem('loggedOut');
+                            break;
+                        case -1:
+                            SyncService.sync('Sync');
+                            localStorage.removeItem('loggedOut');
+                            break;
+                        case 502:
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Offline',
+                                template: "<center>Server offline</center>",
+                            });
+                            alertPopup.then(function(res) {});
+                            break;
+                        case 400:
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Error',
+                                template: "<center>Incorrect user data.</center>",
+                            });
+                            alertPopup.then(function(res) {});
+                            break;
+                        case 401:
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Error',
+                                template: 'Your account has been de-activated. Contact your supervisor for further information.',
+                            });
+                            alertPopup.then(function(res) {});
+                            break;
+                    }
+                })
+            }
         }
 
         function go(predicate, id) {
@@ -70,6 +80,7 @@ angular.module($APP.name).controller('LoginCtrl', [
         $scope.login = function() {
             if ($scope.user.username && $scope.user.password) {
                 AuthService.login($scope.user).success(function(result) {
+                    localStorage.removeItem('loggedOut');
                     if (result.data.status) {
                         SyncService.sync('Sync');
                     } else {
@@ -77,11 +88,9 @@ angular.module($APP.name).controller('LoginCtrl', [
                             if (result.data.role.id === 4) {
                                 $state.go('app.shared')
                             } else {
-                                $timeout(function() {
-                                    SyncService.sync('Sync').then(function() {
-                                        $state.go('app.home')
-                                    });
-                                });
+                                SyncService.sync('Sync').then(function() {
+                                    $state.go('app.home')
+                                })
                             }
                             localStorage.setObject('loggedIn', result.data)
                             if ($scope.user.remember) {
@@ -96,33 +105,42 @@ angular.module($APP.name).controller('LoginCtrl', [
                         }
                     }
                 }).error(function(response, status) {
-                    if (status === 0 || status === -1) {
-                        var alertPopup = $ionicPopup.alert({
-                            title: 'Offline',
-                            template: "<center>You are offline. Please check your internet connection and try again.</center>",
-                        });
-                        alertPopup.then(function(res) {});
-                    }
-                    if (status === 502) {
-                        var alertPopup = $ionicPopup.alert({
-                            title: 'Offline',
-                            template: "<center>Server offline</center>",
-                        });
-                        alertPopup.then(function(res) {});
-                    }
-                    if (status === 400) {
-                        var alertPopup = $ionicPopup.alert({
-                            title: 'Error',
-                            template: "<center>Incorrect user data</center>",
-                        });
-                        alertPopup.then(function(res) {});
-                    }
-                    if (status === 401) {
-                        var alertPopup = $ionicPopup.alert({
-                            title: 'Error',
-                            template: 'Your account has been de-activated. Contact your supervisor for further information',
-                        });
-                        alertPopup.then(function(res) {});
+                    switch (status) {
+                        case 0:
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Offline',
+                                template: "<center>You are offline. Please check your internet connection and try again.</center>",
+                            });
+                            alertPopup.then(function(res) {});
+                            break;
+                        case -1:
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Offline',
+                                template: "<center>You are offline. Please check your internet connection and try again.</center>",
+                            });
+                            alertPopup.then(function(res) {});
+                            break;
+                        case 502:
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Offline',
+                                template: "<center>Server offline</center>",
+                            });
+                            alertPopup.then(function(res) {});
+                            break;
+                        case 400:
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Error',
+                                template: "<center>Incorrect user data.</center>",
+                            });
+                            alertPopup.then(function(res) {});
+                            break;
+                        case 401:
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Error',
+                                template: 'Your account has been de-activated. Contact your supervisor for further information.',
+                            });
+                            alertPopup.then(function(res) {});
+                            break;
                     }
                 })
             }
