@@ -14,6 +14,17 @@ $lightblue: #11c1f3;
     font-family: 'Roboto Condensed', sans-serif !important;
     font-weight: 100;
 }
+@media all and (min-width: 480px) and (max-width: 769px) {
+    .login-form {
+        width: 60%!important;
+        float: right;
+    }
+
+    .keyboard-open .login-container,
+    .login-container {
+        padding-top: 250px!important;
+    }
+}
 
 .login-container::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
@@ -28,9 +39,6 @@ $lightblue: #11c1f3;
 }
 
 .login-form {
-    width: 60%!important;
-    float: right;
-
     input[type='email'],
     input[type='number'],
     input[type='text'] {
@@ -60,7 +68,7 @@ $lightblue: #11c1f3;
     background-size: cover;
     background-repeat: no-repeat;
     background-position-x: 0;
-    padding: 250px 12px 12px;
+    padding: 140px 12px 12px;
 }
 
 .login-container .app-name {
