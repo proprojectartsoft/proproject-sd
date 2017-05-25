@@ -30,6 +30,13 @@ $lightblue: #11c1f3;
 .login-form {
     width: 60%!important;
     float: right;
+
+    input[type='email'],
+    input[type='number'],
+    input[type='text'] {
+        padding: 15px !important;
+        height: auto !important;
+    }
 }
 
 .login-container:-ms-input-placeholder {
