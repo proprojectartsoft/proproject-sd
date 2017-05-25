@@ -1,34 +1,36 @@
 <ion-view title="Login" id="login" cache-view="false">
-  <ion-content>
-    <div class="sd-container">
-      <div class="sd-content">
-        <h1>Login</h1>
+    <ion-content>
+        <div class="login-container">
+            <div class="welcome-container">
+                <div class="welcome-big">Welcome</div>
+                <div class="welcome-small">to</div>
+                <div class="welcome-logo">
+                    <img src="img/new/logo.png">
+                </div>
+            </div>
+            <div class="app-name welcome-big">Site Diary - Login</div>
+            <form class="login-form" role="form" name="loginForm" novalidate="">
+                <div class="input-container">
+                    <input type="email" ng-model="user.username" required="required" readonly onfocus="this.removeAttribute('readonly');"><strong></strong>
+                    <label class="label-bar">Username</label>
+                </div>
+                <div class="input-container">
+                    <input type="password" ng-model="user.password" required="required" readonly onfocus="this.removeAttribute('readonly');"><strong></strong>
+                    <label class="label-bar">Password</label>
+                </div>
 
-        <form class="sd-form" role="form" name="loginForm" novalidate="">
-          <div class="input-container">
-            <input type="email" ng-model="user.username" required="required" readonly onfocus="this.removeAttribute('readonly');">
-            <label class="label-bar">Username</label>
-          </div>
-          <div class="input-container">
-            <input type="password" ng-model="user.password" required="required" readonly onfocus="this.removeAttribute('readonly');">
-            <label class="label-bar">Password</label>
-          </div>
-        </form>
-        <div class="clearfix">
-          <button class="button button-calm clearfix" ng-click="login()">
-            Login
-          </button>
+                <div class="input-container">
+                    <button class="button button-calm button-full" ng-click="login()" ng-disabled="loginForm.$invalid">
+                  Login
+                </button>
+                    <div class="remember-container">
+                        <ion-checkbox ng-model="user.remember">Remember me</ion-checkbox>
+                    </div>
+                </div>
+            </form>
+            <div class="login-footer" ng-click="vm.go('forgot')">
+                Forgot password?
+            </div>
         </div>
-        <label class="sd-checkbox clearfix">
-          <span>Remember me</span>
-          <input  type='checkbox'  class="blue-ck" ondrop="return false;" ng-model="user.remember" id="dsremember"/><label for="dsremember"></label>
-        </label>
-      </div>
-    </div>
-  </ion-content>
-  <div class="bar bar-footer sd-footer">
-    <div class="sd-actions" ng-click="vm.go('forgot')">
-      <span>Forgot password?</span>
-    </div>
-  </div>
+    </ion-content>
 </ion-view>
