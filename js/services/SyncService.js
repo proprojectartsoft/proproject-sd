@@ -73,22 +73,69 @@ angular.module($APP.name).factory('SyncService', [
                                     return prm.promise;
                                 }
 
-                                function setCurrencySymbol() {
-                                    SiteDiaryService.get_company_settings().then(function(curr) {
-                                        localStorage.setObject('currency',
-                                            SettingService.get_currency_symbol(
-                                                $filter('filter')(curr, {
-                                                    name: "currency"
-                                                })[0]
-                                            )
-                                        )
+                                function setCompanySettings() {
+                                    SiteDiaryService.get_company_settings().success(function(sett) {
+                                        localStorage.setObject('companySettings', sett);
                                     })
+                                }
+
+                                function setCompanyLists() {
+                                    var lists = {};
+                                    var ready1 = false,
+                                        ready2 = false,
+                                        ready3 = false,
+                                        ready4 = false;
+                                    var prm = $q.defer();
+                                    SiteDiaryService.absence_list().success(function(result) {
+                                        angular.forEach(result, function(value) {
+                                            value.name = value.reason;
+                                        })
+                                        lists.absence_list = result;
+                                        ready1 = true;
+                                        ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                    }).error(function(err) {
+                                        lists.absence_list = [];
+                                        ready1 = true;
+                                        ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                    })
+                                    SiteDiaryService.get_resources().success(function(result) {
+                                        lists.resources = result;
+                                        ready2 = true;
+                                        ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                    }).error(function(err) {
+                                        lists.resources = [];
+                                        ready2 = true;
+                                        ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                    })
+                                    SiteDiaryService.get_units().success(function(result) {
+                                        lists.units = result;
+                                        ready3 = true;
+                                        ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                    }).error(function(err) {
+                                        lists.units = [];
+                                        ready3 = true;
+                                        ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                    })
+                                    SiteDiaryService.get_staff().success(function(result) {
+                                        lists.staff = result;
+                                        ready4 = true;
+                                        ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                    }).error(function(err) {
+                                        lists.staff = [];
+                                        ready4 = true;
+                                        ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                    })
+                                    return prm.promise;
                                 }
 
                                 function buildData() {
                                     var def = $q.defer();
                                     addDiaries().then(function() {
-                                        setCurrencySymbol();
+                                        setCompanySettings();
+                                        setCompanyLists().then(function(result) {
+                                            localStorage.setObject('companyLists', result);
+                                            console.log(result);
+                                        })
                                         ProjectService.projects().then(function(result) {
                                             angular.forEach(result, function(value) {
                                                 SiteDiaryService.list_diaries(value.id).then(function(diaries) {

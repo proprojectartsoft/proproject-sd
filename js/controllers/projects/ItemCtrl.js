@@ -42,42 +42,22 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.data = {};
     vm.settings = '';
     vm.supplier = $stateParams.id;
+    vm.goods = localStorage.getObject('companyLists').resources;
+    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.searchModal = popover;
+    });
 
-    SiteDiaryService.get_resources().success(function(result) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-        });
-        vm.goods = result;
-    }).error(function(err) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-        });
-    })
-
-    SiteDiaryService.get_units().success(function(result) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-            vm.searchUnit = popover;
-        });
-        vm.units = result;
-    }).error(function(err) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-            vm.searchUnit = popover;
-        });
-    })
+    vm.units = localStorage.getObject('companyLists').units;
+    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.searchModal = popover;
+        vm.searchUnit = popover;
+    });
 
     function showSearch() {
         vm.settings = 'goods';

@@ -13,7 +13,10 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
-    vm.currency = localStorage.getObject('currency');
+    vm.currency = SettingService.get_currency_symbol(
+        $filter('filter')(localStorage.getObject('companySettings'), {
+            name: "currency"
+        })[0]);
 
     vm.local = {};
     vm.local.data = {};
@@ -49,7 +52,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
             role: vm.create.site_attendance.contractors[vm.index].trade,
             trade: vm.create.site_attendance.contractors[vm.index].trade,
             hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
-            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (localStorage.getObject('currency') + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate) || ''
+            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (vm.currency + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate) || ''
         }
         if (vm.create.site_attendance.contractors[vm.index].break_time) {
             vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
@@ -58,25 +61,18 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
         }
     } else {
         vm.local.data.staff_name = "";
-        SiteDiaryService.get_company_settings().then(function(sett) {
-            vm.local.data.model_break = $filter('filter')(sett, {
-                name: "break"
-            })[0].value;
-            vm.local.data.model_start = $filter('filter')(sett, {
-                name: "start"
-            })[0].value;
-            vm.local.data.model_finish = $filter('filter')(sett, {
-                name: "finish"
-            })[0].value;
-        })
+        vm.local.data.model_break = $filter('filter')(localStorage.getObject('companySettings'), {
+            name: "break"
+        })[0].value;
+        vm.local.data.model_start = $filter('filter')(localStorage.getObject('companySettings'), {
+            name: "start"
+        })[0].value;
+        vm.local.data.model_finish = $filter('filter')(localStorage.getObject('companySettings'), {
+            name: "finish"
+        })[0].value;
     }
 
-    SiteDiaryService.absence_list().then(function(result) {
-        angular.forEach(result, function(value) {
-            value.name = value.reason;
-        })
-        vm.absence = result;
-    })
+    vm.absence = localStorage.getObject('companyLists').absence_list;
 
     function showSearch() {
         vm.searchModal.show();

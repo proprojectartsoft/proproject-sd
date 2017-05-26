@@ -22,7 +22,7 @@ $lightblue: #11c1f3;
 
     .keyboard-open .login-container,
     .login-container {
-        padding-top: 250px!important;
+        padding-top: 250px !important;
     }
 }
 
@@ -39,6 +39,9 @@ $lightblue: #11c1f3;
 }
 
 .login-form {
+    width: 80%;
+    float: right;
+
     input[type='email'],
     input[type='number'],
     input[type='text'] {

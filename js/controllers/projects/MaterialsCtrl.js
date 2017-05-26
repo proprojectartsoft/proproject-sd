@@ -19,7 +19,10 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.create = localStorage.getObject('sd.diary.create');
     vm.diaryId = localStorage.getObject('diaryId');
     vm.index = $stateParams.id;
-    vm.currency = localStorage.getObject('currency');
+    vm.currency = SettingService.get_currency_symbol(
+        $filter('filter')(localStorage.getObject('companySettings'), {
+            name: "currency"
+        })[0]);
 
     vm.local = {};
     vm.local.search = '';
@@ -38,11 +41,11 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         var t = (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100));
         var st = vm.material.quantity * vm.material.unitCost;
         if (t !== 0 && !isNaN(t))
-            vm.total_formated = localStorage.getObject('currency') + " " + $filter('number')(t, 2);
+            vm.total_formated = vm.currency + " " + $filter('number')(t, 2);
         else
             vm.total_formated = '';
         if (st !== 0 && !isNaN(st))
-            vm.subtotal_formated = localStorage.getObject('currency') + " " + $filter('number')(st, 2);
+            vm.subtotal_formated = vm.currency + " " + $filter('number')(st, 2);
         else
             vm.subtotal_formated = '';
     })
@@ -57,47 +60,26 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             quantity: vm.create.plant_and_material_used[vm.index].quantity,
             tax: vm.create.plant_and_material_used[vm.index].tax,
             tax_formated: vm.create.plant_and_material_used[vm.index].tax && (vm.create.plant_and_material_used[vm.index].tax + " %") || '',
-            unitCost_formated: vm.create.plant_and_material_used[vm.index].cost_per_unit && (localStorage.getObject('currency') + " " + $filter('number')(vm.create.plant_and_material_used[vm.index].cost_per_unit, 2)) || ''
+            unitCost_formated: vm.create.plant_and_material_used[vm.index].cost_per_unit && (vm.currency + " " + $filter('number')(vm.create.plant_and_material_used[vm.index].cost_per_unit, 2)) || ''
         };
     }
-
     vm.materials = vm.create.plant_and_material_used;
+    vm.goods = localStorage.getObject('companyLists').resources;
+    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.searchModal = popover;
+    });
 
-    SiteDiaryService.get_resources().success(function(result) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-        });
-        vm.goods = result;
-    }).error(function(err) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-        });
-    })
-
-    SiteDiaryService.get_units().success(function(result) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-            vm.searchUnit = popover;
-        });
-        vm.units = result;
-    }).error(function(err) {
-        $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.searchModal = popover;
-            vm.searchUnit = popover;
-        });
-    })
+    vm.units = localStorage.getObject('companyLists').units;
+    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.searchModal = popover;
+        vm.searchUnit = popover;
+    });
 
     function showSearch() {
         vm.settings = 'goods';
