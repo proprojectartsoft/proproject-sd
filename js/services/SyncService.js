@@ -149,6 +149,9 @@ angular.module($APP.name).factory('SyncService', [
                                                         angular.forEach(diaries, function(diary) {
                                                             SiteDiaryService.list_diary(diary.id).then(function(data) {
                                                                 diary.data = data;
+                                                                SiteDiaryService.list_comments(diary.id).then(function(result) {
+                                                                    diary.data.comments = result;
+                                                                })
                                                             });
                                                         });
                                                     }

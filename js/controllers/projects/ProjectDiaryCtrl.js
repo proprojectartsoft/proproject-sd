@@ -45,7 +45,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         })
                     });
                 });
-                AttachmentsService.get_attachments($stateParams.id).then(function(result) {
+                AttachmentsService.get_attachments($stateParams.id).then(function(result) { //TODO:
                     var att = {
                         pictures: result
                     }
@@ -100,7 +100,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         attToAdd.push(value);
                     }
                 });
-                AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
+                AttachmentsService.upload_attachments(attToAdd).then(function(result) {}); //TODO:
                 if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
                     angular.forEach(attachments.toBeUpdated, function(att) {
                         AttachmentsService.update_attachments(att).then(function(result) {})
@@ -158,6 +158,10 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         vm.create = localStorage.getObject('sd.diary.create');
         SiteDiaryService.update_diary(vm.create).then(function(result) {
             vm.go('project');
+        })
+        angular.forEach(vm.create.comments, function(comment) {
+            SiteDiaryService.add_comments(comment)
+                .success(function(result) {}).error(function(err) {})
         })
         var attachments = localStorage.getObject('sd.attachments');
         var attToAdd = [];

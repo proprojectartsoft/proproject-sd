@@ -159,9 +159,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             date.setMinutes(mm);
             date.setHours(hh);
         }
-
         return date;
-
     }
 
     function calcParse() {

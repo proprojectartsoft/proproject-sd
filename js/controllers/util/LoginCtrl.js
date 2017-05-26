@@ -92,7 +92,11 @@ angular.module($APP.name).controller('LoginCtrl', [
                                     $state.go('app.home')
                                 })
                             }
-                            localStorage.setObject('loggedIn', result.data)
+                            localStorage.setObject('loggedIn', result.data);
+                            //get account for logged in user
+                            ProjectService.my_account(result.data.id).then(function(result) {
+                                localStorage.setObject('my_account', result);
+                            })
                             if ($scope.user.remember) {
                                 localStorage.setObject('dsremember', $scope.user);
                             } else {

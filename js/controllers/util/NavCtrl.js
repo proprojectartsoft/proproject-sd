@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('NavCtrl', NavCtrl)
 
-NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'AuthService','SyncService'];
+NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'AuthService', 'SyncService'];
 
-function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService,SyncService) {
+function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
     vm.sync = sync;
@@ -16,23 +16,31 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, AuthService,SyncSer
     };
 
     function sync() {
-      SyncService.sync('Sync').then(function(){
-        $state.reload();
-      });
+        SyncService.sync('Sync').then(function() {
+            $state.reload();
+        });
     }
 
     function go(predicate) {
-            $state.go('app.' + predicate);
-            console.log(predicate);
-        }
-
-    function logout(){
-      AuthService.logout().then(function(result){
-        localStorage.setObject('loggedOut', true);
-        $state.go('login');
-      })
+        $state.go('app.' + predicate);
+        console.log(predicate);
     }
 
+    function logout() {
+        if (navigator.onLine) {
+            AuthService.logout().then(function(result) {
+                localStorage.setObject('loggedOut', true);
+                $state.go('login');
+            })
+        } else {
+            var syncPopup = $ionicPopup.show({
+                title: "Error",
+                template: "<center>Can't log out now. You are offline.</center>",
+                content: "",
+                buttons: []
+            });
+        }
+    }
 
     $rootScope.$watch(function() {
         return $ionicSideMenuDelegate.isOpen();

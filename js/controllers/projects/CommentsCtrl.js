@@ -13,14 +13,10 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService, Projec
     vm.diaryId = localStorage.getObject('diaryId');
     vm.editMode = localStorage.getObject('editMode');
     vm.local.comments = localStorage.getObject('sd.comments');
-    vm.loggedIn = localStorage.getObject('loggedIn')
-    ProjectService.my_account(vm.loggedIn.id).then(function(result) {
-        vm.myProfile = result;
-    })
-
-    SiteDiaryService.list_comments(vm.diaryId).then(function(result) {
-        vm.local.list = result;
-    })
+    vm.loggedIn = localStorage.getObject('loggedIn');
+    vm.myProfile = localStorage.getObject('my_account');
+    vm.create = localStorage.getObject('sd.diary.create');
+    vm.local.list = vm.create.comments;
 
     function addComment() {
         var comment = vm.local.comment;
@@ -46,15 +42,13 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService, Projec
                     site_diary_id: vm.diaryId,
                     comment: comment,
                 };
-                SiteDiaryService.add_comments(request)
-                    .success(function(result) {
-                        vm.local.comment = '';
-                        SiteDiaryService.list_comments(vm.diaryId).then(function(result) {
-                            vm.local.list = result
-                        })
-                    }).error(function(err) {
-                        console.log("An unexpected error occured while adding a new comment");
-                    })
+                vm.local.list.push(request);
+                var proj = localStorage.getObject('currentProj');
+                var diary = $filter('filter')(proj.value.diaries, {
+                    id: (vm.diaryId)
+                })[0];
+                diary.data.comments.push(request);
+                localStorage.setObject('currentProj', proj);
             }
         }
     }
