@@ -56,7 +56,7 @@ angular.module($APP.name).factory('SyncService', [
                                                 }
                                                 var comments = diaryToAdd.comments;
                                                 angular.forEach(comments, function(value) {
-                                                    if (result.data.id) {
+                                                    if (result.data && result.data.id) {
                                                         var request = {
                                                             site_diary_id: result.data.id,
                                                             comment: value,
