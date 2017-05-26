@@ -21,6 +21,9 @@ angular.module($APP.name).controller('LoginCtrl', [
             if (!localStorage.getObject('loggedOut')) {
                 AuthService.login($scope.user).success(function(result) {
                     SyncService.sync('Sync').then(function() {
+                        ProjectService.my_account(result.data.id).then(function(result) {
+                            localStorage.setObject('my_account', result);
+                        })
                         localStorage.removeItem('loggedOut');
                         $state.go('app.home');
                     });
