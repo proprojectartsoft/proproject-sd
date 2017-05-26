@@ -16,7 +16,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.myProfile = localStorage.getObject('my_account');
     vm.create = localStorage.getObject('sd.diary.create');
-    vm.local.list = vm.create.comments;
+    vm.local.list = vm.create.comments || [];
 
     function addComment() {
         var comment = vm.local.comment;
