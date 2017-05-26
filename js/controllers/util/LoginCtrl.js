@@ -7,7 +7,8 @@ angular.module($APP.name).controller('LoginCtrl', [
     '$ionicPopup',
     'AuthService',
     'SyncService',
-    function($rootScope, $timeout, $scope, $state, $ionicModal, $ionicPopup, AuthService, SyncService) {
+    'ProjectService',
+    function($rootScope, $timeout, $scope, $state, $ionicModal, $ionicPopup, AuthService, SyncService, ProjectService) {
         $scope.user = {};
         var vm = this;
         vm.go = go;

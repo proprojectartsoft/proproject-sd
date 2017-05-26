@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('CommentsCtrl', CommentsCtrl)
 
-CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', 'SiteDiaryService', 'ProjectService'];
+CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService'];
 
-function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService, ProjectService) {
+function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService) {
     var vm = this;
     vm.go = go;
     vm.getInitials = getInitials;
@@ -30,6 +30,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService, Projec
                 var aux = {
                     comment: comment,
                     first_name: vm.myProfile.first_name,
+                    last_name: vm.myProfile.last_name,
                     date: new Date()
                 }
                 vm.local.comments.push(comment);
@@ -41,6 +42,9 @@ function CommentsCtrl($rootScope, $state, $stateParams, SiteDiaryService, Projec
                 var request = {
                     site_diary_id: vm.diaryId,
                     comment: comment,
+                    first_name: vm.myProfile.first_name,
+                    last_name: vm.myProfile.last_name,
+                    date: new Date(),
                 };
                 vm.local.list.push(request);
                 var proj = localStorage.getObject('currentProj');
