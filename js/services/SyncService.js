@@ -42,6 +42,7 @@ angular.module($APP.name).factory('SyncService', [
                                     if (diaryToAdd && diaryToAdd.data) {
                                         SiteDiaryService.add_diary(diaryToAdd.data)
                                             .success(function(result) {
+                                                console.log(result);
                                                 var attachments = diaryToAdd.attachments;
                                                 var attToAdd = [];
                                                 angular.forEach(attachments.pictures, function(value) {
@@ -55,11 +56,13 @@ angular.module($APP.name).factory('SyncService', [
                                                 }
                                                 var comments = diaryToAdd.comments;
                                                 angular.forEach(comments, function(value) {
-                                                    var request = {
-                                                        site_diary_id: result.data.id,
-                                                        comment: value,
-                                                    };
-                                                    SiteDiaryService.add_comments(request).then(function(result) {});
+                                                    if (result.data.id) {
+                                                        var request = {
+                                                            site_diary_id: result.data.id,
+                                                            comment: value,
+                                                        };
+                                                        SiteDiaryService.add_comments(request).then(function(result) {});
+                                                    }
                                                 })
                                                 diaryToAdd = {};
                                                 localStorage.setObject('diaryToSync', diaryToAdd);
