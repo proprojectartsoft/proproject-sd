@@ -23,7 +23,6 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 
     function go(predicate) {
         $state.go('app.' + predicate);
-        console.log(predicate);
     }
 
     function logout() {

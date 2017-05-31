@@ -25,7 +25,7 @@ angular.module($APP.name).factory('SyncService', [
 
         var login = function() {
             var prm = $q.defer();
-            if (localStorage.getObject('loggedIn')) {
+            if (localStorage.getObject('isLoggedIn')) {
                 prm.resolve();
             } else {
                 var user = {};
@@ -48,7 +48,7 @@ angular.module($APP.name).factory('SyncService', [
 
                 $timeout(function() {
                     if (navigator.onLine) {
-                        login().success(function() {
+                        login().then(function() {
                             getme()
                                 .success(function(data) {
                                     var syncPopup = $ionicPopup.show({
@@ -272,7 +272,7 @@ angular.module($APP.name).factory('SyncService', [
                                         }
                                     }
                                 });
-                        }).error(function() {
+                        }, function() {
                             var offlinePopup = $ionicPopup.alert({
                                 title: "Error",
                                 template: "An unexpected error occured during authentication and sync could not be done. Please try again.",
