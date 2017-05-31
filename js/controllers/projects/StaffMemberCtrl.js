@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('StaffMemberCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$indexedDB'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', '$timeout', 'SiteDiaryService', 'SettingService', '$indexedDB'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, SiteDiaryService, SettingService, $indexedDB) {
+function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, $timeout, SiteDiaryService, SettingService, $indexedDB) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -12,6 +12,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
+    vm.allowNumbersOnly = allowNumbersOnly;
     vm.currency = SettingService.get_currency_symbol(
         $filter('filter')(localStorage.getObject('companySettings'), {
             name: "currency"
@@ -78,6 +79,18 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }).then(function(popover) {
         vm.searchModal = popover;
     });
+
+    function allowNumbersOnly() {
+        var watchOnce = $scope.$watch(function() {
+            $timeout(function() {
+                $('.ion-datetime-picker input').each(function() {
+                    $(this).prop('type', 'number');
+                })
+                watchOnce();
+            }, 10);
+
+        })
+    }
 
     function showSearch() {
         vm.searchModal.show();

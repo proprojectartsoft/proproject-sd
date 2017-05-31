@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ContractorCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$stateParams', 'ContractorService', 'SiteDiaryService', 'SettingService'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$stateParams', '$timeout', 'ContractorService', 'SiteDiaryService', 'SettingService'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, ContractorService, SiteDiaryService, SettingService) {
+function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $timeout, ContractorService, SiteDiaryService, SettingService) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -12,6 +12,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
+    vm.allowNumbersOnly = allowNumbersOnly;
     vm.currency = SettingService.get_currency_symbol(
         $filter('filter')(localStorage.getObject('companySettings'), {
             name: "currency"
@@ -72,6 +73,18 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
     }
 
     vm.absence = localStorage.getObject('companyLists').absence_list;
+
+    function allowNumbersOnly() {
+        var watchOnce = $scope.$watch(function() {
+            $timeout(function() {
+                $('.ion-datetime-picker input').each(function() {
+                    $(this).prop('type', 'number');
+                })
+                watchOnce();
+            }, 10);
+
+        })
+    }
 
     function showSearch() {
         vm.searchModal.show();
