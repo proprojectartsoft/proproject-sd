@@ -6,8 +6,6 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
     var vm = this;
     vm.go = go;
     vm.add = add;
-    vm.save = save;
-
     vm.delays = [];
     vm.tools = [];
     vm.materials = [];
@@ -69,7 +67,7 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
             localStorage.setObject('currentProj', proj);
         }
         localStorage.setObject('sd.diary.create', vm.create);
-        go('diary');
+        // go('diary');
     }
 
     if (!vm.diaryId) {
@@ -85,6 +83,7 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
     }
 
     function go(predicate, id) {
+        save();
         if (predicate === 'diary') {
             if (vm.diaryId) {
                 $state.go('app.' + predicate, {

@@ -13,8 +13,6 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.addGood = addGood;
     vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
-    vm.save = save;
-
     vm.editMode = localStorage.getObject('editMode');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.diaryId = localStorage.getObject('diaryId');
@@ -128,7 +126,6 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             tax: vm.material.tax,
             total: (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100))
         }
-
         if (vm.editMode) {
             if (vm.index === 'create') {
                 vm.create.plant_and_material_used.push(vm.material);
@@ -156,10 +153,10 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             }
             localStorage.setObject('currentProj', proj);
         }
-        vm.go('materials');
     }
 
     function go(predicate, id) {
+        save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

@@ -4,7 +4,6 @@ WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$scope', 'Setting
 
 function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $indexedDB, $filter) {
     var vm = this;
-    vm.save = save;
     vm.go = go;
     vm.local = {};
     vm.local.data = {};
@@ -19,9 +18,6 @@ function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $i
     vm.local.afternoon = '';
     vm.local.evening = '';
     vm.local.onOff = '';
-    // vm.perfectWeather = false;
-    // vm.min_temp = '';
-    // vm.max_temp = '';
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
@@ -82,8 +78,6 @@ function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $i
             diary.data.weather = vm.weather;
             localStorage.setObject('currentProj', proj);
         }
-
-        vm.go('diary');
     }
 
     if (!vm.diaryId) {
@@ -129,8 +123,8 @@ function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $i
     }
 
     function go(predicate, id) {
+        save();
         if (predicate === 'diary') {
-
             if (vm.diaryId) {
                 $state.go('app.' + predicate, {
                     id: vm.diaryId

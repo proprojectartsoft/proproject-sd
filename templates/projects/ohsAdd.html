@@ -50,8 +50,5 @@
                 <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add comment' ||''}}" ng-model="vm.comment">
             </label>
         </div>
-        <button class="button button-block button-calm sd-text-white sd-save-button mt-0" ng-if="(!vm.diaryId) || (vm.editMode)" ng-click="vm.save()">
-            Save
-        </button>
     </ion-content>
 </ion-view>

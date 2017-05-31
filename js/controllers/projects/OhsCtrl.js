@@ -4,7 +4,6 @@ OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filte
 
 function OhsCtrl($state, $stateParams, $scope, SettingService, $filter) {
     var vm = this;
-    vm.save = save;
     vm.go = go;
     vm.local = {}
     vm.local.type = 'ohs.type';
@@ -75,11 +74,10 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter) {
             }
             localStorage.setObject('currentProj', proj);
         }
-
-        vm.go('ohs');
     }
 
     function go(predicate, id) {
+        save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

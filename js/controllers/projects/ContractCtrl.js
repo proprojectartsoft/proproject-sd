@@ -6,7 +6,6 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
     var vm = this;
     vm.go = go;
     vm.add = add;
-    vm.save = save;
     vm.editMode = localStorage.getObject('editMode');
     vm.instructions = {
         comments: []
@@ -87,10 +86,10 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
             diary.data.contract_notes = vm.contract;
             localStorage.setObject('currentProj', proj);
         }
-        vm.go('diary');
     }
 
     function go(predicate, id) {
+        save();
         if (predicate === 'diary') {
             if (vm.diaryId) {
                 $state.go('app.' + predicate, {

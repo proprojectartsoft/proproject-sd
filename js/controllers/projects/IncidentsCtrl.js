@@ -6,7 +6,6 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     var vm = this;
     vm.showSearchUnit = showSearchUnit;
     vm.backSearch = backSearch;
-    vm.saveIncident = saveIncident;
     vm.addUnit = addUnit;
     vm.go = go;
 
@@ -119,10 +118,10 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             }
             localStorage.setObject('currentProj', proj);
         }
-        vm.go('incidents');
     }
 
     function go(predicate, id) {
+        saveIncident();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

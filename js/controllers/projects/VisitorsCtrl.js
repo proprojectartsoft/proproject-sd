@@ -5,8 +5,6 @@ VisitorsCtrl.$inject = ['$rootScope', '$state', 'SettingService', '$scope', '$in
 function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $filter) {
     var vm = this;
     vm.go = go;
-    vm.save = save;
-
     vm.local = {};
     vm.local.data = {};
     vm.data = {};
@@ -34,10 +32,10 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
             diary.data.site_attendance.visitors.push(vm.member);
             localStorage.setObject('currentProj', proj);
         }
-        vm.go('siteAttendance');
     }
 
     function go(predicate, id) {
+        save();
         localStorage.setObject('siteAttendance.tab', 'visitors');
         $state.go('app.' + predicate, {
             id: id

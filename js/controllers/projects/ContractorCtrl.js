@@ -8,7 +8,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
     vm.showSearch = showSearch;
     vm.backSearch = backSearch;
     vm.addStaff = addStaff;
-    vm.save = save;
     vm.calcParse = calcParse;
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
@@ -63,7 +62,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
         vm.local.data.staff_name = "";
         vm.local.data.model_break = $filter('filter')(localStorage.getObject('companySettings'), {
             name: "break"
-        })[0].value;
+        })[0].value || vm.stringToDate("00:30");
         vm.local.data.model_start = $filter('filter')(localStorage.getObject('companySettings'), {
             name: "start"
         })[0].value;
@@ -140,7 +139,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
             localStorage.setObject('currentProj', proj);
         }
         localStorage.setObject('sd.diary.absence', null);
-        vm.go('siteAttendance');
     }
 
     function calcParse() {
@@ -191,6 +189,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, Cont
     }
 
     function go(predicate, id) {
+        save();
         localStorage.setObject('siteAttendance.tab', 'contractors');
         $state.go('app.' + predicate, {
             id: id

@@ -11,8 +11,6 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.addGood = addGood;
     vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
-    vm.saveItem = saveItem;
-
     vm.editMode = localStorage.getObject('editMode');
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
@@ -123,10 +121,10 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             }
             localStorage.setObject('currentProj', proj);
         }
-        vm.go('goodsUsed', vm.supplier);
     }
 
     function go(predicate, id) {
+        saveItem();
         $state.go('app.' + predicate, {
             id: id
         });

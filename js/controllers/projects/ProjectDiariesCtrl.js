@@ -216,7 +216,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         console.log(id);
         SiteDiaryService.delete_diary(id).then(function(result) {
             SyncService.sync('Removing Site Diary').then(function() {
-                //vm.go('home');
                 $('.delete-btn').attr("disabled", false);
                 $state.reload();
             })
