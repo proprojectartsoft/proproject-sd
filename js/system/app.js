@@ -9,14 +9,21 @@ angular.module($APP.name, [
     'ion-datetime-picker',
     'ngCordova',
     'indexedDB',
-]).config(function ($indexedDBProvider) {
+]).config(function($indexedDBProvider, $ionicConfigProvider) {
     $indexedDBProvider
-      .connection('Site-Diary')
-      .upgradeDatabase(1, function(event, db, tx){
-        var objStore = db.createObjectStore('projects', {keyPath: 'id',autoIncrement: true});
-        objStore.createIndex('id_idx', 'id', {unique: true});
-      });
-  });
+        .connection('Site-Diary')
+        .upgradeDatabase(1, function(event, db, tx) {
+            var objStore = db.createObjectStore('projects', {
+                keyPath: 'id',
+                autoIncrement: true
+            });
+            objStore.createIndex('id_idx', 'id', {
+                unique: true
+            });
+        });
+
+    $ionicConfigProvider.views.swipeBackEnabled(false);
+});
 
 angular.module($APP.name).run(apprun);
 
