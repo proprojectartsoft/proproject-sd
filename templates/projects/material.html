@@ -36,7 +36,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Subtotal cost</div>
-                <input placeholder="{{(!vm.diaryId || vm.editMode) && ('Subtotal cost (' + vm.currency + ')') ||''}}" ng-readonly=true value="{{vm.subtotal_formated}}">
+                <input placeholder="{{(!vm.diaryId || vm.editMode) && ('Subtotal cost (' + vm.currency + ')') ||''}}" ng-readonly=true value="{{vm.subtotal_formated}}" ng-model="vm.subtotal_formated">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Tax</div>
@@ -45,7 +45,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Total</div>
-                <input placeholder="{{(!vm.diaryId || vm.editMode) && ('Total cost (' + vm.currency + ')') ||''}}" ng-readonly=true value="{{vm.total_formated}}">
+                <input placeholder="{{(!vm.diaryId || vm.editMode) && ('Total cost (' + vm.currency + ')') ||''}}" ng-readonly=true value="{{vm.total_formated}}" ng-model="vm.total_formated">
             </label>
         </div>
     </ion-content>
