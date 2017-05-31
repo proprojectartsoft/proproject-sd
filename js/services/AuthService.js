@@ -43,13 +43,16 @@ angular.module($APP.name).factory('AuthService', [
                             return 'login.user.name=' + user.username + '&login.user.password=' + user.password + '&user=true';
                         },
                         data: user
-                    }).success(function(data) {})
+                    }).success(function(data) {
+                        localStorage.setObject('loggedIn', true);
+                    })
                     .error(function errorCallback(response, status) {});
             },
             logout: function() {
                 return $http.post($APP.server + '/pub/logout', {
                     withCredentials: true
                 }).then(function(result) {
+                    localStorage.removeItem('loggedIn');
                     return result;
                 });
             }
