@@ -156,7 +156,8 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function go(predicate, id) {
-        save();
+        if (predicate == "materials")
+            save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

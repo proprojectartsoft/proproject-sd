@@ -77,7 +77,8 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter) {
     }
 
     function go(predicate, id) {
-        save();
+        if (predicate == "ohs")
+            save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId
