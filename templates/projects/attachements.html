@@ -36,7 +36,8 @@
         </div>
         <div class="list" ng-show="vm.filter.substate === 'pic'">
             <div style="padding-bottom: 80px">
-                <img ng-show="vm.filter.picture.base64String !== ''" ng-src="{{vm.filter.picture.base64String}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit;">
+                <img ng-if="vm.filter.picture.base64String" ng-src="{{vm.filter.picture.base64String}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit;">
+                <img ng-if="!vm.filter.picture.base64String" data-ng-src="data:image/png;base64,{{filter.picture.base_64_string}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit;">
                 <div class="list" style="background-color:#fff;">
                     <label class="item item-input item-stacked-label" style="background-color: #11C1F3">
                           <span class="input-label">Title</span>
