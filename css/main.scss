@@ -897,3 +897,17 @@ input[readonly] {
     width: 1px;
     background-color: #fff;
 }
+
+.summary-textarea {
+    padding: 15px;
+    height: 200px;
+}
+
+.summary-popup > div {
+    width: 70%!important;
+}
+
+.ion-compose {
+    padding-left: 15px;
+    font-size: 25px;
+}

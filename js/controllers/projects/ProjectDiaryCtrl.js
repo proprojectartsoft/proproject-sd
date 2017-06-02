@@ -11,13 +11,14 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.toggle = toggle;
     vm.saveEdit = saveEdit;
     vm.setCreatedDateFor = setCreatedDateFor;
+    vm.setSummary = setSummary;
     vm.createInit = localStorage.getObject('sd.diary.create');
     vm.cancelEdit = false;
     vm.local = {};
     vm.local.data = {};
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.projectId = localStorage.getObject('projectId');
-    vm.diaryStateId = $stateParams.id
+    vm.diaryStateId = $stateParams.id;
     vm.edit = localStorage.getObject('editMode');
 
     if ($stateParams.id) {
@@ -25,6 +26,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             var offDiary = localStorage.getObject('diaryToSync');
             vm.create = offDiary.data;
             vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
+            vm.summary = vm.create.summary;
             localStorage.setObject('sd.diary.create', vm.create);
         } else {
             localStorage.setObject('diaryId', $stateParams.id);
@@ -32,6 +34,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             if (vm.edit) {
                 vm.create = localStorage.getObject('sd.diary.create');
                 vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
+                vm.summary = vm.create.summary;
             } else {
                 $indexedDB.openStore('projects', function(store) {
                     vm.projectId = parseInt(vm.projectId);
@@ -40,6 +43,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         angular.forEach(vm.diaries, function(diary) {
                             if (diary.id == $stateParams.id) {
                                 vm.created_for_date = (diary.created_for_date != 0) && diary.created_for_date || '';
+                                vm.summary = diary.data.summary;
                                 localStorage.setObject('sd.diary.create', diary.data);
                             }
                         })
@@ -59,6 +63,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         if (vm.createInit === null) {
             vm.createInit = {
                 created_for_date: '',
+                summary: '',
                 weather: {},
                 contract_notes: {},
                 site_notes: {},
@@ -80,6 +85,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             localStorage.setObject('sd.diary.create', vm.createInit)
         }
         vm.created_for_date = vm.createInit.created_for_date;
+        vm.summary = vm.createInit.summary;
     }
 
     vm.diaryId = localStorage.getObject('diaryId');
@@ -190,6 +196,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             id: (vm.diaryId)
         })[0];
         diary.created_for_date = vm.create.created_for_date;
+        diary.data.summary = vm.create.summary;
         localStorage.setObject('currentProj', proj);
         saveChanges(localStorage.getObject('currentProj'));
         localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
@@ -200,6 +207,31 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         var create = localStorage.getObject('sd.diary.create');
         create.created_for_date = new Date(vm.created_for_date).getTime();
         localStorage.setObject('sd.diary.create', create);
+    }
+
+    function setSummary() {
+        vm.summaryText = vm.summary;
+        var summaryPopup = $ionicPopup.show({
+            title: "Site Diary Summary",
+            template: '<textarea class="summary-textarea" ng-model="vm.summaryText" placeholder="Introduce here the Site Diary summary"></textarea>',
+            content: "",
+            cssClass: 'summary-popup',
+            scope: $scope,
+            buttons: [{
+                text: 'Save',
+                type: 'button-positive',
+                onTap: function(e) {
+                    var create = localStorage.getObject('sd.diary.create');
+                    vm.summary = vm.summaryText;
+                    create.summary = vm.summary;
+                    console.log(vm.summary);
+                    localStorage.setObject('sd.diary.create', create);
+                    summaryPopup.close();
+                }
+            }, {
+                text: 'Cancel',
+            }]
+        });
     }
 
     function toggle() {
