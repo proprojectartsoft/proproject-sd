@@ -229,7 +229,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             })
         }).error(function(res) {
             syncPopup.close();
-            var syncPopup = $ionicPopup.show({
+            var errPopup = $ionicPopup.show({
                 title: "You are offline",
                 template: "<center>You can remove Site Diaries when online.</center>",
                 content: "",

@@ -26,6 +26,8 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
         }
         SyncService.addDiariesToSync().then(function() {
             SyncService.sync().then(function() {
+                if (syncPopup)
+                    syncPopup.close();
                 $state.reload();
             });
         })
