@@ -63,27 +63,24 @@ angular.module($APP.name).factory('SyncService', [
                                             if (diaryToAdd && diaryToAdd.data) {
                                                 SiteDiaryService.add_diary(diaryToAdd.data)
                                                     .success(function(result) {
-                                                        console.log(result);
                                                         var attachments = diaryToAdd.attachments;
                                                         var attToAdd = [];
                                                         angular.forEach(attachments.pictures, function(value) {
                                                             if (!value.path) {
-                                                                value.site_diary_id = result.data.id;
+                                                                value.site_diary_id = result.id;
                                                                 attToAdd.push(value);
                                                             }
                                                         });
                                                         if (attToAdd) {
                                                             AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
                                                         }
-                                                        var comments = diaryToAdd.comments;
+                                                        var comments = diaryToAdd.data.comments;
                                                         angular.forEach(comments, function(value) {
-                                                            if (result.data && result.data.id) {
-                                                                var request = {
-                                                                    site_diary_id: result.data.id,
-                                                                    comment: value,
-                                                                };
-                                                                SiteDiaryService.add_comments(request).then(function(result) {});
-                                                            }
+                                                            var request = {
+                                                                site_diary_id: result.id,
+                                                                comment: value.comment,
+                                                            };
+                                                            SiteDiaryService.add_comments(request).then(function(result) {});
                                                         })
                                                         diaryToAdd = {};
                                                         localStorage.setObject('diaryToSync', diaryToAdd);
