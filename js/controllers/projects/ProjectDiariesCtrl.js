@@ -233,7 +233,13 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 title: "You are offline",
                 template: "<center>You can remove Site Diaries when online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        errPopup.close();
+                    }
+                }]
             });
             $state.reload();
         })

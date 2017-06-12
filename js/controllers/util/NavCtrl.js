@@ -48,7 +48,13 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
                 title: "Error",
                 template: "<center>Can't log out now. You are offline.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        errPopup.close();
+                    }
+                }]
             });
         }
     }
