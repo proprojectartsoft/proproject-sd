@@ -24,18 +24,13 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
         if (!vm.diaryId) {
             if (comment) {
                 var request = {
-                    site_diary_id: vm.diaryId,
-                    comment: comment,
-                };
-                var aux = {
                     comment: comment,
                     first_name: vm.myProfile.first_name,
                     last_name: vm.myProfile.last_name,
                     date: new Date()
-                }
-                vm.local.comments.push(comment);
-                vm.local.list.push(aux);
-                localStorage.setObject('sd.comments', vm.local.comments);
+                };
+                vm.create.comments.push(request);
+                localStorage.setObject('sd.diary.create', vm.create);
             }
         } else {
             if (comment) {
@@ -46,7 +41,14 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                     last_name: vm.myProfile.last_name,
                     date: new Date(),
                 };
+                var commToAdd = {
+                    site_diary_id: vm.diaryId,
+                    comment: comment
+                };
                 vm.local.list.push(request);
+                vm.local.comments.push(commToAdd);
+                localStorage.setObject('sd.comments', vm.local.comments);
+                localStorage.setObject('sd.diary.create', vm.create);
                 var proj = localStorage.getObject('currentProj');
                 var diary = $filter('filter')(proj.value.diaries, {
                     id: (vm.diaryId)

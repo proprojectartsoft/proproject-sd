@@ -71,18 +71,17 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 incidents: [],
                 plant_and_material_used: [],
                 goods_received: [],
-                oh_and_s: []
+                oh_and_s: [],
+                comments: []
             };
             vm.createInit.site_attendance.staffs = [];
             vm.createInit.site_attendance.contractors = [];
             vm.createInit.site_attendance.visitors = [];
-            vm.comments = [];
             vm.att = {
                 pictures: []
             }
-            localStorage.setObject('sd.attachments', vm.att)
-            localStorage.setObject('sd.comments', vm.comments)
-            localStorage.setObject('sd.diary.create', vm.createInit)
+            localStorage.setObject('sd.attachments', vm.att);
+            localStorage.setObject('sd.diary.create', vm.createInit);
         }
         vm.created_for_date = vm.createInit.created_for_date;
         vm.summary = vm.createInit.summary;
@@ -94,7 +93,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         $('.create-btn').attr("disabled", true);
         vm.create = localStorage.getObject('sd.diary.create');
         vm.create.date = new Date().getTime();
-        vm.create.summary = "Please"
         vm.create.project_id = localStorage.getObject('projectId');
         SiteDiaryService.add_diary(vm.create)
             .success(function(result) {
@@ -115,13 +113,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 if (attachments.toBeDeleted) {
                     AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
                 }
-                vm.local.data.comments = localStorage.getObject('sd.comments');
-                angular.forEach(vm.local.data.comments, function(value) {
+                angular.forEach(vm.create.comments, function(value) {
                     var request = {
                         site_diary_id: result.id,
-                        comment: value,
+                        comment: value.comment,
                     };
-                    SiteDiaryService.add_comments(request).success(function(result) {});
+                    SiteDiaryService.add_comments(request).success(function(result) {
+                    });
                 })
                 SyncService.sync('Submitting').then(function() {
                     $('.create-btn').attr("disabled", false);
@@ -129,15 +127,11 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 })
             }).error(function(response) {
                 var attStorage = localStorage.getObject('sd.attachments');
-                var commStorage = localStorage.getObject('sd.comments');
                 vm.diaryToSync = {
                     data: vm.create
                 };
                 if (attStorage) {
                     vm.diaryToSync.attachments = attStorage;
-                }
-                if (commStorage) {
-                    vm.diaryToSync.comments = commStorage;
                 }
                 localStorage.setObject('diaryToSync', vm.diaryToSync);
                 var offlinePopup = $ionicPopup.alert({
@@ -165,9 +159,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         SiteDiaryService.update_diary(vm.create).then(function(result) {
             vm.go('project');
         })
-        angular.forEach(vm.create.comments, function(comment) {
+        angular.forEach(localStorage.getObject('sd.comments'), function(comment) {
             SiteDiaryService.add_comments(comment)
-                .success(function(result) {}).error(function(err) {})
+                .success(function(result) {
+                    localStorage.setObject('sd.comments', []);
+                }).error(function(err) {
+                    localStorage.setObject('sd.comments', []);
+                })
         })
         var attachments = localStorage.getObject('sd.attachments');
         var attToAdd = [];

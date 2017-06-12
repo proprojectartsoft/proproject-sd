@@ -143,7 +143,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             });
             SharedService.share_diary(id, res).then(function(response) {
                     alertPopup1.close();
-                    if (result.message === "Site diary Shared!") {
+                    if (response.message === "Site diary Shared!") {
                         res = "";
                         var alertPopup = $ionicPopup.alert({
                             title: 'Share',
