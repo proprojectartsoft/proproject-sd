@@ -5,7 +5,7 @@
       </button>
     </div>
     <ion-content class="has-subheader sd-list">
-        <p class="white-subtitle">Tap on the supplier to add more resources</p>
+        <p ng-if="vm.suppliers && vm.suppliers.length != 0" class="white-subtitle">Tap on the supplier to add more resources</p>
         <ion-list>
             <ion-item ng-repeat="supplier in vm.suppliers track by $index" ng-click="vm.go('goodsUsed', $index)">
                 <div class="sd-group">
