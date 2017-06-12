@@ -6,6 +6,7 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService) {
     var vm = this;
     vm.go = go;
     vm.local = {}
+    vm.suppNo = 0;
 
     $scope.$watch(function() {
         SettingService.show_focus();
@@ -19,6 +20,7 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService) {
             goods_details: []
         }
         vm.create.goods_received.push(vm.supplier);
+        vm.suppNo = vm.create.goods_received.length - 1;
         var proj = localStorage.getObject('currentProj');
         var diary = $filter('filter')(proj.value.diaries, {
             id: (vm.create.id)
@@ -28,10 +30,11 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService) {
         localStorage.setObject('sd.diary.create', vm.create);
     }
 
-    function go(predicate, id) {
+    function go(predicate) {
         addSupplier();
         $state.go('app.' + predicate, {
-            id: id
+            id: vm.suppNo,
+            index: 'create'
         });
     }
 }

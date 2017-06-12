@@ -213,31 +213,44 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
 
     function deleteDiary(id) {
         $('.delete-btn').attr("disabled", true);
-        console.log(id);
-        SiteDiaryService.delete_diary(id).then(function(result) {
-            SyncService.sync('Removing Site Diary').then(function() {
+        var syncPopup = $ionicPopup.show({
+            title: "Removing Site Diary",
+            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            content: "",
+            buttons: []
+        });
+        SiteDiaryService.delete_diary(id).success(function(result) {
+            SyncService.sync().then(function() {
                 $('.delete-btn').attr("disabled", false);
+                syncPopup.close();
                 $state.reload();
             })
+        }).error(function() {
+            syncPopup.close();
+            $state.reload();
         })
     }
 
     function togglePlus() {
         vm.show = !vm.show;
     }
+
     function showDiary() {
         vm.diaryModal.show();
         vm.state = 'search';
     }
+
     function backDiary() {
         vm.diaryModal.hide();
         vm.show = false;
     }
+
     function saveDiary() {
         if (vm && vm.diaryModal) {
             vm.diaryModal.hide();
         }
     };
+
     function go(predicate, id) {
         $state.go('app.' + predicate, {
             id: id

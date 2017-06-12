@@ -89,8 +89,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 
     vm.diaryId = localStorage.getObject('diaryId');
 
-    function saveCreate() {
-        $('.create-btn').attr("disabled", true);
+    function addSiteDiaryToDB(syncPopup) {
         vm.create = localStorage.getObject('sd.diary.create');
         vm.create.date = new Date().getTime();
         vm.create.project_id = localStorage.getObject('projectId');
@@ -118,13 +117,11 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         site_diary_id: result.id,
                         comment: value.comment,
                     };
-                    SiteDiaryService.add_comments(request).success(function(result) {
-                    });
+                    SiteDiaryService.add_comments(request).success(function(result) {});
                 })
-                SyncService.sync('Submitting').then(function() {
-                    $('.create-btn').attr("disabled", false);
-                    vm.go('project');
-                })
+                $('.create-btn').attr("disabled", false);
+                syncPopup.close();
+                vm.go('project');
             }).error(function(response) {
                 var attStorage = localStorage.getObject('sd.attachments');
                 vm.diaryToSync = {
@@ -134,6 +131,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     vm.diaryToSync.attachments = attStorage;
                 }
                 localStorage.setObject('diaryToSync', vm.diaryToSync);
+                syncPopup.close();
                 var offlinePopup = $ionicPopup.alert({
                     title: "You are offline",
                     template: "<center>You can sync your data when online</center>",
@@ -149,6 +147,23 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 $('.create-btn').attr("disabled", false);
                 vm.go('project');
             });
+    }
+
+    function saveCreate() {
+        $('.create-btn').attr("disabled", true);
+        var syncPopup = $ionicPopup.show({
+            title: 'Submitting',
+            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            content: "",
+            buttons: []
+        });
+        if (navigator.onLine && localStorage.getObject('diaryToSync')) {
+            SyncService.sync().then(function() { //'Submitting'
+                addSiteDiaryToDB(syncPopup)
+            })
+        } else {
+            addSiteDiaryToDB(syncPopup);
+        }
     }
 
     function saveEdit() {
@@ -210,7 +225,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     function setSummary() {
         var summaryPopup = $ionicPopup.show({
             title: "Site Diary Summary",
-            template: '<textarea class="summary-textarea" ng-model="vm.summary" placeholder="Introduce here the Site Diary summary"></textarea>',
+            template: '<textarea class="summary-textarea" ng-model="vm.summary" placeholder="Please add any summary of the days work you have here."></textarea>',
             content: "",
             cssClass: 'summary-popup',
             scope: $scope,

@@ -41,7 +41,7 @@ angular.module($APP.name).factory('SyncService', [
             return prm.promise;
         }
         return {
-            sync: function(title) {
+            sync: function() { //title
                 var deferred = $q.defer();
 
                 $timeout(function() {
@@ -50,12 +50,12 @@ angular.module($APP.name).factory('SyncService', [
                             if (res == "logged") {
                                 getme()
                                     .success(function(data) {
-                                        var syncPopup = $ionicPopup.show({
-                                            title: title,
-                                            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                                            content: "",
-                                            buttons: []
-                                        });
+                                        // var syncPopup = $ionicPopup.show({
+                                        //     title: title,
+                                        //     template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                                        //     content: "",
+                                        //     buttons: []
+                                        // });
 
                                         function addDiaries() {
                                             var prm = $q.defer();
@@ -219,14 +219,14 @@ angular.module($APP.name).factory('SyncService', [
                                                                         "value": project,
                                                                     }).then(function(e) {
                                                                         if (projects[projects.length - 1] === project) {
-                                                                            syncPopup.close();
+                                                                            // syncPopup.close();
                                                                             deferred.resolve('sync_done');
                                                                         };
                                                                     });
                                                                 });
                                                             })
                                                         }).error(function(err) {
-                                                            syncPopup.close();
+                                                            // syncPopup.close();
                                                             deferred.resolve('sync_done');
                                                         })
                                                 } else {
@@ -237,7 +237,7 @@ angular.module($APP.name).factory('SyncService', [
                                                                 "value": project,
                                                             }).then(function(e) {
                                                                 if (projects[projects.length - 1] === project) {
-                                                                    syncPopup.close();
+                                                                    // syncPopup.close();
                                                                     deferred.resolve('sync_done');
                                                                 };
                                                             });
@@ -248,6 +248,7 @@ angular.module($APP.name).factory('SyncService', [
                                         });
                                     })
                                     .error(function(data, status) {
+                                      deferred.resolve();
                                         if (!navigator.onLine) {
                                             var loggedIn = localStorage.getObject('dsremember');
                                             console.log('Offline');
@@ -269,6 +270,7 @@ angular.module($APP.name).factory('SyncService', [
                                         }
                                     });
                             } else {
+                                deferred.resolve();
                                 var offlinePopup = $ionicPopup.alert({
                                     title: "Error",
                                     template: "An unexpected error occured during authentication and sync could not be done. Please try again.",
@@ -286,6 +288,7 @@ angular.module($APP.name).factory('SyncService', [
                     } else {
                         var loggedIn = localStorage.getObject('dsremember');
                         console.log('Offline');
+                        deferred.resolve();
                         var offlinePopup = $ionicPopup.alert({
                             title: "You are offline",
                             template: "<center>You can sync your data when online</center>",

@@ -1,10 +1,11 @@
 <ion-view hide-back-button="true" cache-view="false">
-  <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
-      <button class="button button-icon ion-ios-arrow-left sd-text-white">
+    <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
+        <button class="button button-icon ion-ios-arrow-left sd-text-white">
           <span style="margin-left:10px;">Goods received/Plant Off-Hired</span>
       </button>
-  </div>
+    </div>
     <ion-content class="has-subheader sd-list">
+        <p class="white-subtitle">Tap on the supplier to add more resources</p>
         <ion-list>
             <ion-item ng-repeat="supplier in vm.suppliers track by $index" ng-click="vm.go('goodsUsed', $index)">
                 <div class="sd-group">

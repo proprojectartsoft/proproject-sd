@@ -908,7 +908,7 @@ input[readonly] {
     height: 30%;
 
     .popup-body {
-      height: 100%;
+        height: 100%;
     }
 }
 
@@ -922,4 +922,10 @@ input[readonly] {
         color: #11c1f3;
         padding-left: 15px;
     }
+}
+
+.white-subtitle {
+    font-size: 17px;
+    color: white;
+    padding: 10px 15px 0;
 }

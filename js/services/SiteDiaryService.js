@@ -112,11 +112,13 @@ angular.module($APP.name).factory('SiteDiaryService', [
                     params: {
                         id: id,
                     }
-                }).then(
+                }).success(
                     function(payload) {
                         return payload.data;
                     }
-                );
+                ).error(function() {
+                    return payload.data;
+                })
             },
 
             revision: function(id, revision) {

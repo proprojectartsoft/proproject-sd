@@ -19,25 +19,37 @@ angular.module($APP.name).controller('LoginCtrl', [
             $scope.user.remember = localStorage.getObject('dsremember').remember;
             $scope.user.id = localStorage.getObject('dsremember').id;
             if (!localStorage.getObject('loggedOut')) {
+                var loginPopup = $ionicPopup.show({
+                    title: "Sync",
+                    template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                    content: "",
+                    buttons: []
+                });
                 AuthService.login($scope.user).success(function(result) {
-                    SyncService.sync('Sync').then(function() {
+                    SyncService.sync().then(function() { //'Sync'
                         ProjectService.my_account(result.data.id).then(function(result) {
                             localStorage.setObject('my_account', result);
                         })
                         localStorage.removeItem('loggedOut');
+                        loginPopup.close();
                         $state.go('app.home');
                     });
                 }).error(function(result, status) {
                     switch (status) {
                         case 0:
-                            SyncService.sync('Sync');
-                            localStorage.removeItem('loggedOut');
+                            SyncService.sync().then(function() {
+                                loginPopup.close();
+                                localStorage.removeItem('loggedOut');
+                            }) //'Sync'
                             break;
                         case -1:
-                            SyncService.sync('Sync');
-                            localStorage.removeItem('loggedOut');
+                            SyncService.sync().then(function() {
+                                loginPopup.close();
+                                localStorage.removeItem('loggedOut');
+                            })
                             break;
                         case 502:
+                            loginPopup.close();
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Offline',
                                 template: "<center>Server offline</center>",
@@ -45,6 +57,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                             alertPopup.then(function(res) {});
                             break;
                         case 400:
+                            loginPopup.close();
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Error',
                                 template: "<center>Incorrect user data.</center>",
@@ -52,6 +65,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                             alertPopup.then(function(res) {});
                             break;
                         case 401:
+                            loginPopup.close();
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Error',
                                 template: 'Your account has been de-activated. Contact your supervisor for further information.',
@@ -82,17 +96,28 @@ angular.module($APP.name).controller('LoginCtrl', [
         };
 
         $scope.login = function() {
+            var loginPopup = $ionicPopup.show({
+                title: "Sync",
+                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                content: "",
+                buttons: []
+            });
             if ($scope.user.username && $scope.user.password) {
                 AuthService.login($scope.user).success(function(result) {
                     localStorage.removeItem('loggedOut');
                     if (result.data.status) {
-                        SyncService.sync('Sync');
+                        SyncService.sync().then(function() {
+                            loginPopup.close();
+                        })
                     } else {
                         if (result.data) {
                             if (result.data.role.id === 4) {
-                                $state.go('app.shared')
+                                loginPopup.close();
+
+                                $state.go('app.shared');
                             } else {
-                                SyncService.sync('Sync').then(function() {
+                                SyncService.sync().then(function() {
+                                    loginPopup.close();
                                     $state.go('app.home')
                                 })
                             }
@@ -108,11 +133,13 @@ angular.module($APP.name).controller('LoginCtrl', [
                             }
                             localStorage.setObject('id', result.data.id)
                         } else {
+                            loginPopup.close();
                             $scope.userRemember = localStorage.getObject('dsremember');
                             if ($scope.userRemember) {}
                         }
                     }
                 }).error(function(response, status) {
+                    loginPopup.close();
                     switch (status) {
                         case 0:
                             var alertPopup = $ionicPopup.alert({

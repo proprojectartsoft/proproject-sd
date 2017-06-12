@@ -16,7 +16,14 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     };
 
     function sync() {
-        SyncService.sync('Sync').then(function() {
+        var syncPopup = $ionicPopup.show({
+            title: "Sync",
+            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            content: "",
+            buttons: []
+        });
+        SyncService.sync().then(function() {
+            syncPopup.close();
             $state.reload();
         });
     }
