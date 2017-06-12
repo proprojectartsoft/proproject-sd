@@ -57,42 +57,7 @@ angular.module($APP.name).factory('SyncService', [
                                         //     buttons: []
                                         // });
 
-                                        function addDiaries() {
-                                            var prm = $q.defer();
-                                            var diaryToAdd = localStorage.getObject('diaryToSync');
-                                            if (diaryToAdd && diaryToAdd.data) {
-                                                SiteDiaryService.add_diary(diaryToAdd.data)
-                                                    .success(function(result) {
-                                                        var attachments = diaryToAdd.attachments;
-                                                        var attToAdd = [];
-                                                        angular.forEach(attachments.pictures, function(value) {
-                                                            if (!value.path) {
-                                                                value.site_diary_id = result.id;
-                                                                attToAdd.push(value);
-                                                            }
-                                                        });
-                                                        if (attToAdd) {
-                                                            AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
-                                                        }
-                                                        var comments = diaryToAdd.data.comments;
-                                                        angular.forEach(comments, function(value) {
-                                                            var request = {
-                                                                site_diary_id: result.id,
-                                                                comment: value.comment,
-                                                            };
-                                                            SiteDiaryService.add_comments(request).then(function(result) {});
-                                                        })
-                                                        diaryToAdd = {};
-                                                        localStorage.setObject('diaryToSync', diaryToAdd);
-                                                        prm.resolve();
-                                                    }).error(function(err) {
-                                                        prm.resolve();
-                                                    })
-                                            } else {
-                                                prm.resolve();
-                                            }
-                                            return prm.promise;
-                                        }
+                                        //TODO: addDiary
 
                                         function setCompanySettings() {
                                             SiteDiaryService.get_company_settings().success(function(sett) {
@@ -151,7 +116,7 @@ angular.module($APP.name).factory('SyncService', [
 
                                         function buildData() {
                                             var def = $q.defer();
-                                            addDiaries().then(function() {
+                                            // addDiaries().then(function() {
                                                 setCompanySettings();
                                                 setCompanyLists().then(function(result) {
                                                     localStorage.setObject('companyLists', result);
@@ -179,7 +144,7 @@ angular.module($APP.name).factory('SyncService', [
                                                         });
                                                     });
                                                 });
-                                            })
+                                            // })
                                             return def.promise;
                                         }
 
@@ -307,6 +272,42 @@ angular.module($APP.name).factory('SyncService', [
                     }
                 })
                 return deferred.promise;
+            },
+            addDiariesToSync: function() {
+                var prm = $q.defer();
+                var diaryToAdd = localStorage.getObject('diaryToSync');
+                if (diaryToAdd && diaryToAdd.data) {
+                    SiteDiaryService.add_diary(diaryToAdd.data)
+                        .success(function(result) {
+                            var attachments = diaryToAdd.attachments;
+                            var attToAdd = [];
+                            angular.forEach(attachments.pictures, function(value) {
+                                if (!value.path) {
+                                    value.site_diary_id = result.id;
+                                    attToAdd.push(value);
+                                }
+                            });
+                            if (attToAdd) {
+                                AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
+                            }
+                            var comments = diaryToAdd.data.comments;
+                            angular.forEach(comments, function(value) {
+                                var request = {
+                                    site_diary_id: result.id,
+                                    comment: value.comment,
+                                };
+                                SiteDiaryService.add_comments(request).then(function(result) {});
+                            })
+                            diaryToAdd = {};
+                            localStorage.setObject('diaryToSync', diaryToAdd);
+                            prm.resolve();
+                        }).error(function(err) {
+                            prm.resolve();
+                        })
+                } else {
+                    prm.resolve();
+                }
+                return prm.promise;
             }
         }
     }

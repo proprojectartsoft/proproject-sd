@@ -26,26 +26,32 @@ angular.module($APP.name).controller('LoginCtrl', [
                     buttons: []
                 });
                 AuthService.login($scope.user).success(function(result) {
-                    SyncService.sync().then(function() { //'Sync'
-                        ProjectService.my_account(result.data.id).then(function(result) {
-                            localStorage.setObject('my_account', result);
-                        })
-                        localStorage.removeItem('loggedOut');
-                        loginPopup.close();
-                        $state.go('app.home');
-                    });
+                    SyncService.addDiariesToSync().then(function() {
+                        SyncService.sync().then(function() { //'Sync'
+                            ProjectService.my_account(result.data.id).then(function(result) {
+                                localStorage.setObject('my_account', result);
+                            })
+                            localStorage.removeItem('loggedOut');
+                            loginPopup.close();
+                            $state.go('app.home');
+                        });
+                    })
                 }).error(function(result, status) {
                     switch (status) {
                         case 0:
-                            SyncService.sync().then(function() {
-                                loginPopup.close();
-                                localStorage.removeItem('loggedOut');
-                            }) //'Sync'
+                            SyncService.addDiariesToSync().then(function() {
+                                SyncService.sync().then(function() {
+                                    loginPopup.close();
+                                    localStorage.removeItem('loggedOut');
+                                }) //'Sync'
+                            })
                             break;
                         case -1:
-                            SyncService.sync().then(function() {
-                                loginPopup.close();
-                                localStorage.removeItem('loggedOut');
+                            SyncService.addDiariesToSync().then(function() {
+                                SyncService.sync().then(function() {
+                                    loginPopup.close();
+                                    localStorage.removeItem('loggedOut');
+                                })
                             })
                             break;
                         case 502:
@@ -106,8 +112,10 @@ angular.module($APP.name).controller('LoginCtrl', [
                 AuthService.login($scope.user).success(function(result) {
                     localStorage.removeItem('loggedOut');
                     if (result.data.status) {
-                        SyncService.sync().then(function() {
-                            loginPopup.close();
+                        SyncService.addDiariesToSync().then(function() {
+                            SyncService.sync().then(function() {
+                                loginPopup.close();
+                            })
                         })
                     } else {
                         if (result.data) {
@@ -116,9 +124,11 @@ angular.module($APP.name).controller('LoginCtrl', [
 
                                 $state.go('app.shared');
                             } else {
-                                SyncService.sync().then(function() {
-                                    loginPopup.close();
-                                    $state.go('app.home')
+                                SyncService.addDiariesToSync().then(function() {
+                                    SyncService.sync().then(function() {
+                                        loginPopup.close();
+                                        $state.go('app.home')
+                                    })
                                 })
                             }
                             localStorage.setObject('loggedIn', result.data);

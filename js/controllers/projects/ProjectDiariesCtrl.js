@@ -220,13 +220,21 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             buttons: []
         });
         SiteDiaryService.delete_diary(id).success(function(result) {
-            SyncService.sync().then(function() {
-                $('.delete-btn').attr("disabled", false);
-                syncPopup.close();
-                $state.reload();
+            SyncService.addDiariesToSync().then(function() {
+                SyncService.sync().then(function() {
+                    $('.delete-btn').attr("disabled", false);
+                    syncPopup.close();
+                    $state.reload();
+                })
             })
         }).error(function() {
             syncPopup.close();
+            var syncPopup = $ionicPopup.show({
+                title: "You are offline",
+                template: "<center>You can remove Site Diaries when online.</center>",
+                content: "",
+                buttons: []
+            });
             $state.reload();
         })
     }

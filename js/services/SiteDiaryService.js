@@ -116,7 +116,7 @@ angular.module($APP.name).factory('SiteDiaryService', [
                     function(payload) {
                         return payload.data;
                     }
-                ).error(function() {
+                ).error(function(payload) {
                     return payload.data;
                 })
             },

@@ -119,9 +119,11 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     };
                     SiteDiaryService.add_comments(request).success(function(result) {});
                 })
-                $('.create-btn').attr("disabled", false);
-                syncPopup.close();
-                vm.go('project');
+                SyncService.sync().then(function() {
+                    $('.create-btn').attr("disabled", false);
+                    syncPopup.close();
+                    vm.go('project');
+                })
             }).error(function(response) {
                 var attStorage = localStorage.getObject('sd.attachments');
                 vm.diaryToSync = {
@@ -158,7 +160,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             buttons: []
         });
         if (navigator.onLine && localStorage.getObject('diaryToSync')) {
-            SyncService.sync().then(function() { //'Submitting'
+            SyncService.addDiariesToSync().then(function() { //'Submitting'
                 addSiteDiaryToDB(syncPopup)
             })
         } else {

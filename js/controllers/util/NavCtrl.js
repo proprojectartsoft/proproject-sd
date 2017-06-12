@@ -16,16 +16,20 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     };
 
     function sync() {
-        var syncPopup = $ionicPopup.show({
-            title: "Sync",
-            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-            content: "",
-            buttons: []
-        });
-        SyncService.sync().then(function() {
-            syncPopup.close();
-            $state.reload();
-        });
+        if (navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: "Sync",
+                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                content: "",
+                buttons: []
+            });
+        }
+        SyncService.addDiariesToSync().then(function() {
+            SyncService.sync().then(function() {
+                syncPopup.close();
+                $state.reload();
+            });
+        })
     }
 
     function go(predicate) {
