@@ -41,7 +41,7 @@ angular.module($APP.name).factory('SyncService', [
             return prm.promise;
         }
         return {
-            sync: function() { //title
+            sync: function() {
                 var deferred = $q.defer();
 
                 $timeout(function() {
@@ -50,21 +50,11 @@ angular.module($APP.name).factory('SyncService', [
                             if (res == "logged") {
                                 getme()
                                     .success(function(data) {
-                                        // var syncPopup = $ionicPopup.show({
-                                        //     title: title,
-                                        //     template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                                        //     content: "",
-                                        //     buttons: []
-                                        // });
-
-                                        //TODO: addDiary
-
                                         function setCompanySettings() {
                                             SiteDiaryService.get_company_settings().success(function(sett) {
                                                 localStorage.setObject('companySettings', sett);
                                             })
                                         }
-
                                         function setCompanyLists() {
                                             var lists = {};
                                             var ready1 = false,
@@ -113,38 +103,35 @@ angular.module($APP.name).factory('SyncService', [
                                             })
                                             return prm.promise;
                                         }
-
                                         function buildData() {
                                             var def = $q.defer();
-                                            // addDiaries().then(function() {
-                                                setCompanySettings();
-                                                setCompanyLists().then(function(result) {
-                                                    localStorage.setObject('companyLists', result);
-                                                    console.log(result);
-                                                })
-                                                ProjectService.projects().then(function(result) {
-                                                    angular.forEach(result, function(value) {
-                                                        SiteDiaryService.list_diaries(value.id).then(function(diaries) {
-                                                            value.diaries = diaries;
-                                                            if ((result[result.length - 1] === value)) {
-                                                                $timeout(function() {
-                                                                    def.resolve(result)
-                                                                }, 5000);
-                                                            }
-                                                            if (value.diaries.length) {
-                                                                angular.forEach(diaries, function(diary) {
-                                                                    SiteDiaryService.list_diary(diary.id).then(function(data) {
-                                                                        diary.data = data;
-                                                                        SiteDiaryService.list_comments(diary.id).then(function(result) {
-                                                                            diary.data.comments = result;
-                                                                        })
-                                                                    });
+                                            setCompanySettings();
+                                            setCompanyLists().then(function(result) {
+                                                localStorage.setObject('companyLists', result);
+                                                console.log(result);
+                                            })
+                                            ProjectService.projects().then(function(result) {
+                                                angular.forEach(result, function(value) {
+                                                    SiteDiaryService.list_diaries(value.id).then(function(diaries) {
+                                                        value.diaries = diaries;
+                                                        if ((result[result.length - 1] === value)) {
+                                                            $timeout(function() {
+                                                                def.resolve(result)
+                                                            }, 5000);
+                                                        }
+                                                        if (value.diaries.length) {
+                                                            angular.forEach(diaries, function(diary) {
+                                                                SiteDiaryService.list_diary(diary.id).then(function(data) {
+                                                                    diary.data = data;
+                                                                    SiteDiaryService.list_comments(diary.id).then(function(result) {
+                                                                        diary.data.comments = result;
+                                                                    })
                                                                 });
-                                                            }
-                                                        });
+                                                            });
+                                                        }
                                                     });
                                                 });
-                                            // })
+                                            });
                                             return def.promise;
                                         }
 
@@ -184,14 +171,12 @@ angular.module($APP.name).factory('SyncService', [
                                                                         "value": project,
                                                                     }).then(function(e) {
                                                                         if (projects[projects.length - 1] === project) {
-                                                                            // syncPopup.close();
                                                                             deferred.resolve('sync_done');
                                                                         };
                                                                     });
                                                                 });
                                                             })
                                                         }).error(function(err) {
-                                                            // syncPopup.close();
                                                             deferred.resolve('sync_done');
                                                         })
                                                 } else {
@@ -202,7 +187,6 @@ angular.module($APP.name).factory('SyncService', [
                                                                 "value": project,
                                                             }).then(function(e) {
                                                                 if (projects[projects.length - 1] === project) {
-                                                                    // syncPopup.close();
                                                                     deferred.resolve('sync_done');
                                                                 };
                                                             });
@@ -213,7 +197,7 @@ angular.module($APP.name).factory('SyncService', [
                                         });
                                     })
                                     .error(function(data, status) {
-                                      deferred.resolve();
+                                        deferred.resolve();
                                         if (!navigator.onLine) {
                                             var loggedIn = localStorage.getObject('dsremember');
                                             console.log('Offline');

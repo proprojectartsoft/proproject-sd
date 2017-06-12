@@ -227,7 +227,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                     $state.reload();
                 })
             })
-        }).error(function() {
+        }).error(function(res) {
             syncPopup.close();
             var syncPopup = $ionicPopup.show({
                 title: "You are offline",

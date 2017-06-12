@@ -160,7 +160,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             buttons: []
         });
         if (navigator.onLine && localStorage.getObject('diaryToSync')) {
-            SyncService.addDiariesToSync().then(function() { //'Submitting'
+            SyncService.addDiariesToSync().then(function() {
                 addSiteDiaryToDB(syncPopup)
             })
         } else {

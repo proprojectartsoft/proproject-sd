@@ -116,9 +116,10 @@ angular.module($APP.name).factory('SiteDiaryService', [
                     function(payload) {
                         return payload.data;
                     }
-                ).error(function(payload) {
-                    return payload.data;
-                })
+                ).error(
+                    function(payload) {
+                        return payload;
+                    })
             },
 
             revision: function(id, revision) {
