@@ -208,10 +208,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function setSummary() {
-        vm.summaryText = vm.summary;
         var summaryPopup = $ionicPopup.show({
             title: "Site Diary Summary",
-            template: '<textarea class="summary-textarea" ng-model="vm.summaryText" placeholder="Introduce here the Site Diary summary"></textarea>',
+            template: '<textarea class="summary-textarea" ng-model="vm.summary" placeholder="Introduce here the Site Diary summary"></textarea>',
             content: "",
             cssClass: 'summary-popup',
             scope: $scope,
@@ -220,9 +219,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 type: 'button-positive',
                 onTap: function(e) {
                     var create = localStorage.getObject('sd.diary.create');
-                    vm.summary = vm.summaryText;
                     create.summary = vm.summary;
-                    console.log(vm.summary);
                     localStorage.setObject('sd.diary.create', create);
                     summaryPopup.close();
                 }

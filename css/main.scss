@@ -900,14 +900,26 @@ input[readonly] {
 
 .summary-textarea {
     padding: 15px;
-    height: 200px;
+    height: 100%;
 }
 
 .summary-popup > div {
     width: 70%!important;
+    height: 30%;
+
+    .popup-body {
+      height: 100%;
+    }
 }
 
 .ion-compose {
     padding-left: 15px;
     font-size: 25px;
+}
+
+.sd-title {
+    .summary-check {
+        color: #11c1f3;
+        padding-left: 15px;
+    }
 }
