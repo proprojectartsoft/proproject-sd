@@ -52,7 +52,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
                     text: 'Ok',
                     type: 'button-positive',
                     onTap: function(e) {
-                        errPopup.close();
+                        syncPopup.close();
                     }
                 }]
             });
