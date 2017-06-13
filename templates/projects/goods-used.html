@@ -9,6 +9,9 @@
             <ion-item ng-repeat="item in vm.goods  track by $index" ng-click="vm.go('item',vm.index, $index)">
                 <div class="sd-group">
                     <div class="sd-title">{{item.details}}</div>
+                    <div class="sd-description">
+                      {{item.quantity}} {{item.unit_name}} | {{item.onHireAsString}}-{{item.offHireAsString}}
+                    </div>
                 </div>
             </ion-item>
         </ion-list>
