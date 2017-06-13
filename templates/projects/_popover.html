@@ -8,7 +8,7 @@
     <ion-content>
         <ion-list>
             <label class="sd-status">
-                <input class="sd-input" type="search" placeholder="Search" ng-change="search()" ng-model="vm.local.search">
+                <input class="sd-input" type="search" placeholder="Search" ng-change="search()" ng-model="vm.local.search.name">
             </label>
             <div class="list" ng-if="vm.settings === 'staff'">
                 <ion-item class="item" ng-repeat="staff in vm.staff | filter:vm.local.search" ng-click="vm.addStaff(staff)">{{staff.name}}</ion-item>
