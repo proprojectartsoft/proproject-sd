@@ -17,11 +17,11 @@
                 <ion-item class="item" ng-repeat="contractor in vm.contractor | filter:vm.local.search" ng-click="vm.addStaff(contractor)">{{contractor.name}}</ion-item>
             </div>
             <div class="list" ng-if="vm.settings === 'goods'">
-                <ion-item class="item" ng-repeat="good in vm.goods | filter:vm.local.search" ng-click="vm.addGood(good)">{{good.name}}</ion-item>
                 <ion-item class="item search-input-item">
                     <input class="search-input" placeholder="Tap to add other goods" ng-model="vm.newGood">
                     <span class="ion-forward" ng-click="vm.addNewGood()"></span>
                 </ion-item>
+                <ion-item class="item" ng-repeat="good in vm.goods | filter:vm.local.search" ng-click="vm.addGood(good)">{{good.name}}</ion-item>
             </div>
             <div class="list" ng-if="vm.settings === 'units'">
                 <ion-item class="item" ng-repeat="unit in vm.units | filter:vm.local.search" ng-click="vm.addUnit(unit)">{{unit.name}}</ion-item>
