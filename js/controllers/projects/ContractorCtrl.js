@@ -156,7 +156,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
             vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm");
             vm.filteredStart = $filter('date')(vm.local.data.model_start, "HH:mm");
             vm.filteredFinish = $filter('date')(vm.local.data.model_finish, "HH:mm");
-            vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
+            if(!vm.myForm.$dirty){
+              vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
+            }
         }
     }
 
