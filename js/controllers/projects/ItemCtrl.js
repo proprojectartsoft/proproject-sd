@@ -41,6 +41,11 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.settings = '';
     vm.supplier = $stateParams.id;
     vm.goods = localStorage.getObject('companyLists').resources;
+    vm.goods.sort(function (a,b){
+      var textA = a.name.toUpperCase();
+      var textB = b.name.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
         animation: 'slide-in-up'
