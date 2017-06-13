@@ -123,15 +123,12 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
             note: vm.local.data.note
         }
 
-        if (vm.editMode) {
-            if (vm.index === 'create') {
-                vm.create.site_attendance.contractors.push(vm.member);
-            } else {
-                vm.create.site_attendance.contractors[vm.index] = vm.member;
-            }
-        } else {
+        if (vm.index === 'create') {
             vm.create.site_attendance.contractors.push(vm.member);
+        } else {
+            vm.create.site_attendance.contractors[vm.index] = vm.member;
         }
+
         localStorage.setObject('sd.diary.create', vm.create);
         localStorage.setObject('siteAttendance.tab', 'contractors');
 

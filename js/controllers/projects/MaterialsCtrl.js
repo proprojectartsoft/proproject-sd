@@ -126,14 +126,10 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             tax: vm.material.tax,
             total: (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100))
         }
-        if (vm.editMode) {
-            if (vm.index === 'create') {
-                vm.create.plant_and_material_used.push(vm.material);
-            } else {
-                vm.create.plant_and_material_used[vm.index] = vm.material
-            }
-        } else {
+        if (vm.index === 'create') {
             vm.create.plant_and_material_used.push(vm.material);
+        } else {
+            vm.create.plant_and_material_used[vm.index] = vm.material
         }
         localStorage.setObject('sd.diary.create', vm.create);
 

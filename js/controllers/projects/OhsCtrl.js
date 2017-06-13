@@ -54,8 +54,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter) {
             action: vm.action_message,
             note: vm.comment
         }
-
-        if ((vm.editMode) && (vm.index !== 'create')) {
+        if (vm.index !== 'create') {
             vm.create.oh_and_s[vm.index] = vm.oh_and_s;
         } else {
             vm.create.oh_and_s.push(vm.oh_and_s);

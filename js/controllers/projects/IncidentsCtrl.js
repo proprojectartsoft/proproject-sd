@@ -99,7 +99,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             action_required: vm.action_required && vm.action_required[0] || ''
         }
 
-        if ((vm.editMode) && (vm.index !== 'create')) {
+        if (vm.index !== 'create') {
             vm.create.incidents[vm.index] = incident;
         } else {
             vm.create.incidents.push(incident);

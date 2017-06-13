@@ -101,11 +101,10 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             onHireAsString: $filter('date')(vm.local.data.on_hire, "dd/MM/yyyy"),
             offHireAsString: $filter('date')(vm.local.data.off_hire, "dd/MM/yyyy")
         }
-
-        if ((vm.editMode) && (vm.index !== 'create')) {
-            vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
-        } else {
+        if (vm.index === 'create') {
             vm.create.goods_received[vm.supplier].goods_details.push(vm.item);
+        } else {
+            vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
         }
         localStorage.setObject('sd.diary.create', vm.create);
 
