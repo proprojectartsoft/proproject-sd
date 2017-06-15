@@ -1,12 +1,13 @@
 angular.module($APP.name).controller('SupplierCtrl', SupplierCtrl)
 
-SupplierCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', 'SettingService'];
+SupplierCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', 'SettingService', '$stateParams'];
 
-function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService) {
+function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stateParams) {
     var vm = this;
     vm.go = go;
     vm.local = {}
     vm.suppNo = 0;
+    vm.index = $stateParams.id;
 
     $scope.$watch(function() {
         SettingService.show_focus();
@@ -21,17 +22,24 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService) {
         }
         vm.create.goods_received.push(vm.supplier);
         vm.suppNo = vm.create.goods_received.length - 1;
-        var proj = localStorage.getObject('currentProj');
-        var diary = $filter('filter')(proj.value.diaries, {
-            id: (vm.create.id)
-        })[0];
-        diary.data.goods_received.push(vm.supplier);
-        localStorage.setObject('currentProj', proj);
+        if (vm.index === 'create') {
+            vm.create.goods_received.push(vm.supplier);
+        } else {
+            vm.create.goods_received[vm.index] = vm.supplier;
+        }
+
         localStorage.setObject('sd.diary.create', vm.create);
+        // var proj = localStorage.getObject('currentProj');
+        // var diary = $filter('filter')(proj.value.diaries, {
+        //     id: (vm.create.id)
+        // })[0];
+        // diary.data.goods_received.push(vm.supplier);
+        // localStorage.setObject('currentProj', proj);
+        // localStorage.setObject('sd.diary.create', vm.create);
     }
 
     function go(predicate) {
-        if(vm.editMode) addSupplier();
+        addSupplier();
         $state.go('app.' + predicate, {
             id: vm.suppNo,
             index: 'create'

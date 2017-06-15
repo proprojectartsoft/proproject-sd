@@ -12,7 +12,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 
     vm.editMode = localStorage.getObject('editMode');
     vm.local = {};
-    vm.index = $stateParams.id
+    vm.index = $stateParams.id;
     vm.actionReq = 'incident.actionReq';
     vm.type = 'incident.type';
     vm.units = 'incident.units';
