@@ -1,10 +1,12 @@
 angular.module($APP.name).controller('OhsCtrl', OhsCtrl)
 
-OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter'];
+OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter', 'SiteDiaryService'];
 
-function OhsCtrl($state, $stateParams, $scope, SettingService, $filter) {
+function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiaryService) {
     var vm = this;
     vm.go = go;
+    vm.deleteEntry = deleteEntry;
+
     vm.local = {}
     vm.local.type = 'ohs.type';
     vm.create = localStorage.getObject('sd.diary.create');
@@ -75,9 +77,19 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter) {
         }
     }
 
+    function deleteEntry(entry){
+        vm.create.oh_and_s.forEach(function(el, i) {
+            if(el === entry){
+              vm.create.oh_and_s.splice(i, 1);
+            }
+        })
+        localStorage.setObject('sd.diary.create', vm.create);
+        SiteDiaryService.update_diary(vm.create);
+    }
+
     function go(predicate, id) {
         if (predicate == "ohs")
-            save();
+            if(vm.editMode) save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

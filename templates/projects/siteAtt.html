@@ -8,10 +8,10 @@
         <ion-list ng-if="vm.staff" can-swipe="true">
             <ion-item ng-repeat="item in vm.staffList track by $index" ng-click="vm.go('staffMember',$index)" class="sd-item-tile">
                 <div class="sd-group">
-                  <span class="sd-tile">
+                    <span class="sd-tile">
                     {{item.first_name | limitTo:1 | uppercase}}
                     {{item.last_name | limitTo:1 | uppercase}}
-                  </span>
+                    </span>
                     <div class="sd-content">
                         <div class="sd-title">{{item.first_name}} {{item.last_name}}</div>
                         <div class="sd-description">
@@ -20,6 +20,9 @@
                             Start:{{item.start_time}}&nbsp;|&nbsp;Finish:{{item.finish_time}}&nbsp;|&nbsp;Total:{{item.total_time}}
                         </div>
                     </div>
+                    <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteEntry(item)">
+                        Delete
+                    </ion-option-button>
                 </div>
             </ion-item>
         </ion-list>
@@ -36,10 +39,13 @@
                     <div class="sd-content">
                         <div class="sd-title">{{item.first_name}} {{item.last_name}}</div>
                         <div class="sd-description">
-                            {{item.company_name}}&nbsp;|&nbsp;{{item.trade}}
-                            <br/>
-                            Start:{{item.start_time}}&nbsp;|&nbsp;Finish:{{item.finish_time}}&nbsp;|&nbsp;Total:{{item.total_time}}
+                              {{item.company_name}}&nbsp;|&nbsp;{{item.trade}}
+                              <br/>
+                              Start:{{item.start_time}}&nbsp;|&nbsp;Finish:{{item.finish_time}}&nbsp;|&nbsp;Total:{{item.total_time}}
                         </div>
+                        <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteEntry(item)">
+                            Delete
+                        </ion-option-button>
                     </div>
                 </div>
             </ion-item>
@@ -58,6 +64,9 @@
                         <div class="sd-title">{{item.first_name}} {{item.last_name}}</div>
                         <div class="sd-description">{{item.note}}</div>
                     </div>
+                    <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteEntry(item)">
+                        Delete
+                    </ion-option-button>
                 </div>
             </ion-item>
         </ion-list>

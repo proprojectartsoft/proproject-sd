@@ -13,6 +13,8 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.addGood = addGood;
     vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
+    vm.deleteEntry = deleteEntry;
+
     vm.editMode = localStorage.getObject('editMode');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.diaryId = localStorage.getObject('diaryId');
@@ -156,9 +158,19 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         }
     }
 
+    function deleteEntry(entry){
+        vm.create.plant_and_material_used.forEach(function(el, i) {
+            if(el === entry){
+              vm.create.plant_and_material_used.splice(i, 1);
+            }
+        })
+        localStorage.setObject('sd.diary.create', vm.create);
+        SiteDiaryService.update_diary(vm.create);
+    }
+
     function go(predicate, id) {
         if (predicate == "materials")
-            save();
+            if(vm.editMode) save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

@@ -35,7 +35,7 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
     }
 
     function go(predicate, id) {
-        save();
+        if(vm.editMode) save();
         localStorage.setObject('siteAttendance.tab', 'visitors');
         $state.go('app.' + predicate, {
             id: id

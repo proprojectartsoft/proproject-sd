@@ -16,6 +16,9 @@
                             {{incident.unit_name}}</span>
                         <span>{{incident.action_required.name}}</span>
                     </div>
+                    <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteEntry(incident)">
+                        Delete
+                    </ion-option-button>
             </ion-item>
         </ion-list>
         <div ng-if="!vm.incidents.length" class="sd-nodata">

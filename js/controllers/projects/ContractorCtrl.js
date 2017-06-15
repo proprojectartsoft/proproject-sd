@@ -79,6 +79,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
             $timeout(function() {
                 $('.ion-datetime-picker input').each(function() {
                     $(this).prop('type', 'number');
+                    $(this).prop('inputmode', 'numeric');
                 })
                 watchOnce();
             }, 10);
@@ -107,17 +108,17 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
 
     function save() {
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
-        if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
-            vm.calcParse();
-        }
+        // if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
+        //     vm.calcParse();
+        // }
         vm.member = {
             first_name: vm.local.data.staff_name,
             company_name: vm.local.data.company_name,
             trade: vm.local.data.trade,
             hourly_rate: vm.local.data.hourly_rate,
-            start_time: vm.filteredStart,
-            break_time: vm.filteredBreak,
-            finish_time: vm.filteredFinish,
+            start_time: vm.filteredBreak = $filter('date')(vm.local.data.model_start, "HH:mm"),
+            break_time: vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm"),
+            finish_time: vm.filteredBreak = $filter('date')(vm.local.data.model_finish, "HH:mm"),
             total_time: vm.local.data.total_time,
             absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
@@ -201,7 +202,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     }
 
     function go(predicate, id) {
-        save();
+        if(vm.editMode) save();
         localStorage.setObject('siteAttendance.tab', 'contractors');
         $state.go('app.' + predicate, {
             id: id

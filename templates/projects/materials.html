@@ -17,6 +17,9 @@
                     <span ng-if="material.total">{{vm.currency}}</span>
                     <span>{{material.total | number:2}}</span>
                 </div>
+                <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteEntry(material)">
+                    Delete
+                </ion-option-button>
             </ion-item>
         </ion-list>
         <div ng-if="!vm.materials.length" class="sd-nodata">

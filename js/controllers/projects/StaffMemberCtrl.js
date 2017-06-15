@@ -117,18 +117,18 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     function save() {
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
-        if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
-            vm.local.total_time = vm.calcParse();
-        }
+        // if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
+        //     vm.local.total_time = vm.calcParse();
+        // }
         vm.member = {
             first_name: vm.local.data.staff_name.split(" ", 2)[0],
             last_name: vm.local.data.staff_name.split(" ", 2)[1],
             company_name: vm.local.data.company_name,
             trade: vm.local.data.trade,
             hourly_rate: vm.local.data.hourly_rate,
-            start_time: vm.filteredStart,
-            break_time: vm.filteredBreak,
-            finish_time: vm.filteredFinish,
+            start_time: vm.filteredBreak = $filter('date')(vm.local.data.model_start, "HH:mm"),
+            break_time: vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm"),
+            finish_time: vm.filteredBreak = $filter('date')(vm.local.data.model_finish, "HH:mm"),
             total_time: vm.local.data.total_time,
             absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
@@ -207,7 +207,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function go(predicate, id) {
-        save();
+        if(vm.editMode) save();
         $state.go('app.' + predicate, {
             id: id
         });

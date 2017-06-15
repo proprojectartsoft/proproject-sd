@@ -31,7 +31,7 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService) {
     }
 
     function go(predicate) {
-        addSupplier();
+        if(vm.editMode) addSupplier();
         $state.go('app.' + predicate, {
             id: vm.suppNo,
             index: 'create'

@@ -8,6 +8,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     vm.backSearch = backSearch;
     vm.addUnit = addUnit;
     vm.go = go;
+    vm.deleteEntry = deleteEntry;
 
     vm.editMode = localStorage.getObject('editMode');
     vm.local = {};
@@ -120,9 +121,19 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         }
     }
 
+    function deleteEntry(entry){
+        vm.create.incidents.forEach(function(el, i) {
+            if(el === entry){
+              vm.create.incidents.splice(i, 1);
+            }
+        })
+        localStorage.setObject('sd.diary.create', vm.create);
+        SiteDiaryService.update_diary(vm.create);
+    }
+
     function go(predicate, id) {
         if (predicate == "incidents")
-            saveIncident();
+            if(vm.editMode) saveIncident();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

@@ -128,7 +128,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     }
 
     function go(predicate, id) {
-        saveItem();
+        if(vm.editMode) saveItem();
         $state.go('app.' + predicate, {
             id: id
         });

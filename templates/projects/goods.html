@@ -10,6 +10,9 @@
             <ion-item ng-repeat="supplier in vm.suppliers track by $index" ng-click="vm.go('goodsUsed', $index)">
                 <div class="sd-group">
                     <div class="sd-title">{{supplier.grn_ref}}&nbsp;|&nbsp;{{supplier.supplier}}</div>
+                    <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteEntry(supplier)">
+                        Delete
+                    </ion-option-button>
                 </div>
             </ion-item>
         </ion-list>

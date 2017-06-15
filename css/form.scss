@@ -58,7 +58,7 @@ $lightblue: #11c1f3;
                     font-size: 14px;
                     vertical-align: middle;
                     margin-right: 5px;
-                    font-weight: 400;
+                    font-weight: 200;
                     white-space: normal;
                 }
 
@@ -271,4 +271,12 @@ $lightblue: #11c1f3;
             }
         }
     }
+}
+
+.item-complex .item-content, .item-radio .item-content {
+    padding:0!important;
+}
+
+.button {
+  min-height:0!important;
 }

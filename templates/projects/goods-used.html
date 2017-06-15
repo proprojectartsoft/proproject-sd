@@ -12,6 +12,9 @@
                     <div class="sd-description">
                       {{item.quantity}} {{item.unit_name}} | {{item.onHireAsString}}-{{item.offHireAsString}}
                     </div>
+                    <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteEntry(item)">
+                        Delete
+                    </ion-option-button>
                 </div>
             </ion-item>
         </ion-list>

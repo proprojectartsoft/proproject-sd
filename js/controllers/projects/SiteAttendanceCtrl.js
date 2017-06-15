@@ -1,11 +1,13 @@
 angular.module($APP.name).controller('SiteAttendanceCtrl', SiteAttendanceCtrl)
 
-SiteAttendanceCtrl.$inject = ['$rootScope', '$state'];
+SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService'];
 
-function SiteAttendanceCtrl($rootScope, $state) {
+function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService) {
     var vm = this;
     vm.go = go;
     vm.show = show;
+    vm.deleteEntry = deleteEntry;
+
     show(localStorage.getObject('siteAttendance.tab') || "staff");
     localStorage.setObject('siteAttendance.tab', '');
     vm.diaryId = localStorage.getObject('diaryId');
@@ -29,6 +31,32 @@ function SiteAttendanceCtrl($rootScope, $state) {
                 vm.visitors = true;
             }
         }
+    }
+
+    function deleteEntry(entry){
+        if(vm.staff){
+          vm.create.site_attendance.staffs.forEach(function(el, i) {
+                if(el === entry){
+                  vm.create.site_attendance.staffs.splice(i, 1);
+                }
+           })
+        }
+        if(vm.contractors){
+          vm.create.site_attendance.contractors.forEach(function(el, i) {
+                if(el === entry){
+                  vm.create.site_attendance.contractors.splice(i, 1);
+                }
+           })
+        }
+        if(vm.visitors){
+          vm.create.site_attendance.visitors.forEach(function(el, i) {
+                if(el === entry){
+                  vm.create.site_attendance.visitors.splice(i, 1);
+                }
+           })
+        }
+        localStorage.setObject('sd.diary.create', vm.create);
+        SiteDiaryService.update_diary(vm.create);
     }
 
     function go(predicate, id) {
