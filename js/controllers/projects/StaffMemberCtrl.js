@@ -136,16 +136,12 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
         }
-        if (vm.editMode) {
-            if (vm.index === 'create') {
-                vm.create.site_attendance.staffs.push(vm.member);
-            } else {
-                vm.create.site_attendance.staffs[vm.index] = vm.member;
-            }
-        } else {
+        //Staff add when index = create; update otherwise
+        if (vm.index === 'create') {
             vm.create.site_attendance.staffs.push(vm.member);
+        } else {
+            vm.create.site_attendance.staffs[vm.index] = vm.member;
         }
-
         localStorage.setObject('sd.diary.create', vm.create);
         if (vm.diaryId) {
             var proj = localStorage.getObject('currentProj');
@@ -212,7 +208,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function go(predicate, id) {
-        if(vm.editMode || vm.index === 'create') save();
+        save();
         $state.go('app.' + predicate, {
             id: id
         });
