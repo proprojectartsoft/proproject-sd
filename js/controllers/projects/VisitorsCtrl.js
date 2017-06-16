@@ -21,6 +21,11 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
             last_name: vm.local.data.last_name,
             note: vm.local.data.note
         }
+        if (vm.index === 'create') {
+            vm.create.site_attendance.visitors.push(vm.member);
+        } else {
+            vm.create.site_attendance.visitors[vm.index] = vm.member;
+        }
         vm.create.site_attendance.visitors.push(vm.member);
         localStorage.setObject('sd.diary.create', vm.create);
         localStorage.setObject('siteAttendance.tab', 'visitors');
@@ -36,7 +41,7 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
     }
 
     function go(predicate, id) {
-        if(vm.editMode || vm.index === 'create') save();
+        save();
         localStorage.setObject('siteAttendance.tab', 'visitors');
         $state.go('app.' + predicate, {
             id: id

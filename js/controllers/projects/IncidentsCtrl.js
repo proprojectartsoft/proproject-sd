@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('IncidentsCtrl', IncidentsCtrl)
 
-IncidentsCtrl.$inject = ['$scope', '$state', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter'];
+IncidentsCtrl.$inject = ['$scope', '$state', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB'];
 
-function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter) {
+function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB) {
     var vm = this;
     vm.showSearchUnit = showSearchUnit;
     vm.backSearch = backSearch;
@@ -128,12 +128,41 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             }
         })
         localStorage.setObject('sd.diary.create', vm.create);
+        var proj = localStorage.getObject('currentProj');
+        var diary = $filter('filter')(proj.value.diaries, {
+            id: (vm.diaryId)
+        })[0];
+        diary.data.incidents = vm.create.incidents;
+        localStorage.setObject('currentProj', proj);
+        saveChanges(localStorage.getObject('currentProj'));
         SiteDiaryService.update_diary(vm.create);
+    }
+
+    function saveChanges(project) {
+        $indexedDB.openStore('projects', function(store) {
+            store.upsert(project).then(
+                function(e) {},
+                function(err) {
+                    var offlinePopup = $ionicPopup.alert({
+                        title: "Unexpected error",
+                        template: "<center>An unexpected error occurred while trying to update Site Diary.</center>",
+                        content: "",
+                        buttons: [{
+                            text: 'Ok',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                offlinePopup.close();
+                            }
+                        }]
+                    });
+                }
+            )
+        })
     }
 
     function go(predicate, id) {
         if (predicate == "incidents")
-            if(vm.editMode || vm.index === 'create') saveIncident();
+            saveIncident();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

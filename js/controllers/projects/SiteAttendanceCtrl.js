@@ -57,7 +57,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
                 }
             })
         }
-        console.log(vm.create);
         localStorage.setObject('sd.diary.create', vm.create);
         var proj = localStorage.getObject('currentProj');
         var diary = $filter('filter')(proj.value.diaries, {
