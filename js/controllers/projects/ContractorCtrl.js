@@ -202,7 +202,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     }
 
     function go(predicate, id) {
-        if(vm.editMode) save();
+        if(vm.editMode || vm.index === 'create') save();
         localStorage.setObject('siteAttendance.tab', 'contractors');
         $state.go('app.' + predicate, {
             id: id

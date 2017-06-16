@@ -133,7 +133,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 
     function go(predicate, id) {
         if (predicate == "incidents")
-            if(vm.editMode) saveIncident();
+            if(vm.editMode || vm.index === 'create') saveIncident();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

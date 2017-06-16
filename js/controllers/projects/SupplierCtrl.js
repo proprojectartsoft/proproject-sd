@@ -25,16 +25,16 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stat
         if (vm.index === 'create') {
             vm.create.goods_received.push(vm.supplier);
         } else {
-            vm.create.goods_received[vm.index] = vm.supplier;
+            vm.create.goods_received[vm.suppNo] = vm.supplier;
         }
 
         localStorage.setObject('sd.diary.create', vm.create);
-        // var proj = localStorage.getObject('currentProj');
-        // var diary = $filter('filter')(proj.value.diaries, {
-        //     id: (vm.create.id)
-        // })[0];
-        // diary.data.goods_received.push(vm.supplier);
-        // localStorage.setObject('currentProj', proj);
+        var proj = localStorage.getObject('currentProj');
+        var diary = $filter('filter')(proj.value.diaries, {
+            id: (vm.create.id)
+        })[0];
+        diary.data.goods_received.push(vm.supplier);
+        localStorage.setObject('currentProj', proj);
         // localStorage.setObject('sd.diary.create', vm.create);
     }
 

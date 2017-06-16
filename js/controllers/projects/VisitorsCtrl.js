@@ -1,14 +1,15 @@
 angular.module($APP.name).controller('VisitorsCtrl', VisitorsCtrl)
 
-VisitorsCtrl.$inject = ['$rootScope', '$state', 'SettingService', '$scope', '$indexedDB', '$filter'];
+VisitorsCtrl.$inject = ['$rootScope', '$state', 'SettingService', '$scope', '$indexedDB', '$filter', '$stateParams'];
 
-function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $filter) {
+function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $filter, $stateParams) {
     var vm = this;
     vm.go = go;
     vm.local = {};
     vm.local.data = {};
     vm.data = {};
     vm.create = localStorage.getObject('sd.diary.create');
+    vm.index = $stateParams.id;
 
     $scope.$watch(function() {
         SettingService.show_focus();
@@ -35,7 +36,7 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
     }
 
     function go(predicate, id) {
-        if(vm.editMode) save();
+        if(vm.editMode || vm.index === 'create') save();
         localStorage.setObject('siteAttendance.tab', 'visitors');
         $state.go('app.' + predicate, {
             id: id

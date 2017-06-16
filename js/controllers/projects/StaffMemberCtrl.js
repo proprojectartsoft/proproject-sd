@@ -207,7 +207,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function go(predicate, id) {
-        if(vm.editMode) save();
+        if(vm.editMode || vm.index === 'create') save();
         $state.go('app.' + predicate, {
             id: id
         });

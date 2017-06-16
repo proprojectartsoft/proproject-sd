@@ -89,7 +89,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
 
     function go(predicate, id) {
         if (predicate == "ohs")
-            if(vm.editMode) save();
+            if(vm.editMode || vm.index === 'create') save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId
