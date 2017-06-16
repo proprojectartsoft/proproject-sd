@@ -55,15 +55,13 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate && (vm.currency + " " + vm.create.site_attendance.staffs[vm.index].hourly_rate) || ''
         }
         if (vm.create.site_attendance.staffs[vm.index].break_time) {
-            vm.local.data.model_break = vm.create.site_attendance.staffs[vm.index].break_time;
+            vm.local.data.model_break = vm.stringToDate(vm.create.site_attendance.staffs[vm.index].break_time);
         } else {
             vm.local.data.model_break = vm.stringToDate("00:30");
         }
     } else {
         vm.local.data.staff_name = "";
-        vm.local.data.model_break = $filter('filter')(localStorage.getObject('companySettings'), {
-            name: "break"
-        })[0].value || vm.stringToDate("00:30");
+        vm.local.data.model_break = vm.stringToDate("00:30");
         vm.local.data.model_start = $filter('filter')(localStorage.getObject('companySettings'), {
             name: "start"
         })[0].value;
@@ -85,6 +83,11 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             $timeout(function() {
                 $('.ion-datetime-picker input').each(function() {
                     $(this).prop('type', 'number');
+                    $(this).on('input', function() {
+                      if(!this.value) {
+                        $(this).val(0); $(this).blur(); $(this).focus();
+                      }
+                    })
                 })
                 watchOnce();
             }, 10);
@@ -117,26 +120,30 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     function save() {
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
-        // if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
-        //     vm.local.total_time = vm.calcParse();
-        // }
+        if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
+            vm.local.total_time = vm.calcParse();
+        }
         vm.member = {
             first_name: vm.local.data.staff_name.split(" ", 2)[0],
             last_name: vm.local.data.staff_name.split(" ", 2)[1],
             company_name: vm.local.data.company_name,
             trade: vm.local.data.trade,
             hourly_rate: vm.local.data.hourly_rate,
-            start_time: vm.filteredBreak = $filter('date')(vm.local.data.model_start, "HH:mm"),
-            break_time: vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm"),
-            finish_time: vm.filteredBreak = $filter('date')(vm.local.data.model_finish, "HH:mm"),
+            start_time: vm.filteredStart,
+            break_time: vm.filteredBreak,
+            finish_time: vm.filteredFinish,
             total_time: vm.local.data.total_time,
             absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
         }
-        if (vm.index === 'create') {
-            vm.create.site_attendance.staffs.push(vm.member);
+        if (vm.editMode) {
+            if (vm.index === 'create') {
+                vm.create.site_attendance.staffs.push(vm.member);
+            } else {
+                vm.create.site_attendance.staffs[vm.index] = vm.member;
+            }
         } else {
-            vm.create.site_attendance.staffs[vm.index] = vm.member;
+            vm.create.site_attendance.staffs.push(vm.member);
         }
 
         localStorage.setObject('sd.diary.create', vm.create);
@@ -174,9 +181,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm");
             vm.filteredStart = $filter('date')(vm.local.data.model_start, "HH:mm");
             vm.filteredFinish = $filter('date')(vm.local.data.model_finish, "HH:mm");
-            if(!vm.myForm.$dirty){
-              vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
-            }
+            vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
         }
     }
 
@@ -207,7 +212,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function go(predicate, id) {
-        if(vm.editMode || vm.index === 'create') save();
+        save();
         $state.go('app.' + predicate, {
             id: id
         });
