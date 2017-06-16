@@ -82,7 +82,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         var watchOnce = $scope.$watch(function() {
             $timeout(function() {
                 $('.ion-datetime-picker input').each(function() {
-                    $(this).prop('type', 'number');
+                    $(this).prop('type', 'tel');
                     $(this).on('input', function() {
                       if(!this.value) {
                         $(this).val(0); $(this).blur(); $(this).focus();
