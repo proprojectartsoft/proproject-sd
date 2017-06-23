@@ -254,6 +254,12 @@ $lightblue: #11c1f3;
                     border: none;
                 }
 
+                textarea {
+                  resize: none;
+                  padding: 15px;
+                  width: 100%;
+                }
+
                 input[type="number"] {
                     height: 49px;
                 }

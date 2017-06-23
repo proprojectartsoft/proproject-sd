@@ -17,7 +17,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Description</div>
-                <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add a description' ||''}}" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.description">
+                <textarea ng-model="vm.material.description" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add a description' ||''}}" ng-readonly="(vm.diaryId) && (!vm.editMode)" rows='2'></textarea>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>
