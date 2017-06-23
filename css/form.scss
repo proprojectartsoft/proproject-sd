@@ -286,3 +286,21 @@ $lightblue: #11c1f3;
 .button {
   min-height:0!important;
 }
+
+.swipe-preview .list .item {
+  padding: 0;
+  .item-content {
+    padding: 5px 10px !important;
+    animation: swipe-preview 1s;
+    animation-delay: .5s;
+  }
+  .item-options.invisible {
+    visibility: visible;
+  }
+}
+
+@keyframes swipe-preview {
+    0%   {transform: translate3d(0px, 0px, 0px);}
+    50%  {transform: translate3d(-63px, 0px, 0px);}
+    100% {transform: translate3d(0px, 0px, 0px);}
+}
