@@ -4,7 +4,7 @@
             <span style="margin-left:10px;">Site Attendance</span>
         </button>
     </div>
-    <ion-content class="has-subheader has-tabs sd-list">
+    <ion-content class="has-subheader has-tabs sd-list swipe-preview">
         <ion-list ng-if="vm.staff" can-swipe="true">
             <ion-item ng-repeat="item in vm.staffList track by $index" ng-click="vm.go('staffMember',$index)" class="sd-item-tile">
                 <div class="sd-group">

@@ -35,24 +35,20 @@ $lightblue: #11c1f3;
         border: none;
         margin-bottom: 5px;
         border-radius: 3px;
+        border-left: 4px $lightblue solid;
 
         .sd-group {
-            border-left: 4px $lightblue solid;
-            padding: 5px 10px;
             border-radius: 2px;
 
             .sd-title {
                 font-size: 18px;
                 color: #333;
-                margin-bottom: 5px;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-                margin: 3px 0 2px;
             }
 
             .sd-description {
-                margin-bottom: 2px;
 
                 span {
                     font-size: 14px;
@@ -120,7 +116,6 @@ $lightblue: #11c1f3;
             width: calc(100% - 92px);
             display: inline-block;
             vertical-align: middle;
-            margin-left: 3px;
 
             .sd-description {
                 font-size: 15px;
