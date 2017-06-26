@@ -39,6 +39,7 @@ $lightblue: #11c1f3;
 
         .sd-group {
             border-radius: 2px;
+            padding: 5px 10px;
 
             .sd-title {
                 font-size: 18px;
@@ -96,7 +97,6 @@ $lightblue: #11c1f3;
     }
 
     .sd-group {
-        padding-left: 5px !important;
 
         .sd-tile {
             background-color: $lightblue;
@@ -291,6 +291,9 @@ $lightblue: #11c1f3;
   }
   .item-options.invisible {
     visibility: visible;
+  }
+  .sd-group {
+    padding: 0;
   }
 }
 
