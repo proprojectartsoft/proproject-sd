@@ -341,7 +341,7 @@ input[type=checkbox].css-checkbox {
     border-top-width: 1px;
     border-bottom-width: 0;
     background-position: top;
-    height: 44px;
+    height: 65px;
     background-color: #2f4759;
 
     input {
@@ -365,6 +365,16 @@ input[type=checkbox].css-checkbox {
     .chatbubble {
         font-size: 30px!important;
         margin-top: -5px !important;
+    }
+
+    textArea {
+        width: calc(100% - 45px);
+        background-color: transparent;
+        outline: none;
+        color: #fff;
+        font-size: 18px !important;
+        padding-left: 5px;
+        resize: none;
     }
 
     .comment-action {
@@ -900,16 +910,11 @@ input[readonly] {
 
 .summary-textarea {
     padding: 15px;
-    height: 100%;
+    resize: none;
 }
 
 .summary-popup > div {
     width: 70%!important;
-    height: 30%;
-
-    .popup-body {
-        height: 100%;
-    }
 }
 
 .ion-compose {

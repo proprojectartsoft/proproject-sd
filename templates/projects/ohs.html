@@ -2,7 +2,7 @@
   <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
       <button class="button button-icon ion-ios-arrow-left sd-text-white"><span style="margin-left:10px;">OH and S</span></button>
   </div>
-  <ion-content class="has-subheader sd-list-bubble">
+  <ion-content class="has-subheader sd-list-bubble swipe-preview">
       <ion-list>
         <ion-item ng-repeat="tool in vm.tools track by $index" ng-click="vm.go('ohsadd', $index)">
             <div class="sd-group">

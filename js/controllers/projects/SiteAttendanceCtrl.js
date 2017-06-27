@@ -35,6 +35,7 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
     }
 
     function deleteEntry(entry) {
+        $('.item-content').css('transform', '');
         if (vm.staff) {
             vm.create.site_attendance.staffs.forEach(function(el, i) {
                 if (el === entry) {

@@ -213,6 +213,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
 
   function deleteDiary(id) {
     $('.delete-btn').attr("disabled", true);
+    $('.item-content').css('transform', '');
     var syncPopup = $ionicPopup.show({
       title: "Removing Site Diary",
       template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -278,7 +279,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         return name === fn;
       })) {
       var r = Math.floor(Math.random() * 255),
-        g = Math.floor(Math.random() * 255),
+        g = Math.floor(Math.random() * 150),
         b = Math.floor(Math.random() * 255);
       names[fn] = 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
     }

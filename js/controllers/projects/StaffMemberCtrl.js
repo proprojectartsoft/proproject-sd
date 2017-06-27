@@ -210,7 +210,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function go(predicate, id) {
-        save();
+        if(vm.local.data.staff_name) {
+            save();
+        }
         $state.go('app.' + predicate, {
             id: id
         });

@@ -227,7 +227,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     function setSummary() {
         var summaryPopup = $ionicPopup.show({
             title: "Site Diary Summary",
-            template: '<textarea class="summary-textarea" ng-model="vm.summary" placeholder="Please add any summary of the days work you have here."></textarea>',
+            template: '<textarea rows="5" class="summary-textarea" ng-model="vm.summary" placeholder="Please add any summary of the days work you have here."></textarea>',
             content: "",
             cssClass: 'summary-popup',
             scope: $scope,

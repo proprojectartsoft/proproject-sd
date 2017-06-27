@@ -17,9 +17,9 @@ function myExample() {
     return directive;
 }
 
-ExampleController.$inject = ['$ionicScrollDelegate', '$timeout'];
+ExampleController.$inject = ['$ionicScrollDelegate', '$timeout', '$rootScope'];
 
-function ExampleController($ionicScrollDelegate, $timeout) {
+function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
     var vms = this;
     vms.toggle = toggle;
     vms.getHeight = getHeight;
@@ -89,6 +89,7 @@ function ExampleController($ionicScrollDelegate, $timeout) {
         }
         vms.settings.placeholderActive = vms.selected;
         localStorage.setObject(vms.localPath, vms.selected);
+        $rootScope.selected = vms.selected;
         toggle();
     }
 }

@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('OhsCtrl', OhsCtrl)
 
-OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter', 'SiteDiaryService', '$indexedDB'];
+OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter', 'SiteDiaryService', '$indexedDB', '$rootScope'];
 
-function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiaryService, $indexedDB) {
+function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiaryService, $indexedDB, $rootScope) {
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
@@ -78,6 +78,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     }
 
     function deleteEntry(entry){
+        $('.item-content').css('transform', '');
         vm.create.oh_and_s.forEach(function(el, i) {
             if(el === entry){
               vm.create.oh_and_s.splice(i, 1);
@@ -117,7 +118,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     }
 
     function go(predicate, id) {
-        if (predicate == "ohs")
+        if (predicate == "ohs" && $rootScope.selected)
             save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {

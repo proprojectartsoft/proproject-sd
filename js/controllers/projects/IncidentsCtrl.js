@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('IncidentsCtrl', IncidentsCtrl)
 
-IncidentsCtrl.$inject = ['$scope', '$state', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB'];
+IncidentsCtrl.$inject = ['$scope', '$state', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB', '$rootScope'];
 
-function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB) {
+function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB, $rootScope) {
     var vm = this;
     vm.showSearchUnit = showSearchUnit;
     vm.backSearch = backSearch;
@@ -122,6 +122,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function deleteEntry(entry){
+        $('.item-content').css('transform', '');
         vm.create.incidents.forEach(function(el, i) {
             if(el === entry){
               vm.create.incidents.splice(i, 1);
@@ -161,7 +162,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function go(predicate, id) {
-        if (predicate == "incidents")
+        if (predicate == "incidents" && $rootScope.selected)
             saveIncident();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {

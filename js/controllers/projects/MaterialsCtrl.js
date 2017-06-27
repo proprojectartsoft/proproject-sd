@@ -159,6 +159,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function deleteEntry(entry){
+        $('.item-content').css('transform', '');
         vm.create.plant_and_material_used.forEach(function(el, i) {
             if(el === entry){
               vm.create.plant_and_material_used.splice(i, 1);
@@ -176,7 +177,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function go(predicate, id) {
-        if (predicate == "materials")
+        if (predicate == "materials" && vm.material.name)
             save();
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
