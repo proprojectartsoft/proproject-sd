@@ -8,7 +8,7 @@
         <ion-list can-swipe="true">
             <ion-item ng-repeat="item in vm.diaries"  class="sd-item-tile">
                 <div class="sd-group">
-                    <span class="sd-tile" ng-click="vm.go('diary',item.id)">
+                    <span class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': getSdTitleColor(item.userName)[item.userName]}">
                       {{item.userName.split(' ')[0] | limitTo:1 | uppercase}}
                       {{item.userName.split(' ')[1] | limitTo:1 | uppercase}}
                     </span>

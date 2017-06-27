@@ -280,13 +280,14 @@ $lightblue: #11c1f3;
 
 .button {
   min-height:0!important;
+  white-space: nowrap;
 }
 
 .swipe-preview .list .item {
   padding: 0;
   .item-content {
     padding: 5px 10px !important;
-    animation: swipe-preview 1s;
+    animation: swipe-preview .5s;
     animation-delay: .5s;
   }
   .item-options.invisible {
