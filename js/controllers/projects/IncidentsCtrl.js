@@ -164,6 +164,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     function go(predicate, id) {
         if (predicate == "incidents" && $rootScope.selected)
             saveIncident();
+        $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

@@ -120,6 +120,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     function go(predicate, id) {
         if (predicate == "ohs" && $rootScope.selected)
             save();
+        $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId
