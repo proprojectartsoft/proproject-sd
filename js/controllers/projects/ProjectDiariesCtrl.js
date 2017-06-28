@@ -86,7 +86,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.projectId = parseInt($stateParams.id);
     store.find(vm.projectId).then(function(e) {
       localStorage.setObject('currentProj', e);
-      console.log($stateParams.id, e);
       vm.diary = e.value.diaries;
       vm.diaries = orderBy(e.value.diaries, 'date', true);
     });

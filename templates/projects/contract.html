@@ -10,9 +10,9 @@
         </div>
         <div class="sd-container">
             <div class="sd-label">
-                <div class="sd-title">Instructions</div>
+                <div class="sd-title">Instruction</div>
                 <div class="textarea-div">
-                    <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add instruction" ng-model="vm.input1"></textarea>
+                    <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add an instruction" ng-model="vm.input1"></textarea>
                     <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
                 </div>
             </div>
@@ -25,7 +25,7 @@
             <div class="sd-label">
                 <div class="sd-title">Extension of Time</div>
                 <div class="textarea-div">
-                    <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add extension time" ng-model="vm.input2"></textarea>
+                    <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add an extension of time" ng-model="vm.input2"></textarea>
                     <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
                 </div>
             </div>
@@ -36,9 +36,9 @@
                 <span class="de-item">There is no extension time information</span>
             </div>
             <div class="sd-label">
-                <div class="sd-title">Variations</div>
+                <div class="sd-title">Variation</div>
                 <div class="textarea-div">
-                    <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add variations" ng-model="vm.input3"></textarea>
+                    <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add a variation" ng-model="vm.input3"></textarea>
                     <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
                 </div>
             </div>

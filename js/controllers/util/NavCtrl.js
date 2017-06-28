@@ -3,7 +3,8 @@ angular.module($APP.name).controller('NavCtrl', NavCtrl)
 NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'AuthService', 'SyncService'];
 
 function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService) {
-    var vm = this;
+    var vm = this,
+        loadingTemplate = "<center><ion-spinner icon='android'></ion-spinner></center>";
     vm.toggleSidemenu = toggleSidemenu;
     vm.sync = sync;
     vm.go = go;
@@ -17,12 +18,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 
     function sync() {
         if (navigator.onLine) {
-            var syncPopup = $ionicPopup.show({
-                title: "Sync",
-                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                content: "",
-                buttons: []
-            });
+            var syncPopup = loadingPopover("Sync", loadingTemplate, "loading");
         }
         SyncService.addDiariesToSync().then(function() {
             SyncService.sync().then(function() {
@@ -39,23 +35,15 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 
     function logout() {
         if (navigator.onLine) {
+            var logOutPopup = loadingPopover("Logging out", loadingTemplate, "loading");
             AuthService.logout().then(function(result) {
+                logOutPopup.close();
                 localStorage.setObject('loggedOut', true);
                 $state.go('login');
             })
         } else {
-            var syncPopup = $ionicPopup.show({
-                title: "Error",
-                template: "<center>Can't log out now. You are offline.</center>",
-                content: "",
-                buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        syncPopup.close();
-                    }
-                }]
-            });
+            var errorTemplate = "<center>Can't log out now. You are offline.</center>";
+            loadingPopover("Error", errorTemplate, "error");
         }
     }
 
@@ -66,5 +54,20 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
             .toggleClass("ion-navicon")
             .toggleClass("ion-android-arrow-back");
     })
+
+    function loadingPopover(title, template, loadingOrError) {
+      return $ionicPopup.show({
+          title: title,
+          template: template,
+          content: "",
+          buttons: loadingOrError === "error" ? [{
+              text: 'Ok',
+              type: 'button-positive',
+              onTap: function(e) {
+                  syncPopup.close();
+              }
+          }] : []
+      });
+    }
 
 }
