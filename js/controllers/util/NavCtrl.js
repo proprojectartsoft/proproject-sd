@@ -56,18 +56,19 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     })
 
     function loadingPopover(title, template, loadingOrError) {
-      return $ionicPopup.show({
+      var pop =  $ionicPopup.show({
           title: title,
           template: template,
           content: "",
           buttons: loadingOrError === "error" ? [{
               text: 'Ok',
               type: 'button-positive',
-              onTap: function(e) {
-                  syncPopup.close();
+              onTap: function() {
+                  pop.close();
               }
           }] : []
       });
+      return pop;
     }
 
 }
