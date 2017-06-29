@@ -15,7 +15,7 @@
                     <input class="search-input" placeholder="Tap to add another name" ng-model="vm.newName">
                     <span class="ion-forward" ng-click="vm.addNewName()"></span>
                 </ion-item>
-                <ion-item class="item" ng-repeat="staff in vm.staff | filter:vm.local.search" ng-click="vm.addStaff(staff)">{{staff.name}}</ion-item>
+                <ion-item class="item" ng-repeat="staff in vm.staff | filter:vm.local.search | orderBy : 'name'" ng-click="vm.addStaff(staff)">{{staff.name}}</ion-item>
             </div>
             <div class="list" ng-if="vm.settings === 'contractor'">
                 <ion-item class="item" ng-repeat="contractor in vm.contractor | filter:vm.local.search" ng-click="vm.addStaff(contractor)">{{contractor.name}}</ion-item>
