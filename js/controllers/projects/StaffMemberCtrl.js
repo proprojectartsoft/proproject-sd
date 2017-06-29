@@ -11,6 +11,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.calcParse = calcParse;
     vm.calcTime = calcTime;
     vm.stringToDate = stringToDate;
+    vm.addNewName = addNewName;
     vm.addStaff1 = addStaff1;
     vm.allowNumbersOnly = allowNumbersOnly;
     vm.currency = SettingService.get_currency_symbol(
@@ -39,6 +40,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.settings = 'staff';
     vm.local.absence = 'absence';
     vm.index = $stateParams.id;
+    vm.newName = '';
 
     if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {
@@ -100,6 +102,11 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function backSearch() {
+        vm.searchModal.hide();
+    }
+
+    function addNewName() {
+        vm.local.data.staff_name = vm.newName;
         vm.searchModal.hide();
     }
 
