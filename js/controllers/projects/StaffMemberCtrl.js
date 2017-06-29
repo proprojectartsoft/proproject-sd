@@ -73,13 +73,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     vm.staff = localStorage.getObject('companyLists').staff;
-    for(var a = 0; a < 1000; a++) {
-      vm.staff.push({name: 'z'})
-    vm.staff.push({name: 'a'})
-    vm.staff.push({name: 'y'})
-    vm.staff.push({name: 'b'})
-    vm.staff.push({name: 'v'})
-    }
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
         animation: 'slide-in-up'
