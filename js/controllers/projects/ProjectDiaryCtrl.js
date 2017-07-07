@@ -43,8 +43,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         angular.forEach(vm.diaries, function(diary) {
                             if (diary.id == $stateParams.id) {
                                 vm.created_for_date = (diary.created_for_date != 0) && diary.created_for_date || '';
-                                vm.summary = diary.data.summary;
                                 localStorage.setObject('sd.diary.create', diary.data);
+                                vm.summary = diary.data ? diary.data.summary : '';
                             }
                         })
                     });
