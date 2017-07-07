@@ -12,7 +12,7 @@ angular.module($APP.name).factory('SiteDiaryService', [
                     function(payload) {
                         return payload.data;
                     }
-                );
+                ).catch(function(e) { console.log(e) });
             },
 
             list_diaries: function(projectId) {
