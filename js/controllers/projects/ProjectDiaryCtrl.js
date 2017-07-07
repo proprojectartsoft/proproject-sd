@@ -103,14 +103,16 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         attToAdd.push(value);
                     }
                 });
-                AttachmentsService.upload_attachments(attToAdd).then(function(result) {}); //TODO:
+                var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {}); //TODO:
                 if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
                     angular.forEach(attachments.toBeUpdated, function(att) {
                         AttachmentsService.update_attachments(att).then(function(result) {})
                     })
                 }
+
+                var deleteAttachments;
                 if (attachments.toBeDeleted) {
-                    AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
+                    deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
                 }
                 angular.forEach(vm.create.comments, function(value) {
                     var request = {
@@ -119,11 +121,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     };
                     SiteDiaryService.add_comments(request).success(function(result) {});
                 })
-                SyncService.sync().then(function() {
+                var sync = SyncService.sync().then(function() {
                     $('.create-btn').attr("disabled", false);
-                    syncPopup.close();
                     vm.go('project');
                 })
+
+                Promise.all([uploadAttachments, deleteAttachments, sync]).then(syncPopup.close);
             }).error(function(response) {
                 var attStorage = localStorage.getObject('sd.attachments');
                 vm.diaryToSync = {
@@ -209,8 +212,10 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 }));
             })
         }
+
+        var deleteAttachments;
         if (attachments.toBeDeleted) {
-            var deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
+            deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
                 console.log(result);
             });
         }
