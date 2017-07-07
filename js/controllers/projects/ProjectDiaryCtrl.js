@@ -169,11 +169,17 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveEdit() {
+        var syncPopup = $ionicPopup.show({
+            title: 'Submitting',
+            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            content: "",
+            buttons: []
+        });
         $('.save-btn').attr("disabled", true);
         vm.edit = false;
         localStorage.setObject('editMode', vm.edit);
         vm.create = localStorage.getObject('sd.diary.create');
-        SiteDiaryService.update_diary(vm.create).then(function(result) {
+        var updateDiary = SiteDiaryService.update_diary(vm.create).then(function(result) {
             vm.go('project');
         })
         angular.forEach(localStorage.getObject('sd.comments'), function(comment) {
@@ -191,18 +197,19 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 attToAdd.push(value);
             }
         });
-        AttachmentsService.upload_attachments(attToAdd).then(function(result) {
+        var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {
             console.log(result);
         });
         if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
+            var updateAttachments = [];
             angular.forEach(attachments.toBeUpdated, function(att) {
-                AttachmentsService.update_attachments(att).then(function(result) {
+                updateAttachments.push(Service.update_attachments(att).then(function(result) {
                     console.log(result);
-                })
+                }));
             })
         }
         if (attachments.toBeDeleted) {
-            AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
+            var deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
                 console.log(result);
             });
         }
@@ -216,6 +223,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         saveChanges(localStorage.getObject('currentProj'));
         localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
         $('.save-btn').attr("disabled", false);
+
+        Promise.all([updateDiary, uploadAttachments, ...updateAttachments, deleteAttachments]).then(syncPopup.close);
     }
 
     function setCreatedDateFor() {
