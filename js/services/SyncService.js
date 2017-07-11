@@ -256,7 +256,7 @@ angular.module($APP.name).factory('SyncService', [
                     }
                 })
 
-                if(localStorage.getObject('sd.diary.shares').length) {
+                if(localStorage.getObject('sd.diary.shares')) {
                   var shares = localStorage.getObject('sd.diary.shares');
                   for(var  a = 0; a < shares.length; a++) {
                     SharedService.share_diary(shares[a].id, shares[a].res).success(function(result) {}).error(function(err) {});
