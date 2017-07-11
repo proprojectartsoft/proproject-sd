@@ -134,7 +134,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
   }
 
   function sendEmail(res, id) {
-    if (res && navigator.online) {
+    if (res && navigator.onLine) {
       var alertPopup1 = $ionicPopup.alert({
         title: "Sending email",
         template: "<center><ion-spinner icon='android'></ion-spinner></center>",
