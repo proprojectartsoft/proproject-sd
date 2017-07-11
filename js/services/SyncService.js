@@ -10,8 +10,8 @@ angular.module($APP.name).factory('SyncService', [
     'SiteDiaryService',
     'AttachmentsService',
     'SettingService',
-    'AuthService',,
-    'SharedService'
+    'AuthService',
+    'SharedService',
     function($q, $http, $timeout, $indexedDB, $ionicPopup, $state, $filter, ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService, SharedService) {
 
         var getme = function() {
