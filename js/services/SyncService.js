@@ -10,8 +10,9 @@ angular.module($APP.name).factory('SyncService', [
     'SiteDiaryService',
     'AttachmentsService',
     'SettingService',
-    'AuthService',
-    function($q, $http, $timeout, $indexedDB, $ionicPopup, $state, $filter, ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService) {
+    'AuthService',,
+    'SharedService'
+    function($q, $http, $timeout, $indexedDB, $ionicPopup, $state, $filter, ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService, SharedService) {
 
         var getme = function() {
             return $http.get($APP.server + '/api/me')
