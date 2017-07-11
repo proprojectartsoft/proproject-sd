@@ -16,7 +16,7 @@ ProjectDiariesCtrl.$inject = [
 ];
 
 function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService, orderBy) {
-  var vm = this;
+  var vm = this, shares = [];
   vm.showDiary = showDiary;
   vm.backDiary = backDiary;
   vm.togglePlus = togglePlus;
@@ -29,6 +29,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
   localStorage.setObject('diaryId', null);
   localStorage.setObject('sd.attachments', null);
   localStorage.setObject('projectId', $stateParams.id);
+  localStorage.setObject('sd.diary.shares', null);
 
   vm.offlineDiary = localStorage.getObject('diaryToSync');
   vm.filter = {};
@@ -133,7 +134,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
   }
 
   function sendEmail(res, id) {
-    if (res) {
+    if (res && navigator.online) {
       var alertPopup1 = $ionicPopup.alert({
         title: "Sending email",
         template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -150,6 +151,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             });
             alertPopup.then(function(res) {});
           }
+          localStorage.setObject('sd.diary.shares', null);
         },
         function(err) {
           alertPopup1.close();
@@ -166,6 +168,9 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             });
           }
         });
+    } else {
+      shares.push({id: id, res: res})
+      localStorage.setObject('sd.diary.shares', shares);
     }
   }
 
