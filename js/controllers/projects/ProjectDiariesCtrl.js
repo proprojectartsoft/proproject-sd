@@ -171,7 +171,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     } else {
       $ionicPopup.alert({
         title: 'Share',
-        template: 'An email will be sent once you go online.'
+        template: 'The email will be sent once you go online.'
       });
       shares.push({id: id, res: res})
       localStorage.setObject('sd.diary.shares', shares);

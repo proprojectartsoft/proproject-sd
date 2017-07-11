@@ -125,7 +125,9 @@ angular.module($APP.name).factory('SyncService', [
                                                                 SiteDiaryService.list_diary(diary.id).then(function(data) {
                                                                     diary.data = data;
                                                                     SiteDiaryService.list_comments(diary.id).then(function(result) {
-                                                                        diary.data.comments = result;
+                                                                        if(diary.data) {
+                                                                          diary.data.comments = result;
+                                                                        }
                                                                     })
                                                                 });
                                                             });
