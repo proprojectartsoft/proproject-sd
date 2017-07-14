@@ -33,7 +33,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
                 value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
             }
             if (!value.base64String) {
-                value.base64String = $APP.server + '/pub/siteDiaryPhotos/' + value.base_64_string;
+                value.base64String = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
             }
         });
     }
