@@ -212,7 +212,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         var updateAttachments = [];
         if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
             angular.forEach(attachments.toBeUpdated, function(att) {
-                updateAttachments.push(Service.update_attachments(att).then(function(result) {
+                updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {
                     console.log(result);
                 }));
             })
