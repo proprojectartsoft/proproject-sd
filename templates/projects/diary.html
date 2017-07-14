@@ -63,6 +63,9 @@
         <ion-item ng-if="!vm.enableCreate && vm.edit" class="button button-bar pp-formbtn save-btn" ng-click="vm.saveEdit()">
             Save
         </ion-item>
+        <ion-item ng-if="!vm.enableCreate && vm.edit" class="button button-bar pp-formbtn save-btn" ng-click="vm.saveCreate()">
+            Save as new
+        </ion-item>
         <ion-item ng-if="!vm.enableCreate && vm.edit" class="button button-bar pp-formbtn" ng-click="vm.toggle()">
             Cancel
         </ion-item>

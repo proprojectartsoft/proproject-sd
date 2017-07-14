@@ -96,14 +96,19 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         SiteDiaryService.add_diary(vm.create)
             .success(function(result) {
                 var attachments = localStorage.getObject('sd.attachments');
-                var attToAdd = [];
+                var attToAdd = [], attToAddAsNew = [];
                 angular.forEach(attachments.pictures, function(value) {
                     if (!value.path) {
                         value.site_diary_id = result.id;
                         attToAdd.push(value);
+                    } else if(!vm.enableCreate && vm.edit) {
+                        delete value.id;
+                        value.base_64_string = '';
+                        value.site_diary_id = result.id;
+                        attToAddAsNew.push(value);
                     }
                 });
-                var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {}); //TODO:
+                var uploadAttachments = AttachmentsService.upload_attachments([...attToAdd, ...attToAddAsNew]).then(function(result) {}); //TODO:
                 if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
                     angular.forEach(attachments.toBeUpdated, function(att) {
                         AttachmentsService.update_attachments(att).then(function(result) {})
