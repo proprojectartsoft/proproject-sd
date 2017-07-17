@@ -56,6 +56,7 @@ angular.module($APP.name).factory('SyncService', [
                                                 localStorage.setObject('companySettings', sett);
                                             })
                                         }
+
                                         function setCompanyLists() {
                                             var lists = {};
                                             var ready1 = false,
@@ -104,6 +105,7 @@ angular.module($APP.name).factory('SyncService', [
                                             })
                                             return prm.promise;
                                         }
+
                                         function buildData() {
                                             var def = $q.defer();
                                             setCompanySettings();
@@ -112,6 +114,7 @@ angular.module($APP.name).factory('SyncService', [
                                                 console.log(result);
                                             })
                                             ProjectService.projects().then(function(result) {
+                                                if (!result.length) def.resolve([]);
                                                 angular.forEach(result, function(value) {
                                                     SiteDiaryService.list_diaries(value.id).then(function(diaries) {
                                                         value.diaries = diaries;
@@ -125,8 +128,8 @@ angular.module($APP.name).factory('SyncService', [
                                                                 SiteDiaryService.list_diary(diary.id).then(function(data) {
                                                                     diary.data = data;
                                                                     SiteDiaryService.list_comments(diary.id).then(function(result) {
-                                                                        if(diary.data) {
-                                                                          diary.data.comments = result;
+                                                                        if (diary.data) {
+                                                                            diary.data.comments = result;
                                                                         }
                                                                     })
                                                                 });
@@ -183,6 +186,7 @@ angular.module($APP.name).factory('SyncService', [
                                                             deferred.resolve('sync_done');
                                                         })
                                                 } else {
+                                                    if (!projects.length) deferred.resolve('sync_done');
                                                     angular.forEach(projects, function(project) {
                                                         $indexedDB.openStore('projects', function(store) {
                                                             store.insert({
@@ -259,11 +263,11 @@ angular.module($APP.name).factory('SyncService', [
                     }
                 })
 
-                if(localStorage.getObject('sd.diary.shares')) {
-                  var shares = localStorage.getObject('sd.diary.shares');
-                  for(var  a = 0; a < shares.length; a++) {
-                    SharedService.share_diary(shares[a].id, shares[a].res).then(function(result) {});
-                  }
+                if (localStorage.getObject('sd.diary.shares')) {
+                    var shares = localStorage.getObject('sd.diary.shares');
+                    for (var a = 0; a < shares.length; a++) {
+                        SharedService.share_diary(shares[a].id, shares[a].res).then(function(result) {});
+                    }
                 }
 
                 return deferred.promise;
