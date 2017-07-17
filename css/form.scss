@@ -311,17 +311,3 @@ $lightblue: #11c1f3;
     50%  {transform: translate3d(-63px, 0px, 0px);}
     100% {transform: translate3d(0px, 0px, 0px);}
 }
-
-.search-items {
-  span.sd-tile {
-    width: 50px;
-    display: inline-block;
-    height: 50px;
-    vertical-align: middle;
-    text-align: center;
-    font-size: 23px !important;
-    color: #fff;
-    font-weight: 100;
-    padding-top: 15px;
-  }
-}

@@ -7,27 +7,14 @@
         </div>
         <h1 ng-if="vm.state === 'search'" style="color:white" class="sd-titleSearch">Search in diary</h1>
     </ion-header-bar>
-    <ion-content class='search-items'>
+    <ion-content>
         <ion-list ng-if="vm.state === 'search'">
             <label class="sd-status">
-                <input class="sd-input" type="search" placeholder="Search by user" ng-change="search()" ng-model="vm.local.search">
+                <input class="sd-input" type="search" placeholder="Search" ng-change="search()" ng-model="vm.local.search">
             </label>
-            <ion-item class="sd-item-tile" ng-repeat="item in vm.diary | filter:vm.local.search" ng-click="vm.go('diary',item.id)">
-                <div class="sd-group">
-                    <span class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': getSdTitleColor(item.userName)[item.userName], 'color': 'white'}">
-                      {{item.userName.split(' ')[0] | limitTo:1 | uppercase}}
-                      {{item.userName.split(' ')[1] | limitTo:1 | uppercase}}
-                    </span>
-                    <div class="sd-content" ng-click="vm.go('diary',item.id)">
-                        <div class="sd-title">{{item.date | date}}</div>
-                        <div class="sd-description">SD - {{item.sdNo}} - {{((item.created_for_date != 0) && item.created_for_date || item.date) | date:'mediumDate'}}</div>
-                    </div>
-                    <div class="sd-share" ng-click = "showPopup(item)"><span class="ion-android-share-alt"></span></div>
-                    <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteDiary(item.id)">
-                        Delete
-                    </ion-option-button>
-                  </div>
-            </ion-item>
+            <div class="list">
+                <ion-item class="item" ng-repeat="item in vm.diary | filter:vm.local.search" ng-click="vm.go('diary',item.id)">{{item.date | date}}</ion-item>
+            </div>
         </ion-list>
     </ion-content>
 </ion-modal-view>

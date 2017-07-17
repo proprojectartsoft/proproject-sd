@@ -109,9 +109,9 @@ angular.module($APP.name).factory('SyncService', [
                                             setCompanySettings();
                                             setCompanyLists().then(function(result) {
                                                 localStorage.setObject('companyLists', result);
+                                                console.log(result);
                                             })
                                             ProjectService.projects().then(function(result) {
-                                                if(!result.length) def.resolve([]);
                                                 angular.forEach(result, function(value) {
                                                     SiteDiaryService.list_diaries(value.id).then(function(diaries) {
                                                         value.diaries = diaries;
@@ -183,7 +183,6 @@ angular.module($APP.name).factory('SyncService', [
                                                             deferred.resolve('sync_done');
                                                         })
                                                 } else {
-                                                    if(!projects.length) deferred.resolve('sync_done');
                                                     angular.forEach(projects, function(project) {
                                                         $indexedDB.openStore('projects', function(store) {
                                                             store.insert({
