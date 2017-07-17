@@ -15,11 +15,13 @@
         <string>We are using the Photo Library for something..</string>
     </gap:config-file>
 
-    <content src="index.html"/>
-
     <gap:config-file platform="android" parent="/manifest">
         <application android:theme="@android:style/Theme.NoTitleBar"></application>
     </gap:config-file>
+
+    <content src="index.html"/>
+
+    <gap:plugin name="cordova-plugin-splashscreen" source="npm"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0"/>
     <plugin name="cordova-plugin-imagepicker" source="npm"/>
     <gap:plugin name="cordova-plugin-camera" source="npm"/>
