@@ -64,12 +64,14 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     } else {
         vm.local.data.staff_name = "";
         vm.local.data.model_break = vm.stringToDate("00:30");
-        vm.local.data.model_start = $filter('filter')(localStorage.getObject('companySettings'), {
+        var start = $filter('filter')(localStorage.getObject('companySettings'), {
             name: "start"
-        })[0].value;
-        vm.local.data.model_finish = $filter('filter')(localStorage.getObject('companySettings'), {
+        })[0];
+        vm.local.data.model_start = start ? start.value : 0;
+        var finish = $filter('filter')(localStorage.getObject('companySettings'), {
             name: "finish"
-        })[0].value;
+        })[0];
+        vm.local.data.model_finish = finish ? finish.value : 0;
     }
 
     vm.staff = localStorage.getObject('companyLists').staff;
