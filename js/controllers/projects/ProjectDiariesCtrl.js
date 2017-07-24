@@ -281,16 +281,36 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.diaryModal.hide();
   }
 
-  var names = {};
-  $scope.getSdTitleColor = function(fn) {
-    if (!Object.keys(names).some(function(name) {
-        return name === fn;
-      })) {
-      var r = Math.floor(Math.random() * 255),
-        g = Math.floor(Math.random() * 150),
-        b = Math.floor(Math.random() * 255);
-      names[fn] = 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
+  var red, green, blue,
+      colorsChained = 0,
+      colorsForInitials = {},
+      contrastColors = ['navy', 'red', 'blue', 'teal', 'olive', 'orange',
+        'green', 'blueviolet', 'maroon', 'fuchsia', 'purple', 'gray', 'violet'];
+  $scope.getSdTitleColor = function(userName) {
+    var nameExists = Object.keys(colorsForInitials).some(function(initials) {
+      return initials === userName;
+    })
+    if(!nameExists) {
+      if(Object.keys(colorsForInitials).length < contrastColors.length) {
+        colorsForInitials[userName] = contrastColors[Object.keys(colorsForInitials).length];
+      } else {
+        if(colorsChained % 1000  + 50 <= 200) {
+          colorsChained += 50;
+        } else if(colorsChained / 1000 % 1000 + 50 <= 200) {
+        	colorsChained = Math.round(colorsChained / 1000) * 1000;
+        	colorsChained += 50000;
+        } else if(colorsChained / 1000000 + 50 <= 200) {
+        	colorsChained = Math.round(colorsChained / 1000000) * 1000000;
+        	colorsChained += 50000000;
+        }
+        red = Math.round(colorsChained / 1000000);
+        green = Math.round(colorsChained / 1000 % 1000);
+        blue = Math.round(colorsChained % 1000);
+        colorsForInitials[userName] = 'rgb(' + red + ', ' + green + ', ' + blue + ')'
+      }
     }
-    return names;
+    return colorsForInitials[userName];
   }
+
+
 }
