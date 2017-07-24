@@ -89,6 +89,301 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
       localStorage.setObject('currentProj', e);
       vm.diary = e.value.diaries;
       vm.diaries = orderBy(e.value.diaries, 'date', true);
+      vm.diaries = [vm.diaries[0], vm.diaries[1]];
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Aranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Branco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Cranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Dranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Eranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Franco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Zrnco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Zranco Vst"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Granco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Hranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Iranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"Jranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"kranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"lranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"mranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"nranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"oranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"pranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"qranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"rranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"sranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"tranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"uranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"vranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"wranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"xranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"anco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yrco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yran Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yranco ist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yranco Vst"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yranco Vit"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yranco Vis"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"ranco Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yanco Vifvfvst"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yrnco Viasasst"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yraco dfvdfvVist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yrano Vjmjmist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yrasxxsnc Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yrancdfs Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yrauync Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yrtanc Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"eryranc Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yranc Visert"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yranc Vistyu"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yranc Viasst"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yranc fgVist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"yrangfc Vist"
+      })
+      vm.diaries.push({
+        'created_for_date':0,
+        'date':1500639817822,
+        'id':"5971f24900336f51169b1792",
+        'userName':"ysdfranc Vist"
+      })
     });
   });
 
@@ -281,35 +576,32 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.diaryModal.hide();
   }
 
-  var red, green, blue,
-      colorsChained = 0,
-      colorsForInitials = {},
+  var red = 0, green = 0, blue = 0,
+      colorsForName = {},
       contrastColors = ['navy', 'red', 'blue', 'teal', 'olive', 'orange',
         'green', 'blueviolet', 'maroon', 'fuchsia', 'purple', 'gray', 'violet'];
   $scope.getSdTitleColor = function(userName) {
-    var nameExists = Object.keys(colorsForInitials).some(function(initials) {
-      return initials === userName;
+    var nameExists = Object.keys(colorsForName).some(function(name) {
+      return name === userName;
     })
     if(!nameExists) {
-      if(Object.keys(colorsForInitials).length < contrastColors.length) {
-        colorsForInitials[userName] = contrastColors[Object.keys(colorsForInitials).length];
+      if(Object.keys(colorsForName).length < contrastColors.length) {
+        colorsForName[userName] = contrastColors[Object.keys(colorsForName).length];
       } else {
-        if(colorsChained % 1000  + 50 <= 200) {
-          colorsChained += 50;
-        } else if(colorsChained / 1000 % 1000 + 50 <= 200) {
-        	colorsChained = Math.round(colorsChained / 1000) * 1000;
-        	colorsChained += 50000;
-        } else if(colorsChained / 1000000 + 50 <= 200) {
-        	colorsChained = Math.round(colorsChained / 1000000) * 1000000;
-        	colorsChained += 50000000;
+        if(red  + 50 <= 200) {
+          red += 50;
+        } else if(green + 50 <= 200) {
+        	red = 0;
+        	green += 50;
+        } else if(blue + 50 <= 200) {
+          red = 0;
+        	green = 0;
+        	blue += 50;
         }
-        red = Math.round(colorsChained / 1000000);
-        green = Math.round(colorsChained / 1000 % 1000);
-        blue = Math.round(colorsChained % 1000);
-        colorsForInitials[userName] = 'rgb(' + red + ', ' + green + ', ' + blue + ')'
+        colorsForName[userName] = 'rgb(' + red + ', ' + green + ', ' + blue + ')'
       }
     }
-    return colorsForInitials[userName];
+    return colorsForName[userName];
   }
 
 
