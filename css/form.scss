@@ -5,9 +5,14 @@ $lightblue: #11c1f3;
     font-size: 20px!important;
 }
 
+.sd-list-project{
+    height: calc(100% - 47px)!important;
+}
+
 .sd-list {
     padding: 6px 5px;
     bottom: 65px;
+    height: calc(100% - 87px);
 
     .sd-nodata {
         text-align: center;
