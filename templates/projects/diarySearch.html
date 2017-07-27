@@ -12,9 +12,11 @@
             <label class="sd-status">
                 <input class="sd-input" type="search" placeholder="Search by user" ng-change="search()" ng-model="vm.local.search">
             </label>
-            <ion-item class="sd-item-tile" ng-repeat="item in vm.diary | filter:vm.local.search" ng-click="vm.go('diary',item.id)">
+            <ion-item class="sd-item-tile"
+                      ng-repeat="item in vm.diary | filter:vm.local.search"
+                      ng-click="vm.go('diary',item.id)">
                 <div class="sd-group">
-                    <span class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': getSdTitleColor(item.userName)[item.userName], 'color': 'white'}">
+                    <span class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': getSdTitleColor(item.userName), 'color': 'white'}">
                      {{item.userName.split(' ')[0] | limitTo:1 | uppercase}}
                      {{item.userName.split(' ')[1] | limitTo:1 | uppercase}}
                    </span>

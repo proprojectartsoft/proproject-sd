@@ -281,6 +281,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.diaryModal.hide();
   }
 
+  //color generator for tiles 
   var red = 0, green = 0, blue = 0,
       colorsForName = {},
       contrastColors = ['navy', 'red', 'blue', 'teal', 'olive', 'orange',
