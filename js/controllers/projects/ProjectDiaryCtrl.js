@@ -200,29 +200,31 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         })
         var attachments = localStorage.getObject('sd.attachments');
         var attToAdd = [];
-        angular.forEach(attachments.pictures, function(value) {
-            if (!value.path) {
-                attToAdd.push(value);
-            }
-        });
-        var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {
-            console.log(result);
-        });
+        if(attachments !== null){
+          angular.forEach(attachments.pictures, function(value) {
+              if (!value.path) {
+                  attToAdd.push(value);
+              }
+          });
+          var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {
+              console.log(result);
+          });
 
-        var updateAttachments = [];
-        if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
-            angular.forEach(attachments.toBeUpdated, function(att) {
-                updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {
-                    console.log(result);
-                }));
-            })
-        }
+          var updateAttachments = [];
+          if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
+              angular.forEach(attachments.toBeUpdated, function(att) {
+                  updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {
+                      console.log(result);
+                  }));
+              })
+          }
 
-        var deleteAttachments;
-        if (attachments.toBeDeleted) {
-            deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
-                console.log(result);
-            });
+          var deleteAttachments;
+          if (attachments.toBeDeleted) {
+              deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
+                  console.log(result);
+              });
+          }
         }
         var proj = localStorage.getObject('currentProj');
         var diary = $filter('filter')(proj.value.diaries, {

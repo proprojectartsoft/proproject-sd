@@ -61,6 +61,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         } else {
             vm.local.data.model_break = vm.stringToDate("00:30");
         }
+        vm.calcParse();
     } else {
         vm.local.data.staff_name = "";
         vm.local.data.model_break = vm.stringToDate("00:30");
@@ -72,6 +73,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             name: "finish"
         })[0];
         vm.local.data.model_finish = finish ? finish.value : 0;
+        vm.calcParse();
     }
 
     vm.staff = localStorage.getObject('companyLists').staff;
@@ -186,9 +188,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm");
             vm.filteredStart = $filter('date')(vm.local.data.model_start, "HH:mm");
             vm.filteredFinish = $filter('date')(vm.local.data.model_finish, "HH:mm");
-            if(!vm.myForm.$dirty){
-              vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
-            }
+            vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
         }
     }
 
