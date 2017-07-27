@@ -43,11 +43,11 @@
                 </ion-checkbox>
             </label>
             <label class="sd-label" ng-if="vm.action_required">
-                <input ng-readonly="(vm.diaryId) && (!vm.editMode)"  placeholder="Tap to add action message" ng-model="vm.action_message">
+                <textarea elastic ng-readonly="(vm.diaryId) && (!vm.editMode)"  placeholder="Tap to add action message" ng-model="vm.action_message"></textarea>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Note</div>
-                <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add comment' ||''}}" ng-model="vm.comment">
+                <textarea elastic ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add comment' ||''}}" ng-model="vm.comment"></textarea>
             </label>
         </div>
     </ion-content>

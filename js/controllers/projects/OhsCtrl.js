@@ -132,3 +132,25 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
         }
     }
 }
+
+//directive for textarea so it can wrap the text and be scaleble
+angular.module($APP.name).directive('elastic', [
+    '$timeout',
+    function($timeout) {
+        return {
+            restrict: 'A',
+						link: function autoResizeLink(scope, element, attributes, controller) {
+
+                  element.css({ 'height': '45px', 'overflow-y': 'hidden' });
+                  $timeout(function () {
+                      element.css('height', 45  + 'px');
+                  }, 100);
+
+                  element.on('input', function () {
+                      element.css({ 'height': '45px', 'overflow-y': 'hidden' });
+                      element.css('height', element[0].scrollHeight + 'px');
+                  });
+              }
+        };
+    }
+]);

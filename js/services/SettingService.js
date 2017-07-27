@@ -38,6 +38,16 @@ angular.module($APP.name).factory('SettingService', [
                     }
                 })
 
+                //textarea fields
+                $("textarea").on('click', function() {
+                    if (!($(this).prop("readonly"))) {
+                        clearFocus();
+                        $(this).prev(".sd-title").addClass("focus");
+                        $(this).parent().prev(".sd-title").addClass("focus");
+                        $(this).addClass("focus");
+                    }
+                })
+
                 //search popups
                 $(".showSearch").on('click', function() {
                     clearFocus();
@@ -74,6 +84,9 @@ angular.module($APP.name).factory('SettingService', [
                     $('input').prev().removeClass("focus");
                     $('input').parent().prev(".sd-title").removeClass("focus");
                     $('input').removeClass("focus");
+                    $('textarea').prev().removeClass("focus");
+                    $('textarea').parent().prev(".sd-title").removeClass("focus");
+                    $('textarea').removeClass("focus");
                     $('.de-select').parent().removeClass("focus");
                     $('.de-select').parent().prev(".sd-title").removeClass("focus");
                 }
