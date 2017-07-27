@@ -21,15 +21,13 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
             last_name: vm.local.data.last_name,
             note: vm.local.data.note
         }
+        //Visitor add when index = create; update otherwise
         if (vm.index === 'create') {
             vm.create.site_attendance.visitors.push(vm.member);
         } else {
             vm.create.site_attendance.visitors[vm.index] = vm.member;
         }
-        vm.create.site_attendance.visitors.push(vm.member);
         localStorage.setObject('sd.diary.create', vm.create);
-        localStorage.setObject('siteAttendance.tab', 'visitors');
-
         var proj = localStorage.getObject('currentProj');
         if (localStorage.getObject('diaryId')) {
             var diary = $filter('filter')(proj.value.diaries, {

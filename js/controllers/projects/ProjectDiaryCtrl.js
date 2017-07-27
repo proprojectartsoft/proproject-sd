@@ -237,7 +237,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
         $('.save-btn').attr("disabled", false);
 
-        Promise.all([updateDiary, uploadAttachments, ...updateAttachments, deleteAttachments]).then(syncPopup.close);
+        Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments]).then(syncPopup.close);
     }
 
     function setCreatedDateFor() {
