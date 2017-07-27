@@ -14,7 +14,7 @@
                     </span>
                     <div class="sd-content" ng-click="vm.go('diary',item.id)">
                         <div class="sd-title">{{item.date | date}}</div>
-                        <div class="sd-description">SD - {{item.sdNo}} - {{((item.created_for_date != 0) && item.created_for_date || item.date) | date:'mediumDate'}}</div>
+                        <div class="sd-description">SD - {{item.sdNo}} - {{((item.created_for_date != 0) && item.created_for_date || 'No date selected') | date:'mediumDate'}}</div>
                     </div>
                     <div class="sd-share" ng-click = "showPopup(item)"><span class="ion-android-share-alt"></span></div>
                     <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteDiary(item.id)">
