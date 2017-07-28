@@ -174,29 +174,20 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     }
 
     function calcTime(start, finish, breakTime) {
-        var hhmm = ''
-        var stringBreak = breakTime.split(":");
-        var stringStart = start.split(":");
-        var stringFinish = finish.split(":");
-        var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
-        var hh = Math.floor(totalTime / 60)
-        var mm = totalTime % 60
-        if (hh < 10) {
-            hhmm = '0' + hh + ':';
-            if (mm < 10) {
-                hhmm = hhmm + '0' + mm;
-            } else {
-                hhmm = hhmm + mm;
-            }
-        } else {
-            hhmm = hh + ':';
-            if (mm < 10) {
-                hhmm = hhmm + '0' + mm;
-            } else {
-                hhmm = hhmm + mm;
-            }
-        }
-        return hhmm;
+      var hhmm = ''
+      var stringBreak = breakTime.split(":");
+      var stringStart = start.split(":");
+      var stringFinish = finish.split(":");
+      var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
+      var hh = Math.floor(totalTime / 60)
+      var mm = Math.abs(totalTime % 60)
+      hhmm = hh + ':';
+      if (mm < 10) {
+        hhmm = hhmm + '0' + mm;
+      } else {
+        hhmm = hhmm + mm;
+      }
+      return hhmm;
     }
 
     function go(predicate, id) {
