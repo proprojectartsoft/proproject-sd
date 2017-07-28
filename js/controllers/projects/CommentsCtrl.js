@@ -15,6 +15,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     vm.local.comments = localStorage.getObject('sd.comments');
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.myProfile = localStorage.getObject('my_account');
+    console.log(vm.myProfile)
     vm.create = localStorage.getObject('sd.diary.create');
     vm.local.list = vm.create.comments || [];
     //adding colors to tiles by user
@@ -29,13 +30,17 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     function addComment() {
         var comment = vm.local.comment;
         vm.local.comment = "";
+        angular.forEach(vm.local.list, function(value, key) {
+          if(value.first_name === vm.myProfile.first_name) vm.color = value.color;
+        });
         if (!vm.diaryId) {
             if (comment) {
                 var request = {
                     comment: comment,
                     first_name: vm.myProfile.first_name,
                     last_name: vm.myProfile.last_name,
-                    date: new Date()
+                    date: new Date(),
+                    color: vm.color
                 };
                 vm.create.comments.push(request);
                 localStorage.setObject('sd.diary.create', vm.create);
@@ -48,6 +53,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                     first_name: vm.myProfile.first_name,
                     last_name: vm.myProfile.last_name,
                     date: new Date(),
+                    color: vm.color
                 };
                 var commToAdd = {
                     site_diary_id: vm.diaryId,
