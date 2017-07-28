@@ -2,939 +2,950 @@ $darkblue: #32475a;
 $dark: #313131;
 $lightblue: #11c1f3;
 @font-face {
-    font-family: 'FL';
-    src: url("../fonts/FreigSanLig.otf");
+  font-family: 'FL';
+  src: url("../fonts/FreigSanLig.otf");
 }
 @font-face {
-    font-family: 'FM';
-    src: url("../fonts/FreigSanMed.otf");
+  font-family: 'FM';
+  src: url("../fonts/FreigSanMed.otf");
 }
 
 * {
-    font-family: 'Roboto Condensed', sans-serif !important;
-    font-weight: 100;
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-weight: 100;
 }
 @media all and (min-width: 480px) and (max-width: 769px) {
-    .login-form {
-        width: 60%!important;
-        float: right;
-    }
+  .login-form {
+    width: 60%!important;
+    float: right;
+  }
 
-    .keyboard-open .login-container,
-    .login-container {
-        padding-top: 250px !important;
-    }
+  .keyboard-open .login-container,
+  .login-container {
+    padding-top: 250px !important;
+  }
 }
 
 .login-container::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    color: #fff;
-    font-weight: 300;
+  /* Chrome/Opera/Safari */
+  color: #fff;
+  font-weight: 300;
 }
 
 .login-container::-moz-placeholder {
-    /* Firefox 19+ */
-    color: #fff;
-    font-weight: 300;
+  /* Firefox 19+ */
+  color: #fff;
+  font-weight: 300;
 }
 
 .login-form {
-    width: 80%;
-    float: right;
+  width: 80%;
+  float: right;
 
-    input[type='email'],
-    input[type='number'],
-    input[type='text'] {
-        padding: 15px !important;
-        height: auto !important;
-    }
+  input[type='email'],
+  input[type='number'],
+  input[type='text'] {
+    padding: 15px !important;
+    height: auto !important;
+  }
 }
 
 .login-container:-ms-input-placeholder {
-    /* IE 10+ */
-    color: #fff;
-    font-weight: 300;
+  /* IE 10+ */
+  color: #fff;
+  font-weight: 300;
 }
 
 .login-container:-moz-placeholder {
-    /* Firefox 18- */
-    color: #fff;
-    font-weight: 300;
+  /* Firefox 18- */
+  color: #fff;
+  font-weight: 300;
 }
 
 .login-container {
-    background-image: url("../img/new/image.jpg");
-    background-color: #07101E;
-    width: 100%;
-    height: 100%;
-    min-height: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position-x: 0;
-    padding: 140px 12px 12px;
+  //background-image: url("../img/new/image.jpg");
+  //background-color: #07101E;
+  // width: 100%;
+  // height: 100%;
+  // min-height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-x: 0;
+  padding: 140px 12px 12px;
 }
 
 .login-container .app-name {
-    clear: both;
-    float: right;
-    padding-top: 30px;
+  clear: both;
+  float: right;
+  padding-top: 30px;
 }
 
 .keyboard-open #login .scroll {
-    height: calc(100% + 200px);
+  height: calc(100% + 200px);
 }
 
 #login .scroll {
-    height: 100%;
+  height: 100%;
 }
 
 #login ion-content.scroll-content.ionic-scroll {
-    height: 100% !important;
+  height: 100% !important;
 }
 
 .welcome-container {
-    text-align: right;
-    width: 70%;
-    float: right;
+  text-align: right;
+  width: 70%;
+  float: right;
 }
 
 .welcome-big {
-    font-family: 'FL' !important;
-    font-size: 45px;
-    font-weight: 300;
-    color: #fff;
-    line-height: 1em;
-    display: inline-block;
+  font-family: 'FL' !important;
+  font-size: 45px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1em;
+  display: inline-block;
 }
 
 .welcome-small {
-    font-family: 'FL' !important;
-    font-size: 20px;
-    font-weight: 300;
-    color: #fff;
-    margin-bottom: 10px;
-    line-height: 1em;
+  font-family: 'FL' !important;
+  font-size: 20px;
+  font-weight: 300;
+  color: #fff;
+  margin-bottom: 10px;
+  line-height: 1em;
 }
 
 .welcome-logo {
-    width: 142px;
-    float: right;
+  width: 142px;
+  float: right;
 }
 
 .welcome-logo img {
-    width: 100%;
+  width: 100%;
 }
 
 .input-container .label-bar {
-    font-size: 16px;
-    color: #fff;
-    font-weight: 300;
-    line-height: 1em;
-    padding-left: 10px;
-    position: relative;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1em;
+  padding-left: 10px;
+  position: relative;
 }
 
 .input-container input {
-    background: none !important;
-    color: #fff;
-    border-bottom: 1px #fff solid;
-    width: 100%;
-    padding-left: 10px;
-    margin-bottom: 2px;
-    position: relative;
-    border-radius: 0 !important;
+  background: none !important;
+  color: #fff;
+  border-bottom: 1px #fff solid;
+  width: 100%;
+  padding-left: 10px;
+  margin-bottom: 2px;
+  position: relative;
+  border-radius: 0 !important;
 }
 
 .input-container .label-bar:before {
-    content: "";
-    width: 1px;
-    height: 15px;
-    position: absolute;
-    left: 0;
-    top: -11px;
-    background: #fff;
+  content: "";
+  width: 1px;
+  height: 15px;
+  position: absolute;
+  left: 0;
+  top: -11px;
+  background: #fff;
 }
 
 .input-container .button-full {
-    min-height: 40px;
-    height: 40px;
-    width: 142px;
-    float: right;
-    line-height: 1em;
-    font-size: 16px;
-    font-weight: 300;
+  min-height: 40px;
+  height: 40px;
+  width: 142px;
+  float: right;
+  line-height: 1em;
+  font-size: 16px;
+  font-weight: 300;
 }
 
 .remember-container {
-    font-size: 15px;
-    font-weight: 300;
-    color: #fff;
+  font-size: 15px;
+  font-weight: 300;
+  color: #fff;
+  float: right;
+  width: 100%;
+  text-align: right;
+  display: inline-block;
+
+  div {
+    display: inline-block;
     float: right;
-    width: 100%;
-    text-align: right;
+
+    span {
+      position: relative;
+      top: -8px;
+    }
+  }
 }
 
 input[type=checkbox].css-checkbox {
-    display: none;
+  display: none;
 }
 
 .remember-container label {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    display: inline-block;
-    background: none;
-    color: #fff;
-    font-weight: 300;
-    font-size: 15px;
-    border: none;
-    text-align: left;
-    padding-left: 0 !important;
-    padding-right: 50px !important;
-    margin-right: -14px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: inline-block;
+  background: none;
+  color: #fff;
+  font-weight: 300;
+  font-size: 15px;
+  border: none;
+  text-align: left;
+  padding-left: 0 !important;
+  padding-right: 50px !important;
+  margin-right: -14px;
 }
 
 .remember-container {
-    .item-content.disable-pointer-events {
-        margin-top: 15px;
-    }
+  .item-content.disable-pointer-events {
+    margin-top: 15px;
+  }
 
-    .checkbox-icon {
-        float: right;
-    }
+  .checkbox-icon {
+    float: right;
+  }
 
-    .checkbox input:before,
-    .checkbox-icon:before {
-        -webkit-border-radius: 0;
-        -moz-border-radius: 0;
-        border-radius: 0;
-        background: none;
-        /*opacity: 0.4;*/
-        border: 2px #11C1F3 solid;
-    }
+  .checkbox input:before,
+  .checkbox-icon:before {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    background: none;
+    /*opacity: 0.4;*/
+    border: 2px #11C1F3 solid;
+  }
 
-    .checkbox input:checked+.checkbox-icon:before {
-        opacity: 1;
-        background: #11C1F3;
-        border: 2px #11C1F3 solid;
-    }
+  .checkbox input:checked+.checkbox-icon:before {
+    opacity: 1;
+    background: #11C1F3;
+    border: 2px #11C1F3 solid;
+  }
 }
 
 .login-footer {
-    width: 100%;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 300;
-    text-align: right;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 300;
+  text-align: left;
+  position: relative;
+  float: left!important;
+  left: 20px;
 }
 
 .date-item {
-    background-color: inherit!important;
-    border-color: $darkblue!important;
-    color: white;
+  background-color: inherit!important;
+  border-color: $darkblue!important;
+  color: white;
 
-    .ion-calendar {
-        padding-left: 15px;
-        font-size: 20px;
-    }
+  .ion-calendar {
+    padding-left: 15px;
+    font-size: 20px;
+  }
 }
 
 .item-stacked-label {
-    textarea {
-        height: auto;
-        border-radius: 0!important;
-    }
+  textarea {
+    height: auto;
+    border-radius: 0!important;
+  }
 
-    textarea[readonly]:not(.cloned-text-input) {
-        background-color: #fff;
-    }
+  textarea[readonly]:not(.cloned-text-input) {
+    background-color: #fff;
+  }
 
-    .input-label {
-        color: #fff;
-    }
+  .input-label {
+    color: #fff;
+  }
 }
 
 .greentext {
-    color: green;
+  color: green;
 }
 
 .search-input-item {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .item {
-    .search-input {
-        border: none;
-        width: 90%;
-        padding-top: 16px !important;
-        padding-bottom: 16px !important;
-    }
+  .search-input {
+    border: none;
+    width: 90%;
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
 
-    .ion-forward {
-        float: right;
-        font-size: 21px;
-        padding-top: 16px !important;
-        padding-bottom: 16px !important;
-    }
+  .ion-forward {
+    float: right;
+    font-size: 21px;
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
 }
 
 .sd-button {
-    background-color: #11c1f3;
-    color: white;
-    margin: 0 0 0 18px;
-    display: inline-block;
-    top: 36px;
-    width: calc(100% - 234px);
+  background-color: #11c1f3;
+  color: white;
+  margin: 0 0 0 18px;
+  display: inline-block;
+  top: 36px;
+  width: calc(100% - 234px);
 
-    span {
-        font-size: 22px;
-        vertical-align: middle;
-        padding-right: 5px;
-    }
+  span {
+    font-size: 22px;
+    vertical-align: middle;
+    padding-right: 5px;
+  }
 
-    img {
-        height: 20px;
-        vertical-align: middle;
-        padding-right: 5px;
-    }
+  img {
+    height: 20px;
+    vertical-align: middle;
+    padding-right: 5px;
+  }
 }
 
 .pp-formbtn {
-    background-color: #ffffff;
-    color: #2f4759;
-    margin-bottom: 5px;
+  background-color: #ffffff;
+  color: #2f4759;
+  margin-bottom: 5px;
 
-    .pp-formbtn.activated {
-        background-color: #243440;
-        color: #fff;
-    }
+  .pp-formbtn.activated {
+    background-color: #243440;
+    color: #fff;
+  }
 }
 
 .head-icons {
-    position: relative;
-    left: calc(100% - 165px);
+  position: relative;
+  left: calc(100% - 165px);
 }
 
 .border-gray-top {
-    border-top: 1px solid #ddd;
+  border-top: 1px solid #ddd;
 }
 
 .item-list-name {
-    font-size: 18px;
-    font-weight: 100;
+  font-size: 18px;
+  font-weight: 100;
 }
 
 .sd-no-select {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 .item-list-desc {
-    font-size: 14px;
-    font-weight: 100;
+  font-size: 14px;
+  font-weight: 100;
 }
 
 .sd-footer {
-    bottom: 0;
-    border-top-width: 1px;
-    border-bottom-width: 0;
-    background-position: top;
-    height: 45px;
-    background-color: #2f4759;
+  bottom: 0;
+  border-top-width: 1px;
+  border-bottom-width: 0;
+  background-position: top;
+  height: 45px;
+  background-color: #2f4759;
 
-    input {
-        width: calc(100% - 45px);
-        background-color: transparent;
-        outline: none;
-        border: none;
-        color: #fff;
-        font-size: 18px !important;
-        padding-left: 5px;
+  input {
+    width: calc(100% - 45px);
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: #fff;
+    font-size: 18px !important;
+    padding-left: 5px;
+  }
+
+  span {
+    vertical-align: middle;
+    color: #fff;
+    font-size: 18px !important;
+    line-height: 35px;
+    padding-left: 5px;
+  }
+
+  .chatbubble {
+    font-size: 30px!important;
+    margin-top: -5px !important;
+  }
+
+  textArea {
+    width: calc(100% - 45px);
+    background-color: transparent;
+    outline: none;
+    color: #fff;
+    font-size: 18px !important;
+    padding-left: 5px;
+    resize: none;
+    line-height: 20px;
+  }
+
+  .comment-action {
+    padding-top: 0 !important;
+  }
+
+  .sd-actions {
+    position: absolute;
+    right: 0;
+    padding: 7px;
+
+    img {
+      height: 30px;
+      margin-left: 15px;
+      margin-top: -5px;
     }
-
-    span {
-        vertical-align: middle;
-        color: #fff;
-        font-size: 18px !important;
-        line-height: 35px;
-        padding-left: 5px;
-    }
-
-    .chatbubble {
-        font-size: 30px!important;
-        margin-top: -5px !important;
-    }
-
-    textArea {
-        width: calc(100% - 45px);
-        background-color: transparent;
-        outline: none;
-        color: #fff;
-        font-size: 18px !important;
-        padding-left: 5px;
-        resize: none;
-        line-height: 20px;
-    }
-
-    .comment-action {
-        padding-top: 0 !important;
-    }
-
-    .sd-actions {
-        position: absolute;
-        right: 0;
-        padding: 7px;
-
-        img {
-            height: 30px;
-            margin-left: 15px;
-            margin-top: -5px;
-        }
-    }
+  }
 }
 
 input[type=checkbox].blue-ck {
-    display: none !important;
+  display: none !important;
 }
 
 input[type=checkbox].blue-ck + label {
-    background-image: url("../img/resources/checkbox_off.png");
-    height: 15px !important;
-    width: 15px !important;
-    display: inline-block !important;
-    padding: 0;
+  background-image: url("../img/resources/checkbox_off.png");
+  height: 15px !important;
+  width: 15px !important;
+  display: inline-block !important;
+  padding: 0;
 }
 
 input[type=checkbox]:checked.blue-ck + label {
-    background-image: url("../img/resources/checkbox_on.png");
-    height: 15px !important;
-    width: 15px !important;
-    display: inline-block !important;
-    padding: 0;
+  background-image: url("../img/resources/checkbox_on.png");
+  height: 15px !important;
+  width: 15px !important;
+  display: inline-block !important;
+  padding: 0;
 }
 
 .pull-right {
-    float: right;
+  float: right;
 }
 
 .sd-delayed {
-    background-color: $lightblue !important;
+  background-color: $lightblue !important;
 }
 
 .sd-related ion-item h3 {
-    width: calc(100% - 55px);
+  width: calc(100% - 55px);
 }
 
 .sd-related ion-item h3 div:last-child {
-    font-size: 14px !important;
-    font-weight: 400;
-    line-height: 25px;
+  font-size: 14px !important;
+  font-weight: 400;
+  line-height: 25px;
 }
 
 .tabs {
-    padding: 0 !important;
+  padding: 0 !important;
 
-    .tab-item {
-        border-top: 2px solid #35bdee;
-    }
+  .tab-item {
+    border-top: 2px solid #35bdee;
+  }
 
-    .active {
-        border-top: 2px solid white;
-    }
+  .active {
+    border-top: 2px solid white;
+  }
 }
 
 .sd-list-bubble {
-    padding: 6px 5px;
+  padding: 6px 5px;
 
-    .sd-nodata {
-        text-align: center;
-        padding-top: 50%;
-        font-size: 25px !important;
-        font-weight: 100;
-        color: #7b8b93;
+  .sd-nodata {
+    text-align: center;
+    padding-top: 50%;
+    font-size: 25px !important;
+    font-weight: 100;
+    color: #7b8b93;
+  }
+
+  .list {
+    .item {
+      padding: 0;
+      background-color: #ffffff;
+      border: none;
+      margin-bottom: 5px;
+      border-radius: 3px;
+      padding: 5px 10px;
+      border-radius: 2px;
+
+      .sd-title {
+        font-weight: 500;
+      }
     }
-
-    .list {
-        .item {
-            padding: 0;
-            background-color: #ffffff;
-            border: none;
-            margin-bottom: 5px;
-            border-radius: 3px;
-            padding: 5px 10px;
-            border-radius: 2px;
-
-            .sd-title {
-                font-weight: 500;
-            }
-        }
-    }
+  }
 }
 
 .sd-staff {
-    padding: 6px 5px;
+  padding: 6px 5px;
 
-    h3 {
-        width: calc(100% - 55px);
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 3px;
-    }
+  h3 {
+    width: calc(100% - 55px);
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 3px;
+  }
 
-    .sd-tile {
-        background-color: crimson;
-        width: 50px;
-        display: inline-block;
-        height: 50px;
-        vertical-align: middle;
-        text-align: center;
-        font-size: 23px !important;
-        color: #fff;
-        font-weight: 100;
-        padding-top: 15px;
-    }
+  .sd-tile {
+    background-color: crimson;
+    width: 50px;
+    display: inline-block;
+    height: 50px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 23px !important;
+    color: #fff;
+    font-weight: 100;
+    padding-top: 15px;
+  }
 
-    .item-divider {
-        height: 50px;
-        font-weight: 100;
-        padding: 15px 7px !important;
-    }
+  .item-divider {
+    height: 50px;
+    font-weight: 100;
+    padding: 15px 7px !important;
+  }
 
-    .item {
-        padding: 0;
-        background-color: #ffffff;
-        border: none;
-        margin-bottom: 5px;
-        border-radius: 3px;
-        padding: 5px 10px;
-        border-radius: 2px;
+  .item {
+    padding: 0;
+    background-color: #ffffff;
+    border: none;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    padding: 5px 10px;
+    border-radius: 2px;
 
-        span {
-            font-weight: 100;
-        }
-
-        .sd-input-container {
-            width: calc(100% - 130px);
-
-            div {
-                float: right;
-            }
-        }
-    }
-}
-
-.sd-createPopover {
-    height: 100%;
-    background-color: white;
-
-    .bar-header {
-        line-height: 47px;
-
-        .sd-title {
-            left: 49px;
-            right: 397px;
-            width: 100%;
-        }
-
-        .sd-done {
-            text-align: right;
-            padding-right: 10px;
-        }
-
-        > button {
-            top: 5px;
-        }
-    }
-
-    .sd-total {
-        height: 44px;
-        background-color: #e6e7e6;
-        margin: 0;
-        padding: 0;
-        border: 0;
-        vertical-align: baseline;
-        font: inherit;
-        font-size: 100%;
-
-        span {
-            padding-left: 20px;
-            padding-top: 13px;
-            font-size: 17px;
-            position: absolute;
-        }
+    span {
+      font-weight: 100;
     }
 
     .sd-input-container {
-        width: calc(100% - 20px);
-        margin-left: 10px;
-        margin-right: 10px;
+      width: calc(100% - 130px);
 
-        input {
-            width: 100%;
-            background-color: transparent;
-            border: none;
-            border-bottom: 1px solid #333;
-            padding-left: 10px;
-            color: #333;
-        }
+      div {
+        float: right;
+      }
+    }
+  }
+}
 
-        .sd-input {
-            width: 100%;
-            background-color: transparent;
-            border: none;
-            border-bottom: 1px solid #333;
-            padding-left: 10px;
-            padding-top: 13px;
-            color: #333;
-        }
+.sd-createPopover {
+  height: 100%;
+  background-color: white;
 
-        label {
-            color: #333;
-            font-size: 13px;
-            position: relative;
-            padding-left: 10px;
+  .bar-header {
+    line-height: 47px;
 
-            &:before {
-                content: '';
-                position: absolute;
-                height: 15px;
-                top: -11px;
-                left: 0;
-                width: 1px;
-                background-color: #333;
-            }
-        }
+    .sd-title {
+      left: 49px;
+      right: 397px;
+      width: 100%;
     }
 
-    .sd-save-button {
-        width: calc(100% - 20px) !important;
-        margin-left: 10px;
-        margin-right: 10px;
+    .sd-done {
+      text-align: right;
+      padding-right: 10px;
     }
 
-    .sd-text-white {
-        color: white;
+    > button {
+      top: 5px;
     }
+  }
+
+  .sd-total {
+    height: 44px;
+    background-color: #e6e7e6;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    font: inherit;
+    font-size: 100%;
+
+    span {
+      padding-left: 20px;
+      padding-top: 13px;
+      font-size: 17px;
+      position: absolute;
+    }
+  }
+
+  .sd-input-container {
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    margin-right: 10px;
+
+    input {
+      width: 100%;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid #333;
+      padding-left: 10px;
+      color: #333;
+    }
+
+    .sd-input {
+      width: 100%;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid #333;
+      padding-left: 10px;
+      padding-top: 13px;
+      color: #333;
+    }
+
+    label {
+      color: #333;
+      font-size: 13px;
+      position: relative;
+      padding-left: 10px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        height: 15px;
+        top: -11px;
+        left: 0;
+        width: 1px;
+        background-color: #333;
+      }
+    }
+  }
+
+  .sd-save-button {
+    width: calc(100% - 20px) !important;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .sd-text-white {
+    color: white;
+  }
 }
 
 .ds-actionbtn {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    height: 55px;
-    width: 55px;
-    background-color: #35bdee;
-    text-align: center;
-    border-radius: 100%;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  height: 55px;
+  width: 55px;
+  background-color: #35bdee;
+  text-align: center;
+  border-radius: 100%;
 }
 
 .ds-actionbtn i {
-    font-size: 55px !important;
-    color: #fff;
-    display: inline-block;
+  font-size: 55px !important;
+  color: #fff;
+  display: inline-block;
 }
 
 .pane,
 .view {
-    background-color: $darkblue;
+  background-color: $darkblue;
 }
 
 ds-nodata {
-    text-align: center;
-    padding-top: 50%;
-    font-size: 25px !important;
-    font-weight: 100;
-    color: #7b8b93;
+  text-align: center;
+  padding-top: 50%;
+  font-size: 25px !important;
+  font-weight: 100;
+  color: #7b8b93;
 }
 
 .pp-nodata {
-    text-align: center;
-    padding-top: 50%;
-    font-size: 25px !important;
-    font-weight: 100;
-    color: #7b8b93;
+  text-align: center;
+  padding-top: 50%;
+  font-size: 25px !important;
+  font-weight: 100;
+  color: #7b8b93;
 
-    span {
-        display: block;
-        font-size: 30px !important;
-        font-weight: 100;
-        line-height: 37px;
-    }
+  span {
+    display: block;
+    font-size: 30px !important;
+    font-weight: 100;
+    line-height: 37px;
+  }
 }
 
 ::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    font-weight: 300;
-    color: #8a8a8a;
+  /* Chrome/Opera/Safari */
+  font-weight: 300;
+  color: #8a8a8a;
 }
 
 ::-moz-placeholder {
-    /* Firefox 19+ */
-    font-weight: 300;
+  /* Firefox 19+ */
+  font-weight: 300;
 }
 
 :-ms-input-placeholder {
-    /* IE 10+ */
-    font-weight: 300;
+  /* IE 10+ */
+  font-weight: 300;
 }
 
 :-moz-placeholder {
-    /* Firefox 18- */
-    font-weight: 300;
+  /* Firefox 18- */
+  font-weight: 300;
 }
 
 input[readonly] {
-    background-color: #fff;
+  background-color: #fff;
 }
 
 .popup-head {
-    background-color: #1EBDF4;
+  background-color: #1EBDF4;
 }
 
 .popup-buttons .button-positive {
-    border-color: #1EBDF4;
-    background-color: #1EBDF4;
-    color: #000;
+  border-color: #1EBDF4;
+  background-color: #1EBDF4;
+  color: #000;
 }
 
 .popup-buttons .ion-person-add {
-    color: #444;
-    font-size: 22px;
+  color: #444;
+  font-size: 22px;
 }
 
 .popup {
-    .ion-datetime-picker .calendar .day.selected,
-    .ion-datetime-picker .calendar .day.selected.activated,
-    .ion-datetime-picker .calendar .day.selected:hover {
-        background-color: $lightblue;
-    }
+  .ion-datetime-picker .calendar .day.selected,
+  .ion-datetime-picker .calendar .day.selected.activated,
+  .ion-datetime-picker .calendar .day.selected:hover {
+    background-color: $lightblue;
+  }
 }
 
 .sd-search {
-    bottom: 75px !important;
-    right: 17px;
-    height: 40px !important;
-    width: 40px !important;
+  bottom: 75px !important;
+  right: 17px;
+  height: 40px !important;
+  width: 40px !important;
 
-    i {
-        font-size: 30px !important;
-        top: 5px;
-        position: relative;
-        color: #fff;
-        display: inline-block;
-    }
+  i {
+    font-size: 30px !important;
+    top: 5px;
+    position: relative;
+    color: #fff;
+    display: inline-block;
+  }
 }
 
 .sd-create {
-    bottom: 125px !important;
-    right: 17px;
-    height: 40px !important;
-    width: 40px !important;
+  bottom: 125px !important;
+  right: 17px;
+  height: 40px !important;
+  width: 40px !important;
 
-    i {
-        font-size: 30px !important;
-        top: 5px;
-        position: relative;
-        color: #fff;
-        display: inline-block;
-    }
+  i {
+    font-size: 30px !important;
+    top: 5px;
+    position: relative;
+    color: #fff;
+    display: inline-block;
+  }
 }
 
 .sd-status {
-    .sd-input {
-        display: block;
-        width: 100%;
-        height: 40px;
-        line-height: 40px;
-        border: none;
-        padding: 0 12px !important;
-        font-weight: 100;
-    }
+  .sd-input {
+    display: block;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    border: none;
+    padding: 0 12px !important;
+    font-weight: 100;
+  }
 
-    .list {
-        position: relative;
-        padding-top: 1px;
-        padding-bottom: 1px;
-        padding-left: 0;
+  .list {
+    position: relative;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 0;
 
-        .item {
-            border-color: #ddd;
-            background-color: #fff;
-            color: #444;
-            position: relative;
-            z-index: 2;
-            display: block;
-            margin: -1px;
-            padding: 16px;
-            border-width: 1px;
-            border-style: solid;
-            font-size: 16px;
-        }
+    .item {
+      border-color: #ddd;
+      background-color: #fff;
+      color: #444;
+      position: relative;
+      z-index: 2;
+      display: block;
+      margin: -1px;
+      padding: 16px;
+      border-width: 1px;
+      border-style: solid;
+      font-size: 16px;
     }
+  }
 }
 
 .sd-titleSearch {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 0;
-    overflow: hidden;
-    margin: 0 10px;
-    min-width: 30px;
-    height: 43px;
-    text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 17px;
-    font-weight: 500;
-    padding-top: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 0;
+  overflow: hidden;
+  margin: 0 10px;
+  min-width: 30px;
+  height: 43px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 17px;
+  font-weight: 500;
+  padding-top: 10px;
 }
 
 .sd-actionbtnATT {
-    position: fixed;
-    bottom: 58px;
-    right: 10px;
-    height: 55px;
-    width: 55px;
-    background-color: #35bdee;
-    text-align: center;
-    border-radius: 100%;
+  position: fixed;
+  bottom: 58px;
+  right: 10px;
+  height: 55px;
+  width: 55px;
+  background-color: #35bdee;
+  text-align: center;
+  border-radius: 100%;
 
-    i {
-        font-size: 55px !important;
-        color: #fff;
-        display: inline-block;
-    }
+  i {
+    font-size: 55px !important;
+    color: #fff;
+    display: inline-block;
+  }
 }
 
 #login {
-    font-family: 'FL';
-    background-image: url("../img/bg.jpg") !important;
-    background-size: cover;
+  font-family: 'FL';
+  background-image: url("../img/bg.jpg") !important;
+  background-size: cover;
 }
 
 #login .sd-footer {
-    color: #fff;
-    background-color: transparent !important;
-    clear: both;
-    background-image: none;
+  color: #fff;
+  background-color: transparent !important;
+  clear: both;
+  background-image: none;
 }
 
 #login .sd-footer span {
-    font-weight: 100;
-    font-size: 15px !important;
+  font-weight: 100;
+  font-size: 15px !important;
 }
 
 #login .sd-footer .sd-actions {
-    margin-left: 116px;
+  margin-left: 116px;
 }
 
 #login .scroll-content {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 #login .sd-container {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 #login .sd-container .sd-content {
-    padding: 40% 20px 0 100px;
+  padding: 40% 20px 0 100px;
 }
 
 #login .sd-container .sd-content button {
-    font-weight: 100;
-    clear: both;
-    width: 170px;
-    float: right;
-    min-height: 38px;
-    line-height: 38px;
-    margin: 10px 0;
+  font-weight: 100;
+  clear: both;
+  width: 170px;
+  float: right;
+  min-height: 38px;
+  line-height: 38px;
+  margin: 10px 0;
 }
 
 #login .sd-container .sd-content .sd-checkbox {
-    float: right;
-    display: block;
-    color: #fff;
-    font-size: 17px;
+  float: right;
+  display: block;
+  color: #fff;
+  font-size: 17px;
 }
 
 #login .sd-container .sd-content .sd-checkbox span {
-    font-weight: 100;
-    font-size: 15px !important;
+  font-weight: 100;
+  font-size: 15px !important;
 }
 
 #login .sd-container .sd-content .sd-checkbox label {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 #login .sd-container .sd-content h1 {
-    font-size: 50px !important;
-    color: #fff;
+  font-size: 50px !important;
+  color: #fff;
 }
 
 #login .sd-container .sd-content .sd-form {
-    padding-top: 10%;
+  padding-top: 10%;
 }
 
 #login .sd-container .sd-content .sd-form .input-container {
-    width: 100%;
+  width: 100%;
 }
 
 #login .sd-container .sd-content .sd-form .input-container input {
-    width: 100%;
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid #fff;
-    padding-left: 10px;
-    color: #fff;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #fff;
+  padding-left: 10px;
+  color: #fff;
 }
 
 #login .sd-container .sd-content .sd-form .input-container label {
-    color: #fff;
-    font-weight: 100;
-    font-size: 15px !important;
-    position: relative;
+  color: #fff;
+  font-weight: 100;
+  font-size: 15px !important;
+  position: relative;
 }
 
 #login .sd-container .sd-content .sd-form .input-container label:before {
-    content: '';
-    position: absolute;
-    height: 13px;
-    top: -12px;
-    width: 1px;
-    background-color: #fff;
+  content: '';
+  position: absolute;
+  height: 13px;
+  top: -12px;
+  width: 1px;
+  background-color: #fff;
 }
 
 .summary-textarea {
-    padding: 15px;
-    resize: none;
+  padding: 15px;
+  resize: none;
 }
 
 .summary-popup > div {
-    width: 70%!important;
+  width: 70%!important;
 }
 
 .ion-compose {
-    padding-left: 15px;
-    font-size: 25px;
+  padding-left: 15px;
+  font-size: 25px;
 }
 
 .sd-title {
-    .summary-check {
-        color: #11c1f3;
-        padding-left: 15px;
-    }
+  .summary-check {
+    color: #11c1f3;
+    padding-left: 15px;
+  }
 }
 
 .white-subtitle {
-    font-size: 17px;
-    color: white;
-    padding: 10px 15px 0;
+  font-size: 17px;
+  color: white;
+  padding: 10px 15px 0;
 }
+
 .attached-photo {
   width: 100%;
 }
