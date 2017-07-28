@@ -17,6 +17,14 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     vm.myProfile = localStorage.getObject('my_account');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.local.list = vm.create.comments || [];
+    //adding colors to tiles by user
+    vm.diaries = localStorage.getObject('sd.diaries');
+    angular.forEach(vm.local.list, function(value, key) {
+        var aux = $filter('filter')(vm.diaries, {
+            id: (value.site_diary_id)
+        })[0];
+        vm.local.list[key].color = aux.color;
+    });
 
     function addComment() {
         var comment = vm.local.comment;
@@ -57,6 +65,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                 localStorage.setObject('currentProj', proj);
             }
         }
+        $('textarea').css({ 'height': '45px', 'overflow-y': 'hidden' });
     }
 
     function addComentAtEnter(event) {
@@ -81,4 +90,5 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
             });
         }
     }
+
 }

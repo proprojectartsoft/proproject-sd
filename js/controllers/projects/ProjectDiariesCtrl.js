@@ -89,6 +89,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
       localStorage.setObject('currentProj', e);
       vm.diary = e.value.diaries;
       vm.diaries = orderBy(e.value.diaries, 'date', true);
+      //store color of the tile for each diary by user
+      angular.forEach(vm.diaries, function(value, key) {
+          vm.diaries[key].color =  $scope.getSdTitleColor(value.userName)
+      });
+      localStorage.setObject('sd.diaries', vm.diaries);
     });
   });
 
@@ -281,7 +286,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.diaryModal.hide();
   }
 
-  //color generator for tiles 
+  //color generator for tiles
   var red = 0, green = 0, blue = 0,
       colorsForName = {},
       contrastColors = ['navy', 'red', 'blue', 'teal', 'olive', 'orange',

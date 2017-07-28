@@ -6,9 +6,9 @@
     </div>
     <ion-content class="has-subheader sd-list has-footer">
         <ion-list can-swipe="true">
-            <ion-item ng-repeat="item in vm.local.list" class="sd-item-tile">
+            <ion-item ng-repeat="item in vm.local.list track by $index" class="sd-item-tile">
                 <div class="sd-group">
-                    <span class="sd-tile">
+                    <span class="sd-tile" ng-style="{'background-color': item.color}">
                       {{item.first_name.split(' ')[0] | limitTo:1 | uppercase}}
                       {{item.last_name.split(' ')[0] | limitTo:1 | uppercase}}
                     </span>
@@ -24,7 +24,7 @@
         </div>
     </ion-content>
     <div class="bar bar-footer sd-footer">
-        <textArea rows='3' placeholder="Type comment here" ng-disabled="vm.diaryId && !vm.editMode" ng-model="vm.local.comment" ng-keydown="vm.addComentAtEnter($event)"></textArea>
+        <textarea elastic placeholder="Type comment here" ng-disabled="vm.diaryId && !vm.editMode" ng-model="vm.local.comment" ng-keydown="vm.addComentAtEnter($event)"></textarea>
         <div class="comment-action sd-actions" ng-click="vm.addComment()">
           <span class="chatbubble ion-chatbubble-working"></span>
         </div>

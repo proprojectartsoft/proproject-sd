@@ -3519,6 +3519,7 @@ ion-infinite-scroll {
   top: 137px; }
 
 .has-footer {
+  height: calc(100% - 132px)!important;
   bottom: 44px; }
 
 .has-subfooter {
