@@ -46,7 +46,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
             company_name: vm.create.site_attendance.contractors[vm.index].company_name,
             model_start: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].start_time),
             model_finish: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].finish_time),
-            total_time: vm.create.site_attendance.contractors[vm.index].total_time,
+            total_time: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].total_time),
             note: vm.create.site_attendance.contractors[vm.index].note,
             absence: vm.create.site_attendance.contractors[vm.index].absence && vm.create.site_attendance.contractors[vm.index].absence.reason,
             role: vm.create.site_attendance.contractors[vm.index].trade,
@@ -59,7 +59,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
         } else {
             vm.local.data.model_break = vm.stringToDate("00:30");
         }
-        vm.calcParse();
+        if(!vm.local.data.total_time) vm.calcParse();
     } else {
         vm.local.data.staff_name = "";
         vm.local.data.model_break = vm.stringToDate("00:30");
@@ -69,7 +69,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
         vm.local.data.model_finish = $filter('filter')(localStorage.getObject('companySettings'), {
             name: "finish"
         })[0].value;
-        vm.calcParse();
+        if(!vm.local.data.total_time) vm.calcParse();
     }
 
     vm.absence = localStorage.getObject('companyLists').absence_list;
@@ -116,10 +116,10 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
             company_name: vm.local.data.company_name,
             trade: vm.local.data.trade,
             hourly_rate: vm.local.data.hourly_rate,
-            start_time: vm.filteredBreak = $filter('date')(vm.local.data.model_start, "HH:mm"),
-            break_time: vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm"),
-            finish_time: vm.filteredBreak = $filter('date')(vm.local.data.model_finish, "HH:mm"),
-            total_time: vm.local.data.total_time,
+            start_time: $filter('date')(vm.local.data.model_start, "HH:mm"),
+            break_time: $filter('date')(vm.local.data.model_break, "HH:mm"),
+            finish_time: $filter('date')(vm.local.data.model_finish, "HH:mm"),
+            total_time: $filter('date')(vm.local.data.total_time, "HH:mm"),
             absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
         }

@@ -70,14 +70,28 @@
                         Tap here to select finish time.</div>
                 </div>
             </div>
-            <label class="sd-label">
+            <div class="sd-label">
+                <div class="sd-title">Total</div>
+                <div ng-required="vm.data.required"
+                     ion-datetime-picker time
+                     ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}"
+                     ng-model="vm.local.data.total_time"
+                     month-step="1" hour-step="1" minute-step="1" second-step="1"
+                     class="sd-input-container"
+                     ng-click="vm.allowNumbersOnly()">
+                    <div class="sd-line" ng-if="vm.local.data.total_time">{{vm.local.data.total_time | date: 'HH:mm'}}</div>
+                    <div class="sd-line" ng-if="!vm.local.data.total_time">
+                        Tap here to select finish time.</div>
+                </div>
+            </div>
+            <!-- <label class="sd-label">
                 <div class="sd-title">Total</div>
                 <form name="vm.myForm">
                   <input type="tel" ng-readonly="(vm.diaryId) && !(vm.editMode)"
                          placeholder="{{(!vm.diaryId || vm.editMode) && 'Total' || ''}}"
                          ng-model="vm.local.data.total_time">
                 </form>
-            </label>
+            </label> -->
             <label class="sd-label">
                 <div class="sd-title">Note</div>
                 <input ng-readonly="(vm.diaryId) && !(vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add note' || ''}}" ng-model="vm.local.data.note">

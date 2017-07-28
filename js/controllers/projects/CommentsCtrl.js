@@ -15,7 +15,6 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     vm.local.comments = localStorage.getObject('sd.comments');
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.myProfile = localStorage.getObject('my_account');
-    console.log(vm.myProfile)
     vm.create = localStorage.getObject('sd.diary.create');
     vm.local.list = vm.create.comments || [];
     //adding colors to tiles by user

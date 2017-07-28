@@ -48,7 +48,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             company_name: vm.create.site_attendance.staffs[vm.index].company_name,
             model_start: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].start_time),
             model_finish: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].finish_time),
-            total_time: vm.create.site_attendance.staffs[vm.index].total_time,
+            total_time: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].total_time),
             note: vm.create.site_attendance.staffs[vm.index].note,
             absence: vm.create.site_attendance.staffs[vm.index].absence && vm.create.site_attendance.staffs[vm.index].absence.reason,
             role: vm.create.site_attendance.staffs[vm.index].trade,
@@ -61,7 +61,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         } else {
             vm.local.data.model_break = vm.stringToDate("00:30");
         }
-        vm.calcParse();
+        if(!vm.local.data.total_time) vm.calcParse();
     } else {
         vm.local.data.staff_name = "";
         vm.local.data.model_break = vm.stringToDate("00:30");
@@ -73,7 +73,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             name: "finish"
         })[0];
         vm.local.data.model_finish = finish ? finish.value : 0;
-        vm.calcParse();
+        if(!vm.local.data.total_time) vm.calcParse();
     }
 
     vm.staff = localStorage.getObject('companyLists').staff;
@@ -143,7 +143,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             start_time: $filter('date')(vm.local.data.model_start, "HH:mm"),
             break_time: $filter('date')(vm.local.data.model_break, "HH:mm"),
             finish_time: $filter('date')(vm.local.data.model_finish, "HH:mm"),
-            total_time: vm.local.data.total_time,
+            total_time: $filter('date')(vm.local.data.total_time, "HH:mm"),
             absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
         }
