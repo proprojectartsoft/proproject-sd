@@ -12,10 +12,11 @@ ProjectDiariesCtrl.$inject = [
   'SettingService',
   'SharedService',
   'SyncService',
-  'orderByFilter'
+  'orderByFilter',
+  '$rootScope'
 ];
 
-function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService, orderBy) {
+function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService, orderBy, $rootScope) {
   var vm = this, shares = [];
   vm.showDiary = showDiary;
   vm.backDiary = backDiary;
@@ -39,6 +40,23 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
   vm.local = {};
   vm.local.data = {};
   vm.local.search = '';
+  $rootScope.seen = {
+    weather: '',
+    site_attendance: {
+      staff: '',
+      contractor: '',
+      visitor: ''
+    },
+    material: '',
+    contract: '',
+    site: '',
+    incident: '',
+    ohs: '',
+    comment: '',
+    attachment: '',
+    good: ''
+  }
+  localStorage.setObject('sd.seen', $rootScope.seen)
   vm.selectOpt = [{
     id: 0,
     name: 'Annual leave'

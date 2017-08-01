@@ -10,12 +10,14 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
     vm.data = {};
     vm.create = localStorage.getObject('sd.diary.create');
     vm.index = $stateParams.id;
+    $rootScope.seen = localStorage.getObject('sd.seen');
 
     $scope.$watch(function() {
         SettingService.show_focus();
     });
 
     function save() {
+        vm.backup = angular.copy(vm.create.site_attendance.visitors);
         vm.member = {
             first_name: vm.local.data.first_name,
             last_name: vm.local.data.last_name,
@@ -39,7 +41,12 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
     }
 
     function go(predicate, id) {
-        save();
+        if(vm.local.data.first_name) {
+          save();
+          if(JSON.stringify(vm.create.site_attendance.visitors) !== JSON.stringify(vm.backup)) {
+            $rootScope.seen.site_attendance.visitor = true;
+          }
+        }
         localStorage.setObject('siteAttendance.tab', 'visitors');
         $state.go('app.' + predicate, {
             id: id

@@ -31,6 +31,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
+    $rootScope.seen = localStorage.getObject('sd.seen');
     vm.index = $stateParams.id;
 
     vm.local.absence = 'absence';
@@ -107,6 +108,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     }
 
     function save() {
+        vm.backup = angular.copy(vm.create.site_attendance.contractors);
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
         // if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
         //     vm.calcParse();
@@ -191,7 +193,12 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     }
 
     function go(predicate, id) {
-        save();
+        if(vm.local.data.staff_name) {
+          save();
+          if(JSON.stringify(vm.create.site_attendance.staffs) !== JSON.stringify(vm.backup)) {
+            $rootScope.seen.site_attendance.contractor = true;
+          }
+        }
         localStorage.setObject('siteAttendance.tab', 'contractors');
         $state.go('app.' + predicate, {
             id: id

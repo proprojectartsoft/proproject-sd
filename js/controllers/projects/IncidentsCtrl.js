@@ -25,6 +25,8 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             SettingService.show_focus();
     });
 
+    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
+
     if (!isNaN(vm.index)) {
         vm.incident = {
             description: vm.create.incidents[vm.index].description,
@@ -86,6 +88,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function saveIncident() {
+        vm.backup = angular.copy(vm.create.incidents);
         vm.newType = localStorage.getObject('sd.diary.incident.type')
         vm.action_required = localStorage.getObject('sd.diary.incident.actionReq')
         var incident = {
@@ -162,8 +165,12 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function go(predicate, id) {
-        if (predicate == "incidents" && $rootScope.selected)
+        if (predicate == "incidents" && ($rootScope.selected || vm.incident.type)){
             saveIncident();
+            if(vm.editMode && JSON.stringify(vm.create.incidents) !==  JSON.stringify(vm.backup)) {
+              $rootScope.seen.incident = true;
+            }
+        }
         $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {

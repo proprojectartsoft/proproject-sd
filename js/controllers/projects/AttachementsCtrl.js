@@ -134,10 +134,14 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
     }
 
     function go(predicate, id) {
+        vm.backup = angular.copy(vm.attachments);
         vm.attachments = {
             pictures: vm.pictures,
             toBeDeleted: vm.dataToDelete,
             toBeUpdated: vm.dataToUpdate
+        }
+        if(vm.editMode && JSON.stringify(vm.attachments) !==  JSON.stringify(vm.backup)) {
+          $rootScope.seen.attachment = true;
         }
         console.log(vm.attachments);
         localStorage.setObject('sd.attachments', vm.attachments);

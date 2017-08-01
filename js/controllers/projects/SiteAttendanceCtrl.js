@@ -16,7 +16,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
     vm.staffList = vm.create.site_attendance.staffs;
     vm.companyList = vm.create.site_attendance.contractors;
     vm.visitorList = vm.create.site_attendance.visitors;
-
     function show(predicate) {
         if (predicate == "staff") {
             vm.visitors = false;

@@ -8,6 +8,8 @@
         <ion-list>
             <ion-item ng-repeat="material in vm.materials track by $index" ng-click="vm.go('material', $index)">
                 <div class="sd-title">{{material.name}}</div>
+                <!-- <span ng-if="material.seen === true"
+                      class="notification-dot-sub-menu"></span> -->
                 <div class="sd-description">
                     <span>{{material.description}}</span>
                 </div>

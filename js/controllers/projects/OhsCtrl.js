@@ -19,6 +19,8 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             SettingService.show_focus();
     });
 
+    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
+
     if (!isNaN(vm.index) && !(vm.index === null)) {
         vm.type = vm.create.oh_and_s[vm.index].type;
         vm.task_completed = vm.create.oh_and_s[vm.index].task_completed;
@@ -44,6 +46,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     vm.tools = vm.create.oh_and_s;
 
     function save() {
+        vm.backup = angular.copy(vm.create.incidents);
         vm.newType = localStorage.getObject('sd.diary.ohs.type');
         vm.oh_and_s = {
             type: {
@@ -118,8 +121,12 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     }
 
     function go(predicate, id) {
-        if (predicate == "ohs" && $rootScope.selected)
+        if (predicate == "ohs" && ($rootScope.selected || vm.type)){
             save();
+            if(vm.editMode && JSON.stringify(vm.create.ohs) !==  JSON.stringify(vm.backup)) {
+              $rootScope.seen.ohs = true;
+            }
+          }
         $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {

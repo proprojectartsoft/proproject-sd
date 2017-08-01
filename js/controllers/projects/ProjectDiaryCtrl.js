@@ -160,6 +160,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveCreate() {
+        $rootScope.seen = false;
         $('.create-btn').attr("disabled", true);
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
@@ -177,6 +178,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveEdit() {
+        $rootScope.seen = false;
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
             template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -269,6 +271,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function toggle() {
+        if(vm.edit) $rootScope.seen = false;
         vm.edit = !vm.edit;
         localStorage.setObject('editMode', vm.edit);
         if (!vm.edit)
@@ -289,6 +292,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveChanges(project) {
+        $rootScope.seen = false;
         $indexedDB.openStore('projects', function(store) {
             store.upsert(project).then(
                 function(e) {},

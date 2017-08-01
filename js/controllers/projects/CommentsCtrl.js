@@ -26,7 +26,10 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
         vm.local.list[key].color = aux.color;
     });
 
+    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
+
     function addComment() {
+        vm.backup = angular.copy(vm.create.comments);
         var comment = vm.local.comment;
         vm.local.comment = "";
         angular.forEach(vm.local.list, function(value, key) {
@@ -85,6 +88,9 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     }
 
     function go(predicate, id) {
+        if(vm.editMode && JSON.stringify(vm.create.comments) !==  JSON.stringify(vm.backup)) {
+          $rootScope.seen.comment = true;
+        }
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

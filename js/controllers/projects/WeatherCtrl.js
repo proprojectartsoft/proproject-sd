@@ -21,6 +21,7 @@ function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $i
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
+    $rootScope.seen = localStorage.getObject('sd.seen');
 
     $scope.$watch(function() {
         if (vm.editMode)
@@ -57,6 +58,8 @@ function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $i
     }]
 
     function save() {
+        delete vm.create.weather.all_day
+        vm.backup = angular.copy(vm.create.weather);
         vm.weather = {
             morning: angular.extend([], vm.create.weather.morning, localStorage.getObject('sd.diary.weather.morning')),
             midday: angular.extend([], vm.create.weather.midday, localStorage.getObject('sd.diary.weather.midday')),
@@ -124,6 +127,9 @@ function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $i
 
     function go(predicate, id) {
         save();
+        if(JSON.stringify(vm.create.weather) !==  JSON.stringify(vm.backup)) {
+          $rootScope.seen.weather = true;
+        }
         if (predicate === 'diary') {
             if (vm.diaryId) {
                 $state.go('app.' + predicate, {

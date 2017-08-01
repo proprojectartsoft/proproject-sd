@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('MaterialsCtrl', MaterialsCtrl)
 
-MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB'];
+MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB', '$rootScope'];
 
-function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB) {
+function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB, $rootScope) {
     var vm = this;
     vm.go = go;
     vm.unit = "materials.unit";
@@ -48,7 +48,9 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             vm.subtotal_formated = vm.currency + " " + $filter('number')(st, 2);
         else
             vm.subtotal_formated = '';
-    })
+    });
+
+    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
 
     if (!isNaN(vm.index) && (vm.index !== 'create')) {
         vm.material = {
@@ -122,6 +124,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function save() {
+        vm.backup = angular.copy(vm.create.plant_and_material_used);
         vm.material = {
             name: vm.material.name,
             description: vm.material.description,
@@ -177,8 +180,12 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function go(predicate, id) {
-        if (predicate == "materials" && vm.material.name)
+        if (predicate == "materials" && vm.material.name){
             save();
+            if(vm.editMode && JSON.stringify(vm.create.plant_and_material_used) !==  JSON.stringify(vm.backup)) {
+              $rootScope.seen.material = true;
+            }
+        }
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId
