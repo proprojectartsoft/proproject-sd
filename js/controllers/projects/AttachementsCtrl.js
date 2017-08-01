@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
 
-AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService'];
+AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope'];
 
-function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, AttachmentsService) {
+function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;

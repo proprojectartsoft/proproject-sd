@@ -263,8 +263,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     var create = localStorage.getObject('sd.diary.create');
                     create.summary = vm.summary;
                     localStorage.setObject('sd.diary.create', create);
-                    if (!vm.edit)
+                    if (!vm.edit && !vm.enableCreate) {
                         saveSummary(create);
+                    }
                     summaryPopup.close();
                 }
             }, {
