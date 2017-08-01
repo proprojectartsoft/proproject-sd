@@ -120,6 +120,7 @@ angular.module($APP.name).factory('SyncService', [
                                                         value.diaries = diaries;
                                                         if ((result[result.length - 1] === value)) {
                                                             $timeout(function() {
+                                                                console.log(result);
                                                                 def.resolve(result)
                                                             }, 5000);
                                                         }
@@ -142,9 +143,12 @@ angular.module($APP.name).factory('SyncService', [
                                         }
 
                                         $indexedDB.openStore('projects', function(store) {
+                                            console.log(localStorage.getObject('diaryToSync'));
                                             store.clear();
                                         }).then(function(e) {
+                                            console.log(localStorage.getObject('diaryToSync'));
                                             buildData().then(function(projects) {
+                                                console.log(localStorage.getObject('diaryToSync'));
                                                 var diaryToAdd = localStorage.getObject('diaryToSync');
                                                 if (diaryToAdd && diaryToAdd.data) {
                                                     SiteDiaryService.add_diary(diaryToAdd.data)
@@ -171,6 +175,7 @@ angular.module($APP.name).factory('SyncService', [
                                                             diaryToAdd = {};
                                                             localStorage.setObject('diaryToSync', diaryToAdd);
                                                             angular.forEach(projects, function(project) {
+                                                                console.log(projects);
                                                                 $indexedDB.openStore('projects', function(store) {
                                                                     store.insert({
                                                                         "id": project.id,
