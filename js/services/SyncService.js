@@ -111,7 +111,6 @@ angular.module($APP.name).factory('SyncService', [
                                             setCompanySettings();
                                             setCompanyLists().then(function(result) {
                                                 localStorage.setObject('companyLists', result);
-                                                console.log(result);
                                             })
                                             ProjectService.projects().then(function(result) {
                                                 if (!result.length) def.resolve([]);
@@ -120,7 +119,6 @@ angular.module($APP.name).factory('SyncService', [
                                                         value.diaries = diaries;
                                                         if ((result[result.length - 1] === value)) {
                                                             $timeout(function() {
-                                                                console.log(result);
                                                                 def.resolve(result)
                                                             }, 5000);
                                                         }
@@ -143,12 +141,9 @@ angular.module($APP.name).factory('SyncService', [
                                         }
 
                                         $indexedDB.openStore('projects', function(store) {
-                                            console.log(localStorage.getObject('diaryToSync'));
                                             store.clear();
                                         }).then(function(e) {
-                                            console.log(localStorage.getObject('diaryToSync'));
                                             buildData().then(function(projects) {
-                                                console.log(localStorage.getObject('diaryToSync'));
                                                 var diaryToAdd = localStorage.getObject('diaryToSync');
                                                 if (diaryToAdd && diaryToAdd.data) {
                                                     SiteDiaryService.add_diary(diaryToAdd.data)
@@ -175,7 +170,6 @@ angular.module($APP.name).factory('SyncService', [
                                                             diaryToAdd = {};
                                                             localStorage.setObject('diaryToSync', diaryToAdd);
                                                             angular.forEach(projects, function(project) {
-                                                                console.log(projects);
                                                                 $indexedDB.openStore('projects', function(store) {
                                                                     store.insert({
                                                                         "id": project.id,
@@ -279,38 +273,60 @@ angular.module($APP.name).factory('SyncService', [
             },
             addDiariesToSync: function() {
                 var prm = $q.defer();
-                var diaryToAdd = localStorage.getObject('diaryToSync');
-                if (diaryToAdd && diaryToAdd.data) {
-                    SiteDiaryService.add_diary(diaryToAdd.data)
-                        .success(function(result) {
-                            var attachments = diaryToAdd.attachments;
-                            var attToAdd = [];
-                            angular.forEach(attachments.pictures, function(value) {
-                                if (!value.path) {
-                                    value.site_diary_id = result.id;
-                                    attToAdd.push(value);
+                $timeout(function() {
+                    if (navigator.onLine) {
+                        login().then(function(res) {
+                            if (res == "logged") {
+                                var diaryToAdd = localStorage.getObject('diaryToSync');
+                                if (diaryToAdd && diaryToAdd.data) {
+                                    SiteDiaryService.add_diary(diaryToAdd.data)
+                                        .success(function(result) {
+                                            var attachments = diaryToAdd.attachments;
+                                            var attToAdd = [];
+                                            angular.forEach(attachments.pictures, function(value) {
+                                                if (!value.path) {
+                                                    value.site_diary_id = result.id;
+                                                    attToAdd.push(value);
+                                                }
+                                            });
+                                            if (attToAdd) {
+                                                AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
+                                            }
+                                            var comments = diaryToAdd.data.comments;
+                                            angular.forEach(comments, function(value) {
+                                                var request = {
+                                                    site_diary_id: result.id,
+                                                    comment: value.comment,
+                                                };
+                                                SiteDiaryService.add_comments(request).then(function(result) {});
+                                            })
+                                            diaryToAdd = {};
+                                            localStorage.setObject('diaryToSync', diaryToAdd);
+                                            prm.resolve();
+                                        }).error(function(err) {
+                                            prm.resolve();
+                                        })
+                                } else {
+                                    prm.resolve();
                                 }
-                            });
-                            if (attToAdd) {
-                                AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
+                            } else {
+                                prm.resolve();
+                                var offlinePopup = $ionicPopup.alert({
+                                    title: "Error",
+                                    template: "An unexpected error occured during authentication and sync could not be done. Please try again.",
+                                    content: "",
+                                    buttons: [{
+                                        text: 'Ok',
+                                        type: 'button-positive',
+                                        onTap: function(e) {
+                                            offlinePopup.close();
+                                        }
+                                    }]
+                                });
                             }
-                            var comments = diaryToAdd.data.comments;
-                            angular.forEach(comments, function(value) {
-                                var request = {
-                                    site_diary_id: result.id,
-                                    comment: value.comment,
-                                };
-                                SiteDiaryService.add_comments(request).then(function(result) {});
-                            })
-                            diaryToAdd = {};
-                            localStorage.setObject('diaryToSync', diaryToAdd);
-                            prm.resolve();
-                        }).error(function(err) {
-                            prm.resolve();
                         })
-                } else {
-                    prm.resolve();
-                }
+                    }
+                })
                 return prm.promise;
             }
         }
