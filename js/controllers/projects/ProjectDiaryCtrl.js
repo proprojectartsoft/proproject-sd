@@ -96,12 +96,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         SiteDiaryService.add_diary(vm.create)
             .success(function(result) {
                 var attachments = localStorage.getObject('sd.attachments');
-                var attToAdd = [], attToAddAsNew = [];
+                var attToAdd = [],
+                    attToAddAsNew = [];
                 angular.forEach(attachments.pictures, function(value) {
                     if (!value.path) {
                         value.site_diary_id = result.id;
                         attToAdd.push(value);
-                    } else if(!vm.enableCreate && vm.edit) {
+                    } else if (!vm.enableCreate && vm.edit) {
                         delete value.id;
                         value.base_64_string = '';
                         value.site_diary_id = result.id;
@@ -202,31 +203,31 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         })
         var attachments = localStorage.getObject('sd.attachments');
         var attToAdd = [];
-        if(attachments !== null){
-          angular.forEach(attachments.pictures, function(value) {
-              if (!value.path) {
-                  attToAdd.push(value);
-              }
-          });
-          var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {
-              console.log(result);
-          });
+        if (attachments !== null) {
+            angular.forEach(attachments.pictures, function(value) {
+                if (!value.path) {
+                    attToAdd.push(value);
+                }
+            });
+            var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {
+                console.log(result);
+            });
 
-          var updateAttachments = [];
-          if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
-              angular.forEach(attachments.toBeUpdated, function(att) {
-                  updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {
-                      console.log(result);
-                  }));
-              })
-          }
+            var updateAttachments = [];
+            if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
+                angular.forEach(attachments.toBeUpdated, function(att) {
+                    updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {
+                        console.log(result);
+                    }));
+                })
+            }
 
-          var deleteAttachments;
-          if (attachments.toBeDeleted) {
-              deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
-                  console.log(result);
-              });
-          }
+            var deleteAttachments;
+            if (attachments.toBeDeleted) {
+                deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
+                    console.log(result);
+                });
+            }
         }
         var proj = localStorage.getObject('currentProj');
         var diary = $filter('filter')(proj.value.diaries, {
@@ -262,6 +263,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     var create = localStorage.getObject('sd.diary.create');
                     create.summary = vm.summary;
                     localStorage.setObject('sd.diary.create', create);
+                    if (!vm.edit)
+                        saveSummary(create);
                     summaryPopup.close();
                 }
             }, {
@@ -270,8 +273,31 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         });
     }
 
+    function saveSummary(create) {
+        var syncPopup = $ionicPopup.show({
+            title: 'Submitting',
+            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            content: "",
+            buttons: []
+        });
+
+        SiteDiaryService.update_diary(create).then(function(result) {
+            // vm.go('project');
+            var proj = localStorage.getObject('currentProj');
+            var diary = $filter('filter')(proj.value.diaries, {
+                id: (vm.diaryId)
+            })[0];
+            diary.created_for_date = create.created_for_date;
+            diary.data.summary = create.summary;
+            localStorage.setObject('currentProj', proj);
+            saveChanges(localStorage.getObject('currentProj'));
+            localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
+            syncPopup.close();
+        })
+    }
+
     function toggle() {
-        if(vm.edit) $rootScope.seen = false;
+        if (vm.edit) $rootScope.seen = false;
         vm.edit = !vm.edit;
         localStorage.setObject('editMode', vm.edit);
         if (!vm.edit)
