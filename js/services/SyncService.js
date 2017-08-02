@@ -325,6 +325,8 @@ angular.module($APP.name).factory('SyncService', [
                                 });
                             }
                         })
+                    } else {
+                      prm.resolve();
                     }
                 })
                 return prm.promise;
