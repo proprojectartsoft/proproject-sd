@@ -80,6 +80,11 @@ $lightblue: #11c1f3;
   height: calc(100% + 200px);
 }
 
+.keyboard-open .login-container {
+    padding-top: 20px;
+    height: 100%;
+}
+
 #login .scroll {
   height: 100%;
 }
