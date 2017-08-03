@@ -1,6 +1,6 @@
 <div class="de-select" ng-class="{'de-active':vms.settings.show}">
     <div class="de-item  de-input" ng-click="vms.toggle()" ng-model="vm.selectOpt">
-        <span ng-if="vms.selected.length > 0" ng-repeat="title in vms.selected track by $index">
+        <span class="selected" ng-if="vms.selected.length > 0" ng-repeat="title in vms.selected track by $index">
           {{title.name}}
           <span ng-if="vms.selected.length > 1">, </span>
         </span>

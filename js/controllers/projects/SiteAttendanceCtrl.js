@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('SiteAttendanceCtrl', SiteAttendanceCtrl)
 
-SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', '$indexedDB'];
+SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', '$indexedDB', '$timeout'];
 
-function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $indexedDB) {
+function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $indexedDB, $timeout) {
     var vm = this;
     vm.go = go;
     vm.show = show;
@@ -16,16 +16,23 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
     vm.staffList = vm.create.site_attendance.staffs;
     vm.companyList = vm.create.site_attendance.contractors;
     vm.visitorList = vm.create.site_attendance.visitors;
+    $timeout(function() {
+        vm.seen = localStorage.getObject('sd.seen');
+    })
+
     function show(predicate) {
         if (predicate == "staff") {
             vm.visitors = false;
             vm.contractors = false
             vm.staff = true;
+            localStorage.setObject('siteAttTab', 'staff');
         } else {
             vm.staff = false;
             if (predicate == "contractors") {
                 vm.visitors = false;
                 vm.contractors = true;
+                localStorage.setObject('siteAttTab', 'contractors');
+
             } else {
                 vm.contractors = false;
                 vm.visitors = true;
@@ -42,6 +49,9 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
                     console.log(vm.create.site_attendance.staffs);
                 }
             })
+            var seen = localStorage.getObject('sd.seen');
+            seen.staff = true;
+            localStorage.setObject('sd.seen', seen);
         }
         if (vm.contractors) {
             vm.create.site_attendance.contractors.forEach(function(el, i) {
@@ -49,6 +59,9 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
                     vm.create.site_attendance.contractors.splice(i, 1);
                 }
             })
+            var seen = localStorage.getObject('sd.seen');
+            seen.contractor = true;
+            localStorage.setObject('sd.seen', seen);
         }
         if (vm.visitors) {
             vm.create.site_attendance.visitors.forEach(function(el, i) {
@@ -56,6 +69,9 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
                     vm.create.site_attendance.visitors.splice(i, 1);
                 }
             })
+            var seen = localStorage.getObject('sd.seen');
+            seen.visitor = true;
+            localStorage.setObject('sd.seen', seen);
         }
         localStorage.setObject('sd.diary.create', vm.create);
         var proj = localStorage.getObject('currentProj');

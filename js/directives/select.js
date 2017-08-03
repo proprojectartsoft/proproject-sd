@@ -83,7 +83,32 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
             } else {
                 vms.selected.splice(index, 1);
             }
+            console.log("weather select changed");
+            var seen = localStorage.getObject('sd.seen');
+            seen.weather = true;
+            localStorage.setObject('sd.seen', seen);
+
         } else {
+            var seen = localStorage.getObject('sd.seen');
+            switch (vms.deTitle) {
+                case 'incident.type':
+                    seen.incident = true;
+                    break;
+                case 'incident.actionReq':
+                    seen.incident = true;
+                    break;
+                case 'absence':
+                    if (localStorage.getObject('siteAttTab') == 'staff') {
+                        seen.staff = true;
+                    } else {
+                        seen.contractor = true;
+                    }
+                    break;
+                case 'ohs.type':
+                    seen.ohs = true;
+                    break;
+            }
+            localStorage.setObject('sd.seen', seen);
             vms.selected = [];
             vms.selected.push(option);
         }

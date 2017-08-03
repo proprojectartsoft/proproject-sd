@@ -13,6 +13,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
     vm.allowNumbersOnly = allowNumbersOnly;
+    vm.datetimeChanged = datetimeChanged;
     vm.currency = SettingService.get_currency_symbol(
         $filter('filter')(localStorage.getObject('companySettings'), {
             name: "currency"
@@ -31,7 +32,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
-    $rootScope.seen = localStorage.getObject('sd.seen');
     vm.index = $stateParams.id;
 
     vm.local.absence = 'absence';
@@ -108,7 +108,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     }
 
     function save() {
-        vm.backup = angular.copy(vm.create.site_attendance.contractors);
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
         // if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
         //     vm.calcParse();
@@ -128,6 +127,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
 
         if (vm.index === 'create') {
             vm.create.site_attendance.contractors.push(vm.member);
+            var seen = localStorage.getObject('sd.seen');
+            seen.contractor = true;
+            localStorage.setObject('sd.seen', seen);
         } else {
             vm.create.site_attendance.contractors[vm.index] = vm.member;
         }
@@ -195,13 +197,23 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     function go(predicate, id) {
         if(vm.local.data.staff_name) {
           save();
-          if(JSON.stringify(vm.create.site_attendance.staffs) !== JSON.stringify(vm.backup)) {
-            $rootScope.seen.site_attendance.contractor = true;
-          }
         }
         localStorage.setObject('siteAttendance.tab', 'contractors');
         $state.go('app.' + predicate, {
             id: id
         });
+    }
+    function watchChanges() {
+        $("input").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.contractor = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
+    function datetimeChanged() {
+        var seen = localStorage.getObject('sd.seen');
+        seen.contractor = true;
+        localStorage.setObject('sd.seen', seen);
     }
 }

@@ -10,14 +10,12 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
     vm.data = {};
     vm.create = localStorage.getObject('sd.diary.create');
     vm.index = $stateParams.id;
-    $rootScope.seen = localStorage.getObject('sd.seen');
 
     $scope.$watch(function() {
         SettingService.show_focus();
     });
 
     function save() {
-        vm.backup = angular.copy(vm.create.site_attendance.visitors);
         vm.member = {
             first_name: vm.local.data.first_name,
             last_name: vm.local.data.last_name,
@@ -26,6 +24,9 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
         //Visitor add when index = create; update otherwise
         if (vm.index === 'create') {
             vm.create.site_attendance.visitors.push(vm.member);
+            var seen = localStorage.getObject('sd.seen');
+            seen.visitor = true;
+            localStorage.setObject('sd.seen', seen);
         } else {
             vm.create.site_attendance.visitors[vm.index] = vm.member;
         }
@@ -41,15 +42,21 @@ function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $f
     }
 
     function go(predicate, id) {
-        if(vm.local.data.first_name) {
-          save();
-          if(JSON.stringify(vm.create.site_attendance.visitors) !== JSON.stringify(vm.backup)) {
-            $rootScope.seen.site_attendance.visitor = true;
-          }
+        if (vm.local.data.first_name) {
+            save();
         }
         localStorage.setObject('siteAttendance.tab', 'visitors');
         $state.go('app.' + predicate, {
             id: id
         });
     }
+
+    function watchChanges() {
+        $("input").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.visitor = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
 }

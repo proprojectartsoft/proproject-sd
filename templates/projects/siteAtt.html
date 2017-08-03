@@ -87,17 +87,17 @@
         <a class="tab-item" ng-class="{'active': vm.staff}" ng-click="vm.show('staff')">
             Staff
             <span class="notification-dot-attendance"
-                  ng-if="$root.seen.site_attendance.staff"></span>
+                  ng-if="vm.seen.staff"></span>
         </a>
         <a class="tab-item" ng-class="{'active': vm.contractors}" ng-click="vm.show('contractors')">
             Contractors
             <span class="notification-dot-attendance"
-                  ng-if="$root.seen.site_attendance.contractor"></span>
+                  ng-if="vm.seen.contractor"></span>
         </a>
         <a class="tab-item" ng-class="{'active': vm.visitors}" ng-click="vm.show('visitors')">
             Visitors
             <span class="notification-dot-attendance"
-                  ng-if="$root.seen.site_attendance.visitor"></span>
+                  ng-if="vm.seen.visitor"></span>
         </a>
     </div>
 </ion-view>

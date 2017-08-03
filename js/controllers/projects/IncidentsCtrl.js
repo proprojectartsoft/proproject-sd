@@ -25,8 +25,6 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             SettingService.show_focus();
     });
 
-    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
-
     if (!isNaN(vm.index)) {
         vm.incident = {
             description: vm.create.incidents[vm.index].description,
@@ -85,10 +83,12 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         vm.local.unit_id = item.id;
         vm.local.unit_name = item.name;
         vm.searchUnit.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.incident = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function saveIncident() {
-        vm.backup = angular.copy(vm.create.incidents);
         vm.newType = localStorage.getObject('sd.diary.incident.type')
         vm.action_required = localStorage.getObject('sd.diary.incident.actionReq')
         var incident = {
@@ -107,6 +107,9 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             vm.create.incidents[vm.index] = incident;
         } else {
             vm.create.incidents.push(incident);
+            var seen = localStorage.getObject('sd.seen');
+            seen.incident = true;
+            localStorage.setObject('sd.seen', seen);
         }
         localStorage.setObject('sd.diary.create', vm.create);
 
@@ -140,6 +143,9 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         localStorage.setObject('currentProj', proj);
         saveChanges(localStorage.getObject('currentProj'));
         SiteDiaryService.update_diary(vm.create);
+        var seen = localStorage.getObject('sd.seen');
+        seen.incident = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function saveChanges(project) {
@@ -167,9 +173,6 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     function go(predicate, id) {
         if (predicate == "incidents" && ($rootScope.selected || vm.incident.type)){
             saveIncident();
-            if(vm.editMode && JSON.stringify(vm.create.incidents) !==  JSON.stringify(vm.backup)) {
-              $rootScope.seen.incident = true;
-            }
         }
         $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
@@ -182,4 +185,13 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             });
         }
     }
+
+    function watchChanges() {
+        $("input").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.incident = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
 }

@@ -28,6 +28,9 @@ function GoodsUsedCtrl($rootScope,$state,$stateParams, SiteDiaryService, $indexe
         localStorage.setObject('currentProj', proj);
         saveChanges(localStorage.getObject('currentProj'));
         SiteDiaryService.update_diary(vm.create);
+        var seen = localStorage.getObject('sd.seen');
+        seen.good = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function saveChanges(project) {

@@ -50,8 +50,6 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             vm.subtotal_formated = '';
     });
 
-    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
-
     if (!isNaN(vm.index) && (vm.index !== 'create')) {
         vm.material = {
             name: vm.create.plant_and_material_used[vm.index].name,
@@ -67,10 +65,10 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     }
     vm.materials = vm.create.plant_and_material_used;
     vm.goods = localStorage.getObject('companyLists').resources;
-    vm.goods.sort(function (a,b){
-      var textA = a.name.toUpperCase();
-      var textB = b.name.toUpperCase();
-      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    vm.goods.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
@@ -110,21 +108,29 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         vm.material.tax = item.vat;
         vm.material.tax_formated = vm.material.tax + " %";
         vm.searchModal.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.material = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function addNewGood() {
         vm.material.name = vm.newGood;
         vm.searchModal.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.material = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function addUnit(item) {
         vm.material.unit_id = item.id;
         vm.material.unit_name = item.name;
         vm.searchUnit.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.material = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function save() {
-        vm.backup = angular.copy(vm.create.plant_and_material_used);
         vm.material = {
             name: vm.material.name,
             description: vm.material.description,
@@ -138,6 +144,9 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         }
         if (vm.index === 'create') {
             vm.create.plant_and_material_used.push(vm.material);
+            var seen = localStorage.getObject('sd.seen');
+            seen.material = true;
+            localStorage.setObject('sd.seen', seen);
         } else {
             vm.create.plant_and_material_used[vm.index] = vm.material
         }
@@ -161,11 +170,11 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         }
     }
 
-    function deleteEntry(entry){
+    function deleteEntry(entry) {
         $('.item-content').css('transform', '');
         vm.create.plant_and_material_used.forEach(function(el, i) {
-            if(el === entry){
-              vm.create.plant_and_material_used.splice(i, 1);
+            if (el === entry) {
+                vm.create.plant_and_material_used.splice(i, 1);
             }
         })
         localStorage.setObject('sd.diary.create', vm.create);
@@ -177,14 +186,14 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         localStorage.setObject('currentProj', proj);
         saveChanges(localStorage.getObject('currentProj'));
         SiteDiaryService.update_diary(vm.create);
+        var seen = localStorage.getObject('sd.seen');
+        seen.material = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id) {
-        if (predicate == "materials" && vm.material.name){
+        if (predicate == "materials" && vm.material.name) {
             save();
-            if(vm.editMode && JSON.stringify(vm.create.plant_and_material_used) !==  JSON.stringify(vm.backup)) {
-              $rootScope.seen.material = true;
-            }
         }
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
@@ -218,4 +227,18 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             )
         })
     }
+
+    function watchChanges() {
+        $("input").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.material = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+        $("textarea").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.material = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
 }

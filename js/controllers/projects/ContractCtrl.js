@@ -18,8 +18,6 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
     };
     vm.create = localStorage.getObject('sd.diary.create');
     vm.diaryId = localStorage.getObject('diaryId');
-    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
-
     $scope.$watch(function() {
         if (vm.editMode)
             SettingService.show_focus();
@@ -30,18 +28,20 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
     };
 
     function add() {
+        if (vm.input1 || vm.input2 || vm.input3) {
+            var seen = localStorage.getObject('sd.seen');
+            seen.contract = true;
+            localStorage.setObject('sd.seen', seen);
+        }
         if (vm.input1) {
-            vm.backup = angular.copy(vm.create.contract_notes);
             vm.instructions.comments.push(vm.input1);
             vm.input1 = '';
         }
         if (vm.input2) {
-            vm.backup = angular.copy(vm.create.contract_notes);
             vm.extensions.comments.push(vm.input2);
             vm.input2 = '';
         }
         if (vm.input3) {
-            vm.backup = angular.copy(vm.create.contract_notes);
             vm.variations.comments.push(vm.input3);
             vm.input3 = '';
         }
@@ -73,7 +73,6 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
     }
 
     function save() {
-        if(!vm.backup) vm.backup = angular.copy(vm.create.contract_notes);
         add();
         vm.contract = {
             instructions: vm.instructions,
@@ -95,9 +94,6 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
 
     function go(predicate, id) {
         save();
-        if(JSON.stringify(vm.create.contract_notes) !==  JSON.stringify(vm.backup)) {
-          $rootScope.seen.contract = true;
-        }
         if (predicate === 'diary') {
             if (vm.diaryId) {
                 $state.go('app.' + predicate, {
@@ -111,6 +107,14 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
                 id: id
             });
         }
-
     }
+
+    function watchChanges() {
+        $("textarea").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.contract = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
 }

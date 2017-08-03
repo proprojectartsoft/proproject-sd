@@ -19,8 +19,6 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             SettingService.show_focus();
     });
 
-    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
-
     if (!isNaN(vm.index) && !(vm.index === null)) {
         vm.type = vm.create.oh_and_s[vm.index].type;
         vm.task_completed = vm.create.oh_and_s[vm.index].task_completed;
@@ -46,7 +44,6 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     vm.tools = vm.create.oh_and_s;
 
     function save() {
-        vm.backup = angular.copy(vm.create.incidents);
         vm.newType = localStorage.getObject('sd.diary.ohs.type');
         vm.oh_and_s = {
             type: {
@@ -63,6 +60,9 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             vm.create.oh_and_s[vm.index] = vm.oh_and_s;
         } else {
             vm.create.oh_and_s.push(vm.oh_and_s);
+            var seen = localStorage.getObject('sd.seen');
+            seen.ohs = true;
+            localStorage.setObject('sd.seen', seen);
         }
         localStorage.setObject('sd.diary.create', vm.create);
 
@@ -96,6 +96,9 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
         localStorage.setObject('currentProj', proj);
         saveChanges(localStorage.getObject('currentProj'));
         SiteDiaryService.update_diary(vm.create);
+        var seen = localStorage.getObject('sd.seen');
+        seen.ohs = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function saveChanges(project) {
@@ -123,9 +126,6 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     function go(predicate, id) {
         if (predicate == "ohs" && ($rootScope.selected || vm.type)){
             save();
-            if(vm.editMode && JSON.stringify(vm.create.ohs) !==  JSON.stringify(vm.backup)) {
-              $rootScope.seen.ohs = true;
-            }
           }
         $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
@@ -138,6 +138,20 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             });
         }
     }
+
+    function watchChanges() {
+        $("input").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.ohs = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+        $("textarea").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.ohs = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
 }
 
 //directive for textarea so it can wrap the text and be scaleble

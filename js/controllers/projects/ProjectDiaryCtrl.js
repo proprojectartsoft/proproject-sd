@@ -21,6 +21,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.diaryStateId = $stateParams.id;
     vm.edit = localStorage.getObject('editMode');
 
+    vm.seen = localStorage.getObject('sd.seen');
+
     if ($stateParams.id) {
         if ($stateParams.id === 'offline') {
             var offDiary = localStorage.getObject('diaryToSync');
@@ -161,7 +163,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveCreate() {
-        $rootScope.seen = false;
         $('.create-btn').attr("disabled", true);
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
@@ -179,7 +180,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveEdit() {
-        $rootScope.seen = false;
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
             template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -298,11 +298,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function toggle() {
-        if (vm.edit) $rootScope.seen = false;
         vm.edit = !vm.edit;
         localStorage.setObject('editMode', vm.edit);
-        if (!vm.edit)
+        if (!vm.edit) {
+            // localStorage.setObject('seen', {});  //TODO:
+            // vm.seen = localStorage.getObject('seen');
             localStorage.setObject('currentProj', localStorage.getObject('initialProj'));
+        }
     }
 
     function go(predicate, id) {
@@ -319,7 +321,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveChanges(project) {
-        $rootScope.seen = false;
+        localStorage.setObject('sd.seen', {});
         $indexedDB.openStore('projects', function(store) {
             store.upsert(project).then(
                 function(e) {},

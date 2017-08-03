@@ -11,6 +11,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.addGood = addGood;
     vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
+    vm.datetimeChanged = datetimeChanged;
     vm.editMode = localStorage.getObject('editMode');
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
@@ -82,17 +83,26 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         vm.local.data.good_id = item.id;
         vm.local.data.good_unit = item.unit_name
         vm.searchModal.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.good = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function addNewGood() {
         vm.local.data.good_name = vm.newGood;
         vm.searchModal.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.good = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function addUnit(item) {
         vm.local.data.unit_id = item.id;
         vm.local.data.good_unit = item.name;
         vm.searchUnit.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.good = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function saveItem() {
@@ -108,6 +118,9 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         }
         if (vm.index === 'create') {
             vm.create.goods_received[vm.supplier].goods_details.push(vm.item);
+            var seen = localStorage.getObject('sd.seen');
+            seen.good = true;
+            localStorage.setObject('sd.seen', seen);
         } else {
             vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
         }
@@ -132,5 +145,19 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         $state.go('app.' + predicate, {
             id: id
         });
+    }
+
+    function watchChanges() {
+        $("input").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.good = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
+    function datetimeChanged() {
+        var seen = localStorage.getObject('sd.seen');
+        seen.good = true;
+        localStorage.setObject('sd.seen', seen);
     }
 }

@@ -12,7 +12,6 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
     vm.editMode = localStorage.getObject('editMode');
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
-    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
 
     $scope.$watch(function() {
         if (vm.editMode)
@@ -24,18 +23,20 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
     };
 
     function add() {
+        if (vm.input1 || vm.input2 || vm.input3) {
+            var seen = localStorage.getObject('sd.seen');
+            seen.site = true;
+            localStorage.setObject('sd.seen', seen);
+        }
         if (vm.input1) {
-            vm.backup = angular.copy(vm.create.site_notes);
             vm.delays.push(vm.input1);
             vm.input1 = '';
         }
         if (vm.input2) {
-            vm.backup = angular.copy(vm.create.site_notes);
             vm.tools.push(vm.input2);
             vm.input2 = '';
         }
         if (vm.input3) {
-            vm.backup = angular.copy(vm.create.site_notes);
             vm.materials.push(vm.input3);
             vm.input3 = '';
         }
@@ -55,7 +56,6 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
     }
 
     function save() {
-        if(!vm.backup) vm.backup = angular.copy(vm.create.site_notes);
         add();
         vm.site_notes = {
             delays: vm.delays,
@@ -89,9 +89,6 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
 
     function go(predicate, id) {
         save();
-        if(JSON.stringify(vm.create.site_notes) !==  JSON.stringify(vm.backup)) {
-          $rootScope.seen.site = true;
-        }
         if (predicate === 'diary') {
             if (vm.diaryId) {
                 $state.go('app.' + predicate, {
@@ -106,4 +103,13 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter) {
             });
         }
     }
+
+    function watchChanges() {
+        $("textarea").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.site = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
 }

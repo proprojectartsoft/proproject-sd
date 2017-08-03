@@ -41,23 +41,8 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
-    $rootScope.seen = {
-        weather: '',
-        site_attendance: {
-            staff: '',
-            contractor: '',
-            visitor: ''
-        },
-        material: '',
-        contract: '',
-        site: '',
-        incident: '',
-        ohs: '',
-        comment: '',
-        attachment: '',
-        good: ''
-    }
-    localStorage.setObject('sd.seen', $rootScope.seen)
+    localStorage.setObject('sd.seen', {});
+
     vm.selectOpt = [{
         id: 0,
         name: 'Annual leave'

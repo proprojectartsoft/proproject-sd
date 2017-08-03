@@ -23,12 +23,12 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Hourly rate</div>
-                <input type="number" placeholder="Tap to add hourly rate ({{vm.currency}})" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.local.data.hourly_rate">
+                <input ng-change="vm.datetimeChanged()" type="number" placeholder="Tap to add hourly rate ({{vm.currency}})" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.local.data.hourly_rate">
                 <input ng-readonly=true ng-if="(vm.diaryId) && !(vm.editMode)" ng-model="vm.local.data.hourly_rate_formated">
             </label>
             <div class="sd-label">
                 <div class="sd-title">Start</div>
-                <div ng-required="vm.data.required"
+                <div ng-change="vm.datetimeChanged()" ng-required="vm.data.required"
                      ion-datetime-picker time
                      ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}"
                      ng-model="vm.local.data.model_start"
@@ -43,7 +43,7 @@
             </div>
             <div class="sd-label">
                 <div class="sd-title">Break</div>
-                <div ng-required="vm.data.required"
+                <div ng-change="vm.datetimeChanged()" ng-required="vm.data.required"
                      ion-datetime-picker time
                      ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}"
                      ng-model="vm.local.data.model_break" month-step="1" hour-step="1" minute-step="1" second-step="1"
@@ -57,7 +57,7 @@
             </div>
             <div class="sd-label">
                 <div class="sd-title">Finish</div>
-                <div ng-required="vm.data.required"
+                <div ng-change="vm.datetimeChanged()" ng-required="vm.data.required"
                      ion-datetime-picker time
                      ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}"
                      ng-model="vm.local.data.model_finish"
@@ -72,7 +72,7 @@
             </div>
             <div class="sd-label">
                 <div class="sd-title">Total</div>
-                <div ng-required="vm.data.required"
+                <div ng-change="vm.datetimeChanged()" ng-required="vm.data.required"
                      ion-datetime-picker time
                      ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}"
                      ng-model="vm.local.data.total_time"

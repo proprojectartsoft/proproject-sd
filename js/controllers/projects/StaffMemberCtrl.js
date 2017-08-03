@@ -14,11 +14,11 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.addNewName = addNewName;
     vm.addStaff1 = addStaff1;
     vm.allowNumbersOnly = allowNumbersOnly;
+    vm.datetimeChanged = datetimeChanged;
     vm.currency = SettingService.get_currency_symbol(
         $filter('filter')(localStorage.getObject('companySettings'), {
             name: "currency"
         })[0]);
-
     $scope.$watch(function() {
         if (vm.editMode)
             SettingService.show_focus();
@@ -33,7 +33,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
     vm.editMode = localStorage.getObject('editMode');
-    $rootScope.seen = localStorage.getObject('sd.seen');
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
@@ -62,7 +61,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         } else {
             vm.local.data.model_break = vm.stringToDate("00:30");
         }
-        if(!vm.local.data.total_time) vm.calcParse();
+        if (!vm.local.data.total_time) vm.calcParse();
     } else {
         vm.local.data.staff_name = "";
         vm.local.data.model_break = vm.stringToDate("00:30");
@@ -74,7 +73,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             name: "finish"
         })[0];
         vm.local.data.model_finish = finish ? finish.value : 0;
-        if(!vm.local.data.total_time) vm.calcParse();
+        if (!vm.local.data.total_time) vm.calcParse();
     }
 
     vm.staff = localStorage.getObject('companyLists').staff;
@@ -89,11 +88,19 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         var watchOnce = $scope.$watch(function() {
             $timeout(function() {
                 $('.ion-datetime-picker input').each(function() {
+                    $(this).change(function() {
+                        console.log("change");
+                        var seen = localStorage.getObject('sd.seen');
+                        seen.staff = true;
+                        localStorage.setObject('sd.seen', seen);
+                    });
                     $(this).prop('type', 'tel');
                     $(this).on('input', function() {
-                      if(!this.value) {
-                        $(this).val(0); $(this).blur(); $(this).focus();
-                      }
+                        if (!this.value) {
+                            $(this).val(0);
+                            $(this).blur();
+                            $(this).focus();
+                        }
                     })
                 })
                 watchOnce();
@@ -113,6 +120,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     function addNewName() {
         vm.local.data.staff_name = vm.newName;
         vm.searchModal.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.staff = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function addStaff(item) {
@@ -123,6 +133,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         vm.local.data.hourly_rate = item.direct_cost;
         vm.local.data.company_name = item.employee_name;
         vm.searchModal.hide();
+        var seen = localStorage.getObject('sd.seen');
+        seen.staff = true;
+        localStorage.setObject('sd.seen', seen);
     }
 
     function addStaff1(item) {
@@ -131,7 +144,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function save() {
-        vm.backup = angular.copy(vm.create.site_attendance.staffs);
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
         // if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
         //     vm.local.total_time = vm.calcParse();
@@ -152,6 +164,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         //Staff add when index = create; update otherwise
         if (vm.index === 'create') {
             vm.create.site_attendance.staffs.push(vm.member);
+            var seen = localStorage.getObject('sd.seen');
+            seen.staff = true;
+            localStorage.setObject('sd.seen', seen);
         } else {
             vm.create.site_attendance.staffs[vm.index] = vm.member;
         }
@@ -195,31 +210,43 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function calcTime(start, finish, breakTime) {
-      var hhmm = ''
-      var stringBreak = breakTime.split(":");
-      var stringStart = start.split(":");
-      var stringFinish = finish.split(":");
-      var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
-      var hh = Math.floor(totalTime / 60)
-      var mm = Math.abs(totalTime % 60)
-      hhmm = hh + ':';
-      if (mm < 10) {
-        hhmm = hhmm + '0' + mm;
-      } else {
-        hhmm = hhmm + mm;
-      }
-      return hhmm;
+        var hhmm = ''
+        var stringBreak = breakTime.split(":");
+        var stringStart = start.split(":");
+        var stringFinish = finish.split(":");
+        var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
+        var hh = Math.floor(totalTime / 60)
+        var mm = Math.abs(totalTime % 60)
+        hhmm = hh + ':';
+        if (mm < 10) {
+            hhmm = hhmm + '0' + mm;
+        } else {
+            hhmm = hhmm + mm;
+        }
+        return hhmm;
     }
 
     function go(predicate, id) {
-        if(vm.local.data.staff_name) {
+        if (vm.local.data.staff_name) {
             save();
-            if(JSON.stringify(vm.create.site_attendance.staffs) !== JSON.stringify(vm.backup)) {
-              $rootScope.seen.site_attendance.staff = true;
-            }
         }
         $state.go('app.' + predicate, {
             id: id
         });
+    }
+
+    function watchChanges() {
+        $("input").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.staff = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
+
+    function datetimeChanged() {
+        var seen = localStorage.getObject('sd.seen');
+        seen.staff = true;
+        localStorage.setObject('sd.seen', seen);
     }
 }

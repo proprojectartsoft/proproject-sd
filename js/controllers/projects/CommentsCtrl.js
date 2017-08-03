@@ -26,14 +26,14 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
         vm.local.list[key].color = aux.color;
     });
 
-    if(!$rootScope.seen) $rootScope.seen = localStorage.getObject('sd.seen');
-
     function addComment() {
-        vm.backup = angular.copy(vm.create.comments);
+        var seen = localStorage.getObject('sd.seen');
+        seen.comment = true;
+        localStorage.setObject('sd.seen', seen);
         var comment = vm.local.comment;
         vm.local.comment = "";
         angular.forEach(vm.local.list, function(value, key) {
-          if(value.first_name === vm.myProfile.first_name) vm.color = value.color;
+            if (value.first_name === vm.myProfile.first_name) vm.color = value.color;
         });
         if (!vm.diaryId) {
             if (comment) {
@@ -62,6 +62,9 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                     comment: comment
                 };
                 vm.local.list.push(request);
+                if (!vm.local.comments || (vm.local.comments && !vm.local.comments.length)) {
+                    vm.local.comments = [];
+                }
                 vm.local.comments.push(commToAdd);
                 localStorage.setObject('sd.comments', vm.local.comments);
                 localStorage.setObject('sd.diary.create', vm.create);
@@ -73,7 +76,10 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                 localStorage.setObject('currentProj', proj);
             }
         }
-        $('textarea').css({ 'height': '45px', 'overflow-y': 'hidden' });
+        $('textarea').css({
+            'height': '45px',
+            'overflow-y': 'hidden'
+        });
     }
 
     function addComentAtEnter(event) {
@@ -88,9 +94,6 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     }
 
     function go(predicate, id) {
-        if(vm.editMode && JSON.stringify(vm.create.comments) !==  JSON.stringify(vm.backup)) {
-          $rootScope.seen.comment = true;
-        }
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId
@@ -101,5 +104,4 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
             });
         }
     }
-
 }
