@@ -25,26 +25,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     })
 
     if ($stateParams.id) {
-        if ($stateParams.id === 'offline') {
+        if ($stateParams.id === 'offline') {  //TODO:NOT
             var offDiary = localStorage.getObject('diaryToSync');
-            //TODO:
-
-            $indexedDB.openStore('projects', function(store) {
-                vm.projectId = parseInt(vm.projectId);
-                store.find(vm.projectId).then(function(e) {
-                    vm.diaries = e.value.diaries;
-                    angular.forEach(vm.diaries, function(diary) {
-                        if (diary.id == $stateParams.id) {
-                            vm.created_for_date = (diary.created_for_date != 0) && diary.created_for_date || '';
-                            localStorage.setObject('sd.diary.create', diary.data);
-                            vm.summary = diary.data ? diary.data.summary : '';
-                        }
-                    })
-                });
-            });
-
-
-
             vm.create = offDiary.data;
             vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
             vm.summary = vm.create.summary;
@@ -136,7 +118,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         AttachmentsService.update_attachments(att).then(function(result) {})
                     })
                 }
-
                 var deleteAttachments;
                 if (attachments.toBeDeleted) {
                     deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
@@ -156,17 +137,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 Promise.all([uploadAttachments, deleteAttachments, sync]).then(syncPopup.close);
             }).error(function(response) {
                 var attStorage = localStorage.getObject('sd.attachments');
-
-                // var diariesToSync = localStorage.getObject('diariesToSync') || [];
                 var diary = {
                     data: vm.create
                 }
                 if (attStorage) {
                     diary.attachments = attStorage;
                 }
-
-
-                // diariesToSync.push(diary); //NOT
                 localStorage.setObject('diariesToSync', true);
                 var proj = localStorage.getObject('currentProj');
                 if (!proj.value.diaries)
@@ -179,10 +155,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 localStorage.setObject('currentProj', proj);
                 saveChanges(localStorage.getObject('currentProj'));
                 localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
-
-
-
-
                 syncPopup.close();
                 var offlinePopup = $ionicPopup.alert({
                     title: "You are offline",
@@ -210,7 +182,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             buttons: []
         });
 
-        // if (navigator.onLine && localStorage.getObject('diaryToSync')) {
         if (navigator.onLine && localStorage.getObject('diariesToSync')) {
             SyncService.addDiariesToSync().then(function() {
                 addSiteDiaryToDB(syncPopup)
@@ -307,7 +278,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         saveChanges(localStorage.getObject('currentProj'));
         localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
         $('.save-btn').attr("disabled", false);
-
         Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments]).then(syncPopup.close);
     }
 
