@@ -239,8 +239,9 @@ angular.module($APP.name).factory('SyncService', [
                                     store.getAll().then(function(result) {
                                         angular.forEach(result, function(project) {
                                             console.log(diariesToAdd);
-
-                                            angular.extend(diariesToAdd, diariesToAdd, $filter('filter')(project.value.diaries, function(d) {
+                                            var copy = angular.copy(diariesToAdd);
+                                            console.log(copy);
+                                            angular.extend(diariesToAdd, copy, $filter('filter')(project.value.diaries, function(d) {
                                                 return /^off.*/g.test(d.id);
                                             }))
                                             console.log(diariesToAdd);
