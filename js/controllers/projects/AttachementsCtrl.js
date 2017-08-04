@@ -178,4 +178,18 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
             }, 100);
         })
     }
+
+    function watchChanges() {
+        $("input").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.material = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+        $("textarea").change(function() {
+            var seen = localStorage.getObject('sd.seen');
+            seen.material = true;
+            localStorage.setObject('sd.seen', seen);
+        });
+    }
+    watchChanges();
 }
