@@ -80,11 +80,20 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
         }
     }
 
-    function deleteEntry(entry){
+    function deleteEntry(entry) {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can remove OH and S while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         $('.item-content').css('transform', '');
         vm.create.oh_and_s.forEach(function(el, i) {
-            if(el === entry){
-              vm.create.oh_and_s.splice(i, 1);
+            if (el === entry) {
+                vm.create.oh_and_s.splice(i, 1);
             }
         })
         localStorage.setObject('sd.diary.create', vm.create);
@@ -124,9 +133,9 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     }
 
     function go(predicate, id) {
-        if (predicate == "ohs" && ($rootScope.selected || vm.type)){
+        if (predicate == "ohs" && ($rootScope.selected || vm.type)) {
             save();
-          }
+        }
         $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
             $state.go('app.' + predicate, {
@@ -160,18 +169,24 @@ angular.module($APP.name).directive('elastic', [
     function($timeout) {
         return {
             restrict: 'A',
-						link: function autoResizeLink(scope, element, attributes, controller) {
+            link: function autoResizeLink(scope, element, attributes, controller) {
 
-                  element.css({ 'height': '45px', 'overflow-y': 'hidden' });
-                  $timeout(function () {
-                      element.css('height', 45  + 'px');
-                  }, 100);
+                element.css({
+                    'height': '45px',
+                    'overflow-y': 'hidden'
+                });
+                $timeout(function() {
+                    element.css('height', 45 + 'px');
+                }, 100);
 
-                  element.on('input', function () {
-                      element.css({ 'height': '45px', 'overflow-y': 'hidden' });
-                      element.css('height', element[0].scrollHeight + 'px');
-                  });
-              }
+                element.on('input', function() {
+                    element.css({
+                        'height': '45px',
+                        'overflow-y': 'hidden'
+                    });
+                    element.css('height', element[0].scrollHeight + 'px');
+                });
+            }
         };
     }
 ]);

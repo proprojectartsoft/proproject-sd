@@ -41,6 +41,15 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
     }
 
     function deleteEntry(entry) {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can remove members while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         $('.item-content').css('transform', '');
         if (vm.staff) {
             vm.create.site_attendance.staffs.forEach(function(el, i) {

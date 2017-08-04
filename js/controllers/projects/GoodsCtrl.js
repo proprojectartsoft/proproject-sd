@@ -1,6 +1,6 @@
 angular.module($APP.name).controller('GoodsCtrl', GoodsCtrl)
 
-GoodsCtrl.$inject = ['$rootScope','$state', 'SiteDiaryService', '$indexedDB', '$filter'];
+GoodsCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$indexedDB', '$filter'];
 
 function GoodsCtrl($rootScope, $state, SiteDiaryService, $indexedDB, $filter) {
     var vm = this;
@@ -12,10 +12,19 @@ function GoodsCtrl($rootScope, $state, SiteDiaryService, $indexedDB, $filter) {
     vm.create = localStorage.getObject('sd.diary.create');
     vm.suppliers = vm.create.goods_received;
 
-    function deleteEntry(entry){
+    function deleteEntry(entry) {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can remove goods while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         vm.create.goods_received.forEach(function(el, i) {
-            if(el === entry){
-              vm.create.goods_received.splice(i, 1);
+            if (el === entry) {
+                vm.create.goods_received.splice(i, 1);
             }
         })
         localStorage.setObject('sd.diary.create', vm.create);
@@ -32,16 +41,16 @@ function GoodsCtrl($rootScope, $state, SiteDiaryService, $indexedDB, $filter) {
         localStorage.setObject('sd.seen', seen);
     }
 
-    function go(predicate,id) {
-      if((predicate ==='diary') && (vm.diaryId)){
-        $state.go('app.'+predicate, {
-            id: vm.diaryId
-        });
-      }else{
-        $state.go('app.'+predicate, {
-            id: id
-        });
-      }
+    function go(predicate, id) {
+        if ((predicate === 'diary') && (vm.diaryId)) {
+            $state.go('app.' + predicate, {
+                id: vm.diaryId
+            });
+        } else {
+            $state.go('app.' + predicate, {
+                id: id
+            });
+        }
     }
 
     function saveChanges(project) {

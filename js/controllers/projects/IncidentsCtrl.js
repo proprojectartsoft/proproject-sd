@@ -127,11 +127,20 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         }
     }
 
-    function deleteEntry(entry){
+    function deleteEntry(entry) {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can remove incidents while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         $('.item-content').css('transform', '');
         vm.create.incidents.forEach(function(el, i) {
-            if(el === entry){
-              vm.create.incidents.splice(i, 1);
+            if (el === entry) {
+                vm.create.incidents.splice(i, 1);
             }
         })
         localStorage.setObject('sd.diary.create', vm.create);
@@ -171,7 +180,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function go(predicate, id) {
-        if (predicate == "incidents" && ($rootScope.selected || vm.incident.type)){
+        if (predicate == "incidents" && ($rootScope.selected || vm.incident.type)) {
             saveIncident();
         }
         $rootScope.selected = undefined;

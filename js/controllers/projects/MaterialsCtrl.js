@@ -171,6 +171,15 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function deleteEntry(entry) {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can remove materials while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         $('.item-content').css('transform', '');
         vm.create.plant_and_material_used.forEach(function(el, i) {
             if (el === entry) {

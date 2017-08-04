@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('GoodsUsedCtrl', GoodsUsedCtrl)
 
-GoodsUsedCtrl.$inject = ['$rootScope','$state','$stateParams', 'SiteDiaryService', '$indexedDB', '$filter'];
+GoodsUsedCtrl.$inject = ['$rootScope', '$state', '$stateParams', 'SiteDiaryService', '$indexedDB', '$filter'];
 
-function GoodsUsedCtrl($rootScope,$state,$stateParams, SiteDiaryService, $indexedDB, $filter) {
+function GoodsUsedCtrl($rootScope, $state, $stateParams, SiteDiaryService, $indexedDB, $filter) {
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
@@ -13,10 +13,19 @@ function GoodsUsedCtrl($rootScope,$state,$stateParams, SiteDiaryService, $indexe
     vm.index = $stateParams.id;
     vm.goods = vm.create.goods_received[vm.index].goods_details;
 
-    function deleteEntry(entry){
+    function deleteEntry(entry) {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can remove goods while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         vm.create.goods_received[vm.index].goods_details.forEach(function(el, i) {
-            if(el === entry){
-              vm.create.goods_received[vm.index].goods_details.splice(i, 1);
+            if (el === entry) {
+                vm.create.goods_received[vm.index].goods_details.splice(i, 1);
             }
         })
         localStorage.setObject('sd.diary.create', vm.create);
@@ -55,8 +64,8 @@ function GoodsUsedCtrl($rootScope,$state,$stateParams, SiteDiaryService, $indexe
         })
     }
 
-    function go(predicate,id,index) {
-        $state.go('app.'+predicate, {
+    function go(predicate, id, index) {
+        $state.go('app.' + predicate, {
             id: id,
             index: index
         });

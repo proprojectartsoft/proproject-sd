@@ -12,7 +12,9 @@ angular.module($APP.name).factory('SiteDiaryService', [
                     function(payload) {
                         return payload.data;
                     }
-                ).catch(function(e) { console.log(e) });
+                ).catch(function(e) {
+                    console.log(e)
+                });
             },
 
             list_diaries: function(projectId) {
@@ -98,11 +100,13 @@ angular.module($APP.name).factory('SiteDiaryService', [
                     method: 'PUT',
                     url: $APP.server + '/api/sitediary',
                     data: dataIn
-                }).then(
+                }).success(
                     function(payload) {
                         return payload.data;
                     }
-                );
+                ).error(function(err) {
+                    return err;
+                })
             },
 
             delete_diary: function(id) {

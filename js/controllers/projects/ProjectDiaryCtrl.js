@@ -202,6 +202,15 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveEdit() {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can edit Site Diaries while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
             template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -212,8 +221,20 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         vm.edit = false;
         localStorage.setObject('editMode', vm.edit);
         vm.create = localStorage.getObject('sd.diary.create');
-        var updateDiary = SiteDiaryService.update_diary(vm.create).then(function(result) {
+        var updateDiary = SiteDiaryService.update_diary(vm.create).success(function(result) {
             vm.go('project');
+        }).error(function(err) {
+            var errPopup = $ionicPopup.show({
+                title: "Error",
+                template: '<span>An unexpected error occured and Site Diary could not be updated.</span>',
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        errPopup.close();
+                    }
+                }]
+            });
         })
         angular.forEach(localStorage.getObject('sd.comments'), function(comment) {
             SiteDiaryService.add_comments(comment)
@@ -297,6 +318,15 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function saveSummary(create) {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can edit Site Diaries while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
             template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -304,7 +334,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             buttons: []
         });
 
-        SiteDiaryService.update_diary(create).then(function(result) {
+        SiteDiaryService.update_diary(create).success(function(result) {
             // vm.go('project');
             var proj = localStorage.getObject('currentProj');
             var diary = $filter('filter')(proj.value.diaries, {
@@ -316,15 +346,34 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             saveChanges(localStorage.getObject('currentProj'));
             localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
             syncPopup.close();
+        }).error(function(err) {
+            var errPopup = $ionicPopup.show({
+                title: "Error",
+                template: '<span>An unexpected error occured and Site Diary could not be updated.</span>',
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        errPopup.close();
+                    }
+                }]
+            });
         })
     }
 
     function toggle() {
+        if (!navigator.onLine) {
+            var syncPopup = $ionicPopup.show({
+                title: 'You are offline',
+                template: "<center>You can edit Site Diaries while online.</center>",
+                content: "",
+                buttons: []
+            });
+            return;
+        }
         vm.edit = !vm.edit;
         localStorage.setObject('editMode', vm.edit);
         if (!vm.edit) {
-            // localStorage.setObject('seen', {});  //TODO:
-            // vm.seen = localStorage.getObject('seen');
             localStorage.setObject('currentProj', localStorage.getObject('initialProj'));
         }
     }
