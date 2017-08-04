@@ -191,7 +191,7 @@ input[type=checkbox].css-checkbox {
 }
 
 .remember-container label {
-  padding-top: 5px;
+  // padding-top: 5px;
   padding-bottom: 5px;
   display: inline-block;
   background: none;
@@ -239,6 +239,7 @@ input[type=checkbox].css-checkbox {
   position: relative;
   float: left!important;
   left: 20px;
+  padding-top: 10px;
 }
 
 .date-item {

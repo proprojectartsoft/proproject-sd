@@ -25,7 +25,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     })
 
     if ($stateParams.id) {
-        if ($stateParams.id === 'offline') {  //TODO:NOT
+        if ($stateParams.id === 'offline') {
             var offDiary = localStorage.getObject('diaryToSync');
             vm.create = offDiary.data;
             vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
@@ -89,9 +89,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         vm.created_for_date = vm.createInit.created_for_date;
         vm.summary = vm.createInit.summary;
     }
-
     vm.diaryId = localStorage.getObject('diaryId');
-
     function addSiteDiaryToDB(syncPopup) {
         vm.create = localStorage.getObject('sd.diary.create');
         vm.create.date = new Date().getTime();
@@ -112,7 +110,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         attToAddAsNew.push(value);
                     }
                 });
-                var uploadAttachments = AttachmentsService.upload_attachments([...attToAdd, ...attToAddAsNew]).then(function(result) {}); //TODO:
+                var uploadAttachments = AttachmentsService.upload_attachments([...attToAdd, ...attToAddAsNew]).then(function(result) {});
                 if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
                     angular.forEach(attachments.toBeUpdated, function(att) {
                         AttachmentsService.update_attachments(att).then(function(result) {})
@@ -133,7 +131,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     $('.create-btn').attr("disabled", false);
                     vm.go('project');
                 })
-
                 Promise.all([uploadAttachments, deleteAttachments, sync]).then(syncPopup.close);
             }).error(function(response) {
                 var attStorage = localStorage.getObject('sd.attachments');
