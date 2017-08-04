@@ -238,11 +238,7 @@ angular.module($APP.name).factory('SyncService', [
                                 $indexedDB.openStore('projects', function(store) {
                                     store.getAll().then(function(result) {
                                         angular.forEach(result, function(project) {
-                                            var x = $filter('filter')(project.value.diaries, function(d) {
-                                              var test = /^off.*/g.test(d.id);
-                                                return test;
-                                            })
-                                            angular.extend(diariesToAdd, $filter('filter')(project.value.diaries, function(d) {
+                                            diariesToAdd = angular.extend(diariesToAdd, $filter('filter')(project.value.diaries, function(d) {
                                                 return /^off.*/g.test(d.id);
                                             }))
                                         })
