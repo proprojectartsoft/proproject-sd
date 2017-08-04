@@ -238,13 +238,18 @@ angular.module($APP.name).factory('SyncService', [
                                 $indexedDB.openStore('projects', function(store) {
                                     store.getAll().then(function(result) {
                                         angular.forEach(result, function(project) {
-                                            console.log(diariesToAdd);
-                                            var copy = angular.copy(diariesToAdd);
-                                            console.log(copy);
-                                            angular.extend(diariesToAdd, copy, $filter('filter')(project.value.diaries, function(d) {
+                                            angular.forEach($filter('filter')(project.value.diaries, function(d) {
                                                 return /^off.*/g.test(d.id);
-                                            }))
-                                            console.log(diariesToAdd);
+                                            }), function(sd) {
+                                                diariesToAdd.push(sd);
+                                            })
+                                            // console.log(diariesToAdd);
+                                            // var copy = angular.copy(diariesToAdd);
+                                            // console.log(copy);
+                                            // angular.extend(diariesToAdd, copy, $filter('filter')(project.value.diaries, function(d) {
+                                            //     return /^off.*/g.test(d.id);
+                                            // }))
+                                            // console.log(diariesToAdd);
                                         })
                                         localStorage.removeItem('diariesToSync');
                                         if (diariesToAdd && !diariesToAdd.length) {
