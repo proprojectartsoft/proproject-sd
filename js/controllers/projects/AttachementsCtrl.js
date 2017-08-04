@@ -27,7 +27,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
 
     function populate() {
         vm.attachments = localStorage.getObject('sd.attachments');
-        vm.pictures = vm.attachments.pictures;
+        vm.pictures = vm.attachments && vm.attachments.pictures || [];
         angular.forEach(vm.pictures, function(value) {
             if (!value.url) {
                 value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;

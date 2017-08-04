@@ -33,7 +33,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     localStorage.setObject('projectId', $stateParams.id);
     localStorage.setObject('sd.diary.shares', null);
 
-    vm.offlineDiary = localStorage.getObject('diaryToSync');
+    // vm.offlineDiary = localStorage.getObject('diaryToSync');
+    vm.offlineDiaries = localStorage.getObject('diariesToSync');
+
+
+
     vm.filter = {};
     vm.shareId = {};
     vm.state = '';

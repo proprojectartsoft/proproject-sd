@@ -22,7 +22,10 @@
                     </ion-option-button>
                 </div>
             </ion-item>
-            <ion-item ng-if="vm.offlineDiary.data" class="sd-item-tile">
+
+
+
+            <ion-item ng-repeat="item in vm.offlineDiaries.data" class="sd-item-tile">
                 <div class="sd-group">
                     <span class="sd-tile">
                       OFF
@@ -36,6 +39,31 @@
                     </ion-option-button>
                 </div>
             </ion-item>
+
+
+
+
+
+
+
+
+
+
+<!--
+            <ion-item ng-if="vm.offlineDiary.data" class="sd-item-tile">
+                <div class="sd-group">
+                    <span class="sd-tile">
+                      OFF
+                    </span>
+                    <div class="sd-content">
+                        <div class="sd-title">OfflineDiary</div>
+                        <div class="sd-description">SD - Unknown</div>
+                    </div>
+                    <ion-option-button class="button-assertive" ng-click="vm.deleteOffDiary()">
+                        Delete
+                    </ion-option-button>
+                </div>
+            </ion-item> -->
         </ion-list>
         <div ng-if="!vm.diaries.length" class="sd-nodata">
             <span>There are no diaries</span>

@@ -27,6 +27,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     if ($stateParams.id) {
         if ($stateParams.id === 'offline') {
             var offDiary = localStorage.getObject('diaryToSync');
+            //TODO:
+
             vm.create = offDiary.data;
             vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
             vm.summary = vm.create.summary;
@@ -138,13 +140,30 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 Promise.all([uploadAttachments, deleteAttachments, sync]).then(syncPopup.close);
             }).error(function(response) {
                 var attStorage = localStorage.getObject('sd.attachments');
-                vm.diaryToSync = {
+
+                var diariesToSync = localStorage.getObject('diariesToSync') || [];
+                var diary = {
                     data: vm.create
-                };
-                if (attStorage) {
-                    vm.diaryToSync.attachments = attStorage;
                 }
-                localStorage.setObject('diaryToSync', vm.diaryToSync);
+                if (attStorage) {
+                    diary.attachments = attStorage;
+                }
+                diariesToSync.push(diary);
+
+
+
+
+                // vm.diaryToSync = {
+                //     data: vm.create
+                // };
+                // if (attStorage) {
+                //     vm.diaryToSync.attachments = attStorage;
+                // }
+                // localStorage.setObject('diaryToSync', vm.diaryToSync);
+                //
+
+
+
                 syncPopup.close();
                 var offlinePopup = $ionicPopup.alert({
                     title: "You are offline",
@@ -171,7 +190,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             content: "",
             buttons: []
         });
-        if (navigator.onLine && localStorage.getObject('diaryToSync')) {
+        // if (navigator.onLine && localStorage.getObject('diaryToSync')) {
+        if (navigator.onLine && localStorage.getObject('diariesToSync')) {
+
             SyncService.addDiariesToSync().then(function() {
                 addSiteDiaryToDB(syncPopup)
             })
