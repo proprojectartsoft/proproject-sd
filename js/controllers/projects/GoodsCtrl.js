@@ -18,7 +18,13 @@ function GoodsCtrl($rootScope, $state, SiteDiaryService, $indexedDB, $filter, $i
                 title: 'You are offline',
                 template: "<center>You can remove goods while online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        syncPopup.close();
+                    }
+                }]
             });
             return;
         }

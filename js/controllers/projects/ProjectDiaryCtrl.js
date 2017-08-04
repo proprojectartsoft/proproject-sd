@@ -208,7 +208,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 title: 'You are offline',
                 template: "<center>You can edit Site Diaries while online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        syncPopup.close();
+                    }
+                }]
             });
             return;
         }
@@ -324,7 +330,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 title: 'You are offline',
                 template: "<center>You can edit Site Diaries while online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        syncPopup.close();
+                    }
+                }]
             });
             return;
         }
@@ -368,7 +380,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 title: 'You are offline',
                 template: "<center>You can edit Site Diaries while online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        syncPopup.close();
+                    }
+                }]
             });
             return;
         }

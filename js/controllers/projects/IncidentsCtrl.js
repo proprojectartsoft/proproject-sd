@@ -133,7 +133,13 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
                 title: 'You are offline',
                 template: "<center>You can remove incidents while online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        syncPopup.close();
+                    }
+                }]
             });
             return;
         }

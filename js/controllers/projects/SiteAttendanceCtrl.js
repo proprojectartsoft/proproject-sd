@@ -46,7 +46,13 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
                 title: 'You are offline',
                 template: "<center>You can remove members while online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        syncPopup.close();
+                    }
+                }]
             });
             return;
         }

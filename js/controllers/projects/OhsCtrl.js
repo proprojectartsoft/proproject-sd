@@ -86,7 +86,13 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
                 title: 'You are offline',
                 template: "<center>You can remove OH and S while online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        syncPopup.close();
+                    }
+                }]
             });
             return;
         }

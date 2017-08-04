@@ -182,12 +182,12 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
     function watchChanges() {
         $("input").change(function() {
             var seen = localStorage.getObject('sd.seen');
-            seen.material = true;
+            seen.attachement = true;
             localStorage.setObject('sd.seen', seen);
         });
         $("textarea").change(function() {
             var seen = localStorage.getObject('sd.seen');
-            seen.material = true;
+            seen.attachement = true;
             localStorage.setObject('sd.seen', seen);
         });
     }

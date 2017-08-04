@@ -176,7 +176,13 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
                 title: 'You are offline',
                 template: "<center>You can remove materials while online.</center>",
                 content: "",
-                buttons: []
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        syncPopup.close();
+                    }
+                }]
             });
             return;
         }
