@@ -242,49 +242,45 @@ angular.module($APP.name).factory('SyncService', [
                                                 return /^off.*/g.test(d.id);
                                             }))
                                         })
+                                        // var diariesToAdd = localStorage.getObject('diariesToSync') || [];
+                                        localStorage.removeItem('diariesToSync');
+                                        if (diariesToAdd && !diariesToAdd.length) {
+                                            prm.resolve();
+                                        }
+                                        angular.forEach(diariesToAdd, function(diaryToAdd) {
+                                            diaryToAdd.id = 0;
+                                            SiteDiaryService.add_diary(diaryToAdd)
+                                                .success(function(result) {
+                                                    var attachments = diaryToAdd.attachments;
+                                                    var attToAdd = [];
+                                                    angular.forEach(attachments.pictures, function(value) {
+                                                        if (!value.path) {
+                                                            value.site_diary_id = result.id;
+                                                            attToAdd.push(value);
+                                                        }
+                                                    });
+                                                    if (attToAdd) {
+                                                        AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
+                                                    }
+                                                    var comments = diaryToAdd.comments;
+                                                    angular.forEach(comments, function(value) {
+                                                        var request = {
+                                                            site_diary_id: result.id,
+                                                            comment: value.comment,
+                                                        };
+                                                        SiteDiaryService.add_comments(request).then(function(result) {});
+                                                    })
+                                                    if (diariesToAdd[diariesToAdd.length - 1] == diaryToAdd) {
+                                                        prm.resolve();
+                                                    }
+                                                }).error(function(err) {
+                                                    if (diariesToAdd[diariesToAdd.length - 1] == diaryToAdd) {
+                                                        prm.resolve();
+                                                    }
+                                                })
+                                        })
                                     });
                                 });
-
-                                // var diariesToAdd = localStorage.getObject('diariesToSync') || [];
-                                localStorage.removeItem('diariesToSync');
-
-                                if (diariesToAdd && !diariesToAdd.length) {
-                                    prm.resolve();
-                                }
-                                angular.forEach(diariesToAdd, function(diaryToAdd) {
-
-                                    diaryToAdd.id = 0;
-
-                                    SiteDiaryService.add_diary(diaryToAdd.data)
-                                        .success(function(result) {
-                                            var attachments = diaryToAdd.attachments;
-                                            var attToAdd = [];
-                                            angular.forEach(attachments.pictures, function(value) {
-                                                if (!value.path) {
-                                                    value.site_diary_id = result.id;
-                                                    attToAdd.push(value);
-                                                }
-                                            });
-                                            if (attToAdd) {
-                                                AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
-                                            }
-                                            var comments = diaryToAdd.data.comments;
-                                            angular.forEach(comments, function(value) {
-                                                var request = {
-                                                    site_diary_id: result.id,
-                                                    comment: value.comment,
-                                                };
-                                                SiteDiaryService.add_comments(request).then(function(result) {});
-                                            })
-                                            if (diariesToAdd[diariesToAdd.length - 1] == diaryToAdd) {
-                                                prm.resolve();
-                                            }
-                                        }).error(function(err) {
-                                            if (diariesToAdd[diariesToAdd.length - 1] == diaryToAdd) {
-                                                prm.resolve();
-                                            }
-                                        })
-                                })
                             } else {
                                 prm.resolve();
                                 var offlinePopup = $ionicPopup.alert({

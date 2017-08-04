@@ -158,11 +158,10 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 var attStorage = localStorage.getObject('sd.attachments');
 
                 // var diariesToSync = localStorage.getObject('diariesToSync') || [];
-                var diary = {
-                    data: vm.create
-                }
+                // var diary = vm.create
+
                 if (attStorage) {
-                    diary.attachments = attStorage;
+                    vm.create.attachments = attStorage;
                 }
 
 
@@ -175,14 +174,11 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 var proj = localStorage.getObject('currentProj');
                 if (!proj.value.diaries)
                     proj.value.diaries = [];
-                diary.id = "off" + proj.value.diaries.length + 1;
-                proj.value.diaries.push(diary);
+                vm.create.id = "off" + proj.value.diaries.length + 1;
+                proj.value.diaries.push(vm.create);
                 localStorage.setObject('currentProj', proj);
                 saveChanges(localStorage.getObject('currentProj'));
                 localStorage.setObject('initialProj', localStorage.getObject('currentProj'));
-
-
-
 
                 syncPopup.close();
                 var offlinePopup = $ionicPopup.alert({
@@ -210,7 +206,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             content: "",
             buttons: []
         });
-        
+
         // if (navigator.onLine && localStorage.getObject('diaryToSync')) {
         if (navigator.onLine && localStorage.getObject('diariesToSync')) {
             SyncService.addDiariesToSync().then(function() {
