@@ -34,7 +34,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     localStorage.setObject('sd.diary.shares', null);
 
     // vm.offlineDiary = localStorage.getObject('diaryToSync');
-    vm.offlineDiaries = localStorage.getObject('diariesToSync');
+    // vm.offlineDiaries = localStorage.getObject('diariesToSync');
 
 
 

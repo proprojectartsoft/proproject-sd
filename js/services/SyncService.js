@@ -12,7 +12,8 @@ angular.module($APP.name).factory('SyncService', [
     'SettingService',
     'AuthService',
     'SharedService',
-    function($q, $http, $timeout, $indexedDB, $ionicPopup, $state, $filter, ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService, SharedService) {
+    'filterFilter',
+    function($q, $http, $timeout, $indexedDB, $ionicPopup, $state, $filter, ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService, SharedService, filterFilter) {
 
         var getme = function() {
             return $http.get($APP.server + '/api/me')
@@ -55,6 +56,7 @@ angular.module($APP.name).factory('SyncService', [
                                                 localStorage.setObject('companySettings', sett);
                                             })
                                         }
+
                                         function setCompanyLists() {
                                             var lists = {};
                                             var ready1 = false,
@@ -142,7 +144,6 @@ angular.module($APP.name).factory('SyncService', [
                                             store.clear();
                                         }).then(function(e) {
                                             buildData().then(function(projects) {
-                                                var diaryToAdd = localStorage.getObject('diariesToSync');
                                                 if (!projects.length) deferred.resolve('sync_done');
                                                 angular.forEach(projects, function(project) {
                                                     $indexedDB.openStore('projects', function(store) {
@@ -230,16 +231,30 @@ angular.module($APP.name).factory('SyncService', [
             addDiariesToSync: function() {
                 var prm = $q.defer();
                 $timeout(function() {
-                    if (navigator.onLine) {
+                    if (navigator.onLine && localStorage.getObject('diariesToSync')) {
                         login().then(function(res) {
                             if (res == "logged") {
-                                var diariesToAdd = localStorage.getObject('diariesToSync') || [];
-                                localStorage.setObject('diariesToSync', []);
+                                var diariesToAdd = [];
+                                $indexedDB.openStore('projects', function(store) {
+                                    store.getAll().then(function(result) {
+                                        angular.forEach(result, function(project) {
+                                            angular.extend(diariesToAdd, $filter('filter')(project.value.diaries, function(d) {
+                                                return /^off.*/g.test(d.id);
+                                            }))
+                                        })
+                                    });
+                                });
+
+                                // var diariesToAdd = localStorage.getObject('diariesToSync') || [];
+                                localStorage.removeItem('diariesToSync');
 
                                 if (diariesToAdd && !diariesToAdd.length) {
                                     prm.resolve();
                                 }
                                 angular.forEach(diariesToAdd, function(diaryToAdd) {
+
+                                    diaryToAdd.id = 0;
+
                                     SiteDiaryService.add_diary(diaryToAdd.data)
                                         .success(function(result) {
                                             var attachments = diaryToAdd.attachments;
