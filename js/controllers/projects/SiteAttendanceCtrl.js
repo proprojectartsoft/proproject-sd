@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('SiteAttendanceCtrl', SiteAttendanceCtrl)
 
-SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', '$indexedDB', '$timeout'];
+SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', '$indexedDB', '$timeout', '$ionicPopup'];
 
-function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $indexedDB, $timeout) {
+function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $indexedDB, $timeout, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.show = show;

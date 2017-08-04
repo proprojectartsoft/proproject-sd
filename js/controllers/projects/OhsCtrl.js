@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('OhsCtrl', OhsCtrl)
 
-OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter', 'SiteDiaryService', '$indexedDB', '$rootScope'];
+OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter', 'SiteDiaryService', '$indexedDB', '$rootScope', '$ionicPopup'];
 
-function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiaryService, $indexedDB, $rootScope) {
+function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiaryService, $indexedDB, $rootScope, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;

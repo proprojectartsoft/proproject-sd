@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('MaterialsCtrl', MaterialsCtrl)
 
-MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB', '$rootScope'];
+MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB', '$rootScope', '$ionicPopup'];
 
-function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB, $rootScope) {
+function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB, $rootScope, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.unit = "materials.unit";

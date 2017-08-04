@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('GoodsCtrl', GoodsCtrl)
 
-GoodsCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$indexedDB', '$filter'];
+GoodsCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$indexedDB', '$filter', '$ionicPopup'];
 
-function GoodsCtrl($rootScope, $state, SiteDiaryService, $indexedDB, $filter) {
+function GoodsCtrl($rootScope, $state, SiteDiaryService, $indexedDB, $filter, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;

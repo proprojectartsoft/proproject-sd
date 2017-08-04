@@ -149,6 +149,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     diary.attachments = attStorage;
                 }
                 diariesToSync.push(diary);
+                localStorage.setObject('diariesToSync', diariesToSync);
 
 
 
