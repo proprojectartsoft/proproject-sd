@@ -228,13 +228,10 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             });
         });
     }
-
-    $scope.data = {}; //TODO:
+    $scope.data = {};
     $scope.showPopup = function(predicate) {
-        //TODO: scope data here
         var popup = $ionicPopup.show(createPopup(predicate.id));
     };
-
     function deleteDiary(id) {
         $('.delete-btn').attr("disabled", true);
         $('.item-content').css('transform', '');

@@ -27,7 +27,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                 });
                 AuthService.login($scope.user).success(function(result) {
                     SyncService.addDiariesToSync().then(function() {
-                        SyncService.sync().then(function() { //'Sync'
+                        SyncService.sync().then(function() {
                             ProjectService.my_account(result.data.id).then(function(result) {
                                 localStorage.setObject('my_account', result);
                             })
@@ -43,7 +43,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                                 SyncService.sync().then(function() {
                                     loginPopup.close();
                                     localStorage.removeItem('loggedOut');
-                                }) //'Sync'
+                                }) 
                             })
                             break;
                         case -1:

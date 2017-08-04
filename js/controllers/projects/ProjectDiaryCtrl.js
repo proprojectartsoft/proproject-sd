@@ -54,7 +54,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         })
                     });
                 });
-                AttachmentsService.get_attachments($stateParams.id).then(function(result) { //TODO:
+                AttachmentsService.get_attachments($stateParams.id).then(function(result) {
                     var att = {
                         pictures: result
                     }

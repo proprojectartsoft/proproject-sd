@@ -44,7 +44,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {
-            staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""), //TODO:
+            staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""), 
             company_name: vm.create.site_attendance.staffs[vm.index].company_name,
             model_start: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].start_time),
             model_finish: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].finish_time),
