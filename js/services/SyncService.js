@@ -247,14 +247,11 @@ angular.module($APP.name).factory('SyncService', [
 
                                 // var diariesToAdd = localStorage.getObject('diariesToSync') || [];
                                 localStorage.removeItem('diariesToSync');
-
                                 if (diariesToAdd && !diariesToAdd.length) {
                                     prm.resolve();
                                 }
                                 angular.forEach(diariesToAdd, function(diaryToAdd) {
-
                                     diaryToAdd.id = 0;
-
                                     SiteDiaryService.add_diary(diaryToAdd.data)
                                         .success(function(result) {
                                             var attachments = diaryToAdd.attachments;

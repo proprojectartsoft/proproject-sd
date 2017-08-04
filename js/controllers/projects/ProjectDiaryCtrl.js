@@ -168,14 +168,13 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 
                 // diariesToSync.push(diary); //NOT
                 localStorage.setObject('diariesToSync', true);
-
-
-                //TODO:
-
                 var proj = localStorage.getObject('currentProj');
                 if (!proj.value.diaries)
                     proj.value.diaries = [];
                 diary.id = "off" + proj.value.diaries.length + 1;
+                diary.date = diary.data.date;
+                diary.sdNo = diary.id;
+                diary.created_for_date = diary.data.created_for_date;
                 proj.value.diaries.push(diary);
                 localStorage.setObject('currentProj', proj);
                 saveChanges(localStorage.getObject('currentProj'));
@@ -210,7 +209,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             content: "",
             buttons: []
         });
-        
+
         // if (navigator.onLine && localStorage.getObject('diaryToSync')) {
         if (navigator.onLine && localStorage.getObject('diariesToSync')) {
             SyncService.addDiariesToSync().then(function() {
