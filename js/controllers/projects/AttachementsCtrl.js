@@ -127,7 +127,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
 
     function returnToGallery() {
         pullDown();
-        //save title and comments TODO:
         var crtPic = $filter('filter')(vm.pictures, {
             id: vm.filter.picture.id
         })[0];
@@ -148,7 +147,6 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
             toBeDeleted: vm.dataToDelete,
             toBeUpdated: vm.dataToUpdate
         }
-        console.log(vm.attachments);
         localStorage.setObject('sd.attachments', vm.attachments);
         if ((vm.diaryId) && (predicate === 'diary')) {
             $state.go('app.' + predicate, {

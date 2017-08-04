@@ -20,8 +20,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.projectId = localStorage.getObject('projectId');
     vm.diaryStateId = $stateParams.id;
     vm.edit = localStorage.getObject('editMode');
-
-    vm.seen = localStorage.getObject('sd.seen');
+    $timeout(function() {
+        vm.seen = localStorage.getObject('sd.seen');
+    })
 
     if ($stateParams.id) {
         if ($stateParams.id === 'offline') {
