@@ -21,7 +21,7 @@
         <application android:theme="@android:style/Theme.NoTitleBar"></application>
     </gap:config-file>
     <gap:plugin name="cordova-plugin-splashscreen" source="npm"/>
-    <!-- <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0"/>
+    <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0"/>
     <plugin name="cordova-plugin-imagepicker" source="npm"/>
     <gap:plugin name="cordova-plugin-camera" source="npm"/>
     <gap:plugin name="cordova-plugin-contacts" source="npm"/>
@@ -29,7 +29,7 @@
     <plugin name="cordova-plugin-file" spec="~4.3.0"/>
     <plugin name="cordova-plugin-file-transfer"/>
     <plugin name="cordova-plugin-network-information"/>
-    <plugin name="cordova-plugin-keyboard"/> -->
+    <plugin name="cordova-plugin-keyboard"/>
 
     <access origin="*"/>
     <allow-navigation href="http://*/*"/>
@@ -37,6 +37,12 @@
     <allow-navigation href="data:*"/>
 
     <preference name="SplashScreen" value="screen"/>
+    <Preference name="AutoHideSplashScreen" value="true"/>
+    <Preference name="ShowSplashScreenSpinner" value="true"/>
+    <Preference name="FadeSplashScreen" value="true"/>
+    <Preference name="FadeSplashScreenDuration" value="1.0"/>
+    <Preference name="SplashMaintainAspectRatio" value="true"/>
+
     <preference name="SplashScreenDelay" value="4000"/>
     <preference name="webviewbounce" value="false"/>
     <preference name="UIWebViewBounce" value="false"/>
