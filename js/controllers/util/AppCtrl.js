@@ -4,6 +4,4 @@ AppCtrl.$inject = ['$rootScope', '$ionicPopup'];
 
 function AppCtrl($rootScope) {
     var ac = this;
-    localStorage.removeItem('loggedOut');
-    localStorage.removeItem('isLoggedIn');
 }
