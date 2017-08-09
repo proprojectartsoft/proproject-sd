@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('CommentsCtrl', CommentsCtrl)
 
-CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService'];
+CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService', '$indexedDB', 'orderByFilter'];
 
-function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService) {
+function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService, $indexedDB, orderBy) {
     var vm = this;
     vm.go = go;
     vm.getInitials = getInitials;
@@ -18,12 +18,18 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     vm.create = localStorage.getObject('sd.diary.create');
     vm.local.list = vm.create.comments || [];
     //adding colors to tiles by user
-    vm.diaries = localStorage.getObject('sd.diaries');
-    angular.forEach(vm.local.list, function(value, key) {
-        var aux = $filter('filter')(vm.diaries, {
-            id: (value.site_diary_id)
-        })[0];
-        vm.local.list[key].color = aux.color;
+    $indexedDB.openStore('projects', function(store) {
+        store.find(localStorage.getObject('projectId')).then(function(e) {
+            vm.diaries = orderBy(e.value.diaries, 'date', true);
+
+            angular.forEach(vm.local.list, function(value, key) {
+                var aux = $filter('filter')(vm.diaries, {
+                    id: (value.site_diary_id)
+                })[0];
+                vm.local.list[key].color = aux.color;
+            });
+
+        });
     });
 
     function addComment() {

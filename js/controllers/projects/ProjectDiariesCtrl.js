@@ -30,13 +30,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     SettingService.clearWeather();
     localStorage.setObject('diaryId', null);
     localStorage.setObject('sd.attachments', null);
-    localStorage.setObject('projectId', $stateParams.id);
+    localStorage.setObject('projectId', parseInt($stateParams.id));
     localStorage.setObject('sd.diary.shares', null);
 
     // vm.offlineDiary = localStorage.getObject('diaryToSync');
     // vm.offlineDiaries = localStorage.getObject('diariesToSync');
-
-
 
     vm.filter = {};
     vm.shareId = {};
@@ -96,12 +94,15 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         store.find(vm.projectId).then(function(e) {
             localStorage.setObject('currentProj', e);
             vm.diary = e.value.diaries;
-            vm.diaries = orderBy(e.value.diaries, 'date', true);
-            //store color of the tile for each diary by user
-            angular.forEach(vm.diaries, function(value, key) {
-                vm.diaries[key].color = $scope.getSdTitleColor(value.userName)
+            angular.forEach(e.value.diaries, function(value, key) {
+                e.value.diaries[key].color = $scope.getSdTitleColor(value.userName)
             });
-            localStorage.setObject('sd.diaries', vm.diaries);
+            vm.diaries = orderBy(e.value.diaries, 'date', true);
+            //update the color in indexedDB
+            store.upsert(e).then(
+                function(e) {},
+                function(err) {}
+            )
         });
     });
 
@@ -232,6 +233,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     $scope.showPopup = function(predicate) {
         var popup = $ionicPopup.show(createPopup(predicate.id));
     };
+
     function deleteDiary(id) {
         $('.delete-btn').attr("disabled", true);
         $('.item-content').css('transform', '');
@@ -293,7 +295,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         });
         vm.diaryModal.hide();
     }
-
     //color generator for tiles
     var red = 0,
         green = 0,
