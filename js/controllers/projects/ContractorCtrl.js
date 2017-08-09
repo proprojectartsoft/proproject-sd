@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ContractorCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$stateParams', '$timeout', 'ContractorService', 'SiteDiaryService', 'SettingService'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$stateParams', '$timeout', 'ContractorService', 'SiteDiaryService', 'SettingService', '$ionicPopup'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $timeout, ContractorService, SiteDiaryService, SettingService) {
+function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $timeout, ContractorService, SiteDiaryService, SettingService, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -31,6 +31,21 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     }];
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.editMode = localStorage.getObject('editMode');
     vm.index = $stateParams.id;
 
@@ -60,7 +75,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
         } else {
             vm.local.data.model_break = vm.stringToDate("00:30");
         }
-        if(!vm.local.data.total_time) vm.calcParse();
+        if (!vm.local.data.total_time) vm.calcParse();
     } else {
         vm.local.data.staff_name = "";
         vm.local.data.model_break = vm.stringToDate("00:30");
@@ -70,7 +85,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
         vm.local.data.model_finish = $filter('filter')(localStorage.getObject('companySettings'), {
             name: "finish"
         })[0].value;
-        if(!vm.local.data.total_time) vm.calcParse();
+        if (!vm.local.data.total_time) vm.calcParse();
     }
 
     vm.absence = localStorage.getObject('companyLists').absence_list;
@@ -178,31 +193,32 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
     }
 
     function calcTime(start, finish, breakTime) {
-      var hhmm = ''
-      var stringBreak = breakTime.split(":");
-      var stringStart = start.split(":");
-      var stringFinish = finish.split(":");
-      var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
-      var hh = Math.floor(totalTime / 60)
-      var mm = Math.abs(totalTime % 60)
-      hhmm = hh + ':';
-      if (mm < 10) {
-        hhmm = hhmm + '0' + mm;
-      } else {
-        hhmm = hhmm + mm;
-      }
-      return hhmm;
+        var hhmm = ''
+        var stringBreak = breakTime.split(":");
+        var stringStart = start.split(":");
+        var stringFinish = finish.split(":");
+        var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
+        var hh = Math.floor(totalTime / 60)
+        var mm = Math.abs(totalTime % 60)
+        hhmm = hh + ':';
+        if (mm < 10) {
+            hhmm = hhmm + '0' + mm;
+        } else {
+            hhmm = hhmm + mm;
+        }
+        return hhmm;
     }
 
     function go(predicate, id) {
-        if(vm.local.data.staff_name) {
-          save();
+        if (vm.local.data.staff_name) {
+            save();
         }
         localStorage.setObject('siteAttendance.tab', 'contractors');
         $state.go('app.' + predicate, {
             id: id
         });
     }
+
     function watchChanges() {
         $("input").change(function() {
             var seen = localStorage.getObject('sd.seen');
@@ -211,6 +227,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
         });
     }
     watchChanges();
+
     function datetimeChanged() {
         var seen = localStorage.getObject('sd.seen');
         seen.contractor = true;

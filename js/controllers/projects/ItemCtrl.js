@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ItemCtrl', ItemCtrl)
 
-ItemCtrl.$inject = ['$rootScope', '$scope', '$ionicModal', '$filter', '$state', '$stateParams', 'SiteDiaryService', 'SettingService'];
+ItemCtrl.$inject = ['$rootScope', '$scope', '$ionicModal', '$filter', '$state', '$stateParams', 'SiteDiaryService', 'SettingService', '$ionicPopup'];
 
-function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams, SiteDiaryService, SettingService) {
+function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams, SiteDiaryService, SettingService, $ionicPopup) {
     var vm = this;
     vm.go = go
     vm.showSearch = showSearch;
@@ -15,6 +15,21 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.editMode = localStorage.getObject('editMode');
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.local = {};
     vm.local.data = {};
     vm.id = $stateParams.id;
@@ -42,10 +57,10 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.settings = '';
     vm.supplier = $stateParams.id;
     vm.goods = localStorage.getObject('companyLists').resources;
-    vm.goods.sort(function (a,b){
-      var textA = a.name.toUpperCase();
-      var textB = b.name.toUpperCase();
-      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    vm.goods.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
@@ -155,6 +170,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         });
     }
     watchChanges();
+
     function datetimeChanged() {
         var seen = localStorage.getObject('sd.seen');
         seen.good = true;

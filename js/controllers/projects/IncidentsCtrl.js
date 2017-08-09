@@ -17,6 +17,21 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     vm.type = 'incident.type';
     vm.units = 'incident.units';
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.diaryId = localStorage.getObject('diaryId');
     vm.incidents = vm.create.incidents;
 

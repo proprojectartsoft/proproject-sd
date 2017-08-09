@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('StaffMemberCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', '$timeout', 'SiteDiaryService', 'SettingService', '$indexedDB'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', '$timeout', 'SiteDiaryService', 'SettingService', '$indexedDB', '$ionicPopup'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, $timeout, SiteDiaryService, SettingService, $indexedDB) {
+function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, $timeout, SiteDiaryService, SettingService, $indexedDB, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -32,6 +32,21 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }];
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.editMode = localStorage.getObject('editMode');
     vm.local = {};
     vm.local.data = {};
@@ -44,7 +59,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
         vm.local.data = {
-            staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""), 
+            staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""),
             company_name: vm.create.site_attendance.staffs[vm.index].company_name,
             model_start: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].start_time),
             model_finish: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].finish_time),

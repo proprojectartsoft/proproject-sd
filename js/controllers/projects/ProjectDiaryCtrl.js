@@ -36,6 +36,21 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             vm.enableCreate = false;
             if (vm.edit) {
                 vm.create = localStorage.getObject('sd.diary.create');
+                //if create is not loaded correctly, redirect to home and try again
+                if (vm.create == null || vm.create == {}) {
+                    var errPopup = $ionicPopup.show({
+                        title: "Error",
+                        template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+                        buttons: [{
+                            text: 'OK',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                errPopup.close();
+                            }
+                        }]
+                    });
+                    $state.go('app.home');
+                }
                 vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
                 vm.summary = vm.create.summary;
             } else {
@@ -90,8 +105,24 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         vm.summary = vm.createInit.summary;
     }
     vm.diaryId = localStorage.getObject('diaryId');
+
     function addSiteDiaryToDB(syncPopup) {
         vm.create = localStorage.getObject('sd.diary.create');
+        //if create is not loaded correctly, redirect to home and try again
+        if (vm.create == null || vm.create == {}) {
+            var errPopup = $ionicPopup.show({
+                title: "Error",
+                template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        errPopup.close();
+                    }
+                }]
+            });
+            $state.go('app.home');
+        }
         vm.create.date = new Date().getTime();
         vm.create.project_id = localStorage.getObject('projectId');
         SiteDiaryService.add_diary(vm.create)
@@ -214,6 +245,21 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         vm.edit = false;
         localStorage.setObject('editMode', vm.edit);
         vm.create = localStorage.getObject('sd.diary.create');
+        //if create is not loaded correctly, redirect to home and try again
+        if (vm.create == null || vm.create == {}) {
+            var errPopup = $ionicPopup.show({
+                title: "Error",
+                template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        errPopup.close();
+                    }
+                }]
+            });
+            $state.go('app.home');
+        }
         var updateDiary = SiteDiaryService.update_diary(vm.create).success(function(result) {
             vm.go('project');
         }).error(function(err) {

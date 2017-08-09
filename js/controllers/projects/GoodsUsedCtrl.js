@@ -10,6 +10,21 @@ function GoodsUsedCtrl($rootScope, $state, $stateParams, SiteDiaryService, $inde
     vm.diaryId = localStorage.getObject('diaryId');
     vm.editMode = localStorage.getObject('editMode');
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.index = $stateParams.id;
     vm.goods = vm.create.goods_received[vm.index].goods_details;
 

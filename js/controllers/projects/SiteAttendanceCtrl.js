@@ -12,6 +12,21 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
     localStorage.setObject('siteAttendance.tab', '');
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.editMode = localStorage.getObject('editMode');
     vm.staffList = vm.create.site_attendance.staffs;
     vm.companyList = vm.create.site_attendance.contractors;

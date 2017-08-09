@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('WeatherCtrl', WeatherCtrl)
 
-WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$scope', 'SettingService', '$indexedDB', '$filter'];
+WeatherCtrl.$inject = ['$rootScope', '$ionicModal', '$state', '$scope', 'SettingService', '$indexedDB', '$filter', '$ionicPopup'];
 
-function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $indexedDB, $filter) {
+function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $indexedDB, $filter, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.local = {};
@@ -20,6 +20,21 @@ function WeatherCtrl($rootScope, $ionicModal, $state, $scope, SettingService, $i
     vm.local.onOff = '';
     vm.diaryId = localStorage.getObject('diaryId');
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.editMode = localStorage.getObject('editMode');
 
     $scope.$watch(function() {

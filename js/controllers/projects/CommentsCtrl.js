@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('CommentsCtrl', CommentsCtrl)
 
-CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService', '$indexedDB', 'orderByFilter'];
+CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService', '$indexedDB', 'orderByFilter', '$ionicPopup'];
 
-function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService, $indexedDB, orderBy) {
+function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService, $indexedDB, orderBy, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.getInitials = getInitials;
@@ -16,6 +16,36 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.myProfile = localStorage.getObject('my_account');
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.local.list = vm.create.comments || [];
     //adding colors to tiles by user
     $indexedDB.openStore('projects', function(store) {

@@ -1,14 +1,29 @@
 angular.module($APP.name).controller('VisitorsCtrl', VisitorsCtrl)
 
-VisitorsCtrl.$inject = ['$rootScope', '$state', 'SettingService', '$scope', '$indexedDB', '$filter', '$stateParams'];
+VisitorsCtrl.$inject = ['$rootScope', '$state', 'SettingService', '$scope', '$indexedDB', '$filter', '$stateParams', '$ionicPopup'];
 
-function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $filter, $stateParams) {
+function VisitorsCtrl($rootScope, $state, SettingService, $scope, $indexedDB, $filter, $stateParams, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.local = {};
     vm.local.data = {};
     vm.data = {};
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.index = $stateParams.id;
 
     $scope.$watch(function() {

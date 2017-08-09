@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('SupplierCtrl', SupplierCtrl)
 
-SupplierCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', 'SettingService', '$stateParams'];
+SupplierCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', 'SettingService', '$stateParams', '$ionicPopup'];
 
-function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stateParams) {
+function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stateParams, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.local = {}
@@ -15,6 +15,21 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stat
 
     function addSupplier() {
         vm.create = localStorage.getObject('sd.diary.create');
+        //if create is not loaded correctly, redirect to home and try again
+        if (vm.create == null || vm.create == {}) {
+            var errPopup = $ionicPopup.show({
+                title: "Error",
+                template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+                buttons: [{
+                    text: 'OK',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        errPopup.close();
+                    }
+                }]
+            });
+            $state.go('app.home');
+        }
         vm.supplier = {
             grn_ref: vm.local.refference,
             supplier: vm.local.supplier_name,

@@ -17,6 +17,21 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 
     vm.editMode = localStorage.getObject('editMode');
     vm.create = localStorage.getObject('sd.diary.create');
+    //if create is not loaded correctly, redirect to home and try again
+    if (vm.create == null || vm.create == {}) {
+        var errPopup = $ionicPopup.show({
+            title: "Error",
+            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
+            buttons: [{
+                text: 'OK',
+                type: 'button-positive',
+                onTap: function(e) {
+                    errPopup.close();
+                }
+            }]
+        });
+        $state.go('app.home');
+    }
     vm.diaryId = localStorage.getObject('diaryId');
     vm.index = $stateParams.id;
     vm.currency = SettingService.get_currency_symbol(
