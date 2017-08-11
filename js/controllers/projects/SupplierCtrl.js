@@ -31,7 +31,7 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stat
                 }
                 vm.create.goods_received.push(vm.supplier);
                 vm.suppNo = vm.create.goods_received.length - 1;
-                if (vm.index === 'create') {
+                if (vm.index === 'create' || vm.index == 0) {
                     //add a new supplier
                     vm.create.goods_received.push(vm.supplier);
                     var seen = localStorage.getObject('sd.seen');
@@ -49,9 +49,15 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stat
 
     function go(predicate) {
         addSupplier();
-        $state.go('app.' + predicate, {
-            id: vm.suppNo,
-            index: 'create'
+        $indexedDB.openStore('projects', function(store) {
+            store.find(localStorage.getObject('projectId')).then(function(proj) {
+                var test = proj.temp;
+                $state.go('app.' + predicate, {
+                    id: vm.suppNo,
+                    index: 'create'
+                });
+            });
         });
+
     }
 }

@@ -33,7 +33,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
                     id: vm.diaryId
                 })
                 if (diaries && diaries.length) {
-                    vm.attachments = diaries[0].data.attachments;
+                    vm.attachments = diaries[0].data.attachments; //TODO: without data
                     vm.pictures = vm.attachments && vm.attachments.pictures || [];
                     angular.forEach(vm.pictures, function(value) {
                         if (!value.url) {

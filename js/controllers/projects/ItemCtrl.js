@@ -63,7 +63,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     });
     //initialize data for item's fields
     function initFields() {
-        if (vm.index !== 'create') {
+        if (vm.index !== 'create' && vm.index != 0) {
             vm.local.data = {
                 good_name: vm.create.goods_received[vm.id].goods_details[vm.index].details,
                 good_unit: vm.create.goods_received[vm.id].goods_details[vm.index].unit_name,
