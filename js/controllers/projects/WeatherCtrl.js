@@ -79,9 +79,7 @@ function WeatherCtrl($state, $scope, SettingService, $indexedDB, $filter) {
             on_and_off: angular.extend([], vm.create.weather.onOff, localStorage.getObject('sd.diary.weather.onOff'))
         }
         vm.create.weather = vm.weather;
-        if (vm.diaryId) {
-            SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
-        }
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
     }
 
     function initFields() {

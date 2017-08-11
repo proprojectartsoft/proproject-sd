@@ -62,12 +62,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             vm.summary = diary.data ? diary.data.summary : '';
                         }
                     })
-                    // AttachmentsService.get_attachments($stateParams.id).then(function(result) {
-                    //     var att = {
-                    //         pictures: result
-                    //     }
-                    //     localStorage.setObject('sd.attachments', att);
-                    // });
                 }
             } else {
                 vm.enableCreate = true;
@@ -118,7 +112,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 vm.create.project_id = localStorage.getObject('projectId');
                 SiteDiaryService.add_diary(vm.create)
                     .success(function(result) {
-                        var attachments = localStorage.getObject('sd.attachments') || {};
+                        // var attachments = localStorage.getObject('sd.attachments') || {};
+                        var attachments = vm.create.attachmentsToAdd;
                         var attToAdd = [],
                             attToAddAsNew = [];
                         angular.forEach(attachments.pictures, function(value) {
@@ -155,7 +150,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         })
                         Promise.all([uploadAttachments, deleteAttachments, sync]).then(syncPopup.close);
                     }).error(function(response) {
-                        var attStorage = localStorage.getObject('sd.attachments');
+                        var attStorage = vm.create.attachmentsToAdd; //localStorage.getObject('sd.attachments');
                         var diary = {
                             data: vm.create
                         }
@@ -239,7 +234,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             localStorage.setObject('sd.comments', []);
                         })
                 })
-                var attachments = localStorage.getObject('sd.attachments'); //TODO:
+                var attachments = vm.create.attachmentsToAdd; //localStorage.getObject('sd.attachments');
                 var attToAdd = [];
                 if (attachments !== null) {
                     angular.forEach(attachments.pictures, function(value) {

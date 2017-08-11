@@ -27,7 +27,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     localStorage.setObject('editMode', null);
     SettingService.clearWeather();
     localStorage.setObject('diaryId', null);
-    localStorage.setObject('sd.attachments', null);
     localStorage.setObject('projectId', parseInt($stateParams.id));
     localStorage.setObject('sd.diary.shares', null);
     vm.projectId = parseInt($stateParams.id);
@@ -326,6 +325,4 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         }
         return colorsForName[userName];
     }
-
-
 }
