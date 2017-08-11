@@ -24,18 +24,13 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.togglePlus = togglePlus;
     vm.go = go;
     vm.deleteDiary = deleteDiary;
-
-    localStorage.setObject('sd.diary.create', null);
     localStorage.setObject('editMode', null);
     SettingService.clearWeather();
     localStorage.setObject('diaryId', null);
     localStorage.setObject('sd.attachments', null);
     localStorage.setObject('projectId', parseInt($stateParams.id));
     localStorage.setObject('sd.diary.shares', null);
-
-    // vm.offlineDiary = localStorage.getObject('diaryToSync');
-    // vm.offlineDiaries = localStorage.getObject('diariesToSync');
-
+    vm.projectId = parseInt($stateParams.id);
     vm.filter = {};
     vm.shareId = {};
     vm.state = '';
@@ -44,7 +39,14 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.local.data = {};
     vm.local.search = '';
     localStorage.setObject('sd.seen', {});
-
+    $indexedDB.openStore('projects', function(store) {
+        store.find(vm.projectId).then(function(e) {
+            e.temp = null;
+            store.upsert(e).then(
+                function(e) {},
+                function(err) {})
+        });
+    });
     vm.selectOpt = [{
         id: 0,
         name: 'Annual leave'
@@ -90,9 +92,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         }).then(function(popover) {
             vm.diaryModal = popover;
         });
-        vm.projectId = parseInt($stateParams.id);
         store.find(vm.projectId).then(function(e) {
-            localStorage.setObject('currentProj', e);
             vm.diary = e.value.diaries;
             angular.forEach(e.value.diaries, function(value, key) {
                 e.value.diaries[key].color = $scope.getSdTitleColor(value.userName)

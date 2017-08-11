@@ -31,22 +31,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         name: ''
     }];
     vm.diaryId = localStorage.getObject('diaryId');
-    vm.create = localStorage.getObject('sd.diary.create');
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
-        });
-        $state.go('app.home');
-    }
     vm.editMode = localStorage.getObject('editMode');
     vm.local = {};
     vm.local.data = {};
@@ -56,41 +40,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.local.absence = 'absence';
     vm.index = $stateParams.id;
     vm.newName = '';
-
-    if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
-        vm.local.data = {
-            staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""),
-            company_name: vm.create.site_attendance.staffs[vm.index].company_name,
-            model_start: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].start_time),
-            model_finish: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].finish_time),
-            total_time: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].total_time),
-            note: vm.create.site_attendance.staffs[vm.index].note,
-            absence: vm.create.site_attendance.staffs[vm.index].absence && vm.create.site_attendance.staffs[vm.index].absence.reason,
-            role: vm.create.site_attendance.staffs[vm.index].trade,
-            trade: vm.create.site_attendance.staffs[vm.index].trade,
-            hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate,
-            hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate && (vm.currency + " " + vm.create.site_attendance.staffs[vm.index].hourly_rate) || ''
-        }
-        if (vm.create.site_attendance.staffs[vm.index].break_time) {
-            vm.local.data.model_break = vm.stringToDate(vm.create.site_attendance.staffs[vm.index].break_time);
-        } else {
-            vm.local.data.model_break = vm.stringToDate("00:30");
-        }
-        if (!vm.local.data.total_time) vm.calcParse();
-    } else {
-        vm.local.data.staff_name = "";
-        vm.local.data.model_break = vm.stringToDate("00:30");
-        var start = $filter('filter')(localStorage.getObject('companySettings'), {
-            name: "start"
-        })[0];
-        vm.local.data.model_start = start ? start.value : 0;
-        var finish = $filter('filter')(localStorage.getObject('companySettings'), {
-            name: "finish"
-        })[0];
-        vm.local.data.model_finish = finish ? finish.value : 0;
-        if (!vm.local.data.total_time) vm.calcParse();
-    }
-
     vm.staff = localStorage.getObject('companyLists').staff;
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
@@ -98,6 +47,55 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }).then(function(popover) {
         vm.searchModal = popover;
     });
+
+    $indexedDB.openStore('projects', function(store) {
+        store.find(localStorage.getObject('projectId')).then(function(proj) {
+            vm.create = proj.temp;
+            //if create is not loaded correctly, redirect to home and try again
+            if (vm.create == null || vm.create == {}) {
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+                $state.go('app.home');
+                return;
+            }
+            initFields();
+        });
+    });
+
+    function initFields() {
+        if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
+            vm.local.data = {
+                staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""),
+                company_name: vm.create.site_attendance.staffs[vm.index].company_name,
+                model_start: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].start_time),
+                model_finish: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].finish_time),
+                total_time: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].total_time),
+                note: vm.create.site_attendance.staffs[vm.index].note,
+                absence: vm.create.site_attendance.staffs[vm.index].absence && vm.create.site_attendance.staffs[vm.index].absence.reason,
+                role: vm.create.site_attendance.staffs[vm.index].trade,
+                trade: vm.create.site_attendance.staffs[vm.index].trade,
+                hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate,
+                hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate && (vm.currency + " " + vm.create.site_attendance.staffs[vm.index].hourly_rate) || ''
+            }
+            if (vm.create.site_attendance.staffs[vm.index].break_time) {
+                vm.local.data.model_break = vm.stringToDate(vm.create.site_attendance.staffs[vm.index].break_time);
+            } else {
+                vm.local.data.model_break = vm.stringToDate("00:30");
+            }
+            if (!vm.local.data.total_time) vm.calcParse();
+        } else {
+            vm.local.data.staff_name = "";
+            vm.local.data.model_break = vm.stringToDate("00:30");
+            var start = $filter('filter')(localStorage.getObject('companySettings'), {
+                name: "start"
+            })[0];
+            vm.local.data.model_start = start ? start.value : 0;
+            var finish = $filter('filter')(localStorage.getObject('companySettings'), {
+                name: "finish"
+            })[0];
+            vm.local.data.model_finish = finish ? finish.value : 0;
+            if (!vm.local.data.total_time) vm.calcParse();
+        }
+    }
 
     function allowNumbersOnly() {
         var watchOnce = $scope.$watch(function() {
@@ -160,9 +158,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     function save() {
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
-        // if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
-        //     vm.local.total_time = vm.calcParse();
-        // }
         vm.member = {
             first_name: vm.local.data.staff_name.split(" ", 2)[0],
             last_name: vm.local.data.staff_name.split(" ", 2)[1],
@@ -185,21 +180,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         } else {
             vm.create.site_attendance.staffs[vm.index] = vm.member;
         }
-        localStorage.setObject('sd.diary.create', vm.create);
-        if (vm.diaryId) {
-            var proj = localStorage.getObject('currentProj');
-            var diary = $filter('filter')(proj.value.diaries, {
-                id: (vm.diaryId)
-            })[0];
-            if (vm.editMode) {
-                if (vm.index === 'create') {
-                    diary.data.site_attendance.staffs.push(vm.member);
-                } else {
-                    diary.data.site_attendance.staffs[vm.index] = vm.member;
-                }
-            }
-            localStorage.setObject('currentProj', proj);
-        }
+        //store the new data in temp SD
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
         localStorage.setObject('sd.diary.absence', null);
     }
 

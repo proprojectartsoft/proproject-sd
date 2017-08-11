@@ -1,36 +1,31 @@
 angular.module($APP.name).controller('SiteAttendanceCtrl', SiteAttendanceCtrl)
 
-SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', '$indexedDB', '$timeout', '$ionicPopup'];
+SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', '$indexedDB', '$timeout', '$ionicPopup', 'SettingService'];
 
-function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $indexedDB, $timeout, $ionicPopup) {
+function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $indexedDB, $timeout, $ionicPopup, SettingService) {
     var vm = this;
     vm.go = go;
     vm.show = show;
     vm.deleteEntry = deleteEntry;
-
     show(localStorage.getObject('siteAttendance.tab') || "staff");
     localStorage.setObject('siteAttendance.tab', '');
     vm.diaryId = localStorage.getObject('diaryId');
-    vm.create = localStorage.getObject('sd.diary.create');
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
-        });
-        $state.go('app.home');
-    }
     vm.editMode = localStorage.getObject('editMode');
-    vm.staffList = vm.create.site_attendance.staffs;
-    vm.companyList = vm.create.site_attendance.contractors;
-    vm.visitorList = vm.create.site_attendance.visitors;
+    $indexedDB.openStore('projects', function(store) {
+        store.find(localStorage.getObject('projectId')).then(function(proj) {
+            vm.create = proj.temp;
+            //if create is not loaded correctly, redirect to home and try again
+            if (vm.create == null || vm.create == {}) {
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+                $state.go('app.home');
+                return;
+            }
+            //store the lists of site attendance
+            vm.staffList = vm.create.site_attendance.staffs;
+            vm.companyList = vm.create.site_attendance.contractors;
+            vm.visitorList = vm.create.site_attendance.visitors;
+        });
+    });
     $timeout(function() {
         vm.seen = localStorage.getObject('sd.seen');
     })
@@ -47,7 +42,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
                 vm.visitors = false;
                 vm.contractors = true;
                 localStorage.setObject('siteAttTab', 'contractors');
-
             } else {
                 vm.contractors = false;
                 vm.visitors = true;
@@ -57,18 +51,7 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
 
     function deleteEntry(entry) {
         if (!navigator.onLine) {
-            var syncPopup = $ionicPopup.show({
-                title: 'You are offline',
-                template: "<center>You can remove members while online.</center>",
-                content: "",
-                buttons: [{
-                    text: 'OK',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        syncPopup.close();
-                    }
-                }]
-            });
+            SettingService.show_message_popup('You are offline', "<center>You can remove members while online.</center>");
             return;
         }
         $('.item-content').css('transform', '');
@@ -103,14 +86,8 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
             seen.visitor = true;
             localStorage.setObject('sd.seen', seen);
         }
-        localStorage.setObject('sd.diary.create', vm.create);
-        var proj = localStorage.getObject('currentProj');
-        var diary = $filter('filter')(proj.value.diaries, {
-            id: (vm.diaryId)
-        })[0];
-        diary.data.site_attendance = vm.create.site_attendance;
-        localStorage.setObject('currentProj', proj);
-        saveChanges(localStorage.getObject('currentProj'));
+        //remove from temp SD the site attendance
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
     }
 
@@ -124,27 +101,5 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
                 id: id
             });
         }
-    }
-
-    function saveChanges(project) {
-        $indexedDB.openStore('projects', function(store) {
-            store.upsert(project).then(
-                function(e) {},
-                function(err) {
-                    var offlinePopup = $ionicPopup.alert({
-                        title: "Unexpected error",
-                        template: "<center>An unexpected error occurred while trying to update Site Diary.</center>",
-                        content: "",
-                        buttons: [{
-                            text: 'Ok',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                offlinePopup.close();
-                            }
-                        }]
-                    });
-                }
-            )
-        })
     }
 }

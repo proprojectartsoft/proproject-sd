@@ -115,6 +115,7 @@ angular.module($APP.name).factory('SyncService', [
                                             ProjectService.projects().then(function(result) {
                                                 if (!result.length) def.resolve([]);
                                                 angular.forEach(result, function(value) {
+                                                    //get a list of all diaries for project having the given id
                                                     SiteDiaryService.list_diaries(value.id).then(function(diaries) {
                                                         value.diaries = diaries;
                                                         if ((result[result.length - 1] === value)) {
@@ -124,13 +125,22 @@ angular.module($APP.name).factory('SyncService', [
                                                         }
                                                         if (value.diaries.length) {
                                                             angular.forEach(diaries, function(diary) {
+                                                                //store details for SDs
                                                                 SiteDiaryService.list_diary(diary.id).then(function(data) {
                                                                     diary.data = data;
+                                                                    //store comments for SDs
                                                                     SiteDiaryService.list_comments(diary.id).then(function(result) {
                                                                         if (diary.data) {
                                                                             diary.data.comments = result;
                                                                         }
                                                                     })
+                                                                    //store attachments for SDs
+                                                                    AttachmentsService.get_attachments(diary.id).then(function(result) {
+                                                                        var att = {
+                                                                            pictures: result
+                                                                        }
+                                                                        diary.data.attachments = att;
+                                                                    });
                                                                 });
                                                             });
                                                         }

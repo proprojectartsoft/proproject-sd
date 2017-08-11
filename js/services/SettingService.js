@@ -1,6 +1,6 @@
 angular.module($APP.name).factory('SettingService', [
-    '$http',
-    function($http) {
+    '$http', '$ionicPopup', '$indexedDB',
+    function($http, $ionicPopup, $indexedDB) {
         return {
             clearWeather: function() {
                 localStorage.setObject('sd.diary.weather.afternoon', null);
@@ -90,6 +90,34 @@ angular.module($APP.name).factory('SettingService', [
                     $('.de-select').parent().removeClass("focus");
                     $('.de-select').parent().prev(".sd-title").removeClass("focus");
                 }
+            },
+
+            show_message_popup: function(title, template) {
+                var popup = $ionicPopup.alert({
+                    title: title,
+                    template: template,
+                    content: "",
+                    buttons: [{
+                        text: 'Ok',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            popup.close();
+                        }
+                    }]
+                });
+                return popup;
+            },
+
+            update_temp_sd: function(projId, temp) {
+                $indexedDB.openStore('projects', function(store) {
+                    store.find(projId).then(function(proj) {
+                        proj.temp = temp;
+                        store.upsert(proj).then(
+                            function(e) {},
+                            function(err) {}
+                        )
+                    });
+                });
             }
         }
     }

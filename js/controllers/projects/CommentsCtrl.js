@@ -1,64 +1,37 @@
 angular.module($APP.name).controller('CommentsCtrl', CommentsCtrl)
 
-CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService', '$indexedDB', 'orderByFilter', '$ionicPopup'];
+CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService', '$indexedDB', 'orderByFilter', '$ionicPopup', 'SettingService'];
 
-function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService, $indexedDB, orderBy, $ionicPopup) {
+function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService, $indexedDB, orderBy, $ionicPopup, SettingService) {
     var vm = this;
     vm.go = go;
     vm.getInitials = getInitials;
     vm.addComentAtEnter = addComentAtEnter;
     vm.addComment = addComment;
-
     vm.local = {};
     vm.diaryId = localStorage.getObject('diaryId');
     vm.editMode = localStorage.getObject('editMode');
     vm.local.comments = localStorage.getObject('sd.comments');
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.myProfile = localStorage.getObject('my_account');
-    vm.create = localStorage.getObject('sd.diary.create');
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
-        });
-        $state.go('app.home');
-    }
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
-        });
-        $state.go('app.home');
-    }
-    vm.local.list = vm.create.comments || [];
-    //adding colors to tiles by user
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(e) {
-            vm.diaries = orderBy(e.value.diaries, 'date', true);
-
+        store.find(localStorage.getObject('projectId')).then(function(proj) {
+            vm.create = proj.temp;
+            //if create is not loaded correctly, redirect to home and try again
+            if (vm.create == null || vm.create == {}) {
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+                $state.go('app.home');
+                return;
+            }
+            vm.local.list = vm.create.comments || [];
+            vm.diaries = orderBy(proj.value.diaries, 'date', true);
+            //adding colors to tiles by user
             angular.forEach(vm.local.list, function(value, key) {
                 var aux = $filter('filter')(vm.diaries, {
                     id: (value.site_diary_id)
                 })[0];
                 vm.local.list[key].color = aux.color;
             });
-
         });
     });
 
@@ -80,8 +53,12 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                     date: new Date(),
                     color: vm.color
                 };
+                if (!vm.create.comments || !vm.create.comments.length) {
+                    vm.create.comments = [];
+                }
                 vm.create.comments.push(request);
-                localStorage.setObject('sd.diary.create', vm.create);
+                vm.local.list = vm.create.comments;
+                SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
             }
         } else {
             if (comment) {
@@ -102,14 +79,9 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                     vm.local.comments = [];
                 }
                 vm.local.comments.push(commToAdd);
-                localStorage.setObject('sd.comments', vm.local.comments);
-                localStorage.setObject('sd.diary.create', vm.create);
-                var proj = localStorage.getObject('currentProj');
-                var diary = $filter('filter')(proj.value.diaries, {
-                    id: (vm.diaryId)
-                })[0];
-                diary.data.comments.push(request);
-                localStorage.setObject('currentProj', proj);
+                localStorage.setObject('sd.comments', vm.local.comments); //TODO:
+                //store in indexedDB the new info for SD
+                SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
             }
         }
         $('textarea').css({

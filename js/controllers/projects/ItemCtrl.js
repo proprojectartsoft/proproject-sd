@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ItemCtrl', ItemCtrl)
 
-ItemCtrl.$inject = ['$rootScope', '$scope', '$ionicModal', '$filter', '$state', '$stateParams', 'SiteDiaryService', 'SettingService', '$ionicPopup'];
+ItemCtrl.$inject = ['$rootScope', '$scope', '$ionicModal', '$filter', '$state', '$stateParams', 'SiteDiaryService', 'SettingService', '$ionicPopup', '$indexedDB'];
 
-function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams, SiteDiaryService, SettingService, $ionicPopup) {
+function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams, SiteDiaryService, SettingService, $ionicPopup, $indexedDB) {
     var vm = this;
     vm.go = go
     vm.showSearch = showSearch;
@@ -14,44 +14,11 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.datetimeChanged = datetimeChanged;
     vm.editMode = localStorage.getObject('editMode');
     vm.diaryId = localStorage.getObject('diaryId');
-    vm.create = localStorage.getObject('sd.diary.create');
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
-        });
-        $state.go('app.home');
-    }
     vm.local = {};
     vm.local.data = {};
     vm.id = $stateParams.id;
     vm.index = $stateParams.index;
     vm.newGood = '';
-
-    $scope.$watch(function() {
-        if (vm.editMode)
-            SettingService.show_focus();
-    });
-
-    if (vm.index !== 'create') {
-        vm.local.data = {
-            good_name: vm.create.goods_received[vm.id].goods_details[vm.index].details,
-            good_unit: vm.create.goods_received[vm.id].goods_details[vm.index].unit_name,
-            qty: vm.create.goods_received[vm.id].goods_details[vm.index].quantity,
-            on_hire: vm.create.goods_received[vm.id].goods_details[vm.index].on_hire,
-            off_hire: vm.create.goods_received[vm.id].goods_details[vm.index].off_hire,
-            offHireAsString: $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].off_hire, "dd/MM/yyyy"),
-            onHireAsString: $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].on_hire, "dd/MM/yyyy")
-        };
-    }
     vm.local.search = '';
     vm.data = {};
     vm.settings = '';
@@ -77,6 +44,37 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         vm.searchModal = popover;
         vm.searchUnit = popover;
     });
+    $indexedDB.openStore('projects', function(store) {
+        store.find(localStorage.getObject('projectId')).then(function(proj) {
+            vm.create = proj.temp;
+            //if create is not loaded correctly, redirect to home and try again
+            if (vm.create == null || vm.create == {}) {
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+                $state.go('app.home');
+                return;
+            }
+            initFields();
+        });
+    });
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
+    //initialize data for item's fields
+    function initFields() {
+        if (vm.index !== 'create') {
+            vm.local.data = {
+                good_name: vm.create.goods_received[vm.id].goods_details[vm.index].details,
+                good_unit: vm.create.goods_received[vm.id].goods_details[vm.index].unit_name,
+                qty: vm.create.goods_received[vm.id].goods_details[vm.index].quantity,
+                on_hire: vm.create.goods_received[vm.id].goods_details[vm.index].on_hire,
+                off_hire: vm.create.goods_received[vm.id].goods_details[vm.index].off_hire,
+                offHireAsString: $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].off_hire, "dd/MM/yyyy"),
+                onHireAsString: $filter('date')(vm.create.goods_received[vm.id].goods_details[vm.index].on_hire, "dd/MM/yyyy")
+            };
+        }
+    }
 
     function showSearch() {
         vm.settings = 'goods';
@@ -132,27 +130,19 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             offHireAsString: $filter('date')(vm.local.data.off_hire, "dd/MM/yyyy")
         }
         if (vm.index === 'create') {
+            if (!vm.create.goods_received[vm.supplier].goods_details || !vm.create.goods_received[vm.supplier].goods_details.length) {
+                vm.create.goods_received[vm.supplier].goods_details = [];
+            }
             vm.create.goods_received[vm.supplier].goods_details.push(vm.item);
             var seen = localStorage.getObject('sd.seen');
             seen.good = true;
             localStorage.setObject('sd.seen', seen);
         } else {
-            vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
+            if (vm.create.goods_received[vm.supplier].goods_details)
+                vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
         }
-        localStorage.setObject('sd.diary.create', vm.create);
-
-        if (vm.diaryId) {
-            var proj = localStorage.getObject('currentProj');
-            var diary = $filter('filter')(proj.value.diaries, {
-                id: (vm.diaryId)
-            })[0];
-            if ((vm.editMode) && (vm.index !== 'create')) {
-                diary.data.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
-            } else {
-                diary.data.goods_received[vm.supplier].goods_details.push(vm.item);
-            }
-            localStorage.setObject('currentProj', proj);
-        }
+        //store the new data in temp SD
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
     }
 
     function go(predicate, id) {

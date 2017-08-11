@@ -6,44 +6,39 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
-
     vm.local = {}
     vm.local.type = 'ohs.type';
-    vm.create = localStorage.getObject('sd.diary.create');
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
-        });
-        $state.go('app.home');
-    }
     vm.diaryId = localStorage.getObject('diaryId');
     vm.index = $stateParams.id
     vm.editMode = localStorage.getObject('editMode');
+    $indexedDB.openStore('projects', function(store) {
+        store.find(localStorage.getObject('projectId')).then(function(proj) {
+            vm.create = proj.temp;
+            //if create is not loaded correctly, redirect to home and try again
+            if (vm.create == null || vm.create == {}) {
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+                $state.go('app.home');
+                return;
+            }
+            if (!isNaN(vm.index) && !(vm.index === null)) {
+                vm.type = vm.create.oh_and_s[vm.index].type;
+                vm.task_completed = vm.create.oh_and_s[vm.index].task_completed;
+                vm.form_complete = vm.create.oh_and_s[vm.index].form_to_be_completed;
+                vm.ref = vm.create.oh_and_s[vm.index].ref;
+                vm.action_required = vm.create.oh_and_s[vm.index].action_required;
+                vm.action_message = vm.create.oh_and_s[vm.index].action;
+                vm.comment = vm.create.oh_and_s[vm.index].note;
+            }
+            vm.tools = vm.create.oh_and_s;
+        });
+    });
 
     $scope.$watch(function() {
         if (vm.editMode)
             SettingService.show_focus();
     });
 
-    if (!isNaN(vm.index) && !(vm.index === null)) {
-        vm.type = vm.create.oh_and_s[vm.index].type;
-        vm.task_completed = vm.create.oh_and_s[vm.index].task_completed;
-        vm.form_complete = vm.create.oh_and_s[vm.index].form_to_be_completed;
-        vm.ref = vm.create.oh_and_s[vm.index].ref;
-        vm.action_required = vm.create.oh_and_s[vm.index].action_required;
-        vm.action_message = vm.create.oh_and_s[vm.index].action;
-        vm.comment = vm.create.oh_and_s[vm.index].note;
-    }
-    vm.types = [{
+    vm.types = [{ //TODO:retrieve from DB
         id: 0,
         name: 'Toolbox Talk'
     }, {
@@ -56,7 +51,6 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
         id: 3,
         name: 'PPE Discussion'
     }];
-    vm.tools = vm.create.oh_and_s;
 
     function save() {
         vm.newType = localStorage.getObject('sd.diary.ohs.type');
@@ -65,6 +59,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
                 id: vm.newType && vm.newType[0].id || '',
                 name: vm.newType && vm.newType[0].name || ''
             },
+            ref: vm.ref,
             task_completed: vm.task_completed,
             form_to_be_completed: vm.form_complete,
             action_required: vm.action_required,
@@ -79,36 +74,13 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             seen.ohs = true;
             localStorage.setObject('sd.seen', seen);
         }
-        localStorage.setObject('sd.diary.create', vm.create);
-
-        if (vm.diaryId) {
-            var proj = localStorage.getObject('currentProj');
-            var diary = $filter('filter')(proj.value.diaries, {
-                id: (vm.diaryId)
-            })[0];
-            if ((vm.editMode) && (vm.index !== 'create')) {
-                diary.data.oh_and_s[vm.index] = vm.oh_and_s;
-            } else {
-                diary.data.oh_and_s.push(vm.oh_and_s);
-            }
-            localStorage.setObject('currentProj', proj);
-        }
+        //store the new data in temp SD
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
     }
 
     function deleteEntry(entry) {
         if (!navigator.onLine) {
-            var syncPopup = $ionicPopup.show({
-                title: 'You are offline',
-                template: "<center>You can remove OH and S while online.</center>",
-                content: "",
-                buttons: [{
-                    text: 'OK',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        syncPopup.close();
-                    }
-                }]
-            });
+            SettingService.show_message_popup('You are offline', "<center>You can remove OH and S while online.</center>");
             return;
         }
         $('.item-content').css('transform', '');
@@ -117,40 +89,12 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
                 vm.create.oh_and_s.splice(i, 1);
             }
         })
-        localStorage.setObject('sd.diary.create', vm.create);
-        var proj = localStorage.getObject('currentProj');
-        var diary = $filter('filter')(proj.value.diaries, {
-            id: (vm.diaryId)
-        })[0];
-        diary.data.oh_and_s = vm.create.oh_and_s;
-        localStorage.setObject('currentProj', proj);
-        saveChanges(localStorage.getObject('currentProj'));
+        //store the new data in temp SD
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
         var seen = localStorage.getObject('sd.seen');
         seen.ohs = true;
         localStorage.setObject('sd.seen', seen);
-    }
-
-    function saveChanges(project) {
-        $indexedDB.openStore('projects', function(store) {
-            store.upsert(project).then(
-                function(e) {},
-                function(err) {
-                    var offlinePopup = $ionicPopup.alert({
-                        title: "Unexpected error",
-                        template: "<center>An unexpected error occurred while trying to update Site Diary.</center>",
-                        content: "",
-                        buttons: [{
-                            text: 'Ok',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                offlinePopup.close();
-                            }
-                        }]
-                    });
-                }
-            )
-        })
     }
 
     function go(predicate, id) {

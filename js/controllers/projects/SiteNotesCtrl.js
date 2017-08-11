@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('SiteNotesCtrl', SiteNotesCtrl)
 
-SiteNotesCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService', '$filter', '$ionicPopup'];
+SiteNotesCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService', '$filter', '$ionicPopup', '$indexedDB'];
 
-function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ionicPopup) {
+function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ionicPopup, $indexedDB) {
     var vm = this;
     vm.go = go;
     vm.add = add;
@@ -11,22 +11,18 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
     vm.materials = [];
     vm.editMode = localStorage.getObject('editMode');
     vm.diaryId = localStorage.getObject('diaryId');
-    vm.create = localStorage.getObject('sd.diary.create');
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
+    $indexedDB.openStore('projects', function(store) {
+        store.find(localStorage.getObject('projectId')).then(function(proj) {
+            vm.create = proj.temp;
+            //if create is not loaded correctly, redirect to home and try again
+            if (vm.create == null || vm.create == {}) {
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+                $state.go('app.home');
+                return;
+            }
+            initFields();
         });
-        $state.go('app.home');
-    }
+    });
 
     $scope.$watch(function() {
         if (vm.editMode)
@@ -36,6 +32,44 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
     $scope.autoExpand = function(e) {
         $(e.target).height(e.target.scrollHeight - 30);
     };
+
+    //initialize data for site notes' fields
+    function initFields() {
+        if (vm.diaryId) {
+            if (vm.create.site_notes.delays !== null) {
+                vm.delays = vm.create.site_notes.delays;
+            }
+            if (vm.create.site_notes.tools_used !== null) {
+                vm.tools = vm.create.site_notes.tools_used;
+            }
+            if (vm.create.site_notes.materials_requested !== null) {
+                vm.materials = vm.create.site_notes.materials_requested;
+            }
+        }
+        if (!vm.diaryId) {
+            if (vm.create.site_notes.delays) {
+                vm.delays = vm.create.site_notes.delays;
+            }
+            if (vm.create.site_notes.tools_used) {
+                vm.tools = vm.create.site_notes.tools_used;
+            }
+            if (vm.create.site_notes.materials_requested) {
+                vm.materials = vm.create.site_notes.materials_requested;
+            }
+        }
+    }
+
+    function save() {
+        add();
+        vm.site_notes = {
+            delays: vm.delays,
+            tools_used: vm.tools,
+            materials_requested: vm.materials
+        }
+        vm.create.site_notes = vm.site_notes;
+        //store the new data in temp SD
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+    }
 
     function add() {
         if (vm.input1 || vm.input2 || vm.input3) {
@@ -56,50 +90,6 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
             vm.input3 = '';
         }
         $('textarea').height('initial');
-    }
-
-    if (vm.diaryId) {
-        if (vm.create.site_notes.delays !== null) {
-            vm.delays = vm.create.site_notes.delays;
-        }
-        if (vm.create.site_notes.tools_used !== null) {
-            vm.tools = vm.create.site_notes.tools_used;
-        }
-        if (vm.create.site_notes.materials_requested !== null) {
-            vm.materials = vm.create.site_notes.materials_requested;
-        }
-    }
-
-    function save() {
-        add();
-        vm.site_notes = {
-            delays: vm.delays,
-            tools_used: vm.tools,
-            materials_requested: vm.materials
-        }
-        vm.create.site_notes = vm.site_notes;
-        if (vm.diaryId) {
-            var proj = localStorage.getObject('currentProj');
-            var diary = $filter('filter')(proj.value.diaries, {
-                id: (vm.diaryId)
-            })[0];
-            diary.data.site_notes = vm.site_notes;
-            localStorage.setObject('currentProj', proj);
-        }
-        localStorage.setObject('sd.diary.create', vm.create);
-        // go('diary');
-    }
-
-    if (!vm.diaryId) {
-        if (vm.create.site_notes.delays) {
-            vm.delays = vm.create.site_notes.delays;
-        }
-        if (vm.create.site_notes.tools_used) {
-            vm.tools = vm.create.site_notes.tools_used;
-        }
-        if (vm.create.site_notes.materials_requested) {
-            vm.materials = vm.create.site_notes.materials_requested;
-        }
     }
 
     function go(predicate, id) {

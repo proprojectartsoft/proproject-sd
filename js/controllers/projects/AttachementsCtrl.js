@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
 
-AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope'];
+AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope', '$indexedDB'];
 
-function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope) {
+function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope, $indexedDB) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -26,15 +26,25 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
     pullDown();
 
     function populate() {
-        vm.attachments = localStorage.getObject('sd.attachments');
-        vm.pictures = vm.attachments && vm.attachments.pictures || [];
-        angular.forEach(vm.pictures, function(value) {
-            if (!value.url) {
-                value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
-            }
-            if (!value.base64String) {
-                value.base64String = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
-            }
+        // vm.attachments = localStorage.getObject('sd.attachments');
+        $indexedDB.openStore('projects', function(store) {
+            store.find(vm.projectId).then(function(e) {
+                var diaries = $filter('filter')(e.value.diaries, {
+                    id: vm.diaryId
+                })
+                if (diaries && diaries.length) {
+                    vm.attachments = diaries[0].data.attachments;
+                    vm.pictures = vm.attachments && vm.attachments.pictures || [];
+                    angular.forEach(vm.pictures, function(value) {
+                        if (!value.url) {
+                            value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
+                        }
+                        if (!value.base64String) {
+                            value.base64String = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
+                        }
+                    });
+                }
+            });
         });
     }
 
@@ -147,7 +157,11 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
             toBeDeleted: vm.dataToDelete,
             toBeUpdated: vm.dataToUpdate
         }
-        localStorage.setObject('sd.attachments', vm.attachments);
+        //locally store the new attachements
+        // localStorage.setObject('sd.attachments', vm.attachments);
+
+
+
         if ((vm.diaryId) && (predicate === 'diary')) {
             $state.go('app.' + predicate, {
                 id: vm.diaryId

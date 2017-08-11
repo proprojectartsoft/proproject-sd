@@ -9,48 +9,52 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     vm.addUnit = addUnit;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
-
     vm.editMode = localStorage.getObject('editMode');
     vm.local = {};
     vm.index = $stateParams.id;
     vm.actionReq = 'incident.actionReq';
     vm.type = 'incident.type';
     vm.units = 'incident.units';
-    vm.create = localStorage.getObject('sd.diary.create');
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
-        });
-        $state.go('app.home');
-    }
     vm.diaryId = localStorage.getObject('diaryId');
-    vm.incidents = vm.create.incidents;
+    vm.units = localStorage.getObject('companyLists').units;
+    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.searchModal = popover;
+        vm.searchUnit = popover;
+    });
 
+    $indexedDB.openStore('projects', function(store) {
+        store.find(localStorage.getObject('projectId')).then(function(proj) {
+            vm.create = proj.temp;
+            //if create is not loaded correctly, redirect to home and try again
+            if (vm.create == null || vm.create == {}) {
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+                $state.go('app.home');
+                return;
+            }
+            vm.incidents = vm.create.incidents;
+            //initialize a new incident
+            if (!isNaN(vm.index)) {
+                vm.incident = {
+                    description: vm.create.incidents[vm.index].description,
+                    quantity: vm.create.incidents[vm.index].quantity,
+                    unit_name: vm.create.incidents[vm.index].unit_name,
+                    action_required: vm.create.incidents[vm.index].action_required,
+                    type: vm.create.incidents[vm.index].type,
+                    unit_id: vm.create.incidents[vm.index].unit_id
+                }
+                vm.local.unit_name = vm.incident.unit_name;
+            }
+        });
+    });
     $scope.$watch(function() {
         if (vm.editMode)
             SettingService.show_focus();
     });
 
-    if (!isNaN(vm.index)) {
-        vm.incident = {
-            description: vm.create.incidents[vm.index].description,
-            quantity: vm.create.incidents[vm.index].quantity,
-            unit_name: vm.create.incidents[vm.index].unit_name,
-            action_required: vm.create.incidents[vm.index].action_required,
-            type: vm.create.incidents[vm.index].type,
-            unit_id: vm.create.incidents[vm.index].unit_id
-        }
-    }
-    vm.local.type = [{
+    vm.local.type = [{ //TODO: retrieve from DB/localStorage
         id: 0,
         name: 'Incident'
     }, {
@@ -74,15 +78,6 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         id: 3,
         name: 'Other'
     }];
-
-    vm.units = localStorage.getObject('companyLists').units;
-    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(popover) {
-        vm.searchModal = popover;
-        vm.searchUnit = popover;
-    });
 
     function showSearchUnit() {
         vm.settings = 'units';
@@ -126,36 +121,13 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             seen.incident = true;
             localStorage.setObject('sd.seen', seen);
         }
-        localStorage.setObject('sd.diary.create', vm.create);
-
-        if (vm.diaryId) {
-            var proj = localStorage.getObject('currentProj');
-            var diary = $filter('filter')(proj.value.diaries, {
-                id: (vm.diaryId)
-            })[0];
-            if ((vm.editMode) && (vm.index !== 'create')) {
-                diary.data.incidents[vm.index] = incident;
-            } else {
-                diary.data.incidents.push(incident);
-            }
-            localStorage.setObject('currentProj', proj);
-        }
+        //store the new data in temp SD
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
     }
 
     function deleteEntry(entry) {
         if (!navigator.onLine) {
-            var syncPopup = $ionicPopup.show({
-                title: 'You are offline',
-                template: "<center>You can remove incidents while online.</center>",
-                content: "",
-                buttons: [{
-                    text: 'OK',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        syncPopup.close();
-                    }
-                }]
-            });
+            SettingService.show_message_popup('You are offline', "<center>You can remove incidents while online.</center>");
             return;
         }
         $('.item-content').css('transform', '');
@@ -164,40 +136,12 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
                 vm.create.incidents.splice(i, 1);
             }
         })
-        localStorage.setObject('sd.diary.create', vm.create);
-        var proj = localStorage.getObject('currentProj');
-        var diary = $filter('filter')(proj.value.diaries, {
-            id: (vm.diaryId)
-        })[0];
-        diary.data.incidents = vm.create.incidents;
-        localStorage.setObject('currentProj', proj);
-        saveChanges(localStorage.getObject('currentProj'));
+        //store the new data in temp SD
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
         var seen = localStorage.getObject('sd.seen');
         seen.incident = true;
         localStorage.setObject('sd.seen', seen);
-    }
-
-    function saveChanges(project) {
-        $indexedDB.openStore('projects', function(store) {
-            store.upsert(project).then(
-                function(e) {},
-                function(err) {
-                    var offlinePopup = $ionicPopup.alert({
-                        title: "Unexpected error",
-                        template: "<center>An unexpected error occurred while trying to update Site Diary.</center>",
-                        content: "",
-                        buttons: [{
-                            text: 'Ok',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                offlinePopup.close();
-                            }
-                        }]
-                    });
-                }
-            )
-        })
     }
 
     function go(predicate, id) {

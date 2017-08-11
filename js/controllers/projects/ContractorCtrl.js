@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('ContractorCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$stateParams', '$timeout', 'ContractorService', 'SiteDiaryService', 'SettingService', '$ionicPopup'];
+ContractorCtrl.$inject = ['$scope', '$state', '$filter', '$stateParams', '$timeout', 'SettingService', '$indexedDB'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $timeout, ContractorService, SiteDiaryService, SettingService, $ionicPopup) {
+function ContractorCtrl($$scope, $state, $filter, $stateParams, $timeout, SettingService, $indexedDB) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -30,22 +30,19 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
         name: ''
     }];
     vm.diaryId = localStorage.getObject('diaryId');
-    vm.create = localStorage.getObject('sd.diary.create');
-    //if create is not loaded correctly, redirect to home and try again
-    if (vm.create == null || vm.create == {}) {
-        var errPopup = $ionicPopup.show({
-            title: "Error",
-            template: '<span>An unexpected error occured and Site Diary did not load properly.</span>',
-            buttons: [{
-                text: 'OK',
-                type: 'button-positive',
-                onTap: function(e) {
-                    errPopup.close();
-                }
-            }]
+    $indexedDB.openStore('projects', function(store) {
+        store.find(localStorage.getObject('projectId')).then(function(proj) {
+            vm.create = proj.temp;
+            //if create is not loaded correctly, redirect to home and try again
+            if (vm.create == null || vm.create == {}) {
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+                $state.go('app.home');
+                return;
+            }
+            initFields();
         });
-        $state.go('app.home');
-    }
+    });
+
     vm.editMode = localStorage.getObject('editMode');
     vm.index = $stateParams.id;
 
@@ -56,38 +53,39 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
             SettingService.show_focus();
     });
 
-    if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
-        vm.local.data = {
-            staff_name: vm.create.site_attendance.contractors[vm.index].first_name,
-            company_name: vm.create.site_attendance.contractors[vm.index].company_name,
-            model_start: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].start_time),
-            model_finish: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].finish_time),
-            total_time: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].total_time),
-            note: vm.create.site_attendance.contractors[vm.index].note,
-            absence: vm.create.site_attendance.contractors[vm.index].absence && vm.create.site_attendance.contractors[vm.index].absence.reason,
-            role: vm.create.site_attendance.contractors[vm.index].trade,
-            trade: vm.create.site_attendance.contractors[vm.index].trade,
-            hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
-            hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (vm.currency + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate) || ''
-        }
-        if (vm.create.site_attendance.contractors[vm.index].break_time) {
-            vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
+    function initFields() {
+        if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
+            vm.local.data = {
+                staff_name: vm.create.site_attendance.contractors[vm.index].first_name,
+                company_name: vm.create.site_attendance.contractors[vm.index].company_name,
+                model_start: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].start_time),
+                model_finish: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].finish_time),
+                total_time: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].total_time),
+                note: vm.create.site_attendance.contractors[vm.index].note,
+                absence: vm.create.site_attendance.contractors[vm.index].absence && vm.create.site_attendance.contractors[vm.index].absence.reason,
+                role: vm.create.site_attendance.contractors[vm.index].trade,
+                trade: vm.create.site_attendance.contractors[vm.index].trade,
+                hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
+                hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (vm.currency + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate) || ''
+            }
+            if (vm.create.site_attendance.contractors[vm.index].break_time) {
+                vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
+            } else {
+                vm.local.data.model_break = vm.stringToDate("00:30");
+            }
+            if (!vm.local.data.total_time) vm.calcParse();
         } else {
+            vm.local.data.staff_name = "";
             vm.local.data.model_break = vm.stringToDate("00:30");
+            vm.local.data.model_start = $filter('filter')(localStorage.getObject('companySettings'), {
+                name: "start"
+            })[0].value;
+            vm.local.data.model_finish = $filter('filter')(localStorage.getObject('companySettings'), {
+                name: "finish"
+            })[0].value;
+            if (!vm.local.data.total_time) vm.calcParse();
         }
-        if (!vm.local.data.total_time) vm.calcParse();
-    } else {
-        vm.local.data.staff_name = "";
-        vm.local.data.model_break = vm.stringToDate("00:30");
-        vm.local.data.model_start = $filter('filter')(localStorage.getObject('companySettings'), {
-            name: "start"
-        })[0].value;
-        vm.local.data.model_finish = $filter('filter')(localStorage.getObject('companySettings'), {
-            name: "finish"
-        })[0].value;
-        if (!vm.local.data.total_time) vm.calcParse();
     }
-
     vm.absence = localStorage.getObject('companyLists').absence_list;
 
     function allowNumbersOnly() {
@@ -99,7 +97,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
                 })
                 watchOnce();
             }, 10);
-
         })
     }
 
@@ -124,9 +121,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
 
     function save() {
         vm.local.data.absence = localStorage.getObject('sd.diary.absence');
-        // if ((vm.local.data.model_start) && (vm.local.data.model_finish)) {
-        //     vm.calcParse();
-        // }
         vm.member = {
             first_name: vm.local.data.staff_name,
             company_name: vm.local.data.company_name,
@@ -148,26 +142,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $stateParams, $tim
         } else {
             vm.create.site_attendance.contractors[vm.index] = vm.member;
         }
-
-        localStorage.setObject('sd.diary.create', vm.create);
+        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
         localStorage.setObject('siteAttendance.tab', 'contractors');
-
-        if (vm.diaryId) {
-            var proj = localStorage.getObject('currentProj');
-            var diary = $filter('filter')(proj.value.diaries, {
-                id: (vm.diaryId)
-            })[0];
-            if (vm.editMode) {
-                if (vm.index === 'create') {
-                    diary.data.site_attendance.contractors.push(vm.member);
-                } else {
-                    diary.data.site_attendance.contractors[vm.index] = vm.member;
-                }
-            } else {
-                diary.data.site_attendance.contractors.push(vm.member);
-            }
-            localStorage.setObject('currentProj', proj);
-        }
         localStorage.setObject('sd.diary.absence', null);
     }
 
