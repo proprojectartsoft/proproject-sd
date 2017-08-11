@@ -170,16 +170,13 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
         vm.attachments = {
             pictures: vm.pictures,
             toBeDeleted: vm.dataToDelete,
-            toBeUpdated: vm.dataToUpdate
+            toBeUpdated: vm.dataToUpdate,
         }
         //locally store the new attachements to be added and include them in attachments list
         $indexedDB.openStore('projects', function(store) {
             store.find(vm.projectId).then(function(e) {
                 var temp = e.temp
-                if (!temp.attachmentsToAdd)
-                    temp.attachmentsToAdd = [];
-                temp.attachmentsToAdd.push(vm.attachments);
-                temp.attachments.push(vm.attachments);
+                temp.attachments = vm.attachments;
                 SettingService.update_temp_sd(localStorage.getObject('projectId'), temp);
             });
         });

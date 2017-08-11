@@ -113,7 +113,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 SiteDiaryService.add_diary(vm.create)
                     .success(function(result) {
                         // var attachments = localStorage.getObject('sd.attachments') || {};
-                        var attachments = vm.create.attachmentsToAdd;
+                        var attachments = vm.create.attachments;
                         var attToAdd = [],
                             attToAddAsNew = [];
                         angular.forEach(attachments.pictures, function(value) {
@@ -150,7 +150,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         })
                         Promise.all([uploadAttachments, deleteAttachments, sync]).then(syncPopup.close);
                     }).error(function(response) {
-                        var attStorage = vm.create.attachmentsToAdd; //localStorage.getObject('sd.attachments');
+                        var attStorage = vm.create.attachments; //localStorage.getObject('sd.attachments');
                         var diary = {
                             data: vm.create
                         }
@@ -234,7 +234,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             localStorage.setObject('sd.comments', []);
                         })
                 })
-                var attachments = vm.create.attachmentsToAdd; //localStorage.getObject('sd.attachments');
+                var attachments = vm.create.attachments; //localStorage.getObject('sd.attachments');
                 var attToAdd = [];
                 if (attachments !== null) {
                     angular.forEach(attachments.pictures, function(value) {
