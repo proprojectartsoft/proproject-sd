@@ -161,9 +161,13 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
             });
         });
         if ((vm.diaryId) && (predicate === 'diary')) {
-            $state.go('app.' + predicate, {
-                id: vm.diaryId
-            });
+            if (vm.filter.substate === 'pic') {
+                returnToGallery();
+            } else {
+                $state.go('app.' + predicate, {
+                    id: vm.diaryId
+                });
+            }
         } else {
             $state.go('app.' + predicate, {
                 id: id
