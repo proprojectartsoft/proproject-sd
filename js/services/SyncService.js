@@ -118,11 +118,6 @@ angular.module($APP.name).factory('SyncService', [
                                                     //get a list of all diaries for project having the given id
                                                     SiteDiaryService.list_diaries(value.id).then(function(diaries) {
                                                         value.diaries = diaries;
-                                                        if ((result[result.length - 1] === value)) {
-                                                            $timeout(function() {
-                                                                def.resolve(result)
-                                                            }, 5000);
-                                                        }
                                                         if (value.diaries.length) {
                                                             angular.forEach(diaries, function(diary) {
                                                                 //store details for SDs
@@ -130,19 +125,34 @@ angular.module($APP.name).factory('SyncService', [
                                                                     diary.data = data;
                                                                     //store comments for SDs
                                                                     SiteDiaryService.list_comments(diary.id).then(function(result) {
+                                                                        console.log("comments loaded");
                                                                         if (diary.data) {
                                                                             diary.data.comments = result;
                                                                         }
                                                                     })
                                                                     //store attachments for SDs
                                                                     AttachmentsService.get_attachments(diary.id).then(function(result) {
-                                                                        var att = {
+                                                                        console.log("attachm. loaded");
+                                                                        diary.data.attachments = {
                                                                             pictures: result
-                                                                        }
-                                                                        diary.data.attachments = att;
+                                                                        };
                                                                     });
+                                                                    //last project
+                                                                    if ((result[result.length - 1] === value)) {
+                                                                        $timeout(function() {
+                                                                            console.log("build resolved");
+                                                                            def.resolve(result);
+                                                                        }, 5000);
+                                                                    }
                                                                 });
                                                             });
+                                                        } else {
+                                                            //no diaries and last project
+                                                            if ((result[result.length - 1] === value)) {
+                                                                $timeout(function() {
+                                                                    def.resolve(result)
+                                                                }, 5000);
+                                                            }
                                                         }
                                                     });
                                                 });
@@ -150,17 +160,36 @@ angular.module($APP.name).factory('SyncService', [
                                             return def.promise;
                                         }
 
+                                        var tempSD = {};
                                         $indexedDB.openStore('projects', function(store) {
-                                            store.clear();
+                                            if (!localStorage.getObject('projectId'))
+                                                store.clear();
+                                            var proj = store.find(localStorage.getObject('projectId')).then(function(e) {
+                                                if (e.temp) {
+                                                    tempSD = e.temp;
+                                                }
+                                                store.clear();
+                                            })
                                         }).then(function(e) {
                                             buildData().then(function(projects) {
                                                 if (!projects.length) deferred.resolve('sync_done');
                                                 angular.forEach(projects, function(project) {
-                                                    $indexedDB.openStore('projects', function(store) {
-                                                        store.insert({
+                                                    var localProj = {};
+                                                    if (tempSD != {} && tempSD.project_id == project.id) {
+                                                        //store the temp SD on indexedDB
+                                                        localProj = {
+                                                            "id": project.id,
+                                                            "temp": tempSD,
+                                                            "value": project,
+                                                        }
+                                                    } else {
+                                                        localProj = {
                                                             "id": project.id,
                                                             "value": project,
-                                                        }).then(function(e) {
+                                                        }
+                                                    }
+                                                    $indexedDB.openStore('projects', function(store) {
+                                                        store.insert(localProj).then(function(e) {
                                                             if (projects[projects.length - 1] === project) {
                                                                 deferred.resolve('sync_done');
                                                             };
