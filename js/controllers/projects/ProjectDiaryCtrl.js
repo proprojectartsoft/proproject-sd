@@ -78,14 +78,14 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         plant_and_material_used: [],
                         goods_received: [],
                         oh_and_s: [],
-                        comments: []
+                        comments: [],
+                        attachments: {
+                            pictures: []
+                        }
                     };
                     vm.createInit.site_attendance.staffs = [];
                     vm.createInit.site_attendance.contractors = [];
                     vm.createInit.site_attendance.visitors = [];
-                    vm.att = {
-                        pictures: []
-                    }
                     e.temp = vm.createInit;
                     store.upsert(e).then(
                         function(e) {},
