@@ -34,7 +34,6 @@
                      ng-model="vm.local.data.model_start"
                      month-step="1" hour-step="1" minute-step="1" second-step="1"
                      class="sd-input-container"
-                     ng-change="vm.calcParse()"
                      ng-click="vm.allowNumbersOnly()">
                     <div class="sd-line" ng-if="vm.local.data.model_start">{{vm.local.data.model_start | date: 'HH:mm'}}</div>
                     <div class="sd-line" ng-if="!vm.local.data.model_start">
@@ -48,7 +47,6 @@
                      ng-class="{'sd-no-select':(vm.diaryId) && !(vm.editMode)}"
                      ng-model="vm.local.data.model_break" month-step="1" hour-step="1" minute-step="1" second-step="1"
                      class="sd-input-container"
-                     ng-change="vm.calcParse()"
                      ng-click="vm.allowNumbersOnly()">
                     <div class="sd-line" ng-if="vm.local.data.model_break">{{vm.local.data.model_break | date: 'HH:mm'}}</div>
                     <div class="sd-line" ng-if="!vm.local.data.model_break">
@@ -63,7 +61,6 @@
                      ng-model="vm.local.data.model_finish"
                      month-step="1" hour-step="1" minute-step="1" second-step="1"
                      class="sd-input-container"
-                     ng-change="vm.calcParse()"
                      ng-click="vm.allowNumbersOnly()">
                     <div class="sd-line" ng-if="vm.local.data.model_finish">{{vm.local.data.model_finish | date: 'HH:mm'}}</div>
                     <div class="sd-line" ng-if="!vm.local.data.model_finish">
@@ -84,14 +81,6 @@
                         Tap here to select finish time.</div>
                 </div>
             </div>
-            <!-- <label class="sd-label">
-                <div class="sd-title">Total</div>
-                <form name="vm.myForm">
-                  <input type="tel" ng-readonly="(vm.diaryId) && !(vm.editMode)"
-                         placeholder="{{(!vm.diaryId || vm.editMode) && 'Total' || ''}}"
-                         ng-model="vm.local.data.total_time">
-                </form>
-            </label> -->
             <label class="sd-label">
                 <div class="sd-title">Note</div>
                 <input ng-readonly="(vm.diaryId) && !(vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add note' || ''}}" ng-model="vm.local.data.note">

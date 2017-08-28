@@ -118,7 +118,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 })
                 watchOnce();
             }, 10);
-
         })
     }
 
@@ -245,5 +244,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         var seen = localStorage.getObject('sd.seen');
         seen.staff = true;
         localStorage.setObject('sd.seen', seen);
+        vm.calcParse();
     }
 }

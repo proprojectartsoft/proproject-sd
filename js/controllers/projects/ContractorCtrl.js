@@ -208,5 +208,6 @@ function ContractorCtrl($$scope, $state, $filter, $stateParams, $timeout, Settin
         var seen = localStorage.getObject('sd.seen');
         seen.contractor = true;
         localStorage.setObject('sd.seen', seen);
+        vm.calcParse();
     }
 }
