@@ -126,9 +126,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                                 attToAddAsNew.push(value);
                             }
                         });
-                        var uploadAttachments = AttachmentsService.upload_attachments([...attToAdd, ...attToAddAsNew]).then(function(result) {
-                            console.log("att uploaded to server");
-                        });
+                        var uploadAttachments = AttachmentsService.upload_attachments([...attToAdd, ...attToAddAsNew]).then(function(result) {});
                         if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
                             angular.forEach(attachments.toBeUpdated, function(att) {
                                 AttachmentsService.update_attachments(att).then(function(result) {})
@@ -148,7 +146,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         Promise.all([uploadAttachments, deleteAttachments]).then(function(res) {
                             SyncService.sync().then(function() {
                                 $('.create-btn').attr("disabled", false);
-                                syncPopup.close;
+                                syncPopup.close();
                                 vm.go('project');
                             })
                         })
@@ -245,22 +243,16 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             attToAdd.push(value);
                         }
                     });
-                    var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {
-                        console.log(result);
-                    });
+                    var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
                     var updateAttachments = [];
                     if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
                         angular.forEach(attachments.toBeUpdated, function(att) {
-                            updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {
-                                console.log(result);
-                            }));
+                            updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {}));
                         })
                     }
                     var deleteAttachments;
                     if (attachments.toBeDeleted) {
-                        deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {
-                            console.log(result);
-                        });
+                        deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
                     }
                 }
                 //replace the diary in proj.value.diaries with the temp diary

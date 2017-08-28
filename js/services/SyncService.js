@@ -107,8 +107,6 @@ angular.module($APP.name).factory('SyncService', [
                                         }
 
                                         function buildData() {
-                                            console.log("sync - build data");
-
                                             var def = $q.defer();
                                             setCompanySettings();
                                             setCompanyLists().then(function(result) {
@@ -133,7 +131,6 @@ angular.module($APP.name).factory('SyncService', [
                                                                     })
                                                                     //store attachments for SDs
                                                                     AttachmentsService.get_attachments(diary.id).then(function(result) {
-                                                                        console.log("attachm. loaded");
                                                                         diary.data.attachments = {
                                                                             pictures: result
                                                                         };
