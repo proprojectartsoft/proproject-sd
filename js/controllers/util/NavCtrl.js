@@ -9,7 +9,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     vm.sync = sync;
     vm.go = go;
     vm.logout = logout;
-    vm.username = localStorage.getObject('dsremember')
+    vm.username = localStorage.getObject('dsremember');
     vm.loggedIn = localStorage.getObject('loggedIn');
 
     function toggleSidemenu($event) {
@@ -35,11 +35,10 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 
     function logout() {
         if (navigator.onLine) {
-            var logOutPopup = loadingPopover("Logging out", loadingTemplate, "loading");
+            $state.go('login');
+            localStorage.removeItem('dsremember');
             AuthService.logout().then(function(result) {
-                logOutPopup.close();
                 localStorage.setObject('loggedOut', true);
-                $state.go('login');
             })
         } else {
             var errorTemplate = "<center>Can't log out now. You are offline.</center>";
@@ -56,19 +55,19 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     })
 
     function loadingPopover(title, template, loadingOrError) {
-      var pop =  $ionicPopup.show({
-          title: title,
-          template: template,
-          content: "",
-          buttons: loadingOrError === "error" ? [{
-              text: 'Ok',
-              type: 'button-positive',
-              onTap: function() {
-                  pop.close();
-              }
-          }] : []
-      });
-      return pop;
+        var pop = $ionicPopup.show({
+            title: title,
+            template: template,
+            content: "",
+            buttons: loadingOrError === "error" ? [{
+                text: 'Ok',
+                type: 'button-positive',
+                onTap: function() {
+                    pop.close();
+                }
+            }] : []
+        });
+        return pop;
     }
 
 }
