@@ -112,7 +112,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 vm.create.project_id = localStorage.getObject('projectId');
                 SiteDiaryService.add_diary(vm.create)
                     .success(function(result) {
-                        // var attachments = localStorage.getObject('sd.attachments') || {};
                         var attachments = vm.create.attachments;
                         var attToAdd = [],
                             attToAddAsNew = [];
@@ -146,13 +145,15 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             };
                             SiteDiaryService.add_comments(request).success(function(result) {});
                         })
-                        var sync = SyncService.sync().then(function() {
-                            $('.create-btn').attr("disabled", false);
-                            vm.go('project');
+                        Promise.all([uploadAttachments, deleteAttachments]).then(function(res) {
+                            SyncService.sync().then(function() {
+                                $('.create-btn').attr("disabled", false);
+                                syncPopup.close;
+                                vm.go('project');
+                            })
                         })
-                        Promise.all([uploadAttachments, deleteAttachments, sync]).then(syncPopup.close);
                     }).error(function(response) {
-                        var attStorage = vm.create.attachments; //localStorage.getObject('sd.attachments');
+                        var attStorage = vm.create.attachments;
                         var diary = {
                             data: vm.create
                         }
