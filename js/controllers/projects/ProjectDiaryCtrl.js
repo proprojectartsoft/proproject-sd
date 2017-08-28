@@ -127,7 +127,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                                 attToAddAsNew.push(value);
                             }
                         });
-                        var uploadAttachments = AttachmentsService.upload_attachments([...attToAdd, ...attToAddAsNew]).then(function(result) {});
+                        var uploadAttachments = AttachmentsService.upload_attachments([...attToAdd, ...attToAddAsNew]).then(function(result) {
+                            console.log("att uploaded to server");
+                        });
                         if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
                             angular.forEach(attachments.toBeUpdated, function(att) {
                                 AttachmentsService.update_attachments(att).then(function(result) {})

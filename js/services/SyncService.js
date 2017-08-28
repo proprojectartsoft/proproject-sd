@@ -107,6 +107,8 @@ angular.module($APP.name).factory('SyncService', [
                                         }
 
                                         function buildData() {
+                                            console.log("sync - build data");
+
                                             var def = $q.defer();
                                             setCompanySettings();
                                             setCompanyLists().then(function(result) {
@@ -125,7 +127,6 @@ angular.module($APP.name).factory('SyncService', [
                                                                     diary.data = data;
                                                                     //store comments for SDs
                                                                     SiteDiaryService.list_comments(diary.id).then(function(result) {
-                                                                        console.log("comments loaded");
                                                                         if (diary.data) {
                                                                             diary.data.comments = result;
                                                                         }
@@ -140,7 +141,6 @@ angular.module($APP.name).factory('SyncService', [
                                                                     //last project
                                                                     if ((result[result.length - 1] === value)) {
                                                                         $timeout(function() {
-                                                                            console.log("build resolved");
                                                                             def.resolve(result);
                                                                         }, 5000);
                                                                     }
