@@ -81,6 +81,14 @@
                         Tap here to select finish time.</div>
                 </div>
             </div>
+            <!-- <label class="sd-label">
+                <div class="sd-title">Total</div>
+                <form name="vm.myForm">
+                  <input type="tel" ng-readonly="(vm.diaryId) && !(vm.editMode)"
+                         placeholder="{{(!vm.diaryId || vm.editMode) && 'Total' || ''}}"
+                         ng-model="vm.local.data.total_time">
+                </form>
+            </label> -->
             <label class="sd-label">
                 <div class="sd-title">Note</div>
                 <input ng-readonly="(vm.diaryId) && !(vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add note' || ''}}" ng-model="vm.local.data.note">

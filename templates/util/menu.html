@@ -2,7 +2,7 @@
     <ion-side-menu-content id="ds-content">
         <ion-header-bar class="bar bar-header">
             <button id="ds-menu-btn" class="button button-icon icon ion-android-arrow-back" ng-click="vm.toggleSidemenu($event)"></button>
-            <div class="h1 title">{{projectName || 'Please select a project'}}</div>
+            <div class="h1 title bold">{{projectName || 'Please select a project'}}</div>
         </ion-header-bar>
         <ion-nav-view id="pp-main" name="menuContent" animation="slide-left-right"></ion-nav-view>
     </ion-side-menu-content>
@@ -16,7 +16,7 @@
                 <div class="ds-text">{{vm.loggedIn.role.title}}</div>
             </ion-item>
             <ion-item nav-clear menu-close ng-click="vm.logout()" class="ds-btn">
-                <button class="button button-block button-calm">Log out</button>
+                <button class="button button-block button-calm bold">Log out</button>
             </ion-item>
 
             <ion-item nav-clear menu-close ng-click="vm.sync()">
@@ -36,8 +36,8 @@
                 <span>My shared docs</span>
             </ion-item>
             <ion-item nav-clear menu-close class="ds-invert">
-                <img src="img/menu/onweb.png">
-                <span>ProProject on web</span>
+                <img class="bold" src="img/menu/onweb.png">
+                <span class="bold">ProProject on web</span>
             </ion-item>
         </ion-content>
     </ion-side-menu>

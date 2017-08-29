@@ -161,12 +161,14 @@ angular.module($APP.name).factory('SyncService', [
                                         $indexedDB.openStore('projects', function(store) {
                                             if (!localStorage.getObject('projectId'))
                                                 store.clear();
-                                            var proj = store.find(localStorage.getObject('projectId')).then(function(e) {
-                                                if (e.temp) {
-                                                    tempSD = e.temp;
-                                                }
-                                                store.clear();
-                                            })
+                                            else {
+                                                var proj = store.find(localStorage.getObject('projectId')).then(function(e) {
+                                                    if (e.temp) {
+                                                        tempSD = e.temp;
+                                                    }
+                                                    store.clear();
+                                                })
+                                            }
                                         }).then(function(e) {
                                             buildData().then(function(projects) {
                                                 if (!projects.length) deferred.resolve('sync_done');

@@ -1,7 +1,7 @@
 <ion-view hide-back-button="true" cache-view="false">
     <div class="bar bar-subheader bar-calm" ng-click="vm.go('diary')">
         <button class="button button-icon ion-ios-arrow-left sd-text-white">
-            <span style="margin-left:10px;">Site Attendance</span>
+            <span class="bold" style="margin-left:10px;">Site Attendance</span>
         </button>
     </div>
     <ion-content class="has-subheader has-tabs sd-list swipe-preview">
@@ -84,17 +84,17 @@
         <i class="ion-ios-plus-empty"></i>
     </span>
     <div class="tabs tabs-calm">
-        <a class="tab-item" ng-class="{'active': vm.staff}" ng-click="vm.show('staff')">
+        <a class="tab-item bold" ng-class="{'active': vm.staff}" ng-click="vm.show('staff')">
             Staff
             <span class="notification-dot-attendance"
                   ng-if="vm.seen.staff"></span>
         </a>
-        <a class="tab-item" ng-class="{'active': vm.contractors}" ng-click="vm.show('contractors')">
+        <a class="tab-item bold" ng-class="{'active': vm.contractors}" ng-click="vm.show('contractors')">
             Contractors
             <span class="notification-dot-attendance"
                   ng-if="vm.seen.contractor"></span>
         </a>
-        <a class="tab-item" ng-class="{'active': vm.visitors}" ng-click="vm.show('visitors')">
+        <a class="tab-item bold" ng-class="{'active': vm.visitors}" ng-click="vm.show('visitors')">
             Visitors
             <span class="notification-dot-attendance"
                   ng-if="vm.seen.visitor"></span>
