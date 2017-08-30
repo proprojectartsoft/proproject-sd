@@ -37,6 +37,9 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
         if (navigator.onLine) {
             $state.go('login');
             localStorage.removeItem('dsremember');
+            $indexedDB.openStore('projects', function(store) {
+                store.clear();
+            }).then(function(e) {})
             AuthService.logout().then(function(result) {
                 localStorage.setObject('loggedOut', true);
             })
