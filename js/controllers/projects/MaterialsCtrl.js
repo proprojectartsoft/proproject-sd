@@ -6,7 +6,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     var vm = this;
     vm.go = go;
     vm.unit = "materials.unit";
-    vm.diaryId = localStorage.getObject('diaryId');
+    vm.diaryId = sessionStorage.getObject('diaryId');
     vm.showSearch = showSearch;
     vm.showSearchUnit = showSearchUnit;
     vm.backSearch = backSearch;
@@ -14,8 +14,8 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
     vm.deleteEntry = deleteEntry;
-    vm.editMode = localStorage.getObject('editMode');
-    vm.diaryId = localStorage.getObject('diaryId');
+    vm.editMode = sessionStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
     vm.index = $stateParams.id;
     vm.local = {};
     vm.local.search = '';
@@ -46,7 +46,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     });
     //get projects
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -130,26 +130,26 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         vm.material.tax = item.vat;
         vm.material.tax_formated = vm.material.tax + " %";
         vm.searchModal.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.material = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addNewGood() {
         vm.material.name = vm.newGood;
         vm.searchModal.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.material = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addUnit(item) {
         vm.material.unit_id = item.id;
         vm.material.unit_name = item.name;
         vm.searchUnit.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.material = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function save() {
@@ -166,14 +166,14 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         }
         if (vm.index === 'create') {
             vm.create.plant_and_material_used.push(vm.material);
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.material = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         } else {
             vm.create.plant_and_material_used[vm.index] = vm.material
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function deleteEntry(entry) {
@@ -188,11 +188,11 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             }
         })
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.material = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id) {
@@ -212,14 +212,14 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.material = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
         $("textarea").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.material = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();

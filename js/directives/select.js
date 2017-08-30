@@ -27,7 +27,7 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
     vms.select = select;
     vms.parameter = '';
 
-    vms.weather = localStorage.getObject('sd.diary.weather.morning');
+    vms.weather = sessionStorage.getObject('sd.diary.weather.morning');
     vms.settings = {};
     vms.settings.show = false;
     vms.localPath = 'sd.diary.' + vms.deTitle;
@@ -84,12 +84,12 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
                 vms.selected.splice(index, 1);
             }
             console.log("weather select changed");
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.weather = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
 
         } else {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             switch (vms.deTitle) {
                 case 'incident.type':
                     seen.incident = true;
@@ -98,7 +98,7 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
                     seen.incident = true;
                     break;
                 case 'absence':
-                    if (localStorage.getObject('siteAttTab') == 'staff') {
+                    if (sessionStorage.getObject('siteAttTab') == 'staff') {
                         seen.staff = true;
                     } else {
                         seen.contractor = true;
@@ -108,7 +108,7 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
                     seen.ohs = true;
                     break;
             }
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
             vms.selected = [];
             vms.selected.push(option);
         }

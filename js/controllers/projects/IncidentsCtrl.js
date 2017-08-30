@@ -9,13 +9,13 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     vm.addUnit = addUnit;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
-    vm.editMode = localStorage.getObject('editMode');
+    vm.editMode = sessionStorage.getObject('editMode');
     vm.local = {};
     vm.index = $stateParams.id;
     vm.actionReq = 'incident.actionReq';
     vm.type = 'incident.type';
     vm.units = 'incident.units';
-    vm.diaryId = localStorage.getObject('diaryId');
+    vm.diaryId = sessionStorage.getObject('diaryId');
     $indexedDB.openStore('settings', function(store) {
         store.find("units").then(function(list) {
             vm.units = list.value;
@@ -30,7 +30,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     });
 
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -97,14 +97,14 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         vm.local.unit_id = item.id;
         vm.local.unit_name = item.name;
         vm.searchUnit.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.incident = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function saveIncident() {
-        vm.newType = localStorage.getObject('sd.diary.incident.type')
-        vm.action_required = localStorage.getObject('sd.diary.incident.actionReq')
+        vm.newType = sessionStorage.getObject('sd.diary.incident.type')
+        vm.action_required = sessionStorage.getObject('sd.diary.incident.actionReq')
         var incident = {
             type: {
                 id: vm.newType && vm.newType[0].id || '',
@@ -121,12 +121,12 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             vm.create.incidents[vm.index] = incident;
         } else {
             vm.create.incidents.push(incident);
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.incident = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function deleteEntry(entry) {
@@ -141,11 +141,11 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             }
         })
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.incident = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id) {
@@ -166,9 +166,9 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.incident = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();

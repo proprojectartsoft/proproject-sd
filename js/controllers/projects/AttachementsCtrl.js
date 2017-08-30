@@ -11,9 +11,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
     vm.testPicture = testPicture;
     vm.populate = populate;
     vm.returnToGallery = returnToGallery;
-    vm.diaryId = localStorage.getObject('diaryId');
-    vm.projectId = localStorage.getObject('projectId');
-    vm.editMode = localStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
+    vm.projectId = sessionStorage.getObject('projectId');
+    vm.editMode = sessionStorage.getObject('editMode');
 
     vm.pictures = [];
     vm.filter = {};
@@ -75,9 +75,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
                 vm.pictures.push(pic);
                 vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
-                var seen = localStorage.getObject('sd.seen');
+                var seen = sessionStorage.getObject('sd.seen');
                 seen.attachement = true;
-                localStorage.setObject('sd.seen', seen);
+                sessionStorage.setObject('sd.seen', seen);
                 pullDown();
             });
         }, function(err) {});
@@ -108,9 +108,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
                 vm.pictures.push(pic);
                 vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
-                var seen = localStorage.getObject('sd.seen');
+                var seen = sessionStorage.getObject('sd.seen');
                 seen.attachement = true;
-                localStorage.setObject('sd.seen', seen);
+                sessionStorage.setObject('sd.seen', seen);
                 pullDown();
             });
         }, function(err) {});
@@ -124,9 +124,9 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
             vm.dataToDelete.push(idPic);
         }
         vm.pictures.splice(index, 1);
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.attachement = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
         pullDown();
     }
 
@@ -157,7 +157,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
             store.find(vm.projectId).then(function(e) {
                 var temp = e.temp
                 temp.attachments = vm.attachments;
-                SettingService.update_temp_sd(localStorage.getObject('projectId'), temp);
+                SettingService.update_temp_sd(sessionStorage.getObject('projectId'), temp);
             });
         });
         if ((vm.diaryId) && (predicate === 'diary')) {
@@ -197,14 +197,14 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.attachement = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
         $("textarea").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.attachement = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();

@@ -16,12 +16,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.local = {};
     vm.local.data = {};
     vm.loggedIn = localStorage.getObject('loggedIn');
-    vm.projectId = localStorage.getObject('projectId');
+    vm.projectId = sessionStorage.getObject('projectId');
     vm.diaryStateId = $stateParams.id;
-    vm.edit = localStorage.getObject('editMode');
-    vm.diaryId = localStorage.getObject('diaryId');
+    vm.edit = sessionStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
     $timeout(function() {
-        vm.seen = localStorage.getObject('sd.seen');
+        vm.seen = sessionStorage.getObject('sd.seen');
     })
 
     $indexedDB.openStore('projects', function(store) {
@@ -33,11 +33,11 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 //     vm.create = offDiary.data;
                 //     vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
                 //     vm.summary = vm.create.summary;
-                //     // localStorage.setObject('sd.diary.create', vm.create);
+                //     // sessionStorage.setObject('sd.diary.create', vm.create);
                 //     //TODO: store as temp in indexedDB
                 //
                 // } else {
-                localStorage.setObject('diaryId', $stateParams.id);
+                sessionStorage.setObject('diaryId', $stateParams.id);
                 vm.enableCreate = false;
                 if (vm.edit) {
                     vm.create = e.temp;
@@ -65,7 +65,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 }
             } else {
                 vm.enableCreate = true;
-                localStorage.setObject('diaryId', false);
+                sessionStorage.setObject('diaryId', false);
                 if (!vm.createInit || vm.createInit && vm.createInit === null) {
                     vm.createInit = {
                         created_for_date: '',
@@ -100,7 +100,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 
     function addSiteDiaryToDB(syncPopup) {
         $indexedDB.openStore('projects', function(store) {
-            store.find(localStorage.getObject('projectId')).then(function(proj) {
+            store.find(sessionStorage.getObject('projectId')).then(function(proj) {
                 vm.create = proj.temp;
                 //if create is not loaded correctly, redirect to home and try again
                 if (vm.create == null || vm.create == {}) {
@@ -109,7 +109,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     return;
                 }
                 vm.create.date = new Date().getTime();
-                vm.create.project_id = localStorage.getObject('projectId');
+                vm.create.project_id = sessionStorage.getObject('projectId');
                 SiteDiaryService.add_diary(vm.create)
                     .success(function(result) {
                         var attachments = vm.create.attachments;
@@ -212,7 +212,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         });
         $('.save-btn').attr("disabled", true);
         vm.edit = false;
-        localStorage.setObject('editMode', vm.edit);
+        sessionStorage.setObject('editMode', vm.edit);
         $indexedDB.openStore('projects', function(store) {
             store.find(vm.projectId).then(function(proj) {
                 vm.create = proj.temp;
@@ -227,15 +227,15 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 }).error(function(err) {
                     SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
                 })
-                angular.forEach(localStorage.getObject('sd.comments'), function(comment) {
+                angular.forEach(sessionStorage.getObject('sd.comments'), function(comment) {
                     SiteDiaryService.add_comments(comment)
                         .success(function(result) {
-                            localStorage.setObject('sd.comments', []);
+                            sessionStorage.setObject('sd.comments', []);
                         }).error(function(err) {
-                            localStorage.setObject('sd.comments', []);
+                            sessionStorage.setObject('sd.comments', []);
                         })
                 })
-                var attachments = vm.create.attachments; //localStorage.getObject('sd.attachments');
+                var attachments = vm.create.attachments; //sessionStorage.getObject('sd.attachments');
                 var attToAdd = [];
                 if (attachments !== null) {
                     angular.forEach(attachments.pictures, function(value) {
@@ -333,7 +333,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             return;
         }
         vm.edit = !vm.edit;
-        localStorage.setObject('editMode', vm.edit);
+        sessionStorage.setObject('editMode', vm.edit);
         if (!vm.edit) {
             //discard changes made on temp SD
             $indexedDB.openStore('projects', function(store) {

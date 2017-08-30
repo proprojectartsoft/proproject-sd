@@ -10,7 +10,7 @@ function VisitorsCtrl($state, SettingService, $scope, $indexedDB, $stateParams) 
     vm.data = {};
     vm.index = $stateParams.id;
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -34,21 +34,21 @@ function VisitorsCtrl($state, SettingService, $scope, $indexedDB, $stateParams) 
         //Visitor add when index = create; update otherwise
         if (vm.index === 'create') {
             vm.create.site_attendance.visitors.push(vm.member);
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.visitor = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         } else {
             vm.create.site_attendance.visitors[vm.index] = vm.member;
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function go(predicate, id) {
         if (vm.local.data.first_name) {
             save();
         }
-        localStorage.setObject('siteAttendance.tab', 'visitors');
+        sessionStorage.setObject('siteAttendance.tab', 'visitors');
         $state.go('app.' + predicate, {
             id: id
         });
@@ -56,9 +56,9 @@ function VisitorsCtrl($state, SettingService, $scope, $indexedDB, $stateParams) 
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.visitor = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();

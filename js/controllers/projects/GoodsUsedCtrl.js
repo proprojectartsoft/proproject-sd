@@ -6,11 +6,11 @@ function GoodsUsedCtrl($state, $stateParams, SiteDiaryService, $indexedDB, Setti
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
-    vm.diaryId = localStorage.getObject('diaryId');
-    vm.editMode = localStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
+    vm.editMode = sessionStorage.getObject('editMode');
     vm.index = $stateParams.id;
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -33,11 +33,11 @@ function GoodsUsedCtrl($state, $stateParams, SiteDiaryService, $indexedDB, Setti
             }
         })
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.good = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id, index) {

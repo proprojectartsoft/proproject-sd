@@ -8,11 +8,11 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     vm.deleteEntry = deleteEntry;
     vm.local = {}
     vm.local.type = 'ohs.type';
-    vm.diaryId = localStorage.getObject('diaryId');
+    vm.diaryId = sessionStorage.getObject('diaryId');
     vm.index = $stateParams.id
-    vm.editMode = localStorage.getObject('editMode');
+    vm.editMode = sessionStorage.getObject('editMode');
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -53,7 +53,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     }];
 
     function save() {
-        vm.newType = localStorage.getObject('sd.diary.ohs.type');
+        vm.newType = sessionStorage.getObject('sd.diary.ohs.type');
         vm.oh_and_s = {
             type: {
                 id: vm.newType && vm.newType[0].id || '',
@@ -70,12 +70,12 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             vm.create.oh_and_s[vm.index] = vm.oh_and_s;
         } else {
             vm.create.oh_and_s.push(vm.oh_and_s);
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.ohs = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function deleteEntry(entry) {
@@ -90,11 +90,11 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             }
         })
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.ohs = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id) {
@@ -115,14 +115,14 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.ohs = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
         $("textarea").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.ohs = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();

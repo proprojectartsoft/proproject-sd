@@ -174,10 +174,10 @@ angular.module($APP.name).factory('SyncService', [
 
                                         var tempSD = {};
                                         $indexedDB.openStore('projects', function(store) {
-                                            if (!localStorage.getObject('projectId'))
+                                            if (!sessionStorage.getObject('projectId'))
                                                 store.clear();
                                             else {
-                                                var proj = store.find(localStorage.getObject('projectId')).then(function(e) {
+                                                var proj = store.find(sessionStorage.getObject('projectId')).then(function(e) {
                                                     if (e.temp) {
                                                         tempSD = e.temp;
                                                     }
@@ -273,8 +273,8 @@ angular.module($APP.name).factory('SyncService', [
                     }
                 })
 
-                if (localStorage.getObject('sd.diary.shares')) {
-                    var shares = localStorage.getObject('sd.diary.shares');
+                if (sessionStorage.getObject('sd.diary.shares')) {
+                    var shares = sessionStorage.getObject('sd.diary.shares');
                     for (var a = 0; a < shares.length; a++) {
                         SharedService.share_diary(shares[a].id, shares[a].res).then(function(result) {});
                     }

@@ -18,10 +18,10 @@ function WeatherCtrl($state, $scope, SettingService, $indexedDB, $filter) {
     vm.local.afternoon = '';
     vm.local.evening = '';
     vm.local.onOff = '';
-    vm.diaryId = localStorage.getObject('diaryId');
-    vm.editMode = localStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
+    vm.editMode = sessionStorage.getObject('editMode');
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -69,17 +69,17 @@ function WeatherCtrl($state, $scope, SettingService, $indexedDB, $filter) {
     function save() {
         delete vm.create.weather.all_day
         vm.weather = {
-            morning: angular.extend([], vm.create.weather.morning, localStorage.getObject('sd.diary.weather.morning')),
-            midday: angular.extend([], vm.create.weather.midday, localStorage.getObject('sd.diary.weather.midday')),
-            afternoon: angular.extend([], vm.create.weather.afternoon, localStorage.getObject('sd.diary.weather.afternoon')),
-            evening: angular.extend([], vm.create.weather.evening, localStorage.getObject('sd.diary.weather.evening')),
+            morning: angular.extend([], vm.create.weather.morning, sessionStorage.getObject('sd.diary.weather.morning')),
+            midday: angular.extend([], vm.create.weather.midday, sessionStorage.getObject('sd.diary.weather.midday')),
+            afternoon: angular.extend([], vm.create.weather.afternoon, sessionStorage.getObject('sd.diary.weather.afternoon')),
+            evening: angular.extend([], vm.create.weather.evening, sessionStorage.getObject('sd.diary.weather.evening')),
             perfect_weather: vm.perfectWeather,
             min_temp: vm.min_temp,
             max_temp: vm.max_temp,
-            on_and_off: angular.extend([], vm.create.weather.onOff, localStorage.getObject('sd.diary.weather.onOff'))
+            on_and_off: angular.extend([], vm.create.weather.onOff, sessionStorage.getObject('sd.diary.weather.onOff'))
         }
         vm.create.weather = vm.weather;
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function initFields() {
@@ -144,9 +144,9 @@ function WeatherCtrl($state, $scope, SettingService, $indexedDB, $filter) {
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.weather = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();

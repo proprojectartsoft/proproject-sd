@@ -6,7 +6,7 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
     var vm = this;
     vm.go = go;
     vm.add = add;
-    vm.editMode = localStorage.getObject('editMode');
+    vm.editMode = sessionStorage.getObject('editMode');
     vm.instructions = {
         comments: []
     };
@@ -17,9 +17,9 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
         comments: []
     };
     //get the temporary SD
-    vm.diaryId = localStorage.getObject('diaryId');
+    vm.diaryId = sessionStorage.getObject('diaryId');
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -67,9 +67,9 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
 
     function add() {
         if (vm.input1 || vm.input2 || vm.input3) {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.contract = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         }
         if (vm.input1) {
             vm.instructions.comments.push(vm.input1);
@@ -94,7 +94,7 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
             variations: vm.variations
         }
         vm.create.contract_notes = vm.contract;
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function go(predicate, id) {
@@ -117,9 +117,9 @@ function ContractCtrl($rootScope, $state, $scope, SettingService, $timeout, $fil
 
     function watchChanges() {
         $("textarea").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.contract = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();

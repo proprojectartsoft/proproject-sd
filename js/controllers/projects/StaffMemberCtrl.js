@@ -20,8 +20,8 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         reason: '',
         name: ''
     }];
-    vm.diaryId = localStorage.getObject('diaryId');
-    vm.editMode = localStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
+    vm.editMode = sessionStorage.getObject('editMode');
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
@@ -46,7 +46,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     });
     //get projects
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -115,9 +115,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 $('.ion-datetime-picker input').each(function() {
                     $(this).change(function() {
                         console.log("change");
-                        var seen = localStorage.getObject('sd.seen');
+                        var seen = sessionStorage.getObject('sd.seen');
                         seen.staff = true;
-                        localStorage.setObject('sd.seen', seen);
+                        sessionStorage.setObject('sd.seen', seen);
                     });
                     $(this).prop('type', 'tel');
                     $(this).on('input', function() {
@@ -144,9 +144,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     function addNewName() {
         vm.local.data.staff_name = vm.newName;
         vm.searchModal.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.staff = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addStaff(item) {
@@ -157,9 +157,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         vm.local.data.hourly_rate = item.direct_cost;
         vm.local.data.company_name = item.employee_name;
         vm.searchModal.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.staff = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addStaff1(item) {
@@ -168,7 +168,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function save() {
-        vm.local.data.absence = localStorage.getObject('sd.diary.absence');
+        vm.local.data.absence = sessionStorage.getObject('sd.diary.absence');
         vm.member = {
             first_name: vm.local.data.staff_name.split(" ", 2)[0],
             last_name: vm.local.data.staff_name.split(" ", 2)[1],
@@ -185,15 +185,15 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         //Staff add when index = create; update otherwise
         if (vm.index === 'create') {
             vm.create.site_attendance.staffs.push(vm.member);
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.staff = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         } else {
             vm.create.site_attendance.staffs[vm.index] = vm.member;
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
-        localStorage.setObject('sd.diary.absence', null);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        sessionStorage.setObject('sd.diary.absence', null);
     }
 
     function stringToDate(string) {
@@ -245,17 +245,17 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.staff = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();
 
     function datetimeChanged() {
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.staff = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
         vm.calcParse();
     }
 }

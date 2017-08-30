@@ -12,8 +12,8 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
     vm.datetimeChanged = datetimeChanged;
-    vm.editMode = localStorage.getObject('editMode');
-    vm.diaryId = localStorage.getObject('diaryId');
+    vm.editMode = sessionStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
     vm.local = {};
     vm.local.data = {};
     vm.id = $stateParams.id;
@@ -52,7 +52,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         vm.searchUnit = popover;
     });
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -103,26 +103,26 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         vm.local.data.good_id = item.id;
         vm.local.data.good_unit = item.unit_name
         vm.searchModal.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.good = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addNewGood() {
         vm.local.data.good_name = vm.newGood;
         vm.searchModal.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.good = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addUnit(item) {
         vm.local.data.unit_id = item.id;
         vm.local.data.good_unit = item.name;
         vm.searchUnit.hide();
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.good = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 
     function saveItem() {
@@ -141,15 +141,15 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
                 vm.create.goods_received[vm.supplier].goods_details = [];
             }
             vm.create.goods_received[vm.supplier].goods_details.push(vm.item);
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.good = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         } else {
             if (vm.create.goods_received[vm.supplier].goods_details)
                 vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function go(predicate, id) {
@@ -161,16 +161,16 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.good = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();
 
     function datetimeChanged() {
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.good = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
     }
 }

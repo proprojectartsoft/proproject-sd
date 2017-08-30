@@ -9,10 +9,10 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
     vm.delays = [];
     vm.tools = [];
     vm.materials = [];
-    vm.editMode = localStorage.getObject('editMode');
-    vm.diaryId = localStorage.getObject('diaryId');
+    vm.editMode = sessionStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -68,14 +68,14 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
         }
         vm.create.site_notes = vm.site_notes;
         //store the new data in temp SD
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function add() {
         if (vm.input1 || vm.input2 || vm.input3) {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.site = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         }
         if (vm.input1) {
             vm.delays.push(vm.input1);
@@ -111,9 +111,9 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
 
     function watchChanges() {
         $("textarea").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.site = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
     watchChanges();

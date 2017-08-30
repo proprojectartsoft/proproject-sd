@@ -24,11 +24,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.togglePlus = togglePlus;
     vm.go = go;
     vm.deleteDiary = deleteDiary;
-    localStorage.setObject('editMode', null);
+    sessionStorage.setObject('editMode', null);
     SettingService.clearWeather();
-    localStorage.setObject('diaryId', null);
-    localStorage.setObject('projectId', parseInt($stateParams.id));
-    localStorage.setObject('sd.diary.shares', null);
+    sessionStorage.setObject('diaryId', null);
+    sessionStorage.setObject('projectId', parseInt($stateParams.id));
+    sessionStorage.setObject('sd.diary.shares', null);
     vm.projectId = parseInt($stateParams.id);
     vm.filter = {};
     vm.shareId = {};
@@ -37,7 +37,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
-    localStorage.setObject('sd.seen', {});
+    sessionStorage.setObject('sd.seen', {});
     $indexedDB.openStore('projects', function(store) {
         store.find(vm.projectId).then(function(e) {
             e.temp = null;
@@ -164,7 +164,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                         });
                         alertPopup.then(function(res) {});
                     }
-                    localStorage.setObject('sd.diary.shares', null);
+                    sessionStorage.setObject('sd.diary.shares', null);
                 },
                 function(err) {
                     alertPopup1.close();
@@ -190,7 +190,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 id: id,
                 res: res
             })
-            localStorage.setObject('sd.diary.shares', shares);
+            sessionStorage.setObject('sd.diary.shares', shares);
         }
     }
 

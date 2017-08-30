@@ -9,13 +9,13 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     vm.addComentAtEnter = addComentAtEnter;
     vm.addComment = addComment;
     vm.local = {};
-    vm.diaryId = localStorage.getObject('diaryId');
-    vm.editMode = localStorage.getObject('editMode');
-    vm.local.comments = localStorage.getObject('sd.comments');
+    vm.diaryId = sessionStorage.getObject('diaryId');
+    vm.editMode = sessionStorage.getObject('editMode');
+    vm.local.comments = sessionStorage.getObject('sd.comments');
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.myProfile = localStorage.getObject('my_account');
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -36,9 +36,9 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     });
 
     function addComment() {
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.comment = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
         var comment = vm.local.comment;
         vm.local.comment = "";
         angular.forEach(vm.local.list, function(value, key) {
@@ -58,7 +58,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                 }
                 vm.create.comments.push(request);
                 vm.local.list = vm.create.comments;
-                SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+                SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
             }
         } else {
             if (comment) {
@@ -79,9 +79,9 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                     vm.local.comments = [];
                 }
                 vm.local.comments.push(commToAdd);
-                localStorage.setObject('sd.comments', vm.local.comments); //TODO:
+                sessionStorage.setObject('sd.comments', vm.local.comments); //TODO:
                 //store in indexedDB the new info for SD
-                SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
+                SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
             }
         }
         $('textarea').css({

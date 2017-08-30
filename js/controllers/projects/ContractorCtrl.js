@@ -24,8 +24,8 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
         reason: '',
         name: ''
     }];
-    vm.diaryId = localStorage.getObject('diaryId');
-    vm.editMode = localStorage.getObject('editMode');
+    vm.diaryId = sessionStorage.getObject('diaryId');
+    vm.editMode = sessionStorage.getObject('editMode');
     vm.index = $stateParams.id;
     vm.local.absence = 'absence';
 
@@ -41,7 +41,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
         });
     });
     $indexedDB.openStore('projects', function(store) {
-        store.find(localStorage.getObject('projectId')).then(function(proj) {
+        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
             if (vm.create == null || vm.create == {}) {
@@ -131,7 +131,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
     }
 
     function save() {
-        vm.local.data.absence = localStorage.getObject('sd.diary.absence');
+        vm.local.data.absence = sessionStorage.getObject('sd.diary.absence');
         vm.member = {
             first_name: vm.local.data.staff_name,
             company_name: vm.local.data.company_name,
@@ -147,15 +147,15 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 
         if (vm.index === 'create') {
             vm.create.site_attendance.contractors.push(vm.member);
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.contractor = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         } else {
             vm.create.site_attendance.contractors[vm.index] = vm.member;
         }
-        SettingService.update_temp_sd(localStorage.getObject('projectId'), vm.create);
-        localStorage.setObject('siteAttendance.tab', 'contractors');
-        localStorage.setObject('sd.diary.absence', null);
+        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        sessionStorage.setObject('siteAttendance.tab', 'contractors');
+        sessionStorage.setObject('sd.diary.absence', null);
     }
 
     function calcParse() {
@@ -200,7 +200,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
         if (vm.local.data.staff_name) {
             save();
         }
-        localStorage.setObject('siteAttendance.tab', 'contractors');
+        sessionStorage.setObject('siteAttendance.tab', 'contractors');
         $state.go('app.' + predicate, {
             id: id
         });
@@ -208,16 +208,16 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 
     function watchChanges() {
         $("input").change(function() {
-            var seen = localStorage.getObject('sd.seen');
+            var seen = sessionStorage.getObject('sd.seen');
             seen.contractor = true;
-            localStorage.setObject('sd.seen', seen);
+            sessionStorage.setObject('sd.seen', seen);
         });
     }
 
     function datetimeChanged() {
-        var seen = localStorage.getObject('sd.seen');
+        var seen = sessionStorage.getObject('sd.seen');
         seen.contractor = true;
-        localStorage.setObject('sd.seen', seen);
+        sessionStorage.setObject('sd.seen', seen);
         vm.calcParse();
     }
 }
