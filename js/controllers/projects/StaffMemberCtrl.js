@@ -15,16 +15,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.addStaff1 = addStaff1;
     vm.allowNumbersOnly = allowNumbersOnly;
     vm.datetimeChanged = datetimeChanged;
-    vm.currency = SettingService.get_currency_symbol(
-        $filter('filter')(localStorage.getObject('companySettings'), {
-            name: "currency"
-        })[0]);
-    $scope.$watch(function() {
-        if (vm.editMode)
-            SettingService.show_focus();
-    });
-
-    vm.absence = localStorage.getObject('companyLists').absence_list;
     vm.emptyAbsence = [{
         id: '',
         reason: '',
@@ -40,14 +30,21 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.local.absence = 'absence';
     vm.index = $stateParams.id;
     vm.newName = '';
-    vm.staff = localStorage.getObject('companyLists').staff;
-    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(popover) {
-        vm.searchModal = popover;
+    //get necessary settings for company
+    $indexedDB.openStore('settings', function(store) {
+        store.find("absence").then(function(list) {
+            vm.absence = list.value;
+        });
+        store.find("staff").then(function(list) {
+            vm.staff = list.value;
+        });
+        store.find("currency").then(function(list) {
+            vm.currency = SettingService.get_currency_symbol(list.value);
+        }, function(err) {
+            vm.currency = SettingService.get_currency_symbol("dolar");
+        });
     });
-
+    //get projects
     $indexedDB.openStore('projects', function(store) {
         store.find(localStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
@@ -59,6 +56,17 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             }
             initFields();
         });
+    });
+
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
+    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.searchModal = popover;
     });
 
     function initFields() {
@@ -85,14 +93,18 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         } else {
             vm.local.data.staff_name = "";
             vm.local.data.model_break = vm.stringToDate("00:30");
-            var start = $filter('filter')(localStorage.getObject('companySettings'), {
-                name: "start"
-            })[0];
-            vm.local.data.model_start = start ? start.value : 0;
-            var finish = $filter('filter')(localStorage.getObject('companySettings'), {
-                name: "finish"
-            })[0];
-            vm.local.data.model_finish = finish ? finish.value : 0;
+            $indexedDB.openStore('settings', function(store) {
+                store.find("start").then(function(list) {
+                    vm.local.data.model_start = list.value;
+                }, function(err) {
+                    vm.local.data.model_start = "08:00";
+                });
+                store.find("finish").then(function(list) {
+                    vm.local.data.model_finish = list.value;
+                }, function(err) {
+                    vm.local.data.model_finish = "12:00";
+                });
+            });
             if (!vm.local.data.total_time) vm.calcParse();
         }
     }

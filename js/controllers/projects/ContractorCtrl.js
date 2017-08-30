@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('ContractorCtrl', StaffMemberCtrl)
+angular.module($APP.name).controller('ContractorCtrl', ContractorCtrl)
 
 ContractorCtrl.$inject = ['$scope', '$state', '$filter', '$stateParams', '$timeout', 'SettingService', '$indexedDB'];
 
-function ContractorCtrl($$scope, $state, $filter, $stateParams, $timeout, SettingService, $indexedDB) {
+function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, SettingService, $indexedDB) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -14,11 +14,6 @@ function ContractorCtrl($$scope, $state, $filter, $stateParams, $timeout, Settin
     vm.addStaff1 = addStaff1;
     vm.allowNumbersOnly = allowNumbersOnly;
     vm.datetimeChanged = datetimeChanged;
-    vm.currency = SettingService.get_currency_symbol(
-        $filter('filter')(localStorage.getObject('companySettings'), {
-            name: "currency"
-        })[0]);
-
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
@@ -30,6 +25,21 @@ function ContractorCtrl($$scope, $state, $filter, $stateParams, $timeout, Settin
         name: ''
     }];
     vm.diaryId = localStorage.getObject('diaryId');
+    vm.editMode = localStorage.getObject('editMode');
+    vm.index = $stateParams.id;
+    vm.local.absence = 'absence';
+
+    //get necessary settings for company
+    $indexedDB.openStore('settings', function(store) {
+        store.find("currency").then(function(list) {
+            vm.currency = SettingService.get_currency_symbol(list.value);
+        }, function(err) {
+            vm.currency = SettingService.get_currency_symbol("dolar");
+        });
+        store.find("absence").then(function(list) {
+            vm.absence = list.value;
+        });
+    });
     $indexedDB.openStore('projects', function(store) {
         store.find(localStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
@@ -43,15 +53,11 @@ function ContractorCtrl($$scope, $state, $filter, $stateParams, $timeout, Settin
         });
     });
 
-    vm.editMode = localStorage.getObject('editMode');
-    vm.index = $stateParams.id;
-
-    vm.local.absence = 'absence';
-
     $scope.$watch(function() {
         if (vm.editMode)
             SettingService.show_focus();
     });
+    watchChanges();
 
     function initFields() {
         if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
@@ -77,16 +83,21 @@ function ContractorCtrl($$scope, $state, $filter, $stateParams, $timeout, Settin
         } else {
             vm.local.data.staff_name = "";
             vm.local.data.model_break = vm.stringToDate("00:30");
-            vm.local.data.model_start = $filter('filter')(localStorage.getObject('companySettings'), {
-                name: "start"
-            })[0].value;
-            vm.local.data.model_finish = $filter('filter')(localStorage.getObject('companySettings'), {
-                name: "finish"
-            })[0].value;
+            $indexedDB.openStore('settings', function(store) {
+                store.find("start").then(function(list) {
+                    vm.local.data.model_start = list.value;
+                }, function(err) {
+                    vm.local.data.model_start = "08:00";
+                });
+                store.find("finish").then(function(list) {
+                    vm.local.data.model_finish = list.value;
+                }, function(err) {
+                    vm.local.data.model_finish = "12:00";
+                });
+            });
             if (!vm.local.data.total_time) vm.calcParse();
         }
     }
-    vm.absence = localStorage.getObject('companyLists').absence_list;
 
     function allowNumbersOnly() {
         var watchOnce = $scope.$watch(function() {
@@ -202,7 +213,6 @@ function ContractorCtrl($$scope, $state, $filter, $stateParams, $timeout, Settin
             localStorage.setObject('sd.seen', seen);
         });
     }
-    watchChanges();
 
     function datetimeChanged() {
         var seen = localStorage.getObject('sd.seen');

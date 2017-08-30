@@ -18,7 +18,13 @@ angular.module($APP.name, [
                 keyPath: 'id',
                 autoIncrement: true
             });
+            var objStore1 = db.createObjectStore('settings', {
+                keyPath: 'name'
+            });
             objStore.createIndex('id_idx', 'id', {
+                unique: true
+            });
+            objStore1.createIndex('name_idx', 'name', {
                 unique: true
             });
         });

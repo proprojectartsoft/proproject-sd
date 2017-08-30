@@ -16,7 +16,11 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     vm.type = 'incident.type';
     vm.units = 'incident.units';
     vm.diaryId = localStorage.getObject('diaryId');
-    vm.units = localStorage.getObject('companyLists').units;
+    $indexedDB.openStore('settings', function(store) {
+        store.find("units").then(function(list) {
+            vm.units = list.value;
+        });
+    });
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
         animation: 'slide-in-up'

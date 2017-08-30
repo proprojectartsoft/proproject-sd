@@ -23,7 +23,14 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.data = {};
     vm.settings = '';
     vm.supplier = $stateParams.id;
-    vm.goods = localStorage.getObject('companyLists').resources;
+    $indexedDB.openStore('settings', function(store) {
+        store.find("resources").then(function(list) {
+            vm.goods = list.value;
+        });
+        store.find("units").then(function(list) {
+            vm.units = list.value;
+        });
+    });
     vm.goods.sort(function(a, b) {
         var textA = a.name.toUpperCase();
         var textB = b.name.toUpperCase();
@@ -36,7 +43,6 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         vm.searchModal = popover;
     });
 
-    vm.units = localStorage.getObject('companyLists').units;
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
         animation: 'slide-in-up'

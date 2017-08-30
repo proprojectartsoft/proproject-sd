@@ -18,7 +18,7 @@ angular.module($APP.name).factory('SyncService', [
         var getme = function() {
             return $http.get($APP.server + '/api/me')
                 .success(function(user) {
-                    return user.data;
+                    return user;
                 })
                 .error(function(data, status) {
                     return status;
@@ -53,65 +53,80 @@ angular.module($APP.name).factory('SyncService', [
                                     .success(function(data) {
                                         function setCompanySettings() {
                                             SiteDiaryService.get_company_settings().success(function(sett) {
-                                                localStorage.setObject('companySettings', sett);
+                                                $indexedDB.openStore('settings', function(store) {
+                                                    //store all information about company settings
+                                                    angular.forEach(sett, function(res) {
+                                                        store.insert({
+                                                            name: res.name,
+                                                            value: res.value
+                                                        });
+                                                    })
+                                                });
                                             })
                                         }
 
                                         function setCompanyLists() {
-                                            var lists = {};
-                                            var ready1 = false,
-                                                ready2 = false,
-                                                ready3 = false,
-                                                ready4 = false;
-                                            var prm = $q.defer();
-                                            SiteDiaryService.absence_list().success(function(result) {
+                                            var lists = [];
+                                            var absenceReq = SiteDiaryService.absence_list().success(function(result) {
                                                 angular.forEach(result, function(value) {
                                                     value.name = value.reason;
                                                 })
-                                                lists.absence_list = result;
-                                                ready1 = true;
-                                                ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                                lists.push({
+                                                    name: 'absence',
+                                                    value: result
+                                                });
                                             }).error(function(err) {
-                                                lists.absence_list = [];
-                                                ready1 = true;
-                                                ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                                lists.push({
+                                                    name: 'absence',
+                                                    value: []
+                                                });
                                             })
-                                            SiteDiaryService.get_resources().success(function(result) {
-                                                lists.resources = result;
-                                                ready2 = true;
-                                                ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                            var resourceReq = SiteDiaryService.get_resources().success(function(result) {
+                                                lists.push({
+                                                    name: 'resources',
+                                                    value: result
+                                                });
                                             }).error(function(err) {
-                                                lists.resources = [];
-                                                ready2 = true;
-                                                ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                                lists.push({
+                                                    name: 'resources',
+                                                    value: []
+                                                });
                                             })
-                                            SiteDiaryService.get_units().success(function(result) {
-                                                lists.units = result;
-                                                ready3 = true;
-                                                ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                            var unitReq = SiteDiaryService.get_units().success(function(result) {
+                                                lists.push({
+                                                    name: 'units',
+                                                    value: result
+                                                });
                                             }).error(function(err) {
-                                                lists.units = [];
-                                                ready3 = true;
-                                                ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                                lists.push({
+                                                    name: 'units',
+                                                    value: []
+                                                });
                                             })
-                                            SiteDiaryService.get_staff().success(function(result) {
-                                                lists.staff = result;
-                                                ready4 = true;
-                                                ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                            var staffReq = SiteDiaryService.get_staff().success(function(result) {
+                                                lists.push({
+                                                    name: 'staff',
+                                                    value: result
+                                                });
                                             }).error(function(err) {
-                                                lists.staff = [];
-                                                ready4 = true;
-                                                ready1 && ready2 && ready3 && ready4 && prm.resolve(lists);
+                                                lists.push({
+                                                    name: 'staff',
+                                                    value: []
+                                                });
                                             })
-                                            return prm.promise;
+                                            Promise.all([absenceReq, resourceReq, unitReq, staffReq]).then(function() {
+                                                $indexedDB.openStore('settings', function(store) {
+                                                    angular.forEach(lists, function(list) {
+                                                        store.insert(list);
+                                                    })
+                                                });
+                                            })
                                         }
 
                                         function buildData() {
                                             var def = $q.defer();
                                             setCompanySettings();
-                                            setCompanyLists().then(function(result) {
-                                                localStorage.setObject('companyLists', result);
-                                            })
+                                            setCompanyLists();
                                             ProjectService.projects().then(function(result) {
                                                 if (!result.length) def.resolve([]);
                                                 angular.forEach(result, function(value) {

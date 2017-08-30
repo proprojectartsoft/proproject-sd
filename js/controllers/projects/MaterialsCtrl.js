@@ -25,28 +25,26 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.subtotal_formated = '';
     vm.newGood = '';
 
-    vm.goods = localStorage.getObject('companyLists').resources;
-    vm.goods.sort(function(a, b) {
-        var textA = a.name.toUpperCase();
-        var textB = b.name.toUpperCase();
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    //get necessary settings for company
+    $indexedDB.openStore('settings', function(store) {
+        store.find("resources").then(function(list) {
+            vm.goods = list.value;
+            vm.goods.sort(function(a, b) {
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
+        });
+        store.find("units").then(function(list) {
+            vm.units = list.value;
+        });
+        store.find("currency").then(function(list) {
+            vm.currency = SettingService.get_currency_symbol(list.value);
+        }, function(err) {
+            vm.currency = SettingService.get_currency_symbol("dolar");
+        });
     });
-    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(popover) {
-        vm.searchModal = popover;
-    });
-
-    vm.units = localStorage.getObject('companyLists').units;
-    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(popover) {
-        vm.searchModal = popover;
-        vm.searchUnit = popover;
-    });
-
+    //get projects
     $indexedDB.openStore('projects', function(store) {
         store.find(localStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
@@ -59,10 +57,21 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             initFields();
         });
     });
-    vm.currency = SettingService.get_currency_symbol(
-        $filter('filter')(localStorage.getObject('companySettings'), {
-            name: "currency"
-        })[0]);
+
+    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.searchModal = popover;
+    });
+
+    $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.searchModal = popover;
+        vm.searchUnit = popover;
+    });
 
     $scope.$watch(function() {
         if (vm.editMode)
