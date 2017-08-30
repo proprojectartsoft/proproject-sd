@@ -26,16 +26,17 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     $indexedDB.openStore('settings', function(store) {
         store.find("resources").then(function(list) {
             vm.goods = list.value;
+            vm.goods.sort(function(a, b) {
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
         });
         store.find("units").then(function(list) {
             vm.units = list.value;
         });
     });
-    vm.goods.sort(function(a, b) {
-        var textA = a.name.toUpperCase();
-        var textB = b.name.toUpperCase();
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    });
+
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -69,7 +70,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     });
     //initialize data for item's fields
     function initFields() {
-        if (vm.index !== 'create' && vm.index != 0) {
+        if (vm.index !== 'create') {
             vm.local.data = {
                 good_name: vm.create.goods_received[vm.id].goods_details[vm.index].details,
                 good_unit: vm.create.goods_received[vm.id].goods_details[vm.index].unit_name,
