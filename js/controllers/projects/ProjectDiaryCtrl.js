@@ -58,7 +58,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             vm.created_for_date = (diary.created_for_date != 0) && diary.created_for_date || '';
                             //store as temp in indexedDB
                             e.temp = diary.data;
-                            SettingService.show_message_popup('Debug', '<span>Visualize SD. Store temporary SD: ' + e.temp.id + ' - ' + e.temp.user_name + '</span>');
+                            if (e.temp && e.temp != null) {
+                                SettingService.show_message_popup('Debug', '<span>Visualize SD. Store temporary SD: ' + e.temp.id + ' - ' + e.temp.user_name + '</span>');
+                            }
                             store.upsert(e).then(
                                 function(e) {},
                                 function(err) {}

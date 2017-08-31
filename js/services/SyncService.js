@@ -139,23 +139,26 @@ angular.module($APP.name).factory('SyncService', [
                                                                 SiteDiaryService.list_diary(diary.id).then(function(data) {
                                                                     diary.data = data;
                                                                     //store comments for SDs
-                                                                    SiteDiaryService.list_comments(diary.id).then(function(result) {
+                                                                    var listComm = SiteDiaryService.list_comments(diary.id).then(function(result) {
                                                                         if (diary.data) {
                                                                             diary.data.comments = result;
                                                                         }
                                                                     })
                                                                     //store attachments for SDs
-                                                                    AttachmentsService.get_attachments(diary.id).then(function(result) {
+                                                                    var getAtt = AttachmentsService.get_attachments(diary.id).then(function(result) {
                                                                         diary.data.attachments = {
                                                                             pictures: result
                                                                         };
                                                                     });
-                                                                    //last project
-                                                                    if ((result[result.length - 1] === value)) {
-                                                                        $timeout(function() {
-                                                                            def.resolve(result);
-                                                                        }, 5000);
-                                                                    }
+
+                                                                    Promise.all([listComm, getAtt]).then(function(res) {
+                                                                        //last project
+                                                                        if ((result[result.length - 1] === value)) {
+                                                                            $timeout(function() {
+                                                                                def.resolve(result);
+                                                                            }, 500);
+                                                                        }
+                                                                    })
                                                                 });
                                                             });
                                                         } else {
