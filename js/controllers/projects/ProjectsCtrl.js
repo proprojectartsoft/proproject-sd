@@ -2,7 +2,8 @@ angular.module($APP.name).controller('ProjectsCtrl', [
     '$rootScope',
     '$state',
     '$indexedDB',
-    function($rootScope, $state, $indexedDB) {
+    'SettingService',
+    function($rootScope, $state, $indexedDB, SettingService) {
         var vm = this;
         vm.go = go;
         vm.header = 'Select a project'
@@ -15,6 +16,13 @@ angular.module($APP.name).controller('ProjectsCtrl', [
         $indexedDB.openStore('projects', function(store) {
             store.getAll().then(function(result) {
                 vm.projects = result;
+                var projIds = "";
+                angular.forEach(vm.projects, function(proj) {
+                    projIds += proj.id + ", ";
+                })
+                SettingService.show_message_popup('Debug', '<span>Enter Site Attendance Controller. Projects list: </span>' + projIds);
+            }, function(err) {
+                SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
             });
         });
 

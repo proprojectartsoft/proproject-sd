@@ -27,6 +27,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     $indexedDB.openStore('projects', function(store) {
         store.find(vm.projectId).then(function(e) {
             vm.createInit = e.temp;
+            SettingService.show_message_popup('Debug', '<span>Set temporary SD (may be an object or null): ' + vm.createInit + '</span>');
             if ($stateParams.id) {
                 // if ($stateParams.id === 'offline') {
                 //     var offDiary = localStorage.getObject('diaryToSync');
@@ -46,15 +47,18 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         $state.go('app.home');
                         return;
                     }
+                    SettingService.show_message_popup('Debug', '<span>Edit mode. Temporary SD: ' + vm.create.id + ' - ' + vm.create.user_name + '</span>');
                     vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
                     vm.summary = vm.create.summary;
                 } else {
                     vm.diaries = e.value.diaries;
+                    SettingService.show_message_popup('Debug', '<span>Visualize SD. </span>');
                     angular.forEach(vm.diaries, function(diary) {
                         if (diary.id == $stateParams.id) {
                             vm.created_for_date = (diary.created_for_date != 0) && diary.created_for_date || '';
                             //store as temp in indexedDB
                             e.temp = diary.data;
+                            SettingService.show_message_popup('Debug', '<span>Visualize SD. Store temporary SD: ' + e.temp.id + ' - ' + e.temp.user_name + '</span>');
                             store.upsert(e).then(
                                 function(e) {},
                                 function(err) {}
@@ -87,6 +91,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     vm.createInit.site_attendance.contractors = [];
                     vm.createInit.site_attendance.visitors = [];
                     e.temp = vm.createInit;
+                    SettingService.show_message_popup('Debug', '<span>Create mode. Store temporary SD: ' + vm.createInit.id + ' - ' + vm.createInit.user_name + '</span>');
                     store.upsert(e).then(
                         function(e) {},
                         function(err) {}
@@ -95,6 +100,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 vm.created_for_date = vm.createInit.created_for_date;
                 vm.summary = vm.createInit.summary;
             }
+        }, function(err) {
+            SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
         });
     });
 

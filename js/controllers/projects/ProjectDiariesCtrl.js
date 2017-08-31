@@ -44,6 +44,8 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             store.upsert(e).then(
                 function(e) {},
                 function(err) {})
+        }, function(err) {
+            SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
         });
     });
     vm.selectOpt = [{
@@ -93,6 +95,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         });
         store.find(vm.projectId).then(function(e) {
             vm.diary = e.value.diaries;
+            var list = "";
+            angular.forEach(vm.diary, function(d) {
+                list += d.data && ("<span style='color:red'>" + d.data.id + "</span> - <span style='color:blue'>" + d.data.user_name + ';</span> ');
+            })
+            SettingService.show_message_popup('Debug', '<span>Get project ' + vm.projectId + '. Diaries data: </span>' + list);
             angular.forEach(e.value.diaries, function(value, key) {
                 e.value.diaries[key].color = $scope.getSdTitleColor(value.userName)
             });
@@ -102,6 +109,8 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 function(e) {},
                 function(err) {}
             )
+        }, function(err) {
+            SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
         });
     });
 
