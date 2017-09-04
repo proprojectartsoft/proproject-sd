@@ -153,7 +153,7 @@ angular.module($APP.name).factory('SyncService', [
 
                                                                     Promise.all([listComm, getAtt]).then(function(res) {
                                                                         //last project
-                                                                        if ((result[result.length - 1] === value)) {
+                                                                        if ((result[result.length - 1] === value) && diaries[diaries.length - 1] === diary) {
                                                                             $timeout(function() {
                                                                                 def.resolve(result);
                                                                             }, 500);
