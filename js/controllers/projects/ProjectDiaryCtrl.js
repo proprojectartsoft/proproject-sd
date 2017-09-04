@@ -109,9 +109,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 
     function addSiteDiaryToDB(syncPopup) {
         $indexedDB.openStore('projects', function(store) {
-            var crtProject = {};
             store.find(sessionStorage.getObject('projectId')).then(function(proj) {
-                crtProject = proj;
                 vm.create = proj.temp;
                 //if create is not loaded correctly, redirect to home and try again
                 if (vm.create == null || vm.create == {}) {
@@ -179,15 +177,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         if (!proj.value.diaries)
                             proj.value.diaries = [];
                         proj.value.diaries.push(diary);
-                        crtProject = proj;
+                        saveChanges(proj);
                         syncPopup.close();
                         SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
                         $('.create-btn').attr("disabled", false);
                         vm.go('project');
                     });
-            });
-            store.upsert(crtProject).then(function(e) {}, function(err) {
-                SettingService.show_message_popup('Error', "<center>An unexpected error occured and SD cannot be displayed until sync.</center>");
             });
         });
     }
@@ -371,5 +366,26 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 id: id
             });
         }
+    }
+
+    function saveChanges(project) {
+        $indexedDB.openStore('projects', function(store) {
+            store.upsert(project).then(
+                function(e) {},
+                function(e) {
+                    var offlinePopup = $ionicPopup.alert({
+                        title: "Unexpected error",
+                        template: "<center>An unexpected error occurred while trying to add a comment</center>",
+                        content: "",
+                        buttons: [{
+                            text: 'Ok',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                offlinePopup.close();
+                            }
+                        }]
+                    });
+                })
+        })
     }
 }
