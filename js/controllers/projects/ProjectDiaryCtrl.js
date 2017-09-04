@@ -179,6 +179,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         if (!proj.value.diaries)
                             proj.value.diaries = [];
                         proj.value.diaries.push(diary);
+                        crtProject = proj;
                         syncPopup.close();
                         SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
                         $('.create-btn').attr("disabled", false);
