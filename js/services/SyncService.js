@@ -123,17 +123,35 @@ angular.module($APP.name).factory('SyncService', [
                                             })
                                         }
 
-                                        function buildData() {
+                                        function saveChanges(project) {
+                                            $indexedDB.openStore('projects', function(store) {
+                                                store.upsert(project).then(
+                                                    function(e) {},
+                                                    function(e) {
+                                                        var offlinePopup = $ionicPopup.alert({
+                                                            title: "Unexpected error",
+                                                            template: "<center>An unexpected error occurred.</center>",
+                                                            content: "",
+                                                            buttons: [{
+                                                                text: 'Ok',
+                                                                type: 'button-positive',
+                                                                onTap: function(e) {
+                                                                    offlinePopup.close();
+                                                                }
+                                                            }]
+                                                        });
+                                                    })
+                                            })
+                                        }
+
+                                        function storeDiariesDetails() {
                                             var def = $q.defer();
-                                            setCompanySettings();
-                                            setCompanyLists();
-                                            ProjectService.projects().then(function(result) {
-                                                if (!result.length) def.resolve([]);
-                                                angular.forEach(result, function(value) {
-                                                    //get a list of all diaries for project having the given id
-                                                    SiteDiaryService.list_diaries(value.id).then(function(diaries) {
-                                                        value.diaries = diaries;
-                                                        if (value.diaries.length) {
+                                            $indexedDB.openStore('projects', function(store) {
+                                                //get all stored projects
+                                                store.getAll().then(function(projects) {
+                                                    angular.forEach(projects, function(project) {
+                                                        if (project.value.diaries.length) {
+                                                            var diaries = project.value.diaries;
                                                             angular.forEach(diaries, function(diary) {
                                                                 //store details for SDs
                                                                 SiteDiaryService.list_diary(diary.id).then(function(data) {
@@ -150,12 +168,17 @@ angular.module($APP.name).factory('SyncService', [
                                                                             pictures: result
                                                                         };
                                                                     });
-
                                                                     Promise.all([listComm, getAtt]).then(function(res) {
-                                                                        //last project
-                                                                        if ((result[result.length - 1] === value) && diaries[diaries.length - 1] === diary) {
+                                                                        if (diaries[diaries.length - 1] === diary) {
                                                                             $timeout(function() {
-                                                                                def.resolve(result);
+                                                                                //sttore data for current diary
+                                                                                saveChanges(project);
+                                                                                //last project and last diary
+                                                                                if ((projects[projects.length - 1] === project)) {
+                                                                                    $timeout(function() {
+                                                                                        def.resolve();
+                                                                                    }, 500);
+                                                                                }
                                                                             }, 500);
                                                                         }
                                                                     })
@@ -163,15 +186,82 @@ angular.module($APP.name).factory('SyncService', [
                                                             });
                                                         } else {
                                                             //no diaries and last project
-                                                            if ((result[result.length - 1] === value)) {
+                                                            if ((projects[projects.length - 1] === project)) {
                                                                 $timeout(function() {
-                                                                    def.resolve(result)
+                                                                    def.resolve()
                                                                 }, 5000);
                                                             }
                                                         }
+                                                    })
+                                                })
+                                            })
+                                            return def.promise;
+                                        }
+
+                                        function storeDiaries() {
+                                            var def = $q.defer();
+                                            $indexedDB.openStore('projects', function(store) {
+                                                //get all stored projects
+                                                store.getAll().then(function(projects) {
+                                                    angular.forEach(projects, function(project) {
+                                                        //get a list of all diaries for project having the given id
+                                                        SiteDiaryService.list_diaries(project.id).then(function(diaries) {
+                                                            //store diaries for project
+                                                            project.value.diaries = diaries;
+                                                            saveChanges(project);
+                                                            $timeout(function() {
+                                                                if (projects[projects.length - 1] == project) {
+                                                                    def.resolve();
+                                                                }
+                                                            }, 100);
+                                                        });
+                                                    })
+                                                })
+                                            });
+                                            return def.promise;
+                                        }
+
+                                        function storeProjects() {
+                                            var def = $q.defer();
+                                            ProjectService.projects().then(function(projects) {
+                                                //there are no projects to store
+                                                if (!projects.length) def.resolve([]);
+                                                angular.forEach(projects, function(value) {
+                                                    //store every project in indexedDB
+                                                    $indexedDB.openStore('projects', function(store) {
+                                                        proj = {
+                                                            "id": value.id,
+                                                            "value": value,
+                                                        }
+                                                        store.insert(proj).then(function(e) {
+                                                            if (projects[projects.length - 1] === value) {
+                                                                def.resolve(projects);
+                                                            };
+                                                        });
                                                     });
                                                 });
                                             });
+                                            return def.promise;
+                                        }
+
+                                        function buildData() {
+                                            var def = $q.defer();
+                                            setCompanySettings();
+                                            setCompanyLists();
+                                            //store projects locally
+                                            storeProjects().then(function(res) {
+                                                //no projects stored
+                                                if (res == []) {
+                                                    def.resolve();
+                                                }
+                                                //store diaries for stored projects
+                                                storeDiaries().then(function(d) {
+                                                    //store diaries details
+                                                    storeDiariesDetails().then(function() {
+                                                        def.resolve();
+                                                    })
+                                                })
+                                            })
                                             return def.promise;
                                         }
 
@@ -188,30 +278,22 @@ angular.module($APP.name).factory('SyncService', [
                                                 })
                                             }
                                         }).then(function(e) {
-                                            buildData().then(function(projects) {
-                                                if (!projects.length) deferred.resolve('sync_done');
-                                                angular.forEach(projects, function(project) {
-                                                    var localProj = {};
-                                                    if (tempSD != {} && tempSD.project_id == project.id) {
-                                                        //store the temp SD on indexedDB
-                                                        localProj = {
-                                                            "id": project.id,
-                                                            "temp": tempSD,
-                                                            "value": project,
-                                                        }
-                                                    } else {
-                                                        localProj = {
-                                                            "id": project.id,
-                                                            "value": project,
-                                                        }
-                                                    }
-                                                    $indexedDB.openStore('projects', function(store) {
-                                                        store.insert(localProj).then(function(e) {
-                                                            if (projects[projects.length - 1] === project) {
+                                            buildData().then(function() {
+                                                $indexedDB.openStore('projects', function(store) {
+                                                    //get all stored projects
+                                                    store.getAll().then(function(projects) {
+                                                        if (!projects.length) deferred.resolve('sync_done');
+                                                        angular.forEach(projects, function(project) {
+                                                            if (tempSD != {} && tempSD.project_id == project.id) {
+                                                                //store the temp SD on indexedDB
+                                                                project.temp = tempSD;
+                                                                saveChanges(project);
+                                                            }
+                                                            $timeout(function() {
                                                                 deferred.resolve('sync_done');
-                                                            };
-                                                        });
-                                                    });
+                                                            }, 500);
+                                                        })
+                                                    })
                                                 })
                                             });
                                         });
