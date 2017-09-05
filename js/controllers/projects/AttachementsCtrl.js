@@ -139,6 +139,10 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
     function returnToGallery() {
         goToTop();
         pullDown();
+        $('input').prev().removeClass("focus");
+        $('input').removeClass("focus");
+        $('textarea').prev().removeClass("focus");
+        $('textarea').removeClass("focus");
         var crtPic = $filter('filter')(vm.pictures, {
             id: vm.filter.picture.id
         })[0];

@@ -40,11 +40,11 @@
                     <img ng-if="vm.filter.picture.path" ng-src="{{vm.filter.picture.base64String}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit; width: 100%">
                     <img ng-if="!vm.filter.picture.path" data-ng-src="data:image/png;base64,{{vm.filter.picture.base_64_string}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit;" class='attached-photo'>
                     <label class="item item-input item-stacked-label" style="background-color: #11C1F3">
-                        <span class="input-label">Title</span>
+                        <span class="input-label attach-title">Title</span>
                         <input type="text" ng-readonly="(vm.diaryId) && (!vm.editMode)" style="background-color: #11C1F3; color:#fff;" ng-model="vm.filter.picture.title">
                     </label>
                     <label class="item item-input item-stacked-label" style="border-bottom: 1px solid #aaa; background-color:#fff;">
-                        <span class="input-label" style="color: #121d21;" >Comments</span>
+                        <span class="input-label attach-title" style="color: #121d21;" >Comments</span>
                         <textarea ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-auto-expand ng-model="vm.filter.picture.comment"></textarea>
                     </label>
                 </div>

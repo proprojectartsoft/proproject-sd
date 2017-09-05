@@ -34,6 +34,7 @@ angular.module($APP.name).factory('SettingService', [
                         clearFocus();
                         $(this).prev(".sd-title").addClass("focus");
                         $(this).parent().prev(".sd-title").addClass("focus");
+                        $(this).prev(".attach-title").addClass("focus");
                         $(this).addClass("focus");
                     }
                 })
@@ -44,6 +45,7 @@ angular.module($APP.name).factory('SettingService', [
                         clearFocus();
                         $(this).prev(".sd-title").addClass("focus");
                         $(this).parent().prev(".sd-title").addClass("focus");
+                        $(this).prev(".attach-title").addClass("focus");
                         $(this).addClass("focus");
                     }
                 })
