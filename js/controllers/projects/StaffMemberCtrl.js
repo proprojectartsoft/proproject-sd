@@ -156,6 +156,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         vm.local.data.staff_id = item.id;
         vm.local.data.hourly_rate = item.direct_cost;
         vm.local.data.company_name = item.employee_name;
+        calcParse();
         vm.searchModal.hide();
         var seen = sessionStorage.getObject('sd.seen');
         seen.staff = true;
