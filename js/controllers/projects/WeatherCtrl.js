@@ -20,10 +20,7 @@ function WeatherCtrl($state, $scope, SettingService, $indexedDB, $filter) {
     vm.local.onOff = '';
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
-    SettingService.show_message_popup('Debug', '<span>Enter Site Attendance Controller</span>');
     $indexedDB.openStore('projects', function(store) {
-        SettingService.show_message_popup('Debug', '<span>Store opened with success. Get data for project ' + sessionStorage.getObject('projectId') + ' for SD ' +
-            vm.diaryId + '</span>');
         store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             if (vm.create == null || vm.create == {}) {
@@ -31,8 +28,6 @@ function WeatherCtrl($state, $scope, SettingService, $indexedDB, $filter) {
                 $state.go('app.home');
                 return;
             }
-            SettingService.show_message_popup('Debug', '<span>Temporary SD - Weather - perfect weather: ' + vm.create.weather.perfect_weather +
-                '; max temp: ' + vm.create.weather.max_temp + '; min temp: ' + vm.create.weather.min_temp + '</span>');
             //if create is not loaded correctly, redirect to home and try again
             initFields();
         }, function(err) {

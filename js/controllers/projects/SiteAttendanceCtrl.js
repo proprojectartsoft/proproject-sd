@@ -11,10 +11,7 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
     sessionStorage.setObject('siteAttendance.tab', '');
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
-    SettingService.show_message_popup('Debug', '<span>Enter Site Attendance Controller</span>');
     $indexedDB.openStore('projects', function(store) {
-        SettingService.show_message_popup('Debug', '<span>Store opened with success. Get data for project ' + sessionStorage.getObject('projectId') + ' for SD ' +
-            vm.diaryId + '</span>');
         store.find(sessionStorage.getObject('projectId')).then(function(proj) {
             vm.create = proj.temp;
             //if create is not loaded correctly, redirect to home and try again
@@ -23,14 +20,12 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
                 $state.go('app.home');
                 return;
             }
-            SettingService.show_message_popup('Debug', '<span>Temporary SD - Site Attendance - first staff name: ' + (vm.create.site_attendance.staffs &&
-                vm.create.site_attendance.staffs.length && vm.create.site_attendance.staffs[0].first_name) + '</span>');
             //store the lists of site attendance
             vm.staffList = vm.create.site_attendance.staffs;
             vm.companyList = vm.create.site_attendance.contractors;
             vm.visitorList = vm.create.site_attendance.visitors;
         }, function(err) {
-            SettingService.show_message_popup('Debug', '<span>Could not find project: </span>' + err);
+            SettingService.show_message_popup('Error', '<span>Could not find project: </span>' + err);
         });
     });
     $timeout(function() {
@@ -66,7 +61,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
             vm.create.site_attendance.staffs.forEach(function(el, i) {
                 if (el === entry) {
                     vm.create.site_attendance.staffs.splice(i, 1);
-                    console.log(vm.create.site_attendance.staffs);
                 }
             })
             var seen = sessionStorage.getObject('sd.seen');

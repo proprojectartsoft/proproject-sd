@@ -20,7 +20,6 @@ angular.module($APP.name).controller('ProjectsCtrl', [
                 angular.forEach(vm.projects, function(proj) {
                     projIds += proj.id + ", ";
                 })
-                SettingService.show_message_popup('Debug', '<span>Enter Site Attendance Controller. Projects list: </span>' + projIds);
             }, function(err) {
                 SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
             });

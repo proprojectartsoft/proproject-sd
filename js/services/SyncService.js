@@ -302,7 +302,6 @@ angular.module($APP.name).factory('SyncService', [
                                         deferred.resolve();
                                         if (!navigator.onLine) {
                                             var loggedIn = localStorage.getObject('dsremember');
-                                            console.log('Offline');
                                             var offlinePopup = $ionicPopup.alert({
                                                 title: "You are offline",
                                                 template: "<center>You can sync your data when online</center>",
@@ -338,7 +337,6 @@ angular.module($APP.name).factory('SyncService', [
                         })
                     } else {
                         var loggedIn = localStorage.getObject('dsremember');
-                        console.log('Offline');
                         deferred.resolve();
                         var offlinePopup = $ionicPopup.alert({
                             title: "You are offline",

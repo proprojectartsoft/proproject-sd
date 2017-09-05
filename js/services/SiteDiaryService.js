@@ -2,7 +2,6 @@ angular.module($APP.name).factory('SiteDiaryService', [
     '$http',
     function($http) {
         return {
-
             list_diary: function(id) {
                 return $http.get($APP.server + '/api/sitediary', {
                     params: {

@@ -99,7 +99,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             angular.forEach(vm.diary, function(d) {
                 list += d.data && ("<span style='color:red'>" + d.data.id + "</span> - <span style='color:blue'>" + d.data.user_name + ';</span> ');
             })
-            SettingService.show_message_popup('Debug', '<span>Get project ' + vm.projectId + '. Diaries data: </span>' + list);
             angular.forEach(e.value.diaries, function(value, key) {
                 e.value.diaries[key].color = $scope.getSdTitleColor(value.userName)
             });

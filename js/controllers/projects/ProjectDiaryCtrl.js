@@ -27,17 +27,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     $indexedDB.openStore('projects', function(store) {
         store.find(vm.projectId).then(function(e) {
             vm.createInit = e.temp;
-            SettingService.show_message_popup('Debug', '<span>Set temporary SD (may be an object or null): ' + vm.createInit + '</span>');
             if ($stateParams.id) {
-                // if ($stateParams.id === 'offline') {
-                //     var offDiary = localStorage.getObject('diaryToSync');
-                //     vm.create = offDiary.data;
-                //     vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
-                //     vm.summary = vm.create.summary;
-                //     // sessionStorage.setObject('sd.diary.create', vm.create);
-                //     //TODO: store as temp in indexedDB
-                //
-                // } else {
                 sessionStorage.setObject('diaryId', $stateParams.id);
                 vm.enableCreate = false;
                 if (vm.edit) {
@@ -47,20 +37,15 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         $state.go('app.home');
                         return;
                     }
-                    SettingService.show_message_popup('Debug', '<span>Edit mode. Temporary SD: ' + vm.create.id + ' - ' + vm.create.user_name + '</span>');
                     vm.created_for_date = (vm.create.created_for_date != 0) && vm.create.created_for_date || '';
                     vm.summary = vm.create.summary;
                 } else {
                     vm.diaries = e.value.diaries;
-                    SettingService.show_message_popup('Debug', '<span>Visualize SD. </span>');
                     angular.forEach(vm.diaries, function(diary) {
                         if (diary.id == $stateParams.id) {
                             vm.created_for_date = (diary.created_for_date != 0) && diary.created_for_date || '';
                             //store as temp in indexedDB
                             e.temp = diary.data;
-                            if (e.temp && e.temp != null) {
-                                SettingService.show_message_popup('Debug', '<span>Visualize SD. Store temporary SD: ' + e.temp.id + ' - ' + e.temp.user_name + '</span>');
-                            }
                             store.upsert(e).then(
                                 function(e) {},
                                 function(err) {}
@@ -93,7 +78,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     vm.createInit.site_attendance.contractors = [];
                     vm.createInit.site_attendance.visitors = [];
                     e.temp = vm.createInit;
-                    SettingService.show_message_popup('Debug', '<span>Create mode. Store temporary SD: ' + vm.createInit.id + ' - ' + vm.createInit.user_name + '</span>');
                     store.upsert(e).then(
                         function(e) {},
                         function(err) {}
@@ -375,7 +359,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 function(e) {
                     var offlinePopup = $ionicPopup.alert({
                         title: "Unexpected error",
-                        template: "<center>An unexpected error occurred while trying to add a comment</center>",
+                        template: "<center>An unexpected error occurred.</center>",
                         content: "",
                         buttons: [{
                             text: 'Ok',
