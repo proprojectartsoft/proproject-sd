@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
 
-AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope', '$indexedDB', 'SettingService', '$ionicScrollDelegate'];
+AttachementsCtrl.$inject = ['$scope', '$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope', '$indexedDB', 'SettingService', '$ionicScrollDelegate'];
 
-function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope, $indexedDB, SettingService, $ionicScrollDelegate) {
+function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope, $indexedDB, SettingService, $ionicScrollDelegate) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -25,6 +25,10 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
     vm.populate();
     pullDown();
     goToTop();
+    $scope.$watch(function() {
+        if (vm.editMode)
+            SettingService.show_focus();
+    });
 
     function populate() {
         $indexedDB.openStore('projects', function(store) {
