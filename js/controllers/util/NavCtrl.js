@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('NavCtrl', NavCtrl)
 
-NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'AuthService', 'SyncService', '$indexedDB'];
+NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'AuthService', 'SyncService', '$indexedDB', '$timeout'];
 
-function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService, $indexedDB) {
+function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService, $indexedDB, $timeout) {
     var vm = this,
         loadingTemplate = "<center><ion-spinner icon='android'></ion-spinner></center>";
     vm.toggleSidemenu = toggleSidemenu;
@@ -17,6 +17,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     };
 
     function sync() {
+        $ionicSideMenuDelegate.toggleLeft();
         if (navigator.onLine) {
             var syncPopup = loadingPopover("Sync", loadingTemplate, "loading");
         }
@@ -24,7 +25,6 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
             SyncService.sync().then(function() {
                 if (syncPopup)
                     syncPopup.close();
-                $state.reload();
             });
         })
     }

@@ -13,10 +13,11 @@ ProjectDiariesCtrl.$inject = [
     'SharedService',
     'SyncService',
     'orderByFilter',
-    '$rootScope'
+    '$rootScope',
+    '$filter',
 ];
 
-function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService, orderBy, $rootScope) {
+function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService, orderBy, $rootScope, $filter) {
     var vm = this,
         shares = [];
     vm.showDiary = showDiary;
@@ -255,7 +256,9 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 SyncService.sync().then(function() {
                     $('.delete-btn').attr("disabled", false);
                     syncPopup.close();
-                    $state.reload();
+                    vm.diaries.splice(jQuery.inArray($filter('filter')(vm.diaries, {
+                        id: id
+                    })[0], vm.diaries), 1);
                 })
             })
         }).error(function(res) {
@@ -272,7 +275,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                     }
                 }]
             });
-            $state.reload();
         })
     }
 
