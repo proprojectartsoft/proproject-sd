@@ -1,0 +1,37 @@
+{
+  "name": "proproject",
+  "license": "UNLICENSED",
+  "version": "0.1.1",
+  "private": true,
+  "scripts": {
+    "preinstall": "npm install -g grunt-cli",
+    "start": "node ./app.js"
+  },
+  "dependencies": {
+    "angular": "1.5.0",
+    "angular-click-outside": "^1.2.0",
+    "angular-sanitize": "1.5.0"
+  },
+  "devDependencies": {
+    "grunt": "~1.0.1",
+    "grunt-contrib-clean": "~1.0.0",
+    "grunt-contrib-concat": "~1.0.1",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-uglify": "~2.0.0",
+    "grunt-contrib-watch": "1.0.0",
+    "grunt-ng-constant": "~2.0.1",
+    "grunt-sass": "~1.2.1",
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "jade": "~1.11.0",
+    "morgan": "~1.7.0",
+    "serve-favicon": "~2.3.0",
+    "ngstorage": "0.3.11",
+    "ui-select": "0.19.8",
+    "angular-ui-grid": "4.0.0",
+    "ui-grid-auto-fit-columns": "1.1.4",
+    "angular-click-outside": "^1.2.0"
+  }
+}
