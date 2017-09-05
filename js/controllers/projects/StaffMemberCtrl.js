@@ -143,6 +143,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     function addNewName() {
         vm.local.data.staff_name = vm.newName;
+        calcParse();
         vm.searchModal.hide();
         var seen = sessionStorage.getObject('sd.seen');
         seen.staff = true;
