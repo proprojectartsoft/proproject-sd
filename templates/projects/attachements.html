@@ -4,7 +4,7 @@
             <span class="bold" style="margin-left:10px;">Attachments</span>
         </button>
     </div>
-    <ion-content class="has-subheader has-footer sd-form sd-form-withfields">
+    <ion-content class="has-subheader sd-form sd-form-withfields" delegate-handle="mainScroll">
         <div ng-if="vm.filter.substate === 'gallery'">
             <div ng-if="vm.pictures.length === 0 || !vm.pictures" style="text-align: center; padding-top:30vw">
                 <span class="all-ion-text" style="line-height: 15vw;font-size: 15vw; color:#4A6780">No images assigned</span>
@@ -35,17 +35,17 @@
             </div>
         </div>
         <div class="list" ng-show="vm.filter.substate === 'pic'">
-            <div style="padding-bottom: 80px">
-                <img ng-if="vm.filter.picture.path" ng-src="{{vm.filter.picture.base64String}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit; width: 100%">
-                <img ng-if="!vm.filter.picture.path" data-ng-src="data:image/png;base64,{{vm.filter.picture.base_64_string}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit;" class='attached-photo'>
-                <div class="list" style="background-color:#fff;">
+            <div style="padding-bottom: 45px">
+                <div class="list">
+                    <img ng-if="vm.filter.picture.path" ng-src="{{vm.filter.picture.base64String}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit; width: 100%">
+                    <img ng-if="!vm.filter.picture.path" data-ng-src="data:image/png;base64,{{vm.filter.picture.base_64_string}}" ng-click="vm.returnToGallery()" style="-webkit-user-drag: inherit;" class='attached-photo'>
                     <label class="item item-input item-stacked-label" style="background-color: #11C1F3">
-                          <span class="input-label">Title</span>
-                          <input type="text" ng-readonly="(vm.diaryId) && (!vm.editMode)" style="background-color: #11C1F3; color:#fff;" ng-model="vm.filter.picture.title">
+                        <span class="input-label">Title</span>
+                        <input type="text" ng-readonly="(vm.diaryId) && (!vm.editMode)" style="background-color: #11C1F3; color:#fff;" ng-model="vm.filter.picture.title">
                     </label>
-                    <label class="item item-input item-stacked-label" style="border-bottom: 1px solid #aaa">
-                          <span class="input-label" style="color: #121d21;" >Comments</span>
-                          <textarea ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-auto-expand ng-model="vm.filter.picture.comment"></textarea>
+                    <label class="item item-input item-stacked-label" style="border-bottom: 1px solid #aaa; background-color:#fff;">
+                        <span class="input-label" style="color: #121d21;" >Comments</span>
+                        <textarea ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-auto-expand ng-model="vm.filter.picture.comment"></textarea>
                     </label>
                 </div>
             </div>

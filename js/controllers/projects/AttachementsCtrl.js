@@ -1,8 +1,8 @@
 angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
 
-AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope', '$indexedDB', 'SettingService'];
+AttachementsCtrl.$inject = ['$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope', '$indexedDB', 'SettingService', '$ionicScrollDelegate'];
 
-function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope, $indexedDB, SettingService) {
+function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope, $indexedDB, SettingService, $ionicScrollDelegate) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -24,6 +24,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
 
     vm.populate();
     pullDown();
+    goToTop();
 
     function populate() {
         $indexedDB.openStore('projects', function(store) {
@@ -46,6 +47,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
     function testPicture(pic) {
         vm.filter.substate = 'pic';
         vm.filter.picture = pic;
+        goToTop();
     }
 
     function takePicture() {
@@ -131,6 +133,7 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
     }
 
     function returnToGallery() {
+        goToTop();
         pullDown();
         var crtPic = $filter('filter')(vm.pictures, {
             id: vm.filter.picture.id
@@ -193,6 +196,12 @@ function AttachementsCtrl($state, $cordovaCamera, $timeout, $filter, Attachments
                 document.getElementsByTagName("html")[0].style.visibility = "visible";
             }, 100);
         })
+    }
+
+    function goToTop() {
+        $timeout(function() { // we need little delay
+            $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
+        });
     }
 
     function watchChanges() {
