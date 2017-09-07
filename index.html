@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -19,6 +18,7 @@
     <script src="lib/jquery/jquery-2.1.4.js"></script>
     <script src="lib/moment.min.js"></script>
     <script src="lib/angular-indexed-db.min.js"></script>
+    <script src="lib/lovefield/dist/lovefield.js"></script>
     <script src="lib/angular-moment.min.js"></script>
     <script src="lib/ion-datetime-picker/ion-datetime-picker.min.js"></script>
 
@@ -27,7 +27,6 @@
     <script src="js/system/routes.js"></script>
     <script src="js/system/config.js"></script>
     <!--controllers-->
-    <script src="js/controllers/util/AppCtrl.js"></script>
     <script src="js/controllers/util/NavCtrl.js"></script>
     <script src="js/controllers/util/LoginCtrl.js"></script>
     <script src="js/controllers/util/AccountCtrl.js"></script>
@@ -66,14 +65,11 @@
     <script src="js/services/SyncService.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
-
     <script src="lib/ng-cordova.min.js"></script>
     <script src="cordova.js"></script>
-
 </head>
 
-<body ng-app="ppsd" ng-controller="AppCtrl">
+<body ng-app="ppsd">
     <ion-nav-view diable-scroll></ion-nav-view>
 </body>
-
 </html>

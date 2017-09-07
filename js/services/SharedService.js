@@ -44,7 +44,7 @@ angular.module($APP.name).factory('SharedService', [
                         return payload.data;
                     }
                 );
-            },
+            }
 
         };
     }
