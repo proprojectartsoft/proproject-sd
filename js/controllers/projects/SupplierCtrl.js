@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('SupplierCtrl', SupplierCtrl)
+sdApp.controller('SupplierCtrl', SupplierCtrl)
 
-SupplierCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', 'SettingService', '$stateParams', '$ionicPopup', '$indexedDB'];
+SupplierCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', 'SettingService', '$stateParams', '$ionicPopup', 'SyncService'];
 
-function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stateParams, $ionicPopup, $indexedDB) {
+function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stateParams, $ionicPopup, SyncService) {
     var vm = this;
     vm.go = go;
     vm.local = {}
@@ -42,7 +42,7 @@ function SupplierCtrl($rootScope, $scope, $state, $filter, SettingService, $stat
                     vm.create.goods_received[vm.suppNo] = vm.supplier;
                 }
                 //store the new data in temp SD
-                SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+                SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
             });
         });
     }

@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('WeatherCtrl', WeatherCtrl)
+sdApp.controller('WeatherCtrl', WeatherCtrl)
 
-WeatherCtrl.$inject = ['$state', '$scope', 'SettingService', '$indexedDB', '$filter'];
+WeatherCtrl.$inject = ['$state', '$scope', 'SettingService', 'SyncService', '$filter'];
 
-function WeatherCtrl($state, $scope, SettingService, $indexedDB, $filter) {
+function WeatherCtrl($state, $scope, SettingService, SyncService, $filter) {
     var vm = this;
     vm.go = go;
     vm.local = {};
@@ -81,7 +81,7 @@ function WeatherCtrl($state, $scope, SettingService, $indexedDB, $filter) {
             on_and_off: angular.extend([], vm.create.weather.onOff, sessionStorage.getObject('sd.diary.weather.onOff'))
         }
         vm.create.weather = vm.weather;
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function initFields() {

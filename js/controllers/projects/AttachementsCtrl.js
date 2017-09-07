@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('AttachementsCtrl', AttachementsCtrl)
+sdApp.controller('AttachementsCtrl', AttachementsCtrl);
 
-AttachementsCtrl.$inject = ['$scope', '$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope', '$indexedDB', 'SettingService', '$ionicScrollDelegate'];
+AttachementsCtrl.$inject = ['$scope', '$state', '$cordovaCamera', '$timeout', '$filter', 'AttachmentsService', '$rootScope', 'SyncService', 'SettingService', '$ionicScrollDelegate'];
 
-function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope, $indexedDB, SettingService, $ionicScrollDelegate) {
+function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, AttachmentsService, $rootScope, SyncService, SettingService, $ionicScrollDelegate) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -168,7 +168,7 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
             store.find(vm.projectId).then(function(e) {
                 var temp = e.temp
                 temp.attachments = vm.attachments;
-                SettingService.update_temp_sd(sessionStorage.getObject('projectId'), temp);
+                SyncService.update_temp_sd(sessionStorage.getObject('projectId'), temp);
             });
         });
         if ((vm.diaryId) && (predicate === 'diary')) {

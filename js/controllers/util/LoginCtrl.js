@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('LoginCtrl', [
+sdApp.controller('LoginCtrl', [
     '$rootScope',
     '$timeout',
     '$scope',

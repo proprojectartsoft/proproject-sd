@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('deSelect', myExample);
+sdApp.directive('deSelect', myExample);
 
 function myExample() {
     var directive = {

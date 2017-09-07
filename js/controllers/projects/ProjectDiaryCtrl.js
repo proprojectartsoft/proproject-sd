@@ -1,9 +1,9 @@
-angular.module($APP.name).controller('ProjectDiaryCtrl', ProjectDiaryCtrl)
+sdApp.controller('ProjectDiaryCtrl', ProjectDiaryCtrl)
 
 
-ProjectDiaryCtrl.$inject = ['$rootScope', '$ionicPopup', '$timeout', '$state', '$stateParams', '$indexedDB', '$scope', '$filter', 'SettingService', 'SiteDiaryService', 'AttachmentsService', 'SyncService', '$q'];
+ProjectDiaryCtrl.$inject = ['$rootScope', '$ionicPopup', '$timeout', '$state', '$stateParams', 'SyncService', '$scope', '$filter', 'SettingService', 'SiteDiaryService', 'AttachmentsService', 'SyncService', '$q'];
 
-function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParams, $indexedDB, $scope, $filter, SettingService, SiteDiaryService, AttachmentsService, SyncService, $q) {
+function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParams, SyncService, $scope, $filter, SettingService, SiteDiaryService, AttachmentsService, SyncService, $q) {
 
     var vm = this;
     vm.go = go;

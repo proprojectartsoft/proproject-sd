@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('ProjectService', [
+sdApp.factory('ProjectService', [
     '$http',
     function($http) {
         return {

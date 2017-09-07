@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('IncidentsCtrl', IncidentsCtrl)
+sdApp.controller('IncidentsCtrl', IncidentsCtrl)
 
-IncidentsCtrl.$inject = ['$scope', '$state', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB', '$rootScope', '$ionicPopup'];
+IncidentsCtrl.$inject = ['$scope', '$state', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', 'SyncService', '$rootScope', '$ionicPopup'];
 
-function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB, $rootScope, $ionicPopup) {
+function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, SyncService, $rootScope, $ionicPopup) {
     var vm = this;
     vm.showSearchUnit = showSearchUnit;
     vm.backSearch = backSearch;
@@ -126,7 +126,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             sessionStorage.setObject('sd.seen', seen);
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function deleteEntry(entry) {
@@ -141,7 +141,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             }
         })
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
         var seen = sessionStorage.getObject('sd.seen');
         seen.incident = true;

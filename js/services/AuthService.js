@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('AuthService', [
+sdApp.factory('AuthService', [
     '$http',
     function($http) {
         var reload = function() {

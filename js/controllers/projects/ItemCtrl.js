@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('ItemCtrl', ItemCtrl)
+sdApp.controller('ItemCtrl', ItemCtrl)
 
-ItemCtrl.$inject = ['$rootScope', '$scope', '$ionicModal', '$filter', '$state', '$stateParams', 'SiteDiaryService', 'SettingService', '$ionicPopup', '$indexedDB'];
+ItemCtrl.$inject = ['$rootScope', '$scope', '$ionicModal', '$filter', '$state', '$stateParams', 'SiteDiaryService', 'SettingService', '$ionicPopup', 'SyncService'];
 
-function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams, SiteDiaryService, SettingService, $ionicPopup, $indexedDB) {
+function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams, SiteDiaryService, SettingService, $ionicPopup, SyncService) {
     var vm = this;
     vm.go = go
     vm.showSearch = showSearch;
@@ -149,7 +149,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
                 vm.create.goods_received[vm.supplier].goods_details[vm.index] = vm.item;
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function go(predicate, id) {

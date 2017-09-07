@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('SiteAttendanceCtrl', SiteAttendanceCtrl)
+sdApp.controller('SiteAttendanceCtrl', SiteAttendanceCtrl)
 
-SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', '$indexedDB', '$timeout', '$ionicPopup', 'SettingService'];
+SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', 'SyncService', '$timeout', '$ionicPopup', 'SettingService'];
 
-function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $indexedDB, $timeout, $ionicPopup, SettingService) {
+function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncService, $timeout, $ionicPopup, SettingService) {
     var vm = this;
     vm.go = go;
     vm.show = show;
@@ -88,7 +88,7 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, $inde
             sessionStorage.setObject('sd.seen', seen);
         }
         //remove from temp SD the site attendance
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
     }
 

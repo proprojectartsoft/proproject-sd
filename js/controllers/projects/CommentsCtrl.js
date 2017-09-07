@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('CommentsCtrl', CommentsCtrl)
+sdApp.controller('CommentsCtrl', CommentsCtrl)
 
-CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService', '$indexedDB', 'orderByFilter', '$ionicPopup', 'SettingService'];
+CommentsCtrl.$inject = ['$rootScope', '$state', '$stateParams', '$filter', 'SiteDiaryService', 'ProjectService', 'SyncService', 'orderByFilter', '$ionicPopup', 'SettingService'];
 
-function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService, $indexedDB, orderBy, $ionicPopup, SettingService) {
+function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryService, ProjectService, SyncService, orderBy, $ionicPopup, SettingService) {
     var vm = this;
     vm.go = go;
     vm.getInitials = getInitials;
@@ -58,7 +58,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                 }
                 vm.create.comments.push(request);
                 vm.local.list = vm.create.comments;
-                SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+                SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
             }
         } else {
             if (comment) {
@@ -81,7 +81,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
                 vm.local.comments.push(commToAdd);
                 sessionStorage.setObject('sd.comments', vm.local.comments); //TODO:
                 //store in indexedDB the new info for SD
-                SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+                SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
             }
         }
         $('textarea').css({

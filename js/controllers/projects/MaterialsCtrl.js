@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('MaterialsCtrl', MaterialsCtrl)
+sdApp.controller('MaterialsCtrl', MaterialsCtrl)
 
-MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', '$indexedDB', '$rootScope', '$ionicPopup'];
+MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', 'SyncService', '$rootScope', '$ionicPopup'];
 
-function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, $indexedDB, $rootScope, $ionicPopup) {
+function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, SyncService, $rootScope, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.unit = "materials.unit";
@@ -173,7 +173,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             vm.create.plant_and_material_used[vm.index] = vm.material
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function deleteEntry(entry) {
@@ -188,7 +188,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             }
         })
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
         var seen = sessionStorage.getObject('sd.seen');
         seen.material = true;

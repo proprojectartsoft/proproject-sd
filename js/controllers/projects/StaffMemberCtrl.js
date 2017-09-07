@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('StaffMemberCtrl', StaffMemberCtrl)
+sdApp.controller('StaffMemberCtrl', StaffMemberCtrl)
 
-StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', '$timeout', 'SiteDiaryService', 'SettingService', '$indexedDB', '$ionicPopup'];
+StaffMemberCtrl.$inject = ['$rootScope', '$scope', '$state', '$filter', '$ionicModal', '$stateParams', '$timeout', 'SiteDiaryService', 'SettingService', 'SyncService', '$ionicPopup'];
 
-function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, $timeout, SiteDiaryService, SettingService, $indexedDB, $ionicPopup) {
+function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stateParams, $timeout, SiteDiaryService, SettingService, SyncService, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -194,7 +194,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             vm.create.site_attendance.staffs[vm.index] = vm.member;
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         sessionStorage.setObject('sd.diary.absence', null);
     }
 

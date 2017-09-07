@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('OhsCtrl', OhsCtrl)
+sdApp.controller('OhsCtrl', OhsCtrl)
 
-OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter', 'SiteDiaryService', '$indexedDB', '$rootScope', '$ionicPopup'];
+OhsCtrl.$inject = ['$state', '$stateParams', '$scope', 'SettingService', '$filter', 'SiteDiaryService', 'SyncService', '$rootScope', '$ionicPopup'];
 
-function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiaryService, $indexedDB, $rootScope, $ionicPopup) {
+function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiaryService, SyncService, $rootScope, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
@@ -75,7 +75,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             sessionStorage.setObject('sd.seen', seen);
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function deleteEntry(entry) {
@@ -90,7 +90,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             }
         })
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
         var seen = sessionStorage.getObject('sd.seen');
         seen.ohs = true;
@@ -129,7 +129,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
 }
 
 //directive for textarea so it can wrap the text and be scaleble
-angular.module($APP.name).directive('elastic', [
+sdApp.directive('elastic', [
     '$timeout',
     function($timeout) {
         return {

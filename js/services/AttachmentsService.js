@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('AttachmentsService', [
+sdApp.factory('AttachmentsService', [
     '$http',
     function($http) {
         return {

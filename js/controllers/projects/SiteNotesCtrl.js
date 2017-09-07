@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('SiteNotesCtrl', SiteNotesCtrl)
+sdApp.controller('SiteNotesCtrl', SiteNotesCtrl)
 
-SiteNotesCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService', '$filter', '$ionicPopup', '$indexedDB'];
+SiteNotesCtrl.$inject = ['$rootScope', '$state', '$scope', 'SettingService', '$filter', '$ionicPopup', 'SyncService'];
 
-function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ionicPopup, $indexedDB) {
+function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ionicPopup, SyncService) {
     var vm = this;
     vm.go = go;
     vm.add = add;
@@ -68,7 +68,7 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
         }
         vm.create.site_notes = vm.site_notes;
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function add() {

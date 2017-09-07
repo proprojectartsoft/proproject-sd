@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('NavCtrl', NavCtrl);
+sdApp.controller('NavCtrl', NavCtrl);
 
-NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'AuthService', 'SyncService', '$indexedDB', '$timeout'];
+NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'AuthService', 'SyncService', 'SyncService', '$timeout'];
 
-function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService, $indexedDB, $timeout) {
+function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService, SyncService, $timeout) {
 	var vm = this,
 		loadingTemplate = "<center><ion-spinner icon='android'></ion-spinner></center>";
 	vm.toggleSidemenu = toggleSidemenu;

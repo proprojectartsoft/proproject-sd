@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('ProjectDiariesCtrl', ProjectDiariesCtrl)
+sdApp.controller('ProjectDiariesCtrl', ProjectDiariesCtrl)
 
 ProjectDiariesCtrl.$inject = [
     '$scope',
@@ -7,7 +7,7 @@ ProjectDiariesCtrl.$inject = [
     '$ionicPopup',
     '$state',
     '$stateParams',
-    '$indexedDB',
+    'SyncService',
     'SiteDiaryService',
     'SettingService',
     'SharedService',
@@ -17,7 +17,7 @@ ProjectDiariesCtrl.$inject = [
     '$filter',
 ];
 
-function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, $indexedDB, SiteDiaryService, SettingService, SharedService, SyncService, orderBy, $rootScope, $filter) {
+function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, SyncService, SiteDiaryService, SettingService, SharedService, SyncService, orderBy, $rootScope, $filter) {
     var vm = this,
         shares = [];
     vm.showDiary = showDiary;

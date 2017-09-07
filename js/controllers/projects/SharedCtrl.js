@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('SharedCtrl', SharedCtrl)
+sdApp.controller('SharedCtrl', SharedCtrl)
 
 SharedCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'SharedService'];
 

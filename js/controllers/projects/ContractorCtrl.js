@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('ContractorCtrl', ContractorCtrl)
+sdApp.controller('ContractorCtrl', ContractorCtrl)
 
-ContractorCtrl.$inject = ['$scope', '$state', '$filter', '$stateParams', '$timeout', 'SettingService', '$indexedDB'];
+ContractorCtrl.$inject = ['$scope', '$state', '$filter', '$stateParams', '$timeout', 'SettingService', 'SyncService'];
 
-function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, SettingService, $indexedDB) {
+function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, SettingService, SyncService) {
     var vm = this;
     vm.go = go;
     vm.showSearch = showSearch;
@@ -153,7 +153,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
         } else {
             vm.create.site_attendance.contractors[vm.index] = vm.member;
         }
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         sessionStorage.setObject('siteAttendance.tab', 'contractors');
         sessionStorage.setObject('sd.diary.absence', null);
     }

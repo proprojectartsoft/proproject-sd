@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('VisitorsCtrl', VisitorsCtrl)
+sdApp.controller('VisitorsCtrl', VisitorsCtrl)
 
-VisitorsCtrl.$inject = ['$state', 'SettingService', '$scope', '$indexedDB', '$stateParams'];
+VisitorsCtrl.$inject = ['$state', 'SettingService', '$scope', 'SyncService', '$stateParams'];
 
-function VisitorsCtrl($state, SettingService, $scope, $indexedDB, $stateParams) {
+function VisitorsCtrl($state, SettingService, $scope, SyncService, $stateParams) {
     var vm = this;
     vm.go = go;
     vm.local = {};
@@ -41,7 +41,7 @@ function VisitorsCtrl($state, SettingService, $scope, $indexedDB, $stateParams) 
             vm.create.site_attendance.visitors[vm.index] = vm.member;
         }
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
     }
 
     function go(predicate, id) {

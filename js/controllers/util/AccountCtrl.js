@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('AccountCtrl', AccountCtrl)
+sdApp.controller('AccountCtrl', AccountCtrl)
 
 AccountCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'ProjectService', 'AuthService'];
 

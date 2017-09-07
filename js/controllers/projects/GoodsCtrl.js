@@ -1,8 +1,8 @@
-angular.module($APP.name).controller('GoodsCtrl', GoodsCtrl)
+sdApp.controller('GoodsCtrl', GoodsCtrl)
 
-GoodsCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$indexedDB', '$filter', '$ionicPopup', 'SettingService', '$timeout'];
+GoodsCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', 'SyncService', '$filter', '$ionicPopup', 'SettingService', '$timeout'];
 
-function GoodsCtrl($rootScope, $state, SiteDiaryService, $indexedDB, $filter, $ionicPopup, SettingService, $timeout) {
+function GoodsCtrl($rootScope, $state, SiteDiaryService, SyncService, $filter, $ionicPopup, SettingService, $timeout) {
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
@@ -32,7 +32,7 @@ function GoodsCtrl($rootScope, $state, SiteDiaryService, $indexedDB, $filter, $i
             }
         })
         //store the new data in temp SD
-        SettingService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         SiteDiaryService.update_diary(vm.create);
         var seen = sessionStorage.getObject('sd.seen');
         seen.good = true;

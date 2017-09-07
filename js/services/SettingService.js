@@ -1,6 +1,6 @@
-angular.module($APP.name).factory('SettingService', [
-    '$http', '$ionicPopup', '$indexedDB',
-    function($http, $ionicPopup, $indexedDB) {
+sdApp.factory('SettingService', [
+    '$http', '$ionicPopup',
+    function($http, $ionicPopup) {
         return {
             clearWeather: function() {
                 sessionStorage.setObject('sd.diary.weather.afternoon', null);
@@ -37,7 +37,7 @@ angular.module($APP.name).factory('SettingService', [
                         $(this).prev(".attach-title").addClass("focus");
                         $(this).addClass("focus");
                     }
-                })
+                });
 
                 //textarea fields
                 $("textarea").on('click', function() {
@@ -48,35 +48,35 @@ angular.module($APP.name).factory('SettingService', [
                         $(this).prev(".attach-title").addClass("focus");
                         $(this).addClass("focus");
                     }
-                })
+                });
 
                 //search popups
                 $(".showSearch").on('click', function() {
                     clearFocus();
                     $(this).prev(".sd-title").addClass("focus");
                     $(this).children('input').addClass("focus");
-                })
+                });
 
                 //time pickers
                 $(".sd-line").on('click', function() {
                     clearFocus();
                     $(this).parent().prev().addClass("focus");
                     $(this).addClass("focus");
-                })
-
+                });
+                
                 //select drop-downs
                 $('.de-select').on('click', function() {
                     clearFocus();
                     $(this).parent().addClass("focus");
                     $(this).parent().prev(".sd-title").addClass("focus");
-                })
+                });
 
                 //checkboxes
                 $(".checkbox-calm").on('click', function() {
                     clearFocus();
                     $(this).prev().addClass("focus");
                     $(this).addClass("focus");
-                })
+                });
 
                 function clearFocus() {
                     $("label.checkbox-calm").removeClass("focus");
@@ -108,18 +108,6 @@ angular.module($APP.name).factory('SettingService', [
                     }]
                 });
                 return popup;
-            },
-
-            update_temp_sd: function(projId, temp) {
-                $indexedDB.openStore('projects', function(store) {
-                    store.find(projId).then(function(proj) {
-                        proj.temp = temp;
-                        store.upsert(proj).then(
-                            function(e) {},
-                            function(err) {}
-                        )
-                    });
-                });
             }
         }
     }
