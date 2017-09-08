@@ -345,23 +345,23 @@ sdApp.service('SyncService', [
 										setCompanyLists(list, function (lists) {
 											service.setSettings(lists, function () {
 												console.log('Setting inserted');
-											});
-										});
-									});
-									//get projects then store locally - this can be done in sync
-									getProjects().then(function (projects) {
-										console.log('Projects gathered', projects);
-										//no projects stored
-										if (!projects.length) return def.resolve();
-										//store diaries for stored projects
-										addDiaries(projects).then(function (projects) {
-											console.log('Diaries added', projects);
-											//store diaries details
-											addDiariesDetails(projects).then(function (projectsArray) {
-												console.log('Diary details added', projectsArray);
-												// store the projects in the DB
-												service.setProjects(projectsArray, function (projects) {
-													def.resolve(projects);
+												//get projects then store locally - this can be done in sync
+												getProjects().then(function (projects) {
+													console.log('Projects gathered', projects);
+													//no projects stored
+													if (!projects.length) return def.resolve();
+													//store diaries for stored projects
+													addDiaries(projects).then(function (projects) {
+														console.log('Diaries added', projects);
+														//store diaries details
+														addDiariesDetails(projects).then(function (projectsArray) {
+															console.log('Diary details added', projectsArray);
+															// store the projects in the DB
+															service.setProjects(projectsArray, function (projects) {
+																def.resolve(projects);
+															});
+														});
+													});
 												});
 											});
 										});
