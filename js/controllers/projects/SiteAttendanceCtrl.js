@@ -11,23 +11,11 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
     sessionStorage.setObject('siteAttendance.tab', '');
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
-    $indexedDB.openStore('projects', function(store) {
-        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
-            vm.create = proj.temp;
-            //if create is not loaded correctly, redirect to home and try again
-            if (vm.create == null || vm.create == {}) {
-                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-                $state.go('app.home');
-                return;
-            }
-            //store the lists of site attendance
-            vm.staffList = vm.create.site_attendance.staffs;
-            vm.companyList = vm.create.site_attendance.contractors;
-            vm.visitorList = vm.create.site_attendance.visitors;
-        }, function(err) {
-            SettingService.show_message_popup('Error', '<span>Could not find project: </span>' + err);
-        });
-    });
+    //store the lists of site attendance
+    vm.staffList = $rootScope.currentSD.site_attendance.staffs;
+    vm.companyList = $rootScope.currentSD.site_attendance.contractors;
+    vm.visitorList = $rootScope.currentSD.site_attendance.visitors;
+
     $timeout(function() {
         vm.seen = sessionStorage.getObject('sd.seen');
     })
@@ -58,9 +46,9 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
         }
         $('.item-content').css('transform', '');
         if (vm.staff) {
-            vm.create.site_attendance.staffs.forEach(function(el, i) {
+            $rootScope.currentSD.site_attendance.staffs.forEach(function(el, i) {
                 if (el === entry) {
-                    vm.create.site_attendance.staffs.splice(i, 1);
+                    $rootScope.currentSD.site_attendance.staffs.splice(i, 1);
                 }
             })
             var seen = sessionStorage.getObject('sd.seen');
@@ -68,9 +56,9 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
             sessionStorage.setObject('sd.seen', seen);
         }
         if (vm.contractors) {
-            vm.create.site_attendance.contractors.forEach(function(el, i) {
+            $rootScope.currentSD.site_attendance.contractors.forEach(function(el, i) {
                 if (el === entry) {
-                    vm.create.site_attendance.contractors.splice(i, 1);
+                    $rootScope.currentSD.site_attendance.contractors.splice(i, 1);
                 }
             })
             var seen = sessionStorage.getObject('sd.seen');
@@ -78,18 +66,16 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
             sessionStorage.setObject('sd.seen', seen);
         }
         if (vm.visitors) {
-            vm.create.site_attendance.visitors.forEach(function(el, i) {
+            $rootScope.currentSD.site_attendance.visitors.forEach(function(el, i) {
                 if (el === entry) {
-                    vm.create.site_attendance.visitors.splice(i, 1);
+                    $rootScope.currentSD.site_attendance.visitors.splice(i, 1);
                 }
             })
             var seen = sessionStorage.getObject('sd.seen');
             seen.visitor = true;
             sessionStorage.setObject('sd.seen', seen);
         }
-        //remove from temp SD the site attendance
-        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
-        SiteDiaryService.update_diary(vm.create);
+        SiteDiaryService.update_diary($rootScope.currentSD);
     }
 
     function go(predicate, id) {

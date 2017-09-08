@@ -7,7 +7,6 @@ ProjectDiariesCtrl.$inject = [
     '$ionicPopup',
     '$state',
     '$stateParams',
-    'SyncService',
     'SiteDiaryService',
     'SettingService',
     'SharedService',
@@ -17,7 +16,7 @@ ProjectDiariesCtrl.$inject = [
     '$filter',
 ];
 
-function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, SyncService, SiteDiaryService, SettingService, SharedService, SyncService, orderBy, $rootScope, $filter) {
+function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, SiteDiaryService, SettingService, SharedService, SyncService, orderBy, $rootScope, $filter) {
     var vm = this,
         shares = [];
     vm.showDiary = showDiary;
@@ -25,107 +24,60 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.togglePlus = togglePlus;
     vm.go = go;
     vm.deleteDiary = deleteDiary;
+    vm.showPopup = showPopup;
+    vm.getSdTitleColor = getSdTitleColor;
     sessionStorage.setObject('editMode', null);
-    SettingService.clearWeather();
     sessionStorage.setObject('diaryId', null);
-    sessionStorage.setObject('projectId', parseInt($stateParams.id));
     sessionStorage.setObject('sd.diary.shares', null);
+    sessionStorage.setObject('sd.seen', {});
+    SettingService.clearWeather();
     vm.projectId = parseInt($stateParams.id);
     vm.filter = {};
-    vm.shareId = {};
     vm.state = '';
     vm.show = false;
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
-    sessionStorage.setObject('sd.seen', {});
-    $indexedDB.openStore('projects', function(store) {
-        store.find(vm.projectId).then(function(e) {
-            e.temp = null;
-            store.upsert(e).then(
-                function(e) {},
-                function(err) {})
-        }, function(err) {
-            SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
-        });
-    });
-    vm.selectOpt = [{
-        id: 0,
-        name: 'Annual leave'
-    }, {
-        id: 1,
-        name: 'Inclement weather'
-    }, {
-        id: 2,
-        name: 'No show'
-    }, {
-        id: 3,
-        name: 'On other site'
-    }, {
-        id: 4,
-        name: 'Public holiday'
-    }, {
-        id: 5,
-        name: 'RDO'
-    }, {
-        id: 6,
-        name: 'Sick leave'
-    }, {
-        id: 7,
-        name: 'Unpaid leave'
-    }, {
-        id: 8,
-        name: 'Training'
-    }, {
-        id: 9,
-        name: 'Went home sick'
-    }, {
-        id: 10,
-        name: 'Went to another project'
-    }, {
-        id: 11,
-        name: 'Other'
-    }];
+    vm.diaries = [];
+    $rootScope.currentSD = null;
+    $rootScope.backupSD = null;
 
-    $indexedDB.openStore('projects', function(store) {
-        vm.diaryModal = $ionicModal.fromTemplateUrl('templates/projects/diarySearch.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(popover) {
-            vm.diaryModal = popover;
+    SyncService.getProject(vm.projectId, function(projArr) {
+        var proj = projArr[0];
+        angular.forEach(proj.value.diaries, function(value, key) {
+            proj.value.diaries[key].color = getSdTitleColor(value.userName)
         });
-        store.find(vm.projectId).then(function(e) {
-            vm.diary = e.value.diaries;
-            var list = "";
-            angular.forEach(vm.diary, function(d) {
-                list += d.data && ("<span style='color:red'>" + d.data.id + "</span> - <span style='color:blue'>" + d.data.user_name + ';</span> ');
-            })
-            angular.forEach(e.value.diaries, function(value, key) {
-                e.value.diaries[key].color = $scope.getSdTitleColor(value.userName)
-            });
-            vm.diaries = orderBy(e.value.diaries, 'date', true);
-            //update the color in indexedDB
-            store.upsert(e).then(
-                function(e) {},
-                function(err) {}
-            )
-        }, function(err) {
-            SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
+        //order diaries by date
+        vm.diaries = orderBy(proj.value.diaries, 'date', true);
+        //update the color for every SD
+        SyncService.setProjects([proj], function() {
+            console.log('Diaries color stored');
         });
+    }, function(err) {
+        SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
+    })
+
+    vm.diaryModal = $ionicModal.fromTemplateUrl('templates/projects/diarySearch.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(popover) {
+        vm.diaryModal = popover;
     });
 
-    $scope.filter = {};
+    function showPopup(predicate) {
+        var popup = $ionicPopup.show(createPopup(predicate.id));
+    };
 
     function createPopup(id) {
         return {
-            template: '<input type="email" ng-model="filter.email">',
+            template: '<input type="email" ng-model="vm.filter.email">',
             title: 'Share form',
             subTitle: 'Please enter a valid e-mail address.',
             scope: $scope,
             buttons: [{
                 text: '<i class="ion-person-add"></i>',
                 onTap: function(e) {
-                    $scope.importContact(id);
+                    importContact(id);
                 }
             }, {
                 text: 'Cancel',
@@ -133,7 +85,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 text: 'Send',
                 type: 'button-positive',
                 onTap: function(e) {
-                    if (!$scope.filter.email) {
+                    if (!vm.filter.email) {
                         e.preventDefault();
                         var alertPopup = $ionicPopup.alert({
                             title: 'Share',
@@ -148,7 +100,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                             }]
                         });
                     } else {
-                        sendEmail($scope.filter.email, id);
+                        sendEmail(vm.filter.email, id);
                     }
                 }
             }]
@@ -203,11 +155,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         }
     }
 
-    $scope.importContact = function(id) {
+    function importContact(id) {
         $timeout(function() {
             navigator.contacts.pickContact(function(contact) {
                 if (contact.emails) {
-                    $scope.filter.email = contact.emails[0].value;
+                    vm.filter.email = contact.emails[0].value;
                     $timeout(function() {
                         var popup = $ionicPopup.show(createPopup(id));
                     });
@@ -237,10 +189,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             });
         });
     }
-    $scope.data = {};
-    $scope.showPopup = function(predicate) {
-        var popup = $ionicPopup.show(createPopup(predicate.id));
-    };
+    // $scope.data = {};
 
     function deleteDiary(id) {
         $('.delete-btn').attr("disabled", true);
@@ -292,12 +241,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         vm.show = false;
     }
 
-    function saveDiary() {
-        if (vm && vm.diaryModal) {
-            vm.diaryModal.hide();
-        }
-    };
-
     function go(predicate, id) {
         $state.go('app.' + predicate, {
             id: id
@@ -312,7 +255,8 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         contrastColors = ['navy', 'red', 'blue', 'teal', 'olive', 'orange',
             'green', 'blueviolet', 'maroon', 'fuchsia', 'purple', 'gray', 'violet'
         ];
-    $scope.getSdTitleColor = function(userName) {
+
+    function getSdTitleColor(userName) {
         var nameExists = Object.keys(colorsForName).some(function(name) {
             return name === userName;
         })

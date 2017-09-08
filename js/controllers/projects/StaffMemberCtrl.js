@@ -31,32 +31,43 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.index = $stateParams.id;
     vm.newName = '';
     //get necessary settings for company
-    $indexedDB.openStore('settings', function(store) {
-        store.find("absence").then(function(list) {
-            vm.absence = list.value;
-        });
-        store.find("staff").then(function(list) {
-            vm.staff = list.value;
-        });
-        store.find("currency").then(function(list) {
-            vm.currency = SettingService.get_currency_symbol(list.value);
-        }, function(err) {
-            vm.currency = SettingService.get_currency_symbol("dolar");
-        });
-    });
-    //get projects
-    $indexedDB.openStore('projects', function(store) {
-        store.find(sessionStorage.getObject('projectId')).then(function(proj) {
-            vm.create = proj.temp;
-            //if create is not loaded correctly, redirect to home and try again
-            if (vm.create == null || vm.create == {}) {
-                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-                $state.go('app.home');
-                return;
-            }
-            initFields();
-        });
-    });
+    // SyncService.getSettings(function(sett) {
+    //     console.log(sett);
+    //     var abs = $filter('filter')(sett, {
+    //         name: "absence"
+    //     });
+    //     if (abs && abs.length) {
+    //         vm.absence = abs[0].value
+    //     }
+    //     var staff = $filter('filter')(sett, {
+    //         name: "staff"
+    //     });
+    //     if (staff && staff.length) {
+    //         vm.staff = staff[0].value
+    //     }
+    //     var currency = $filter('filter')(sett, {
+    //         name: "currency"
+    //     });
+    //     if (currency && currency.length) {
+    //         vm.currency = currency[0].value
+    //     }
+    //
+    //
+    //     var start = $filter('filter')(sett, {
+    //         name: "start"
+    //     });
+    //     if (start && start.length) {
+    //         vm.start = start[0].value
+    //     } else {
+    //         vm.start = "08:00";
+    //     }
+    //     var finish = $filter('filter')(sett, {
+    //         name: "finish"
+    //     });
+    //     vm.finish = finish && finish.length && finish[0].value || "12:00";
+    // })
+
+    initFields();
 
     $scope.$watch(function() {
         if (vm.editMode)
@@ -72,20 +83,20 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     function initFields() {
         if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
             vm.local.data = {
-                staff_name: vm.create.site_attendance.staffs[vm.index].first_name + (vm.create.site_attendance.staffs[vm.index].last_name != null ? (" " + vm.create.site_attendance.staffs[vm.index].last_name) : ""),
-                company_name: vm.create.site_attendance.staffs[vm.index].company_name,
-                model_start: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].start_time),
-                model_finish: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].finish_time),
-                total_time: vm.stringToDate(vm.create.site_attendance.staffs[vm.index].total_time),
-                note: vm.create.site_attendance.staffs[vm.index].note,
-                absence: vm.create.site_attendance.staffs[vm.index].absence && vm.create.site_attendance.staffs[vm.index].absence.reason,
-                role: vm.create.site_attendance.staffs[vm.index].trade,
-                trade: vm.create.site_attendance.staffs[vm.index].trade,
-                hourly_rate: vm.create.site_attendance.staffs[vm.index].hourly_rate,
-                hourly_rate_formated: vm.create.site_attendance.staffs[vm.index].hourly_rate && (vm.currency + " " + vm.create.site_attendance.staffs[vm.index].hourly_rate) || ''
+                staff_name: $rootScope.currentSD.site_attendance.staffs[vm.index].first_name + ($rootScope.currentSD.site_attendance.staffs[vm.index].last_name != null ? (" " + $rootScope.currentSD.site_attendance.staffs[vm.index].last_name) : ""),
+                company_name: $rootScope.currentSD.site_attendance.staffs[vm.index].company_name,
+                model_start: vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].start_time),
+                model_finish: vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].finish_time),
+                total_time: vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].total_time),
+                note: $rootScope.currentSD.site_attendance.staffs[vm.index].note,
+                absence: $rootScope.currentSD.site_attendance.staffs[vm.index].absence && $rootScope.currentSD.site_attendance.staffs[vm.index].absence.reason,
+                role: $rootScope.currentSD.site_attendance.staffs[vm.index].trade,
+                trade: $rootScope.currentSD.site_attendance.staffs[vm.index].trade,
+                hourly_rate: $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate,
+                hourly_rate_formated: $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate && (vm.currency + " " + $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate) || ''
             }
-            if (vm.create.site_attendance.staffs[vm.index].break_time) {
-                vm.local.data.model_break = vm.stringToDate(vm.create.site_attendance.staffs[vm.index].break_time);
+            if ($rootScope.currentSD.site_attendance.staffs[vm.index].break_time) {
+                vm.local.data.model_break = vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].break_time);
             } else {
                 vm.local.data.model_break = vm.stringToDate("00:30");
             }
@@ -186,15 +197,13 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         }
         //Staff add when index = create; update otherwise
         if (vm.index === 'create') {
-            vm.create.site_attendance.staffs.push(vm.member);
+            $rootScope.currentSD.site_attendance.staffs.push(vm.member);
             var seen = sessionStorage.getObject('sd.seen');
             seen.staff = true;
             sessionStorage.setObject('sd.seen', seen);
         } else {
-            vm.create.site_attendance.staffs[vm.index] = vm.member;
+            $rootScope.currentSD.site_attendance.staffs[vm.index] = vm.member;
         }
-        //store the new data in temp SD
-        SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
         sessionStorage.setObject('sd.diary.absence', null);
     }
 

@@ -8,18 +8,18 @@
         <ion-list can-swipe="true">
             <ion-item ng-repeat="item in vm.diaries" class="sd-item-tile">
                 <div class="sd-group">
-                    <span ng-if="item.userName" class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': getSdTitleColor(item.userName)}">
+                    <span ng-if="item.userName" class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': vm.getSdTitleColor(item.userName)}">
                       {{item.userName.split(' ')[0] | limitTo:1 | uppercase}}
                       {{item.userName.split(' ')[1] | limitTo:1 | uppercase}}
                     </span>
-                    <span ng-if="!item.userName" class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': getSdTitleColor(item.userName)}">
+                    <span ng-if="!item.userName" class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': vm.getSdTitleColor(item.userName)}">
                       OFF
                     </span>
                     <div class="sd-content" ng-click="vm.go('diary',item.id)">
                         <div class="sd-title">{{item.date | date}}</div>
                         <div class="sd-description">SD - {{item.sdNo}} - {{((item.created_for_date != 0) && item.created_for_date || 'No date selected') | date:'mediumDate'}}</div>
                     </div>
-                    <div class="sd-share" ng-click="showPopup(item)"><span class="ion-android-share-alt"></span></div>
+                    <div class="sd-share" ng-click="vm.showPopup(item)"><span class="ion-android-share-alt"></span></div>
                     <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteDiary(item.id)">
                         Delete
                     </ion-option-button>

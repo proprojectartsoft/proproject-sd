@@ -8,7 +8,7 @@ var schemaBuilder,
 self.addEventListener('message', function (e) {
 	var params = e.data.data,
 		operation = e.data.operation;
-	
+
 	// SQL equivalent: CREATE DATABASE IF NOT EXISTS projects
 	// This schema definition (or data definition commands in SQL, DDL) is not
 	// executed immediately. Lovefield uses builder pattern to build the schema
@@ -25,7 +25,7 @@ self.addEventListener('message', function (e) {
 		});
 		return false;
 	}
-	
+
 	// SQL equivalent:
 	// CREATE TABLE IF NOT EXISTS projects (
 	//   version AS STRING,
@@ -65,13 +65,13 @@ self.addEventListener('message', function (e) {
 		});
 		return false;
 	}
-	
+
 	// Start of the Promise chaining
-	schemaBuilder.connect().then(function (db) {
+	schemaBuilder.connect({"onUpgrade": null, "storeType": lf.schema.DataStoreType.INDEXED_DB}).then(function (db) {
 		sdDb = db;
 		projects = db.getSchema().table('projects');
 		settings = db.getSchema().table('settings');
-		
+
 		switch (operation) {
 			case 'getSettings':
 				try {

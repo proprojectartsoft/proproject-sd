@@ -26,7 +26,7 @@
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">Morning</div>
-                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.morning" de-title="vm.morning"></de-select>
+                <de-select de-options="vm.deOptions" de-parameter="currentSD.weather.morning" de-title="vm.morning"></de-select>
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">Morning</div>
@@ -34,7 +34,7 @@
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">Midday</div>
-                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.midday" de-title="vm.midday"></de-select>
+                <de-select de-options="vm.deOptions" de-parameter="currentSD.weather.midday" de-title="vm.midday"></de-select>
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">Midday</div>
@@ -42,7 +42,7 @@
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">Afternoon</div>
-                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.afternoon" de-title="vm.afternoon"></de-select>
+                <de-select de-options="vm.deOptions" de-parameter="currentSD.weather.afternoon" de-title="vm.afternoon"></de-select>
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">Afternoon</div>
@@ -50,7 +50,7 @@
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">Evening</div>
-                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.evening" de-title="vm.evening"></de-select>
+                <de-select de-options="vm.deOptions" de-parameter="currentSD.weather.evening" de-title="vm.evening"></de-select>
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">Evening</div>
@@ -58,7 +58,7 @@
             </label>
             <div class="sd-label" ng-if="(!vm.diaryId || vm.editMode) && !vm.perfectWeather">
                 <div class="sd-title">On and off</div>
-                <de-select de-options="vm.deOptions" de-parameter="vm.create.weather.on_and_off" de-title="vm.onOff"></de-select>
+                <de-select de-options="vm.deOptions" de-parameter="currentSD.weather.on_and_off" de-title="vm.onOff"></de-select>
             </div>
             <label ng-if="(vm.diaryId && !vm.editMode) || vm.perfectWeather" class="sd-label">
                 <div class="sd-title">On and Off</div>
