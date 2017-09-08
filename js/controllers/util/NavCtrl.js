@@ -1,8 +1,8 @@
 sdApp.controller('NavCtrl', NavCtrl);
 
-NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'AuthService', 'SyncService', 'SyncService', '$timeout'];
+NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'AuthService', 'SyncService', '$timeout'];
 
-function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService, SyncService, $timeout) {
+function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService, $timeout) {
 	var vm = this,
 		loadingTemplate = "<center><ion-spinner icon='android'></ion-spinner></center>";
 	vm.toggleSidemenu = toggleSidemenu;
@@ -37,12 +37,10 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 		if (navigator.onLine) {
 			$state.go('login');
 			localStorage.removeItem('dsremember');
-			$indexedDB.openStore('projects', function (store) {
-				store.clear();
-			}).then(function (e) {
-			});
-			AuthService.logout().then(function (result) {
-				localStorage.setObject('loggedOut', true);
+			SyncService.clearDb(function (e) {
+				AuthService.logout().then(function (result) {
+					localStorage.setObject('loggedOut', true);
+				});
 			});
 		} else {
 			var errorTemplate = "<center>Can't log out now. You are offline.</center>";

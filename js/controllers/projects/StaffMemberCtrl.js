@@ -83,7 +83,10 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     function initFields() {
         if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
             vm.local.data = {
-                staff_name: $rootScope.currentSD.site_attendance.staffs[vm.index].first_name + ($rootScope.currentSD.site_attendance.staffs[vm.index].last_name != null ? (" " + $rootScope.currentSD.site_attendance.staffs[vm.index].last_name) : ""),
+                staff_name: $rootScope.currentSD.site_attendance.staffs[vm.index].first_name
+                + ($rootScope.currentSD.site_attendance.staffs[vm.index].last_name !== null ?
+                    (" " + $rootScope.currentSD.site_attendance.staffs[vm.index].last_name) :
+                    ""),
                 company_name: $rootScope.currentSD.site_attendance.staffs[vm.index].company_name,
                 model_start: vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].start_time),
                 model_finish: vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].finish_time),
@@ -93,8 +96,9 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 role: $rootScope.currentSD.site_attendance.staffs[vm.index].trade,
                 trade: $rootScope.currentSD.site_attendance.staffs[vm.index].trade,
                 hourly_rate: $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate,
-                hourly_rate_formated: $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate && (vm.currency + " " + $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate) || ''
-            }
+                hourly_rate_formated: $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate
+                && (vm.currency + " " + $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate) || ''
+            };
             if ($rootScope.currentSD.site_attendance.staffs[vm.index].break_time) {
                 vm.local.data.model_break = vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].break_time);
             } else {
@@ -104,18 +108,20 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         } else {
             vm.local.data.staff_name = "";
             vm.local.data.model_break = vm.stringToDate("00:30");
-            $indexedDB.openStore('settings', function(store) {
-                store.find("start").then(function(list) {
-                    vm.local.data.model_start = list.value;
-                }, function(err) {
-                    vm.local.data.model_start = "08:00";
-                });
-                store.find("finish").then(function(list) {
-                    vm.local.data.model_finish = list.value;
-                }, function(err) {
-                    vm.local.data.model_finish = "12:00";
-                });
-            });
+	        SyncService.getSettings('start', function (list) {
+		        if (list && list.value) {
+			        vm.local.data.model_start = list.value;
+		        } else {
+			        vm.local.data.model_start = "08:00";
+		        }
+	        });
+	        SyncService.getSettings('finish', function (list) {
+		        if (list && list.value) {
+			        vm.local.data.model_finish = list.value;
+		        } else {
+			        vm.local.data.model_finish = "12:00";
+		        }
+	        });
             if (!vm.local.data.total_time) vm.calcParse();
         }
     }
@@ -138,7 +144,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                             $(this).focus();
                         }
                     })
-                })
+                });
                 watchOnce();
             }, 10);
         })
@@ -194,7 +200,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             total_time: $filter('date')(vm.local.data.total_time, "HH:mm"),
             absence: vm.local.data.absence && vm.local.data.absence[0],
             note: vm.local.data.note
-        }
+        };
         //Staff add when index = create; update otherwise
         if (vm.index === 'create') {
             $rootScope.currentSD.site_attendance.staffs.push(vm.member);
@@ -229,13 +235,13 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function calcTime(start, finish, breakTime) {
-        var hhmm = ''
+        var hhmm = '';
         var stringBreak = breakTime.split(":");
         var stringStart = start.split(":");
         var stringFinish = finish.split(":");
         var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
-        var hh = Math.floor(totalTime / 60)
-        var mm = Math.abs(totalTime % 60)
+        var hh = Math.floor(totalTime / 60);
+        var mm = Math.abs(totalTime % 60);
         hhmm = hh + ':';
         if (mm < 10) {
             hhmm = hhmm + '0' + mm;

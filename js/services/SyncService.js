@@ -13,136 +13,157 @@ sdApp.service('SyncService', [
 	'SharedService',
 	function ($q, $http, $timeout, $ionicPopup, $state, $filter,
 	          ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService, SharedService) {
-
+		
 		var service = this,
 			worker = false;
-
+		
 		service.setSettings = function (data, callback) {
 			try {
 				worker = new Worker('/js/system/worker.js');
-
+				
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
 						worker.terminate();
 						callback(ev.data);
 					}
 				});
-
+				
 				worker.postMessage({
 					data: data,
 					operation: 'setSettings'
 				});
-
+				
 			} catch (e) {
 				throw ('Error setting data: ' + e);
 			}
 		};
-
+		
 		service.getSettings = function (callback) {
 			try {
 				worker = new Worker('/js/system/worker.js');
-
+				
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
 						worker.terminate();
 						callback(ev.data.results);
 					}
 				});
-
+				
 				worker.postMessage({
 					data: {},
 					operation: 'getSettings'
 				});
-
+				
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
 
+		service.getSetting = function (name, callback) {
+			try {
+				worker = new Worker('/js/system/worker.js');
+				
+				worker.addEventListener('message', function (ev) {
+					if (ev.data.finished === true) {
+						worker.terminate();
+						callback(ev.data.results[0]);
+					}
+				});
+				
+				worker.postMessage({
+					data: {name: name},
+					operation: 'getSetting'
+				});
+				
+			} catch (e) {
+				throw ('Error getting data: ' + e);
+			}
+		};
+		
 		service.setProjects = function (data, callback) {
 			try {
 				worker = new Worker('/js/system/worker.js');
-
+				
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
 						worker.terminate();
 						callback(ev.data);
 					}
 				});
-
+				
 				worker.postMessage({
 					data: data,
 					operation: 'setProjects'
 				});
-
+				
 			} catch (e) {
 				throw ('Error setting data: ' + e);
 			}
 		};
-
+		
 		service.getProjects = function (callback) {
 			try {
 				worker = new Worker('/js/system/worker.js');
-
+				
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
 						worker.terminate();
 						callback(ev.data.results);
 					}
 				});
-
+				
 				worker.postMessage({
 					data: {},
 					operation: 'getProjects'
 				});
-
+				
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
-
+		
 		service.getProject = function (id, callback) {
 			try {
 				worker = new Worker('/js/system/worker.js');
-
+				
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
 						worker.terminate();
-						callback(ev.data.results);
+						callback(ev.data.results[0]);
 					}
 				});
-
+				
 				worker.postMessage({
 					data: {id: id},
 					operation: 'getProject'
 				});
-
+				
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
-
+		
 		service.clearDb = function (callback) {
 			try {
 				worker = new Worker('/js/system/worker.js');
-
+				
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
 						worker.terminate();
 						callback(ev);
 					}
 				});
-
+				
 				worker.postMessage({
 					data: {},
 					operation: 'eraseDb'
 				});
-
+				
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
-
+		
 		service.getme = function () {
 			return $http.get($APP.server + '/api/me')
 				.success(function (user) {
@@ -152,7 +173,7 @@ sdApp.service('SyncService', [
 					return status;
 				})
 		};
-
+		
 		service.login = function () {
 			var prm = $q.defer();
 			if (localStorage.getObject('isLoggedIn')) {
@@ -180,7 +201,7 @@ sdApp.service('SyncService', [
 		// 		});
 		// 	});
 		// };
-
+		
 		service.sync = function () {
 			var deferred = $q.defer();
 			if (navigator.onLine) {
@@ -200,7 +221,7 @@ sdApp.service('SyncService', [
 										callback(lists);
 									})
 								}
-
+								
 								function setCompanyLists(lists, callback) {
 									var absenceReq = SiteDiaryService.absence_list().success(function (result) {
 											angular.forEach(result, function (value) {
@@ -253,77 +274,10 @@ sdApp.service('SyncService', [
 										callback(lists);
 									})
 								}
-
-								function addDiariesDetails(projects) {
-									var def = $q.defer();
-									angular.forEach(projects, function (project) {
-										if (project.value.diaries.length) {
-											var diaries = project.value.diaries;
-											angular.forEach(diaries, function (diary) {
-												//store details for SDs
-												SiteDiaryService.list_diary(diary.id).then(function (data) {
-													diary.data = data;
-													//store comments for SDs
-													var listComm = SiteDiaryService.list_comments(diary.id).then(function (result) {
-														if (diary.data) {
-															diary.data.comments = result;
-														}
-													});
-													//store attachments for SDs
-													var getAtt = AttachmentsService.get_attachments(diary.id).then(function (result) {
-														diary.data.attachments = {
-															pictures: result
-														};
-													});
-													Promise.all([listComm, getAtt]).then(function (res) {
-														if (diaries[diaries.length - 1] === diary) {
-															$timeout(function () {
-																//sttore data for current diary
-																//saveChanges(project);
-																//last project and last diary
-																if ((projects[projects.length - 1] === project)) {
-																	$timeout(function () {
-																		def.resolve(projects);
-																	}, 500);
-																}
-															}, 500);
-														}
-													})
-												});
-											});
-										} else {
-											//no diaries and last project
-											if ((projects[projects.length - 1] === project)) {
-												$timeout(function () {
-													def.resolve(projects);
-												}, 5000);
-											}
-										}
-									});
-									return def.promise;
-								}
-
-								function addDiaries(projects) {
-									var def = $q.defer();
-									angular.forEach(projects, function (project) {
-										//get a list of all diaries for project having the given id
-										SiteDiaryService.list_diaries(project.id).then(function (diaries) {
-											//store diaries for project
-											project.value.diaries = diaries;
-											//saveChanges(project);
-											$timeout(function () {
-												if (projects[projects.length - 1] === project) {
-													def.resolve(projects);
-												}
-											}, 100);
-										});
-									});
-									return def.promise;
-								}
-
+								
 								function getProjects() {
 									var def = $q.defer();
-									ProjectService.projects().then(function (projects) {
+									ProjectService.sync_projects().then(function (projects) {
 										//there are no projects to store
 										if (!projects.length) def.resolve([]);
 										var projectsArray = [];
@@ -337,7 +291,7 @@ sdApp.service('SyncService', [
 									});
 									return def.promise;
 								}
-
+								
 								function buildData() {
 									var def = $q.defer();
 									// get all the settings then insert them - this can be done in sync
@@ -350,25 +304,30 @@ sdApp.service('SyncService', [
 													console.log('Projects gathered', projects);
 													//no projects stored
 													if (!projects.length) return def.resolve();
-													//store diaries for stored projects
-													addDiaries(projects).then(function (projects) {
-														console.log('Diaries added', projects);
-														//store diaries details
-														addDiariesDetails(projects).then(function (projectsArray) {
-															console.log('Diary details added', projectsArray);
-															// store the projects in the DB
-															service.setProjects(projectsArray, function (projects) {
-																def.resolve(projects);
-															});
-														});
+													service.setProjects(projects, function (projects) {
+														def.resolve(projects);
 													});
+													//store diaries for stored projects
+													/*
+													 addDiaries(projects).then(function (projects) {
+													 console.log('Diaries added', projects);
+													 //store diaries details
+													 addDiariesDetails(projects).then(function (projectsArray) {
+													 console.log('Diary details added', projectsArray);
+													 // store the projects in the DB
+													 service.setProjects(projectsArray, function (projects) {
+													 def.resolve(projects);
+													 });
+													 });
+													 });
+													 */
 												});
 											});
 										});
 									});
 									return def.promise;
 								}
-
+								
 								function init() {
 									service.clearDb(function () {
 										buildData().then(function (projects) {
@@ -387,18 +346,17 @@ sdApp.service('SyncService', [
 										});
 									});
 								}
-
+								
 								var tempSD = {};
 								if (sessionStorage.getObject('projectId')) {
 									service.getProject(sessionStorage.getObject('projectId'), function (project) {
-										console.log('Here', project);
-										if (project.temp) tempSD = project.temp;
+										if (project && project.temp) tempSD = project.temp;
 										init();
 									});
 								} else {
 									init();
 								}
-
+								
 							}).error(function (data, status) {
 							deferred.resolve();
 							if (!navigator.onLine) {
@@ -455,7 +413,7 @@ sdApp.service('SyncService', [
 					$state.go('app.home');
 				}
 			}
-
+			
 			if (sessionStorage.getObject('sd.diary.shares')) {
 				var shares = sessionStorage.getObject('sd.diary.shares');
 				for (var a = 0; a < shares.length; a++) {
@@ -465,7 +423,7 @@ sdApp.service('SyncService', [
 			}
 			return deferred.promise;
 		};
-
+		
 		service.addDiariesToSync = function () {
 			var prm = $q.defer();
 			if (navigator.onLine && localStorage.getObject('diariesToSync')) {

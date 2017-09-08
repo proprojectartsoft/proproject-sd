@@ -1,9 +1,10 @@
 sdApp.controller('ProjectsCtrl', [
 	'$rootScope',
+	'$scope',
 	'$state',
 	'SyncService',
 	'SettingService',
-	function ($rootScope, $state, SyncService, SettingService) {
+	function ($rootScope, $scope, $state, SyncService, SettingService) {
 		var vm = this;
 		vm.go = go;
 		vm.header = 'Select a project';
@@ -14,11 +15,11 @@ sdApp.controller('ProjectsCtrl', [
 		vm.loggedIn = localStorage.getObject('loggedIn');
 		
 		SyncService.getProjects(function (result) {
-			vm.projects = result;
-			var projIds = "";
-			angular.forEach(vm.projects, function (proj) {
-				projIds += proj.id + ", ";
-			})
+			setTimeout(function() {
+				$scope.$apply(function() {
+					vm.projects = result;
+				})
+			}, 100);
 		}, function (err) {
 			SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
 		});

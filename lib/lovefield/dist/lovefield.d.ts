@@ -17,7 +17,7 @@
 // Type definitions for Lovefield
 // Project: http://google.github.io/lovefield/
 
-/// <reference path="../es6-promise/es6-promise.d.ts"/>
+// <reference path="../es6-promise/es6-promise.d.ts"/>
 
 declare module lf {
   export enum Order { ASC, DESC }

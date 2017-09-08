@@ -8,7 +8,7 @@ var schemaBuilder,
 self.addEventListener('message', function (e) {
 	var params = e.data.data,
 		operation = e.data.operation;
-
+	
 	// SQL equivalent: CREATE DATABASE IF NOT EXISTS projects
 	// This schema definition (or data definition commands in SQL, DDL) is not
 	// executed immediately. Lovefield uses builder pattern to build the schema
@@ -25,7 +25,7 @@ self.addEventListener('message', function (e) {
 		});
 		return false;
 	}
-
+	
 	// SQL equivalent:
 	// CREATE TABLE IF NOT EXISTS projects (
 	//   version AS STRING,
@@ -38,13 +38,11 @@ self.addEventListener('message', function (e) {
 		schemaBuilder.createTable('projects')
 			.addColumn('id', lf.Type.INTEGER)
 			.addColumn('value', lf.Type.STRING)
-			.addPrimaryKey(['id']);
+			.addPrimaryKey(['id'])
+			.addIndex('idxValue', ['value'], false, lf.Order.ASC);
 	} catch (e) {
 		console.log('Error creating table projectss: ', e);
 		self.postMessage({
-			totalCount: 0,
-			rowCount: 0,
-			noRecords: 0,
 			finished: true
 		});
 		return false;
@@ -58,24 +56,33 @@ self.addEventListener('message', function (e) {
 	} catch (e) {
 		console.log('Error creating table settings: ', e);
 		self.postMessage({
-			totalCount: 0,
-			rowCount: 0,
-			noRecords: 0,
 			finished: true
 		});
 		return false;
 	}
-
+	
 	// Start of the Promise chaining
 	schemaBuilder.connect({"onUpgrade": null, "storeType": lf.schema.DataStoreType.INDEXED_DB}).then(function (db) {
 		sdDb = db;
 		projects = db.getSchema().table('projects');
 		settings = db.getSchema().table('settings');
-
+		
 		switch (operation) {
 			case 'getSettings':
 				try {
 					self.getSettings(function (result) {
+						self.postMessage({
+							results: result,
+							finished: true
+						});
+					});
+				} catch (e) {
+					throw ('Error fetching settings:' + e);
+				}
+				break;
+			case 'getSetting':
+				try {
+					self.getSetting(function (result) {
 						self.postMessage({
 							results: result,
 							finished: true
@@ -231,6 +238,7 @@ self.setProjects = function (data, callback) {
 				object = projects.createRow(
 					{
 						'id': data[i].id,
+						'pr_id': data[i].id,
 						'value': data[i].value
 					}
 				);
@@ -252,11 +260,23 @@ self.getProjects = function (callback) {
 			});
 };
 
-self.getProject = function (id, callback) {
+self.getProject = function (param, callback) {
 	sdDb
 		.select()
 		.from(projects)
-		.where(projects.id.eq(id))
+		.where(projects.id.eq(param.id))
+		.exec()
+		.then(
+			function (res) {
+				callback(res);
+			});
+};
+
+self.getSetting = function (param, callback) {
+	sdDb
+		.select()
+		.from(settings)
+		.where(settings.name.eq(param.name))
 		.exec()
 		.then(
 			function (res) {

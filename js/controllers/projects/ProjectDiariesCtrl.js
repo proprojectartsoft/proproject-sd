@@ -13,7 +13,7 @@ ProjectDiariesCtrl.$inject = [
     'SyncService',
     'orderByFilter',
     '$rootScope',
-    '$filter',
+    '$filter'
 ];
 
 function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, $stateParams, SiteDiaryService, SettingService, SharedService, SyncService, orderBy, $rootScope, $filter) {
@@ -42,20 +42,19 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     $rootScope.currentSD = null;
     $rootScope.backupSD = null;
 
-    SyncService.getProject(vm.projectId, function(projArr) {
-        var proj = projArr[0];
-        angular.forEach(proj.value.diaries, function(value, key) {
-            proj.value.diaries[key].color = getSdTitleColor(value.userName)
+    SyncService.getProject(vm.projectId, function(proj) {
+        angular.forEach(proj.value.site_diaries, function(value, key) {
+            proj.value.site_diaries[key].color = getSdTitleColor(value.userName);
         });
         //order diaries by date
-        vm.diaries = orderBy(proj.value.diaries, 'date', true);
+        vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
         //update the color for every SD
         SyncService.setProjects([proj], function() {
             console.log('Diaries color stored');
         });
     }, function(err) {
         SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
-    })
+    });
 
     vm.diaryModal = $ionicModal.fromTemplateUrl('templates/projects/diarySearch.html', {
         scope: $scope,
@@ -66,7 +65,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
 
     function showPopup(predicate) {
         var popup = $ionicPopup.show(createPopup(predicate.id));
-    };
+    }
 
     function createPopup(id) {
         return {
@@ -80,7 +79,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                     importContact(id);
                 }
             }, {
-                text: 'Cancel',
+                text: 'Cancel'
             }, {
                 text: 'Send',
                 type: 'button-positive',
@@ -129,7 +128,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 },
                 function(err) {
                     alertPopup1.close();
-                    if (err.status == 422) {
+                    if (err.status === 422) {
                         res = "";
                         var alertPopup = $ionicPopup.alert({
                             title: 'Share',
@@ -150,7 +149,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             shares.push({
                 id: id,
                 res: res
-            })
+            });
             sessionStorage.setObject('sd.diary.shares', shares);
         }
     }
@@ -181,7 +180,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             }, function(err) {
                 var alertPopup1 = SecuredPopups.show('alert', {
                     title: "Import contact failed",
-                    template: 'An unexpected error occured while trying to import contact',
+                    template: 'An unexpected error occured while trying to import contact'
                 });
                 $timeout(function() {
                     var popup = $ionicPopup.show(createPopup(id));
@@ -259,7 +258,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     function getSdTitleColor(userName) {
         var nameExists = Object.keys(colorsForName).some(function(name) {
             return name === userName;
-        })
+        });
         if (!nameExists) {
             if (Object.keys(colorsForName).length < contrastColors.length) {
                 colorsForName[userName] = contrastColors[Object.keys(colorsForName).length];

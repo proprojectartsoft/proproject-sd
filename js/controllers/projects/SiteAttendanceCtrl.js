@@ -1,4 +1,4 @@
-sdApp.controller('SiteAttendanceCtrl', SiteAttendanceCtrl)
+sdApp.controller('SiteAttendanceCtrl', SiteAttendanceCtrl);
 
 SiteAttendanceCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', '$filter', 'SyncService', '$timeout', '$ionicPopup', 'SettingService'];
 
@@ -12,23 +12,24 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
     //store the lists of site attendance
+    if (!$rootScope.currentSD) return $state.go('app.home');
     vm.staffList = $rootScope.currentSD.site_attendance.staffs;
     vm.companyList = $rootScope.currentSD.site_attendance.contractors;
     vm.visitorList = $rootScope.currentSD.site_attendance.visitors;
 
     $timeout(function() {
         vm.seen = sessionStorage.getObject('sd.seen');
-    })
+    });
 
     function show(predicate) {
-        if (predicate == "staff") {
+        if (predicate === "staff") {
             vm.visitors = false;
-            vm.contractors = false
+            vm.contractors = false;
             vm.staff = true;
             sessionStorage.setObject('siteAttTab', 'staff');
         } else {
             vm.staff = false;
-            if (predicate == "contractors") {
+            if (predicate === "contractors") {
                 vm.visitors = false;
                 vm.contractors = true;
                 sessionStorage.setObject('siteAttTab', 'contractors');
@@ -50,7 +51,7 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
                 if (el === entry) {
                     $rootScope.currentSD.site_attendance.staffs.splice(i, 1);
                 }
-            })
+            });
             var seen = sessionStorage.getObject('sd.seen');
             seen.staff = true;
             sessionStorage.setObject('sd.seen', seen);
@@ -60,7 +61,7 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
                 if (el === entry) {
                     $rootScope.currentSD.site_attendance.contractors.splice(i, 1);
                 }
-            })
+            });
             var seen = sessionStorage.getObject('sd.seen');
             seen.contractor = true;
             sessionStorage.setObject('sd.seen', seen);
@@ -70,7 +71,7 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
                 if (el === entry) {
                     $rootScope.currentSD.site_attendance.visitors.splice(i, 1);
                 }
-            })
+            });
             var seen = sessionStorage.getObject('sd.seen');
             seen.visitor = true;
             sessionStorage.setObject('sd.seen', seen);

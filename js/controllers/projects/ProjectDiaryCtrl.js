@@ -1,4 +1,4 @@
-sdApp.controller('ProjectDiaryCtrl', ProjectDiaryCtrl)
+sdApp.controller('ProjectDiaryCtrl', ProjectDiaryCtrl);
 
 
 ProjectDiaryCtrl.$inject = ['$rootScope', '$ionicPopup', '$timeout', '$state', '$stateParams', '$scope', '$filter', 'SettingService', 'SiteDiaryService', 'AttachmentsService', 'SyncService', '$q'];
@@ -22,22 +22,22 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.diaryId = sessionStorage.getObject('diaryId');
     $timeout(function() {
         vm.seen = sessionStorage.getObject('sd.seen');
-    })
-
+    });
+    
     if (vm.diaryStateId) {
         //enter existing SD
         sessionStorage.setObject('diaryId', vm.diaryStateId);
         vm.enableCreate = false;
         if (vm.edit) {
-            vm.created_for_date = ($rootScope.currentSD.created_for_date != 0) && $rootScope.currentSD.created_for_date || '';
+            vm.created_for_date = ($rootScope.currentSD.created_for_date !== 0) && $rootScope.currentSD.created_for_date || '';
             vm.summary = $rootScope.currentSD.summary;
         } else {
             //visualize SD
-            SyncService.getProject(vm.projectId, function(projArr) {
-                var diary = $filter('filter')(projArr[0].value.diaries, {
+            SyncService.getProject(vm.projectId, function(proj) {
+                var diary = $filter('filter')(proj.value.site_diaries, {
                     id: vm.diaryStateId
                 })[0];
-                vm.created_for_date = (diary.created_for_date != 0) && diary.created_for_date || '';
+                vm.created_for_date = (diary.created_for_date !== 0) && diary.created_for_date || '';
                 vm.summary = diary.data ? diary.data.summary : '';
                 //store as temp
                 $rootScope.currentSD = diary.data;
@@ -50,7 +50,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         //create new SD
         vm.enableCreate = true;
         sessionStorage.setObject('diaryId', false);
-        if (!$rootScope.currentSD || $rootScope.currentSD && $rootScope.currentSD == null) {
+        if (!$rootScope.currentSD || $rootScope.currentSD && $rootScope.currentSD === null) {
             //store temp
             $rootScope.currentSD = {
                 created_for_date: '',
@@ -97,7 +97,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     }
                 });
                 var uploadAttachments = AttachmentsService.upload_attachments(attToAdd.push.apply(attToAddAsNew)).then(function(result) {});
-                if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
+                if (attachments.toBeUpdated && attachments.toBeUpdated.length !== 0) {
                     angular.forEach(attachments.toBeUpdated, function(att) {
                         AttachmentsService.update_attachments(att).then(function(result) {})
                     })
@@ -109,37 +109,36 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 angular.forEach($rootScope.currentSD.comments, function(value) {
                     var request = {
                         site_diary_id: result.id,
-                        comment: value.comment,
+                        comment: value.comment
                     };
                     SiteDiaryService.add_comments(request).success(function(result) {});
-                })
+                });
                 Promise.all([uploadAttachments, deleteAttachments]).then(function(res) {
                     SyncService.sync().then(function() {
                         $('.create-btn').attr("disabled", false);
                         syncPopup.close();
                         vm.go('project');
                     })
-                })
+                });
             }).error(function(response) {
                 var attStorage = $rootScope.currentSD.attachments;
                 var diary = {
                     data: $rootScope.currentSD
-                }
+                };
                 if (attStorage) {
                     diary.attachments = attStorage;
                 }
                 localStorage.setObject('diariesToSync', true);
                 //add offline information to the new SD
-                diary.id = "off" + proj.value.diaries.length + 1;
+                diary.id = "off" + proj.value.site_diaries.length + 1;
                 diary.date = diary.data.date;
                 diary.sdNo = diary.id;
                 diary.created_for_date = diary.data.created_for_date;
                 //add the new SD to the project's SD list
-                SyncService.getProject(vm.projectId, function(projArr) {
-                    var proj = projArr[0];
-                    if (!proj.value.diaries)
-                        proj.value.diaries = [];
-                    proj.value.diaries.push(diary);
+                SyncService.getProject(vm.projectId, function(proj) {
+                    if (!proj.value.site_diaries)
+                        proj.value.site_diaries = [];
+                    proj.value.site_diaries.push(diary);
                     //add new SD
                     SyncService.setProjects([proj], function() {
                         console.log('New SD stored');
@@ -190,7 +189,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             vm.go('project');
         }).error(function(err) {
             SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
-        })
+        });
         angular.forEach(sessionStorage.getObject('sd.comments'), function(comment) {
             SiteDiaryService.add_comments(comment)
                 .success(function(result) {
@@ -198,7 +197,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 }).error(function(err) {
                     sessionStorage.setObject('sd.comments', []);
                 })
-        })
+        });
         var attachments = $rootScope.currentSD.attachments; //sessionStorage.getObject('sd.attachments');
         var attToAdd = [];
         if (attachments !== null) {
@@ -209,7 +208,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             });
             var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
             var updateAttachments = [];
-            if (attachments.toBeUpdated && attachments.toBeUpdated.length != 0) {
+            if (attachments.toBeUpdated && attachments.toBeUpdated.length !== 0) {
                 angular.forEach(attachments.toBeUpdated, function(att) {
                     updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {}));
                 })
@@ -220,21 +219,20 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             }
         }
         Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments]).then(function(res) {
-            SyncService.getProject(vm.projectId, function(projArr) {
-                var proj = projArr[0];
-                //replace the diary in proj.value.diaries with the temp diary
-                var diary = $filter('filter')(proj.value.diaries, {
+            SyncService.getProject(vm.projectId, function(proj) {
+                //replace the diary in proj.value.site_diaries with the temp diary
+                var diary = $filter('filter')(proj.value.site_diaries, {
                     id: (vm.diaryId)
                 })[0];
                 diary.data = $rootScope.currentSD;
                 diary.data.summary = $rootScope.currentSD.summary;
-                diary.created_for_date = $rootScope.currentSD.created_for_date
+                diary.created_for_date = $rootScope.currentSD.created_for_date;
                 SyncService.setProjects([proj], function() {
                     console.log('SD updated');
                 });
             }, function(err) {
                 SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
-            })
+            });
             $('.save-btn').attr("disabled", false);
             syncPopup.close;
         });
@@ -262,7 +260,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     summaryPopup.close();
                 }
             }, {
-                text: 'Cancel',
+                text: 'Cancel'
             }]
         });
     }
@@ -292,9 +290,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             return;
         }
         vm.edit = !vm.edit;
-        SyncService.getProject(vm.projectId, function(projArr) {
-            console.log(projArr);
-        })
+        SyncService.getProject(vm.projectId, function(proj) {});
         sessionStorage.setObject('editMode', vm.edit);
         if (!vm.edit) {
             //discard changes made on temp SD
