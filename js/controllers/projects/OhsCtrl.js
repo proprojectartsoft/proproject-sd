@@ -11,32 +11,46 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
 	vm.diaryId = sessionStorage.getObject('diaryId');
 	vm.index = $stateParams.id;
 	vm.editMode = sessionStorage.getObject('editMode');
-	
-	SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-		vm.create = proj.temp;
-		//if create is not loaded correctly, redirect to home and try again
-		if (vm.create === null || vm.create === {}) {
-			SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-			$state.go('app.home');
-			return;
-		}
+
+	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
+	// 	$rootScope.currentSD = proj.temp;
+	// 	//if create is not loaded correctly, redirect to home and try again
+	// 	if ($rootScope.currentSD === null || $rootScope.currentSD === {}) {
+	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+	// 		$state.go('app.home');
+	// 		return;
+	// 	}
+	// 	if (!isNaN(vm.index) && !(vm.index === null)) {
+	// 		vm.type = $rootScope.currentSD.oh_and_s[vm.index].type;
+	// 		vm.task_completed = $rootScope.currentSD.oh_and_s[vm.index].task_completed;
+	// 		vm.form_complete = $rootScope.currentSD.oh_and_s[vm.index].form_to_be_completed;
+	// 		vm.ref = $rootScope.currentSD.oh_and_s[vm.index].ref;
+	// 		vm.action_required = $rootScope.currentSD.oh_and_s[vm.index].action_required;
+	// 		vm.action_message = $rootScope.currentSD.oh_and_s[vm.index].action;
+	// 		vm.comment = $rootScope.currentSD.oh_and_s[vm.index].note;
+	// 	}
+	// 	vm.tools = $rootScope.currentSD.oh_and_s;
+	// });
+	initFields();
+
+	function initFields(){
 		if (!isNaN(vm.index) && !(vm.index === null)) {
-			vm.type = vm.create.oh_and_s[vm.index].type;
-			vm.task_completed = vm.create.oh_and_s[vm.index].task_completed;
-			vm.form_complete = vm.create.oh_and_s[vm.index].form_to_be_completed;
-			vm.ref = vm.create.oh_and_s[vm.index].ref;
-			vm.action_required = vm.create.oh_and_s[vm.index].action_required;
-			vm.action_message = vm.create.oh_and_s[vm.index].action;
-			vm.comment = vm.create.oh_and_s[vm.index].note;
+			vm.type = $rootScope.currentSD.oh_and_s[vm.index].type;
+			vm.task_completed = $rootScope.currentSD.oh_and_s[vm.index].task_completed;
+			vm.form_complete = $rootScope.currentSD.oh_and_s[vm.index].form_to_be_completed;
+			vm.ref = $rootScope.currentSD.oh_and_s[vm.index].ref;
+			vm.action_required = $rootScope.currentSD.oh_and_s[vm.index].action_required;
+			vm.action_message = $rootScope.currentSD.oh_and_s[vm.index].action;
+			vm.comment = $rootScope.currentSD.oh_and_s[vm.index].note;
 		}
-		vm.tools = vm.create.oh_and_s;
-	});
-	
+		vm.tools = $rootScope.currentSD.oh_and_s;
+	}
+
 	$scope.$watch(function () {
 		if (vm.editMode)
 			SettingService.show_focus();
 	});
-	
+
 	vm.types = [{ //TODO:retrieve from DB
 		id: 0,
 		name: 'Toolbox Talk'
@@ -50,7 +64,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
 		id: 3,
 		name: 'PPE Discussion'
 	}];
-	
+
 	function save() {
 		vm.newType = sessionStorage.getObject('sd.diary.ohs.type');
 		vm.oh_and_s = {
@@ -66,36 +80,38 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
 			note: vm.comment
 		}
 		if (vm.index !== 'create') {
-			vm.create.oh_and_s[vm.index] = vm.oh_and_s;
+			$rootScope.currentSD.oh_and_s[vm.index] = vm.oh_and_s;
 		} else {
-			vm.create.oh_and_s.push(vm.oh_and_s);
+			$rootScope.currentSD.oh_and_s.push(vm.oh_and_s);
 			var seen = sessionStorage.getObject('sd.seen');
 			seen.ohs = true;
 			sessionStorage.setObject('sd.seen', seen);
 		}
 		//store the new data in temp SD
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
+		vm.tools = $rootScope.currentSD.oh_and_s;
 	}
-	
+
 	function deleteEntry(entry) {
 		if (!navigator.onLine) {
 			SettingService.show_message_popup('You are offline', "<center>You can remove OH and S while online.</center>");
 			return;
 		}
 		$('.item-content').css('transform', '');
-		vm.create.oh_and_s.forEach(function (el, i) {
+		$rootScope.currentSD.oh_and_s.forEach(function (el, i) {
 			if (el === entry) {
-				vm.create.oh_and_s.splice(i, 1);
+				$rootScope.currentSD.oh_and_s.splice(i, 1);
 			}
 		})
 		//store the new data in temp SD
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
-		SiteDiaryService.update_diary(vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
+		vm.tools = $rootScope.currentSD.oh_and_s;
+		SiteDiaryService.update_diary($rootScope.currentSD);
 		var seen = sessionStorage.getObject('sd.seen');
 		seen.ohs = true;
 		sessionStorage.setObject('sd.seen', seen);
 	}
-	
+
 	function go(predicate, id) {
 		if (predicate == "ohs" && ($rootScope.selected || vm.type)) {
 			save();
@@ -111,7 +127,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
 			});
 		}
 	}
-	
+
 	function watchChanges() {
 		$("input").change(function () {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -124,7 +140,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
 			sessionStorage.setObject('sd.seen', seen);
 		});
 	}
-	
+
 	watchChanges();
 }
 
@@ -135,7 +151,7 @@ sdApp.directive('elastic', [
 		return {
 			restrict: 'A',
 			link: function autoResizeLink(scope, element, attributes, controller) {
-				
+
 				element.css({
 					'height': '45px',
 					'overflow-y': 'hidden'
@@ -143,7 +159,7 @@ sdApp.directive('elastic', [
 				$timeout(function () {
 					element.css('height', 45 + 'px');
 				}, 100);
-				
+
 				element.on('input', function () {
 					element.css({
 						'height': '45px',

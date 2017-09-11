@@ -12,52 +12,53 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
 	vm.editMode = sessionStorage.getObject('editMode');
 	vm.diaryId = sessionStorage.getObject('diaryId');
 
-	SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-		vm.create = proj.temp;
-		//if create is not loaded correctly, redirect to home and try again
-		if (vm.create === null || vm.create === {}) {
-			SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-			$state.go('app.home');
-			return;
-		}
-		initFields();
-	});
-	
+	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
+	// 	$rootScope.currentSD = proj.temp;
+	// 	//if create is not loaded correctly, redirect to home and try again
+	// 	if ($rootScope.currentSD === null || $rootScope.currentSD === {}) {
+	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+	// 		$state.go('app.home');
+	// 		return;
+	// 	}
+	// 	initFields();
+	// });
+	initFields();
+
 	$scope.$watch(function () {
 		if (vm.editMode)
 			SettingService.show_focus();
 	});
-	
+
 	$scope.autoExpand = function (e) {
 		$(e.target).height(e.target.scrollHeight - 30);
 	};
-	
+
 	//initialize data for site notes' fields
 	function initFields() {
 		if (vm.diaryId) {
-			if (vm.create.site_notes.delays !== null) {
-				vm.delays = vm.create.site_notes.delays;
+			if ($rootScope.currentSD.site_notes.delays !== null) {
+				vm.delays = $rootScope.currentSD.site_notes.delays;
 			}
-			if (vm.create.site_notes.tools_used !== null) {
-				vm.tools = vm.create.site_notes.tools_used;
+			if ($rootScope.currentSD.site_notes.tools_used !== null) {
+				vm.tools = $rootScope.currentSD.site_notes.tools_used;
 			}
-			if (vm.create.site_notes.materials_requested !== null) {
-				vm.materials = vm.create.site_notes.materials_requested;
+			if ($rootScope.currentSD.site_notes.materials_requested !== null) {
+				vm.materials = $rootScope.currentSD.site_notes.materials_requested;
 			}
 		}
 		if (!vm.diaryId) {
-			if (vm.create.site_notes.delays) {
-				vm.delays = vm.create.site_notes.delays;
+			if ($rootScope.currentSD.site_notes.delays) {
+				vm.delays = $rootScope.currentSD.site_notes.delays;
 			}
-			if (vm.create.site_notes.tools_used) {
-				vm.tools = vm.create.site_notes.tools_used;
+			if ($rootScope.currentSD.site_notes.tools_used) {
+				vm.tools = $rootScope.currentSD.site_notes.tools_used;
 			}
-			if (vm.create.site_notes.materials_requested) {
-				vm.materials = vm.create.site_notes.materials_requested;
+			if ($rootScope.currentSD.site_notes.materials_requested) {
+				vm.materials = $rootScope.currentSD.site_notes.materials_requested;
 			}
 		}
 	}
-	
+
 	function save() {
 		add();
 		vm.site_notes = {
@@ -65,11 +66,11 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
 			tools_used: vm.tools,
 			materials_requested: vm.materials
 		}
-		vm.create.site_notes = vm.site_notes;
+		$rootScope.currentSD.site_notes = vm.site_notes;
 		//store the new data in temp SD
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
 	}
-	
+
 	function add() {
 		if (vm.input1 || vm.input2 || vm.input3) {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -90,7 +91,7 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
 		}
 		$('textarea').height('initial');
 	}
-	
+
 	function go(predicate, id) {
 		save();
 		if (predicate === 'diary') {
@@ -107,7 +108,7 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
 			});
 		}
 	}
-	
+
 	function watchChanges() {
 		$("textarea").change(function () {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -115,6 +116,6 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
 			sessionStorage.setObject('sd.seen', seen);
 		});
 	}
-	
+
 	watchChanges();
 }

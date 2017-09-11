@@ -1,28 +1,28 @@
 sdApp.controller('VisitorsCtrl', VisitorsCtrl)
 
-VisitorsCtrl.$inject = ['$state', 'SettingService', '$scope', 'SyncService', '$stateParams'];
+VisitorsCtrl.$inject = ['$state', 'SettingService', '$scope', '$rootScope', 'SyncService', '$stateParams'];
 
-function VisitorsCtrl($state, SettingService, $scope, SyncService, $stateParams) {
+function VisitorsCtrl($state, SettingService, $scope, $rootScope, SyncService, $stateParams) {
 	var vm = this;
 	vm.go = go;
 	vm.local = {};
 	vm.local.data = {};
 	vm.data = {};
 	vm.index = $stateParams.id;
-	SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-		vm.create = proj.temp;
-		//if create is not loaded correctly, redirect to home and try again
-		if (vm.create == null || vm.create == {}) {
-			SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-			$state.go('app.home');
-			return;
-		}
-	});
-	
+	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
+	// 	vm.create = proj.temp;
+	// 	//if create is not loaded correctly, redirect to home and try again
+	// 	if (vm.create == null || vm.create == {}) {
+	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+	// 		$state.go('app.home');
+	// 		return;
+	// 	}
+	// });
+
 	$scope.$watch(function () {
 		SettingService.show_focus();
 	});
-	
+
 	function save() {
 		vm.member = {
 			first_name: vm.local.data.first_name,
@@ -31,17 +31,17 @@ function VisitorsCtrl($state, SettingService, $scope, SyncService, $stateParams)
 		}
 		//Visitor add when index = create; update otherwise
 		if (vm.index === 'create') {
-			vm.create.site_attendance.visitors.push(vm.member);
+			$rootScope.currentSD.site_attendance.visitors.push(vm.member);
 			var seen = sessionStorage.getObject('sd.seen');
 			seen.visitor = true;
 			sessionStorage.setObject('sd.seen', seen);
 		} else {
-			vm.create.site_attendance.visitors[vm.index] = vm.member;
+			$rootScope.currentSD.site_attendance.visitors[vm.index] = vm.member;
 		}
 		//store the new data in temp SD
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
 	}
-	
+
 	function go(predicate, id) {
 		if (vm.local.data.first_name) {
 			save();
@@ -51,7 +51,7 @@ function VisitorsCtrl($state, SettingService, $scope, SyncService, $stateParams)
 			id: id
 		});
 	}
-	
+
 	function watchChanges() {
 		$("input").change(function () {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -59,6 +59,6 @@ function VisitorsCtrl($state, SettingService, $scope, SyncService, $stateParams)
 			sessionStorage.setObject('sd.seen', seen);
 		});
 	}
-	
+
 	watchChanges();
 }

@@ -16,7 +16,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 	vm.type = 'incident.type';
 	vm.units = 'incident.units';
 	vm.diaryId = sessionStorage.getObject('diaryId');
-	
+
 	SyncService.getSettings('units', function (list) {
 		vm.units = list.value;
 	});
@@ -28,34 +28,51 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 		vm.searchModal = popover;
 		vm.searchUnit = popover;
 	});
-	
-	SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-		vm.create = proj.temp;
-		//if create is not loaded correctly, redirect to home and try again
-		if (vm.create === null || vm.create === {}) {
-			SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-			$state.go('app.home');
-			return;
-		}
-		vm.incidents = vm.create.incidents;
-		//initialize a new incident
+
+	initFields();
+
+	function initFields(){
 		if (!isNaN(vm.index)) {
 			vm.incident = {
-				description: vm.create.incidents[vm.index].description,
-				quantity: vm.create.incidents[vm.index].quantity,
-				unit_name: vm.create.incidents[vm.index].unit_name,
-				action_required: vm.create.incidents[vm.index].action_required,
-				type: vm.create.incidents[vm.index].type,
-				unit_id: vm.create.incidents[vm.index].unit_id
+				description: $rootScope.currentSD.incidents[vm.index].description,
+				quantity: $rootScope.currentSD.incidents[vm.index].quantity,
+				unit_name: $rootScope.currentSD.incidents[vm.index].unit_name,
+				action_required: $rootScope.currentSD.incidents[vm.index].action_required,
+				type: $rootScope.currentSD.incidents[vm.index].type,
+				unit_id: $rootScope.currentSD.incidents[vm.index].unit_id
 			};
 			vm.local.unit_name = vm.incident.unit_name;
 		}
-	});
+		vm.incidents = $rootScope.currentSD.incidents;
+	}
+
+	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
+	// 	$rootScope.currentSD = proj.temp;
+	// 	//if create is not loaded correctly, redirect to home and try again
+	// 	if ($rootScope.currentSD === null || $rootScope.currentSD === {}) {
+	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+	// 		$state.go('app.home');
+	// 		return;
+	// 	}
+	// 	vm.incidents = $rootScope.currentSD.incidents;
+	// 	//initialize a new incident
+	// 	if (!isNaN(vm.index)) {
+	// 		vm.incident = {
+	// 			description: $rootScope.currentSD.incidents[vm.index].description,
+	// 			quantity: $rootScope.currentSD.incidents[vm.index].quantity,
+	// 			unit_name: $rootScope.currentSD.incidents[vm.index].unit_name,
+	// 			action_required: $rootScope.currentSD.incidents[vm.index].action_required,
+	// 			type: $rootScope.currentSD.incidents[vm.index].type,
+	// 			unit_id: $rootScope.currentSD.incidents[vm.index].unit_id
+	// 		};
+	// 		vm.local.unit_name = vm.incident.unit_name;
+	// 	}
+	// });
 	$scope.$watch(function () {
 		if (vm.editMode)
 			SettingService.show_focus();
 	});
-	
+
 	vm.local.type = [{ //TODO: retrieve from DB/localStorage
 		id: 0,
 		name: 'Incident'
@@ -66,7 +83,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 		id: 2,
 		name: 'Non conformance'
 	}];
-	
+
 	vm.actions = [{
 		id: 0,
 		name: 'Raise NCR'
@@ -80,17 +97,17 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 		id: 3,
 		name: 'Other'
 	}];
-	
+
 	function showSearchUnit() {
 		vm.settings = 'units';
 		vm.searchUnit.show();
 	}
-	
+
 	function backSearch() {
 		vm.searchModal.hide();
 		vm.searchUnit.hide();
 	}
-	
+
 	function addUnit(item) {
 		vm.local.unit_id = item.id;
 		vm.local.unit_name = item.name;
@@ -99,7 +116,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 		seen.incident = true;
 		sessionStorage.setObject('sd.seen', seen);
 	}
-	
+
 	function saveIncident() {
 		vm.newType = sessionStorage.getObject('sd.diary.incident.type')
 		vm.action_required = sessionStorage.getObject('sd.diary.incident.actionReq')
@@ -114,38 +131,39 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 			unit_id: vm.local.unit_id,
 			action_required: vm.action_required && vm.action_required[0] || ''
 		}
-		
+
 		if (vm.index !== 'create') {
-			vm.create.incidents[vm.index] = incident;
+			$rootScope.currentSD.incidents[vm.index] = incident;
 		} else {
-			vm.create.incidents.push(incident);
+			$rootScope.currentSD.incidents.push(incident);
 			var seen = sessionStorage.getObject('sd.seen');
 			seen.incident = true;
 			sessionStorage.setObject('sd.seen', seen);
 		}
+		vm.incidents = $rootScope.currentSD.incidents;
 		//store the new data in temp SD
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
 	}
-	
+
 	function deleteEntry(entry) {
 		if (!navigator.onLine) {
 			SettingService.show_message_popup('You are offline', "<center>You can remove incidents while online.</center>");
 			return;
 		}
 		$('.item-content').css('transform', '');
-		vm.create.incidents.forEach(function (el, i) {
+		$rootScope.currentSD.incidents.forEach(function (el, i) {
 			if (el === entry) {
-				vm.create.incidents.splice(i, 1);
+				$rootScope.currentSD.incidents.splice(i, 1);
 			}
 		})
 		//store the new data in temp SD
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
-		SiteDiaryService.update_diary(vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
+		SiteDiaryService.update_diary($rootScope.currentSD);
 		var seen = sessionStorage.getObject('sd.seen');
 		seen.incident = true;
 		sessionStorage.setObject('sd.seen', seen);
 	}
-	
+
 	function go(predicate, id) {
 		if (predicate == "incidents" && ($rootScope.selected || vm.incident.type)) {
 			saveIncident();
@@ -161,7 +179,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 			});
 		}
 	}
-	
+
 	function watchChanges() {
 		$("input").change(function () {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -169,6 +187,6 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 			sessionStorage.setObject('sd.seen', seen);
 		});
 	}
-	
+
 	watchChanges();
 }

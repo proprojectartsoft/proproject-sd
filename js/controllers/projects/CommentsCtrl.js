@@ -14,16 +14,29 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
 	vm.local.comments = sessionStorage.getObject('sd.comments');
 	vm.loggedIn = localStorage.getObject('loggedIn');
 	vm.myProfile = localStorage.getObject('my_account');
-	SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-		vm.create = proj.temp;
-		//if create is not loaded correctly, redirect to home and try again
-		if (vm.create === null || vm.create === {}) {
-			SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-			$state.go('app.home');
-			return;
-		}
-		vm.local.list = vm.create.comments || [];
-		vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
+	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
+	// 	$rootScope.currentSD = proj.temp;
+	// 	//if create is not loaded correctly, redirect to home and try again
+	// 	if ($rootScope.currentSD === null || $rootScope.currentSD === {}) {
+	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+	// 		$state.go('app.home');
+	// 		return;
+	// 	}
+	// 	vm.local.list = $rootScope.currentSD.comments || [];
+	// 	vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
+	// 	//adding colors to tiles by user
+	// 	angular.forEach(vm.local.list, function (value, key) {
+	// 		var aux = $filter('filter')(vm.diaries, {
+	// 			id: (value.site_diary_id)
+	// 		})[0];
+	// 		vm.local.list[key].color = aux.color;
+	// 	});
+	// });
+
+	initFields();
+
+	function initFields(){
+		vm.local.list = $rootScope.currentSD.comments || [];
 		//adding colors to tiles by user
 		angular.forEach(vm.local.list, function (value, key) {
 			var aux = $filter('filter')(vm.diaries, {
@@ -31,8 +44,8 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
 			})[0];
 			vm.local.list[key].color = aux.color;
 		});
-	});
-	
+	}
+
 	function addComment() {
 		var seen = sessionStorage.getObject('sd.seen');
 		seen.comment = true;
@@ -51,12 +64,12 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
 					date: new Date(),
 					color: vm.color
 				};
-				if (!vm.create.comments || !vm.create.comments.length) {
-					vm.create.comments = [];
+				if (!$rootScope.currentSD.comments || !$rootScope.currentSD.comments.length) {
+					$rootScope.currentSD.comments = [];
 				}
-				vm.create.comments.push(request);
-				vm.local.list = vm.create.comments;
-				SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+				$rootScope.currentSD.comments.push(request);
+				vm.local.list = $rootScope.currentSD.comments;
+				// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
 			}
 		} else {
 			if (comment) {
@@ -79,7 +92,7 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
 				vm.local.comments.push(commToAdd);
 				sessionStorage.setObject('sd.comments', vm.local.comments); //TODO:
 				//store in indexedDB the new info for SD
-				SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+				// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
 			}
 		}
 		$('textarea').css({
@@ -87,18 +100,18 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
 			'overflow-y': 'hidden'
 		});
 	}
-	
+
 	function addComentAtEnter(event) {
 		if (event.keyCode === 13) {
 			vm.addComment();
 		}
 	}
-	
+
 	function getInitials(str) {
 		var aux = str.split(" ");
 		return (aux[0][0] + aux[1][0]).toUpperCase();
 	}
-	
+
 	function go(predicate, id) {
 		if ((predicate === 'diary') && (vm.diaryId)) {
 			$state.go('app.' + predicate, {

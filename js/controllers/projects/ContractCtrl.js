@@ -1,8 +1,8 @@
 sdApp.controller('ContractCtrl', ContractCtrl);
 
-ContractCtrl.$inject = ['$state', '$scope', 'SettingService', 'SyncService'];
+ContractCtrl.$inject = ['$state', '$scope', '$rootScope', 'SettingService', 'SyncService'];
 
-function ContractCtrl($state, $scope, SettingService, SyncService) {
+function ContractCtrl($state, $scope, $rootScope, SettingService, SyncService) {
 	var vm = this;
 	vm.go = go;
 	vm.add = add;
@@ -18,18 +18,18 @@ function ContractCtrl($state, $scope, SettingService, SyncService) {
 	};
 	//get the temporary SD
 	vm.diaryId = sessionStorage.getObject('diaryId');
-	
-	SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-		vm.create = proj.temp;
-		//if create is not loaded correctly, redirect to home and try again
-		if (vm.create === null || vm.create === {}) {
-			SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-			return $state.go('app.home');
-		}
-		initFields();
-	});
-	
-	
+
+	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
+	// 	$rootScope.currentSD = proj.temp;
+	// 	//if create is not loaded correctly, redirect to home and try again
+	// 	if ($rootScope.currentSD === null || $rootScope.currentSD === {}) {
+	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+	// 		return $state.go('app.home');
+	// 	}
+	// 	initFields();
+	// });
+	initFields();
+
 	$scope.$watch(function () {
 		if (vm.editMode)
 			SettingService.show_focus();
@@ -37,32 +37,32 @@ function ContractCtrl($state, $scope, SettingService, SyncService) {
 	$scope.autoExpand = function (e) {
 		$(e.target).height(e.target.scrollHeight - 30);
 	};
-	
+
 	function initFields() {
 		if (vm.diaryId) {
-			if (vm.create.contract_notes.instructions) {
-				vm.instructions.comments = vm.create.contract_notes.instructions.comments;
+			if ($rootScope.currentSD.contract_notes.instructions) {
+				vm.instructions.comments = $rootScope.currentSD.contract_notes.instructions.comments;
 			}
-			if (vm.create.contract_notes.extensions_of_time) {
-				vm.extensions.comments = vm.create.contract_notes.extensions_of_time.comments;
+			if ($rootScope.currentSD.contract_notes.extensions_of_time) {
+				vm.extensions.comments = $rootScope.currentSD.contract_notes.extensions_of_time.comments;
 			}
-			if (vm.create.contract_notes.variations) {
-				vm.variations.comments = vm.create.contract_notes.variations.comments;
+			if ($rootScope.currentSD.contract_notes.variations) {
+				vm.variations.comments = $rootScope.currentSD.contract_notes.variations.comments;
 			}
 		}
 		if (!vm.diaryId) {
-			if (vm.create.contract_notes.instructions) {
-				vm.instructions.comments = vm.create.contract_notes.instructions.comments;
+			if ($rootScope.currentSD.contract_notes.instructions) {
+				vm.instructions.comments = $rootScope.currentSD.contract_notes.instructions.comments;
 			}
-			if (vm.create.contract_notes.extensions_of_time) {
-				vm.extensions.comments = vm.create.contract_notes.extensions_of_time.comments;
+			if ($rootScope.currentSD.contract_notes.extensions_of_time) {
+				vm.extensions.comments = $rootScope.currentSD.contract_notes.extensions_of_time.comments;
 			}
-			if (vm.create.contract_notes.variations) {
-				vm.variations.comments = vm.create.contract_notes.variations.comments;
+			if ($rootScope.currentSD.contract_notes.variations) {
+				vm.variations.comments = $rootScope.currentSD.contract_notes.variations.comments;
 			}
 		}
 	}
-	
+
 	function add() {
 		if (vm.input1 || vm.input2 || vm.input3) {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -83,7 +83,7 @@ function ContractCtrl($state, $scope, SettingService, SyncService) {
 		}
 		$('textarea').height('initial');
 	}
-	
+
 	function save() {
 		add();
 		vm.contract = {
@@ -91,10 +91,10 @@ function ContractCtrl($state, $scope, SettingService, SyncService) {
 			extensions_of_time: vm.extensions,
 			variations: vm.variations
 		};
-		vm.create.contract_notes = vm.contract;
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+		$rootScope.currentSD.contract_notes = vm.contract;
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
 	}
-	
+
 	function go(predicate, id) {
 		save();
 		if (predicate === 'diary') {
@@ -105,14 +105,14 @@ function ContractCtrl($state, $scope, SettingService, SyncService) {
 			} else {
 				$state.go('app.' + predicate);
 			}
-			
+
 		} else {
 			$state.go('app.' + predicate, {
 				id: id
 			});
 		}
 	}
-	
+
 	function watchChanges() {
 		$("textarea").change(function () {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -120,6 +120,6 @@ function ContractCtrl($state, $scope, SettingService, SyncService) {
 			sessionStorage.setObject('sd.seen', seen);
 		});
 	}
-	
+
 	watchChanges();
 }

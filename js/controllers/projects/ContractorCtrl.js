@@ -1,8 +1,8 @@
 sdApp.controller('ContractorCtrl', ContractorCtrl)
 
-ContractorCtrl.$inject = ['$scope', '$state', '$filter', '$stateParams', '$timeout', 'SettingService', 'SyncService'];
+ContractorCtrl.$inject = ['$scope', '$rootScope', '$state', '$filter', '$stateParams', '$timeout', 'SettingService', 'SyncService'];
 
-function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, SettingService, SyncService) {
+function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $timeout, SettingService, SyncService) {
 	var vm = this;
 	vm.go = go;
 	vm.showSearch = showSearch;
@@ -28,7 +28,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 	vm.editMode = sessionStorage.getObject('editMode');
 	vm.index = $stateParams.id;
 	vm.local.absence = 'absence';
-	
+
 	//get necessary settings for company
 	SyncService.getSettings('currency', function (list) {
 		if (list && list.value) {
@@ -40,41 +40,42 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 	SyncService.getSettings('absence', function (list) {
 		vm.absence = list.value;
 	});
-	
-	SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-		vm.create = proj.temp;
-		//if create is not loaded correctly, redirect to home and try again
-		if (vm.create === null || vm.create === {}) {
-			SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-			$state.go('app.home');
-			return;
-		}
-		initFields();
-	});
-	
+
+	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
+	// 	vm.create = proj.temp;
+	// 	//if create is not loaded correctly, redirect to home and try again
+	// 	if (vm.create === null || vm.create === {}) {
+	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+	// 		$state.go('app.home');
+	// 		return;
+	// 	}
+	// 	initFields();
+	// });
+	initFields();
+
 	$scope.$watch(function () {
 		if (vm.editMode)
 			SettingService.show_focus();
 	});
 	watchChanges();
-	
+
 	function initFields() {
 		if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
 			vm.local.data = {
-				staff_name: vm.create.site_attendance.contractors[vm.index].first_name,
-				company_name: vm.create.site_attendance.contractors[vm.index].company_name,
-				model_start: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].start_time),
-				model_finish: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].finish_time),
-				total_time: vm.stringToDate(vm.create.site_attendance.contractors[vm.index].total_time),
-				note: vm.create.site_attendance.contractors[vm.index].note,
-				absence: vm.create.site_attendance.contractors[vm.index].absence && vm.create.site_attendance.contractors[vm.index].absence.reason,
-				role: vm.create.site_attendance.contractors[vm.index].trade,
-				trade: vm.create.site_attendance.contractors[vm.index].trade,
-				hourly_rate: vm.create.site_attendance.contractors[vm.index].hourly_rate,
-				hourly_rate_formated: vm.create.site_attendance.contractors[vm.index].hourly_rate && (vm.currency + " " + vm.create.site_attendance.contractors[vm.index].hourly_rate) || ''
+				staff_name: $rootScope.currentSD.site_attendance.contractors[vm.index].first_name,
+				company_name: $rootScope.currentSD.site_attendance.contractors[vm.index].company_name,
+				model_start: vm.stringToDate($rootScope.currentSD.site_attendance.contractors[vm.index].start_time),
+				model_finish: vm.stringToDate($rootScope.currentSD.site_attendance.contractors[vm.index].finish_time),
+				total_time: vm.stringToDate($rootScope.currentSD.site_attendance.contractors[vm.index].total_time),
+				note: $rootScope.currentSD.site_attendance.contractors[vm.index].note,
+				absence: $rootScope.currentSD.site_attendance.contractors[vm.index].absence && $rootScope.currentSD.site_attendance.contractors[vm.index].absence.reason,
+				role: $rootScope.currentSD.site_attendance.contractors[vm.index].trade,
+				trade: $rootScope.currentSD.site_attendance.contractors[vm.index].trade,
+				hourly_rate: $rootScope.currentSD.site_attendance.contractors[vm.index].hourly_rate,
+				hourly_rate_formated: $rootScope.currentSD.site_attendance.contractors[vm.index].hourly_rate && (vm.currency + " " + $rootScope.currentSD.site_attendance.contractors[vm.index].hourly_rate) || ''
 			};
-			if (vm.create.site_attendance.contractors[vm.index].break_time) {
-				vm.local.data.model_break = vm.create.site_attendance.contractors[vm.index].break_time;
+			if ($rootScope.currentSD.site_attendance.contractors[vm.index].break_time) {
+				vm.local.data.model_break = $rootScope.currentSD.site_attendance.contractors[vm.index].break_time;
 			} else {
 				vm.local.data.model_break = vm.stringToDate("00:30");
 			}
@@ -99,7 +100,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 			if (!vm.local.data.total_time) vm.calcParse();
 		}
 	}
-	
+
 	function allowNumbersOnly() {
 		var watchOnce = $scope.$watch(function () {
 			$timeout(function () {
@@ -111,26 +112,26 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 			}, 10);
 		})
 	}
-	
+
 	function showSearch() {
 		vm.searchModal.show();
 	}
-	
+
 	function backSearch() {
 		vm.searchModal.hide();
 	}
-	
+
 	function addStaff(item) {
 		vm.local.data.staff_name = item.name;
 		vm.local.data.staff_id = item.id;
 		vm.searchModal.hide();
 	}
-	
+
 	function addStaff1(item) {
 		vm.local.data.staff_name = item;
 		vm.searchModal.hide();
 	}
-	
+
 	function save() {
 		vm.local.data.absence = sessionStorage.getObject('sd.diary.absence');
 		vm.member = {
@@ -145,20 +146,20 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 			absence: vm.local.data.absence && vm.local.data.absence[0],
 			note: vm.local.data.note
 		}
-		
+
 		if (vm.index === 'create') {
-			vm.create.site_attendance.contractors.push(vm.member);
+			$rootScope.currentSD.site_attendance.contractors.push(vm.member);
 			var seen = sessionStorage.getObject('sd.seen');
 			seen.contractor = true;
 			sessionStorage.setObject('sd.seen', seen);
 		} else {
-			vm.create.site_attendance.contractors[vm.index] = vm.member;
+			$rootScope.currentSD.site_attendance.contractors[vm.index] = vm.member;
 		}
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
 		sessionStorage.setObject('siteAttendance.tab', 'contractors');
 		sessionStorage.setObject('sd.diary.absence', null);
 	}
-	
+
 	function calcParse() {
 		if (vm.local.data.model_start && vm.local.data.model_break && vm.local.data.model_finish) {
 			vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm");
@@ -167,7 +168,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 			vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
 		}
 	}
-	
+
 	function stringToDate(string) {
 		if (string) {
 			var aux = string.split(":");
@@ -179,7 +180,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 		}
 		return date;
 	}
-	
+
 	function calcTime(start, finish, breakTime) {
 		var hhmm = ''
 		var stringBreak = breakTime.split(":");
@@ -196,7 +197,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 		}
 		return hhmm;
 	}
-	
+
 	function go(predicate, id) {
 		if (vm.local.data.staff_name) {
 			save();
@@ -206,7 +207,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 			id: id
 		});
 	}
-	
+
 	function watchChanges() {
 		$("input").change(function () {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -214,7 +215,7 @@ function ContractorCtrl($scope, $state, $filter, $stateParams, $timeout, Setting
 			sessionStorage.setObject('sd.seen', seen);
 		});
 	}
-	
+
 	function datetimeChanged() {
 		var seen = sessionStorage.getObject('sd.seen');
 		seen.contractor = true;

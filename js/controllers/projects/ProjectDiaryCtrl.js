@@ -23,7 +23,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     $timeout(function() {
         vm.seen = sessionStorage.getObject('sd.seen');
     });
-    
+
     if (vm.diaryStateId) {
         //enter existing SD
         sessionStorage.setObject('diaryId', vm.diaryStateId);
@@ -38,9 +38,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     id: vm.diaryStateId
                 })[0];
                 vm.created_for_date = (diary.created_for_date !== 0) && diary.created_for_date || '';
-                vm.summary = diary.data ? diary.data.summary : '';
+                vm.summary = diary ? diary.summary : '';
                 //store as temp
-                $rootScope.currentSD = diary.data;
+                $rootScope.currentSD = diary;
                 angular.copy($rootScope.currentSD, $rootScope.backupSD);
             }, function(err) {
                 SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
@@ -131,9 +131,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 localStorage.setObject('diariesToSync', true);
                 //add offline information to the new SD
                 diary.id = "off" + proj.value.site_diaries.length + 1;
-                diary.date = diary.data.date;
+                diary.date = diary.date;
                 diary.sdNo = diary.id;
-                diary.created_for_date = diary.data.created_for_date;
+                diary.created_for_date = diary.created_for_date;
                 //add the new SD to the project's SD list
                 SyncService.getProject(vm.projectId, function(proj) {
                     if (!proj.value.site_diaries)
@@ -224,8 +224,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 var diary = $filter('filter')(proj.value.site_diaries, {
                     id: (vm.diaryId)
                 })[0];
-                diary.data = $rootScope.currentSD;
-                diary.data.summary = $rootScope.currentSD.summary;
+                diary = $rootScope.currentSD;
+                diary.summary = $rootScope.currentSD.summary;
                 diary.created_for_date = $rootScope.currentSD.created_for_date;
                 SyncService.setProjects([proj], function() {
                     console.log('SD updated');
@@ -234,7 +234,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
             });
             $('.save-btn').attr("disabled", false);
-            syncPopup.close;
+            syncPopup.close();
         });
     }
 
@@ -255,7 +255,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 onTap: function(e) {
                     $rootScope.currentSD.summary = vm.summary;
                     if (!vm.edit && !vm.enableCreate) {
-                        saveSummary(create);
+                        saveSummary($rootScope.currentSD);
                     }
                     summaryPopup.close();
                 }

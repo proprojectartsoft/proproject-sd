@@ -24,7 +24,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 	vm.total_formated = '';
 	vm.subtotal_formated = '';
 	vm.newGood = '';
-	
+
 	//get necessary settings for company
 	SyncService.getSettings('resources', function (list) {
 		vm.goods = list.value;
@@ -44,25 +44,26 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 			vm.currency = SettingService.get_currency_symbol("dolar");
 		}
 	});
-	//get projects
-	SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-		vm.create = proj.temp;
-		//if create is not loaded correctly, redirect to home and try again
-		if (vm.create === null || vm.create === {}) {
-			SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-			$state.go('app.home');
-			return;
-		}
-		initFields();
-	});
-	
+	initFields()
+	// //get projects
+	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
+	// 	vm.create = proj.temp;
+	// 	//if create is not loaded correctly, redirect to home and try again
+	// 	if (vm.create === null || vm.create === {}) {
+	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
+	// 		$state.go('app.home');
+	// 		return;
+	// 	}
+	// 	initFields();
+	// });
+
 	$ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
 		scope: $scope,
 		animation: 'slide-in-up'
 	}).then(function (popover) {
 		vm.searchModal = popover;
 	});
-	
+
 	$ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
 		scope: $scope,
 		animation: 'slide-in-up'
@@ -70,12 +71,12 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 		vm.searchModal = popover;
 		vm.searchUnit = popover;
 	});
-	
+
 	$scope.$watch(function () {
 		if (vm.editMode)
 			SettingService.show_focus();
 	});
-	
+
 	$scope.$watch(function () {
 		var t = (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100));
 		var st = vm.material.quantity * vm.material.unitCost;
@@ -88,39 +89,39 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 		else
 			vm.subtotal_formated = '';
 	});
-	
+
 	function initFields() {
 		if (!isNaN(vm.index) && (vm.index !== 'create')) {
 			vm.material = {
-				name: vm.create.plant_and_material_used[vm.index].name,
-				description: vm.create.plant_and_material_used[vm.index].description,
-				unitCost: vm.create.plant_and_material_used[vm.index].cost_per_unit,
-				unit_id: vm.create.plant_and_material_used[vm.index].unit_id,
-				unit_name: vm.create.plant_and_material_used[vm.index].unit_name,
-				quantity: vm.create.plant_and_material_used[vm.index].quantity,
-				tax: vm.create.plant_and_material_used[vm.index].tax,
-				tax_formated: vm.create.plant_and_material_used[vm.index].tax && (vm.create.plant_and_material_used[vm.index].tax + " %") || '',
-				unitCost_formated: vm.create.plant_and_material_used[vm.index].cost_per_unit && (vm.currency + " " + $filter('number')(vm.create.plant_and_material_used[vm.index].cost_per_unit, 2)) || ''
+				name: $rootScope.currentSD.plant_and_material_used[vm.index].name,
+				description: $rootScope.currentSD.plant_and_material_used[vm.index].description,
+				unitCost: $rootScope.currentSD.plant_and_material_used[vm.index].cost_per_unit,
+				unit_id: $rootScope.currentSD.plant_and_material_used[vm.index].unit_id,
+				unit_name: $rootScope.currentSD.plant_and_material_used[vm.index].unit_name,
+				quantity: $rootScope.currentSD.plant_and_material_used[vm.index].quantity,
+				tax: $rootScope.currentSD.plant_and_material_used[vm.index].tax,
+				tax_formated: $rootScope.currentSD.plant_and_material_used[vm.index].tax && ($rootScope.currentSD.plant_and_material_used[vm.index].tax + " %") || '',
+				unitCost_formated: $rootScope.currentSD.plant_and_material_used[vm.index].cost_per_unit && (vm.currency + " " + $filter('number')($rootScope.currentSD.plant_and_material_used[vm.index].cost_per_unit, 2)) || ''
 			};
 		}
-		vm.materials = vm.create.plant_and_material_used;
+		vm.materials = $rootScope.currentSD.plant_and_material_used;
 	}
-	
+
 	function showSearch() {
 		vm.settings = 'goods';
 		vm.searchModal.show();
 	}
-	
+
 	function showSearchUnit() {
 		vm.settings = 'units';
 		vm.searchUnit.show();
 	}
-	
+
 	function backSearch() {
 		vm.searchModal.hide();
 		vm.searchUnit.hide();
 	}
-	
+
 	function addGood(item) {
 		vm.material.name = item.name;
 		vm.material.unit_name = item.unit_name;
@@ -132,7 +133,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 		seen.material = true;
 		sessionStorage.setObject('sd.seen', seen);
 	}
-	
+
 	function addNewGood() {
 		vm.material.name = vm.newGood;
 		vm.searchModal.hide();
@@ -140,7 +141,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 		seen.material = true;
 		sessionStorage.setObject('sd.seen', seen);
 	}
-	
+
 	function addUnit(item) {
 		vm.material.unit_id = item.id;
 		vm.material.unit_name = item.name;
@@ -149,7 +150,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 		seen.material = true;
 		sessionStorage.setObject('sd.seen', seen);
 	}
-	
+
 	function save() {
 		vm.material = {
 			name: vm.material.name,
@@ -163,36 +164,37 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 			total: (vm.material.quantity * vm.material.unitCost) + ((vm.material.quantity * vm.material.unitCost) * (vm.material.tax / 100))
 		}
 		if (vm.index === 'create') {
-			vm.create.plant_and_material_used.push(vm.material);
+			$rootScope.currentSD.plant_and_material_used.push(vm.material);
 			var seen = sessionStorage.getObject('sd.seen');
 			seen.material = true;
 			sessionStorage.setObject('sd.seen', seen);
 		} else {
-			vm.create.plant_and_material_used[vm.index] = vm.material
+			$rootScope.currentSD.plant_and_material_used[vm.index] = vm.material
 		}
+		vm.materials = $rootScope.currentSD.plant_and_material_used;
 		//store the new data in temp SD
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
 	}
-	
+
 	function deleteEntry(entry) {
 		if (!navigator.onLine) {
 			SettingService.show_message_popup('You are offline', "<center>You can remove materials while online.</center>");
 			return;
 		}
 		$('.item-content').css('transform', '');
-		vm.create.plant_and_material_used.forEach(function (el, i) {
+		$rootScope.currentSD.plant_and_material_used.forEach(function (el, i) {
 			if (el === entry) {
-				vm.create.plant_and_material_used.splice(i, 1);
+				$rootScope.currentSD.plant_and_material_used.splice(i, 1);
 			}
 		})
 		//store the new data in temp SD
-		SyncService.update_temp_sd(sessionStorage.getObject('projectId'), vm.create);
-		SiteDiaryService.update_diary(vm.create);
+		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
+		SiteDiaryService.update_diary($rootScope.currentSD);
 		var seen = sessionStorage.getObject('sd.seen');
 		seen.material = true;
 		sessionStorage.setObject('sd.seen', seen);
 	}
-	
+
 	function go(predicate, id) {
 		if (predicate == "materials" && vm.material.name) {
 			save();
@@ -207,7 +209,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 			});
 		}
 	}
-	
+
 	function watchChanges() {
 		$("input").change(function () {
 			var seen = sessionStorage.getObject('sd.seen');
@@ -220,6 +222,6 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 			sessionStorage.setObject('sd.seen', seen);
 		});
 	}
-	
+
 	watchChanges();
 }
