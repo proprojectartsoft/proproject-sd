@@ -30,14 +30,14 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 	vm.local.absence = 'absence';
 
 	//get necessary settings for company
-	SyncService.getSettings('currency', function (list) {
+	SyncService.getSetting('currency', function (list) {
 		if (list && list.value) {
 			vm.currency = SettingService.get_currency_symbol(list.value);
 		} else {
 			vm.currency = SettingService.get_currency_symbol("dolar");
 		}
 	});
-	SyncService.getSettings('absence', function (list) {
+	SyncService.getSetting('absence', function (list) {
 		vm.absence = list.value;
 	});
 
@@ -83,14 +83,14 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 		} else {
 			vm.local.data.staff_name = "";
 			vm.local.data.model_break = vm.stringToDate("00:30");
-			SyncService.getSettings('start', function (list) {
+			SyncService.getSetting('start', function (list) {
 				if (list && list.value) {
 					vm.local.data.model_start = list.value;
 				} else {
 					vm.local.data.model_start = "08:00";
 				}
 			});
-			SyncService.getSettings('finish', function (list) {
+			SyncService.getSetting('finish', function (list) {
 				if (list && list.value) {
 					vm.local.data.model_finish = list.value;
 				} else {

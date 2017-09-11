@@ -24,7 +24,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
 	vm.settings = '';
 	vm.supplier = $stateParams.id;
 
-	SyncService.getSettings('resources', function (list) {
+	SyncService.getSetting('resources', function (list) {
 		vm.goods = list.value;
 		vm.goods.sort(function (a, b) {
 			var textA = a.name.toUpperCase();
@@ -33,7 +33,7 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
 		});
 	});
 
-	SyncService.getSettings('units', function (list) {
+	SyncService.getSetting('units', function (list) {
 		vm.units = list.value;
 	});
 

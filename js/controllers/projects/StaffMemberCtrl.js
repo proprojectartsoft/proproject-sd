@@ -108,14 +108,14 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         } else {
             vm.local.data.staff_name = "";
             vm.local.data.model_break = vm.stringToDate("00:30");
-	        SyncService.getSettings('start', function (list) {
+	        SyncService.getSetting('start', function (list) {
 		        if (list && list.value) {
 			        vm.local.data.model_start = list.value;
 		        } else {
 			        vm.local.data.model_start = "08:00";
 		        }
 	        });
-	        SyncService.getSettings('finish', function (list) {
+	        SyncService.getSetting('finish', function (list) {
 		        if (list && list.value) {
 			        vm.local.data.model_finish = list.value;
 		        } else {

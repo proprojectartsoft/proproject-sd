@@ -58,7 +58,7 @@ function WeatherCtrl($rootScope, $state, $scope, SettingService, SyncService, $f
 
 	function initFields() {
 		if (!$rootScope.currentSD) return $state.go('app.home');
-		vm.perfectWeather = $rootScope.currentSD.weather.perfect_weather;
+		//vm.perfectWeather = $rootScope.currentSD.weather.perfect_weather;
 		vm.max_temp = $rootScope.currentSD.weather.max_temp;
 		vm.min_temp = $rootScope.currentSD.weather.min_temp;
 		angular.forEach($rootScope.currentSD.weather.morning, function (value) {

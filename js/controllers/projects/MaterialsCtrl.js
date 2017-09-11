@@ -26,7 +26,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 	vm.newGood = '';
 
 	//get necessary settings for company
-	SyncService.getSettings('resources', function (list) {
+	SyncService.getSetting('resources', function (list) {
 		vm.goods = list.value;
 		vm.goods.sort(function (a, b) {
 			var textA = a.name.toUpperCase();
@@ -34,17 +34,17 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
 			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
 		});
 	});
-	SyncService.getSettings('units', function (list) {
+	SyncService.getSetting('units', function (list) {
 		vm.units = list.value;
 	});
-	SyncService.getSettings('currency', function (list) {
+	SyncService.getSetting('currency', function (list) {
 		if (list && list.value) {
 			vm.currency = SettingService.get_currency_symbol(list.value);
 		} else {
 			vm.currency = SettingService.get_currency_symbol("dolar");
 		}
 	});
-	initFields()
+	initFields();
 	// //get projects
 	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
 	// 	vm.create = proj.temp;

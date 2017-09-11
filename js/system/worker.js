@@ -82,7 +82,7 @@ self.addEventListener('message', function (e) {
 				break;
 			case 'getSetting':
 				try {
-					self.getSetting(function (result) {
+					self.getSetting(params, function (result) {
 						self.postMessage({
 							results: result,
 							finished: true
@@ -235,6 +235,7 @@ self.setProjects = function (data, callback) {
 				object = false;
 			for (var i = 0; i < data.length; i++) {
 				// create lovefield row type
+				console.log('Data to update', data[i]);
 				object = projects.createRow(
 					{
 						'id': data[i].id,

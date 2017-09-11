@@ -17,7 +17,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
 	vm.units = 'incident.units';
 	vm.diaryId = sessionStorage.getObject('diaryId');
 
-	SyncService.getSettings('units', function (list) {
+	SyncService.getSetting('units', function (list) {
 		vm.units = list.value;
 	});
 
