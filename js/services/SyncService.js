@@ -61,7 +61,7 @@ sdApp.service('SyncService', [
 
 		service.getSetting = function (name, callback) {
 			try {
-				worker = new Worker('/js/system/worker.js');
+				worker = new Worker($APP.server + '/js/system/worker.js');
 
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
