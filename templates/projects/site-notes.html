@@ -13,39 +13,39 @@
                 <div class="sd-title">Delays</div>
                 <div class="textarea-div">
                     <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add delays" ng-model="vm.input1"></textarea>
-                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
+                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.save()"></span>
                 </div>
             </div>
-            <div class="sd-filler" ng-if="vm.delays.length > 0">
-                <span class="de-item" ng-repeat="option in vm.delays track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
+            <div class="sd-filler" ng-if="currentSD.site_notes.delays.length > 0">
+                <span class="de-item" ng-repeat="option in currentSD.site_notes.delays track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
-            <div class="sd-filler" ng-if="vm.delays.length === 0 && vm.diaryId">
+            <div class="sd-filler" ng-if="!currentSD.site_notes.delays && vm.diaryId">
                 <span class="de-item">There is no delay information</span>
             </div>
             <div class="sd-label">
                 <div class="sd-title">Tools used</div>
                 <div class="textarea-div">
                     <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add tools used" ng-model="vm.input2"></textarea>
-                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
+                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.save()"></span>
                 </div>
             </div>
-            <div class="sd-filler" ng-if="vm.tools.length > 0">
-                <span class="de-item" ng-repeat="option in vm.tools track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
+            <div class="sd-filler" ng-if="currentSD.site_notes.tools.length > 0">
+                <span class="de-item" ng-repeat="option in currentSD.site_notes.tools track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
-            <div class="sd-filler" ng-if="vm.tools.length === 0 && vm.diaryId">
+            <div class="sd-filler" ng-if="!currentSD.site_notes.tools && vm.diaryId">
                 <span class="de-item">There is no tools used information</span>
             </div>
             <div class="sd-label">
                 <div class="sd-title">Materials requested</div>
                 <div class="textarea-div">
                     <textarea rows="1" ng-keyup="autoExpand($event)" ng-if="(!vm.diaryId) || (vm.editMode)" placeholder="Tap to add materials requested" ng-model="vm.input3"></textarea>
-                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.add()"></span>
+                    <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.save()"></span>
                 </div>
             </div>
-            <div class="sd-filler" ng-if="vm.materials.length > 0">
-                <span class="de-item" ng-repeat="option in vm.materials track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
+            <div class="sd-filler" ng-if="currentSD.site_notes.materials.length > 0">
+                <span class="de-item" ng-repeat="option in currentSD.site_notes.materials track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
-            <div class="sd-filler" ng-if="vm.materials.length === 0 && vm.diaryId">
+            <div class="sd-filler" ng-if="!currentSD.site_notes.materials && vm.diaryId">
                 <span class="de-item">There is no material information</span>
             </div>
         </div>

@@ -27,7 +27,6 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
     vms.select = select;
     vms.parameter = '';
 
-    vms.weather = sessionStorage.getObject('sd.diary.weather.morning');
     vms.settings = {};
     vms.settings.show = false;
     vms.localPath = 'sd.diary.' + vms.deTitle;
@@ -87,7 +86,6 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
             var seen = sessionStorage.getObject('sd.seen');
             seen.weather = true;
             sessionStorage.setObject('sd.seen', seen);
-
         } else {
             var seen = sessionStorage.getObject('sd.seen');
             switch (vms.deTitle) {
@@ -113,7 +111,7 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
             vms.selected.push(option);
         }
         vms.settings.placeholderActive = vms.selected;
-        localStorage.setObject(vms.localPath, vms.selected);
+        sessionStorage.setObject(vms.localPath, vms.selected);
         $rootScope.selected = vms.selected;
         toggle();
     }

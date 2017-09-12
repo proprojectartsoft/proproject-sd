@@ -28,7 +28,7 @@
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
                 <div class="showSearch" ng-click="((vm.diaryId && vm.editMode) || !(vm.diaryId)) && vm.showSearchUnit()">
-                  <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add unit' || ''}}" ng-readonly=true ng-model="vm.local.unit_name">
+                  <input placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add unit' || ''}}" ng-readonly=true ng-model="vm.incident.unit_name">
                 </div>
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">

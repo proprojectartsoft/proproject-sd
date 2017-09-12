@@ -41,16 +41,6 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 		vm.absence = list.value;
 	});
 
-	// SyncService.getProject(sessionStorage.getObject('projectId'), function (proj) {
-	// 	vm.create = proj.temp;
-	// 	//if create is not loaded correctly, redirect to home and try again
-	// 	if (vm.create === null || vm.create === {}) {
-	// 		SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary did not load properly.</span>');
-	// 		$state.go('app.home');
-	// 		return;
-	// 	}
-	// 	initFields();
-	// });
 	initFields();
 
 	$scope.$watch(function () {
@@ -155,7 +145,6 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 		} else {
 			$rootScope.currentSD.site_attendance.contractors[vm.index] = vm.member;
 		}
-		// SyncService.update_temp_sd(sessionStorage.getObject('projectId'), $rootScope.currentSD);
 		sessionStorage.setObject('siteAttendance.tab', 'contractors');
 		sessionStorage.setObject('sd.diary.absence', null);
 	}

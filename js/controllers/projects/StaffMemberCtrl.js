@@ -23,7 +23,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
     vm.local = {};
-    vm.local.data = {};
+    vm.currentStaff = {};
     vm.local.search = '';
     vm.data = {};
     vm.settings = 'staff';
@@ -31,41 +31,28 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.index = $stateParams.id;
     vm.newName = '';
     //get necessary settings for company
-    // SyncService.getSettings(function(sett) {
-    //     console.log(sett);
-    //     var abs = $filter('filter')(sett, {
-    //         name: "absence"
-    //     });
-    //     if (abs && abs.length) {
-    //         vm.absence = abs[0].value
-    //     }
-    //     var staff = $filter('filter')(sett, {
-    //         name: "staff"
-    //     });
-    //     if (staff && staff.length) {
-    //         vm.staff = staff[0].value
-    //     }
-    //     var currency = $filter('filter')(sett, {
-    //         name: "currency"
-    //     });
-    //     if (currency && currency.length) {
-    //         vm.currency = currency[0].value
-    //     }
-    //
-    //
-    //     var start = $filter('filter')(sett, {
-    //         name: "start"
-    //     });
-    //     if (start && start.length) {
-    //         vm.start = start[0].value
-    //     } else {
-    //         vm.start = "08:00";
-    //     }
-    //     var finish = $filter('filter')(sett, {
-    //         name: "finish"
-    //     });
-    //     vm.finish = finish && finish.length && finish[0].value || "12:00";
-    // })
+    SyncService.getSetting("absence", function(sett) {
+        vm.absence = sett.value;
+    })
+    SyncService.getSetting("staff", function(sett) {
+        vm.staff = sett.value;
+    })
+    SyncService.getSetting("currency", function(sett) {
+        if (sett && sett.value) {
+            vm.currency = SettingService.get_currency_symbol(sett.value);
+        } else {
+            vm.currency = SettingService.get_currency_symbol("dolar");
+        }
+    })
+    SyncService.getSetting("start", function(sett) {
+        vm.start = sett.value;
+    })
+    SyncService.getSetting("finish", function(sett) {
+        vm.finish = sett.value;
+    })
+    SyncService.getSetting("break", function(sett) {
+        vm.break = sett.value;
+    })
 
     initFields();
 
@@ -82,47 +69,37 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     function initFields() {
         if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
-            vm.local.data = {
-                staff_name: $rootScope.currentSD.site_attendance.staffs[vm.index].first_name
-                + ($rootScope.currentSD.site_attendance.staffs[vm.index].last_name !== null ?
-                    (" " + $rootScope.currentSD.site_attendance.staffs[vm.index].last_name) :
-                    ""),
-                company_name: $rootScope.currentSD.site_attendance.staffs[vm.index].company_name,
-                model_start: vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].start_time),
-                model_finish: vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].finish_time),
-                total_time: vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].total_time),
-                note: $rootScope.currentSD.site_attendance.staffs[vm.index].note,
-                absence: $rootScope.currentSD.site_attendance.staffs[vm.index].absence && $rootScope.currentSD.site_attendance.staffs[vm.index].absence.reason,
-                role: $rootScope.currentSD.site_attendance.staffs[vm.index].trade,
-                trade: $rootScope.currentSD.site_attendance.staffs[vm.index].trade,
-                hourly_rate: $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate,
-                hourly_rate_formated: $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate
-                && (vm.currency + " " + $rootScope.currentSD.site_attendance.staffs[vm.index].hourly_rate) || ''
-            };
-            if ($rootScope.currentSD.site_attendance.staffs[vm.index].break_time) {
-                vm.local.data.model_break = vm.stringToDate($rootScope.currentSD.site_attendance.staffs[vm.index].break_time);
-            } else {
-                vm.local.data.model_break = vm.stringToDate("00:30");
-            }
-            if (!vm.local.data.total_time) vm.calcParse();
+            vm.currentStaff = $rootScope.currentSD.site_attendance.staffs[vm.index];
+            vm.currentStaff.staff_name = vm.currentStaff.first_name +
+                (vm.currentStaff.last_name !== null ?
+                    (" " + vm.currentStaff.last_name) :
+                    "");
+            vm.currentStaff.role = vm.currentStaff.trade;
+            vm.currentStaff.model_start = vm.stringToDate(vm.currentStaff.start_time);
+            vm.currentStaff.model_finish = vm.stringToDate(vm.currentStaff.finish_time);
+            vm.currentStaff.total_time = vm.stringToDate(vm.currentStaff.total_time);
+            vm.currentStaff.model_break = vm.stringToDate(vm.currentStaff.break_time || "00:30");
+            vm.currentStaff.absence = vm.currentStaff.absence && vm.currentStaff.absence.reason;
+            vm.currentStaff.hourly_rate_formated = vm.currentStaff.hourly_rate && (vm.currency + " " + vm.currentStaff.hourly_rate) || '';
+            if (!vm.currentStaff.total_time) vm.calcParse();
         } else {
-            vm.local.data.staff_name = "";
-            vm.local.data.model_break = vm.stringToDate("00:30");
-	        SyncService.getSetting('start', function (list) {
-		        if (list && list.value) {
-			        vm.local.data.model_start = list.value;
-		        } else {
-			        vm.local.data.model_start = "08:00";
-		        }
-	        });
-	        SyncService.getSetting('finish', function (list) {
-		        if (list && list.value) {
-			        vm.local.data.model_finish = list.value;
-		        } else {
-			        vm.local.data.model_finish = "12:00";
-		        }
-	        });
-            if (!vm.local.data.total_time) vm.calcParse();
+            vm.currentStaff.staff_name = "";
+            vm.currentStaff.model_break = vm.stringToDate("00:30");
+            SyncService.getSetting('start', function(list) {
+                if (list && list.value) {
+                    vm.currentStaff.model_start = list.value;
+                } else {
+                    vm.currentStaff.model_start = "08:00";
+                }
+            });
+            SyncService.getSetting('finish', function(list) {
+                if (list && list.value) {
+                    vm.currentStaff.model_finish = list.value;
+                } else {
+                    vm.currentStaff.model_finish = "12:00";
+                }
+            });
+            if (!vm.currentStaff.total_time) vm.calcParse();
         }
     }
 
@@ -159,7 +136,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function addNewName() {
-        vm.local.data.staff_name = vm.newName;
+        vm.currentStaff.staff_name = vm.newName;
         calcParse();
         vm.searchModal.hide();
         var seen = sessionStorage.getObject('sd.seen');
@@ -168,12 +145,12 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function addStaff(item) {
-        vm.local.data.role = item.role;
-        vm.local.data.trade = item.role;
-        vm.local.data.staff_name = item.name;
-        vm.local.data.staff_id = item.id;
-        vm.local.data.hourly_rate = item.direct_cost;
-        vm.local.data.company_name = item.employee_name;
+        vm.currentStaff.role = item.role;
+        vm.currentStaff.trade = item.role;
+        vm.currentStaff.staff_name = item.name;
+        vm.currentStaff.staff_id = item.id;
+        vm.currentStaff.hourly_rate = item.direct_cost;
+        vm.currentStaff.company_name = item.employee_name;
         calcParse();
         vm.searchModal.hide();
         var seen = sessionStorage.getObject('sd.seen');
@@ -182,24 +159,24 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function addStaff1(item) {
-        vm.local.data.staff_name = item;
+        vm.currentStaff.staff_name = item;
         vm.searchModal.hide();
     }
 
     function save() {
-        vm.local.data.absence = sessionStorage.getObject('sd.diary.absence');
+        vm.currentStaff.absence = sessionStorage.getObject('sd.diary.absence');
         vm.member = {
-            first_name: vm.local.data.staff_name.split(" ", 2)[0],
-            last_name: vm.local.data.staff_name.split(" ", 2)[1],
-            company_name: vm.local.data.company_name,
-            trade: vm.local.data.trade,
-            hourly_rate: vm.local.data.hourly_rate,
-            start_time: $filter('date')(vm.local.data.model_start, "HH:mm"),
-            break_time: $filter('date')(vm.local.data.model_break, "HH:mm"),
-            finish_time: $filter('date')(vm.local.data.model_finish, "HH:mm"),
-            total_time: $filter('date')(vm.local.data.total_time, "HH:mm"),
-            absence: vm.local.data.absence && vm.local.data.absence[0],
-            note: vm.local.data.note
+            first_name: vm.currentStaff.staff_name.split(" ", 2)[0],
+            last_name: vm.currentStaff.staff_name.split(" ", 2)[1],
+            company_name: vm.currentStaff.company_name,
+            trade: vm.currentStaff.trade,
+            hourly_rate: vm.currentStaff.hourly_rate,
+            start_time: $filter('date')(vm.currentStaff.model_start, "HH:mm"),
+            break_time: $filter('date')(vm.currentStaff.model_break, "HH:mm"),
+            finish_time: $filter('date')(vm.currentStaff.model_finish, "HH:mm"),
+            total_time: $filter('date')(vm.currentStaff.total_time, "HH:mm"),
+            absence: vm.currentStaff.absence && vm.currentStaff.absence[0],
+            note: vm.currentStaff.note
         };
         //Staff add when index = create; update otherwise
         if (vm.index === 'create') {
@@ -226,11 +203,11 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function calcParse() {
-        if (vm.local.data.model_start && vm.local.data.model_break && vm.local.data.model_finish) {
-            vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm");
-            vm.filteredStart = $filter('date')(vm.local.data.model_start, "HH:mm");
-            vm.filteredFinish = $filter('date')(vm.local.data.model_finish, "HH:mm");
-            vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
+        if (vm.currentStaff.model_start && vm.currentStaff.model_break && vm.currentStaff.model_finish) {
+            vm.filteredBreak = $filter('date')(vm.currentStaff.model_break, "HH:mm");
+            vm.filteredStart = $filter('date')(vm.currentStaff.model_start, "HH:mm");
+            vm.filteredFinish = $filter('date')(vm.currentStaff.model_finish, "HH:mm");
+            vm.currentStaff.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
         }
     }
 
@@ -252,7 +229,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function go(predicate, id) {
-        if (vm.local.data.staff_name) {
+        if (vm.currentStaff.staff_name) {
             save();
         }
         $state.go('app.' + predicate, {

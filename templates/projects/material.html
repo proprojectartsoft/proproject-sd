@@ -21,7 +21,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>
-                <input type="number" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add quantity' ||''}}" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.quantity">
+                <input type="number" ng-change="vm.compute()" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add quantity' ||''}}" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.quantity">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>
@@ -31,7 +31,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Cost per unit</div>
-                <input type="number" placeholder="Tap to add cost per unit ({{vm.currency}})" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.material.unitCost">
+                <input ng-change="vm.compute()" type="number" placeholder="Tap to add cost per unit ({{vm.currency}})" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.material.cost_per_unit">
                 <input ng-readonly=true ng-if="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.unitCost_formated">
             </label>
             <label class="sd-label">
@@ -40,7 +40,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Tax</div>
-                <input type="number" placeholder="Tap to add tax (%)" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.material.tax">
+                <input ng-change="vm.compute()" type="number" placeholder="Tap to add tax (%)" ng-if="((vm.diaryId) && (vm.editMode)) || !(vm.diaryId)" ng-model="vm.material.tax">
                 <input ng-readonly=true ng-if="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.tax_formated">
             </label>
             <label class="sd-label">

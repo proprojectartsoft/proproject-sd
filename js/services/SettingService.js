@@ -2,15 +2,6 @@ sdApp.factory('SettingService', [
     '$http', '$ionicPopup',
     function($http, $ionicPopup) {
         return {
-            clearWeather: function() {
-                sessionStorage.setObject('sd.diary.weather.afternoon', null);
-                sessionStorage.setObject('sd.diary.weather.morning', null);
-                sessionStorage.setObject('sd.diary.weather.onOff', null);
-                sessionStorage.setObject('sd.diary.weather.midday', null);
-                sessionStorage.setObject('sd.diary.weather.evening', null);
-                sessionStorage.setObject('sd.diary.weather.allDay', null);
-            },
-
             get_currency_symbol: function(currency) {
                 switch (currency) {
                     case 'dolar':
@@ -63,7 +54,7 @@ sdApp.factory('SettingService', [
                     $(this).parent().prev().addClass("focus");
                     $(this).addClass("focus");
                 });
-                
+
                 //select drop-downs
                 $('.de-select').on('click', function() {
                     clearFocus();

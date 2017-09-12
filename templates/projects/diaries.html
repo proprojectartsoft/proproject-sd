@@ -8,11 +8,11 @@
         <ion-list can-swipe="true">
             <ion-item ng-repeat="item in vm.diaries" class="sd-item-tile">
                 <div class="sd-group">
-                    <span ng-if="item.userName" class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': vm.getSdTitleColor(item.userName)}">
-                      {{item.userName.split(' ')[0] | limitTo:1 | uppercase}}
-                      {{item.userName.split(' ')[1] | limitTo:1 | uppercase}}
+                    <span ng-if="item.user_name" class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': item.backColor}">
+                      {{item.user_name.split(' ')[0] | limitTo:1 | uppercase}}
+                      {{item.user_name.split(' ')[1] | limitTo:1 | uppercase}}
                     </span>
-                    <span ng-if="!item.userName" class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': vm.getSdTitleColor(item.userName)}">
+                    <span ng-if="!item.user_name" class="sd-tile" ng-click="vm.go('diary',item.id)" ng-style="{'background-color': item.backColor}">
                       OFF
                     </span>
                     <div class="sd-content" ng-click="vm.go('diary',item.id)">

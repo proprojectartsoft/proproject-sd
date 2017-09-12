@@ -5,9 +5,9 @@
       </button>
     </div>
     <ion-content class="has-subheader sd-list">
-        <p ng-if="vm.suppliers && vm.suppliers.length != 0" class="white-subtitle">Tap on the supplier to add more resources</p>
+        <p ng-if="currentSD.goods_received && currentSD.goods_received.length != 0" class="white-subtitle">Tap on the supplier to add more resources</p>
         <ion-list>
-            <ion-item ng-repeat="supplier in vm.suppliers track by $index" ng-click="vm.go('goodsUsed', $index)">
+            <ion-item ng-repeat="supplier in currentSD.goods_received track by $index" ng-click="vm.go('goodsUsed', $index)">
                 <div class="sd-group">
                     <div class="sd-title">{{supplier.grn_ref}}&nbsp;|&nbsp;{{supplier.supplier}}</div>
                     <ion-option-button class="button-assertive delete-btn" ng-click="vm.deleteEntry(supplier)">
@@ -16,7 +16,7 @@
                 </div>
             </ion-item>
         </ion-list>
-        <div ng-if="!vm.suppliers.length" class="sd-nodata">
+        <div ng-if="!currentSD.goods_received.length" class="sd-nodata">
             <span>There are no suppliers</span>
         </div>
     </ion-content>

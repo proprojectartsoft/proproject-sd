@@ -11,43 +11,43 @@
         <div class="sd-container">
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div class="sd-title">Type</div>
-                <de-select de-options="vm.types" de-title="vm.local.type" de-selected="vm.type.name"></de-select>
+                <de-select de-options="vm.types" de-title="vm.local.type" de-selected="vm.currentOhs.type.name"></de-select>
             </div>
             <label ng-if="vm.diaryId && !vm.editMode" class="sd-label">
                 <div class="sd-title">Type</div>
-                <input ng-readonly=true ng-model="vm.type.name">
+                <input ng-readonly=true ng-model="vm.currentOhs.type.name">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Reference</div>
-                <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add reference' ||''}}" ng-model="vm.ref">
+                <input ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add reference' ||''}}" ng-model="vm.currentOhs.ref">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Task completed</div>
-                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.task_completed" class="checkbox-calm">
-                    <span ng-if="vm.task_completed">Yes</span>
-                    <span ng-if="!vm.task_completed">No</span>
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.currentOhs.task_completed" class="checkbox-calm">
+                    <span ng-if="vm.currentOhs.task_completed">Yes</span>
+                    <span ng-if="!vm.currentOhs.task_completed">No</span>
                 </ion-checkbox>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Form to be completed</div>
-                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.form_complete" class="checkbox-calm">
-                    <span ng-if="vm.form_complete">Yes</span>
-                    <span ng-if="!vm.form_complete">No</span>
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.currentOhs.form_to_be_completed" class="checkbox-calm">
+                    <span ng-if="vm.currentOhs.form_to_be_completed">Yes</span>
+                    <span ng-if="!vm.currentOhs.form_to_be_completed">No</span>
                 </ion-checkbox>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Action required</div>
-                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.action_required" class="checkbox-calm">
-                    <span ng-if="vm.action_required">Yes</span>
-                    <span ng-if="!vm.action_required">No</span>
+                <ion-checkbox ng-disabled="(vm.diaryId) && (!vm.editMode)" ng-model="vm.currentOhs.action_required" class="checkbox-calm">
+                    <span ng-if="vm.currentOhs.action_required">Yes</span>
+                    <span ng-if="!vm.currentOhs.action_required">No</span>
                 </ion-checkbox>
             </label>
-            <label class="sd-label" ng-if="vm.action_required">
-                <textarea elastic ng-readonly="(vm.diaryId) && (!vm.editMode)"  placeholder="Tap to add action message" ng-model="vm.action_message"></textarea>
+            <label class="sd-label" ng-if="vm.currentOhs.action_required">
+                <textarea elastic ng-readonly="(vm.diaryId) && (!vm.editMode)"  placeholder="Tap to add action message" ng-model="vm.currentOhs.action"></textarea>
             </label>
             <label class="sd-label">
                 <div class="sd-title">Note</div>
-                <textarea elastic ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add comment' ||''}}" ng-model="vm.comment"></textarea>
+                <textarea elastic ng-readonly="(vm.diaryId) && (!vm.editMode)" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add comment' ||''}}" ng-model="vm.currentOhs.note"></textarea>
             </label>
         </div>
     </ion-content>

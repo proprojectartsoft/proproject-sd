@@ -8,7 +8,7 @@
         <ion-list can-swipe="true">
             <ion-item ng-repeat="item in vm.local.list track by $index" class="sd-item-tile">
                 <div class="sd-group">
-                    <span class="sd-tile" ng-style="{'background-color': item.color}">
+                    <span class="sd-tile" ng-style="{'background-color': item.backColor}">
                       {{item.first_name.split(' ')[0] | limitTo:1 | uppercase}}
                       {{item.last_name.split(' ')[0] | limitTo:1 | uppercase}}
                     </span>

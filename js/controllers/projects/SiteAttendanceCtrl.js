@@ -12,7 +12,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
     //store the lists of site attendance
-    if (!$rootScope.currentSD) return $state.go('app.home');
     vm.staffList = $rootScope.currentSD.site_attendance.staffs;
     vm.companyList = $rootScope.currentSD.site_attendance.contractors;
     vm.visitorList = $rootScope.currentSD.site_attendance.visitors;
