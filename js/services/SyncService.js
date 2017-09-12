@@ -19,7 +19,7 @@ sdApp.service('SyncService', [
 
 		service.setSettings = function (data, callback) {
 			try {
-				worker = new Worker('/js/system/worker.js');
+				worker = new Worker($APP.server + '/js/system/worker.js');
 
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
@@ -40,7 +40,7 @@ sdApp.service('SyncService', [
 
 		service.getSettings = function (callback) {
 			try {
-				worker = new Worker('/js/system/worker.js');
+				worker = new Worker($APP.server + '/js/system/worker.js');
 
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
@@ -82,7 +82,7 @@ sdApp.service('SyncService', [
 
 		service.setProjects = function (data, callback) {
 			try {
-				worker = new Worker('/js/system/worker.js');
+				worker = new Worker($APP.server + '/js/system/worker.js');
 
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
@@ -103,7 +103,7 @@ sdApp.service('SyncService', [
 
 		service.getProjects = function (callback) {
 			try {
-				worker = new Worker('/js/system/worker.js');
+				worker = new Worker($APP.server + '/js/system/worker.js');
 
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
@@ -124,7 +124,7 @@ sdApp.service('SyncService', [
 
 		service.getProject = function (id, callback) {
 			try {
-				worker = new Worker('/js/system/worker.js');
+				worker = new Worker($APP.server + '/js/system/worker.js');
 
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
@@ -145,7 +145,7 @@ sdApp.service('SyncService', [
 
 		service.clearDb = function (callback) {
 			try {
-				worker = new Worker('/js/system/worker.js');
+				worker = new Worker($APP.server + '/js/system/worker.js');
 
 				worker.addEventListener('message', function (ev) {
 					if (ev.data.finished === true) {
