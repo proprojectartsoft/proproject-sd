@@ -24,9 +24,6 @@ function SupplierCtrl($rootScope, $scope, $state, SettingService, $stateParams, 
         if (vm.index === 'create' || vm.index === 0) {
             //add a new supplier
             $rootScope.currentSD.goods_received.push(supplier);
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.good = true;
-            sessionStorage.setObject('sd.seen', seen);
         } else {
             //add goods for an existing supplier
             $rootScope.currentSD.goods_received[suppNo] = supplier;

@@ -19,11 +19,6 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
     };
 
     function save() {
-        if (vm.input1 || vm.input2 || vm.input3) {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.site = true;
-            sessionStorage.setObject('sd.seen', seen);
-        }
         if (vm.input1) {
             $rootScope.currentSD.site_notes.delays = $rootScope.currentSD.site_notes.delays || [];
             $rootScope.currentSD.site_notes.delays.push(vm.input1);
@@ -58,14 +53,4 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
             });
         }
     }
-
-    function watchChanges() {
-        $("textarea").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.site = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
-    watchChanges();
 }

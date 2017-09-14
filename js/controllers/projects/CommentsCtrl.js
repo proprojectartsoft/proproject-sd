@@ -30,9 +30,6 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     }
 
     function addComment() {
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.comment = true;
-        sessionStorage.setObject('sd.seen', seen);
         ColorService.get_colors().then(function(colorList) {
             var colorsLength = Object.keys(colorList).length;
             //adding background colors by user and customer id

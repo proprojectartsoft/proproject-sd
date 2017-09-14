@@ -43,7 +43,6 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
         if (vm.editMode)
             SettingService.show_focus();
     });
-    watchChanges();
 
     function initFields() {
         if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
@@ -118,9 +117,6 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
         //Contractor add when index = create; update otherwise
         if (vm.index === 'create') {
             $rootScope.currentSD.site_attendance.contractors.push(member);
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.contractor = true;
-            sessionStorage.setObject('sd.seen', seen);
         } else {
             //if no absence selected on last edit, keep the old value
             member.absence = member.absence || $rootScope.currentSD.site_attendance.contractors[vm.index].absence;
@@ -178,18 +174,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
         });
     }
 
-    function watchChanges() {
-        $("input").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.contractor = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
     function datetimeChanged() {
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.contractor = true;
-        sessionStorage.setObject('sd.seen', seen);
         vm.calcParse();
     }
 }

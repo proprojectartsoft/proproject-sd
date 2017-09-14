@@ -18,11 +18,6 @@ function ContractCtrl($state, $scope, $rootScope, SettingService, SyncService) {
     };
 
     function save() {
-        if (vm.input1 || vm.input2 || vm.input3) {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.contract = true;
-            sessionStorage.setObject('sd.seen', seen);
-        }
         if (vm.input1) {
             var instr = $rootScope.currentSD.contract_notes.instructions || {};
             instr.comments = instr.comments || [];
@@ -70,14 +65,4 @@ function ContractCtrl($state, $scope, $rootScope, SettingService, SyncService) {
             });
         }
     }
-
-    function watchChanges() {
-        $("textarea").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.contract = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
-    watchChanges();
 }

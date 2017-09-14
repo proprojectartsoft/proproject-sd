@@ -76,9 +76,6 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
         vm.incident.unit_id = item.id;
         vm.incident.unit_name = item.name;
         vm.searchUnit.hide();
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.incident = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function saveIncident() {
@@ -99,9 +96,6 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             $rootScope.currentSD.incidents[vm.index] = incident;
         } else {
             $rootScope.currentSD.incidents.push(incident);
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.incident = true;
-            sessionStorage.setObject('sd.seen', seen);
         }
         vm.incidents = $rootScope.currentSD.incidents;
     }
@@ -118,9 +112,6 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             }
         })
         SiteDiaryService.update_diary($rootScope.currentSD);
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.incident = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id) {
@@ -138,14 +129,4 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
             });
         }
     }
-
-    function watchChanges() {
-        $("input").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.incident = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
-    watchChanges();
 }

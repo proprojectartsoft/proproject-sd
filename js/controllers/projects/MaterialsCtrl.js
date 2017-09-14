@@ -104,26 +104,17 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         vm.material.tax = item.vat;
         vm.material.tax_formated = vm.material.tax + " %";
         vm.searchModal.hide();
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.material = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addNewGood() {
         vm.material.name = vm.newGood;
         vm.searchModal.hide();
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.material = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addUnit(item) {
         vm.material.unit_id = item.id;
         vm.material.unit_name = item.name;
         vm.searchUnit.hide();
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.material = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function save() {
@@ -131,9 +122,6 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
         vm.material.total = (vm.material.quantity * vm.material.cost_per_unit) + ((vm.material.quantity * vm.material.cost_per_unit) * (vm.material.tax / 100));
         if (vm.index === 'create') {
             $rootScope.currentSD.plant_and_material_used.push(vm.material);
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.material = true;
-            sessionStorage.setObject('sd.seen', seen);
         } else {
             $rootScope.currentSD.plant_and_material_used[vm.index] = vm.material
         }
@@ -152,9 +140,6 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             }
         })
         SiteDiaryService.update_diary($rootScope.currentSD);
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.material = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id) {
@@ -171,19 +156,4 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
             });
         }
     }
-
-    function watchChanges() {
-        $("input").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.material = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-        $("textarea").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.material = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
-    watchChanges();
 }

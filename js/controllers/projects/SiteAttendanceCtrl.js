@@ -16,10 +16,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
     vm.companyList = $rootScope.currentSD.site_attendance.contractors;
     vm.visitorList = $rootScope.currentSD.site_attendance.visitors;
 
-    $timeout(function() {
-        vm.seen = sessionStorage.getObject('sd.seen');
-    });
-
     function show(predicate) {
         if (predicate === "staff") {
             vm.visitors = false;
@@ -51,9 +47,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
                     $rootScope.currentSD.site_attendance.staffs.splice(i, 1);
                 }
             });
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.staff = true;
-            sessionStorage.setObject('sd.seen', seen);
         }
         if (vm.contractors) {
             $rootScope.currentSD.site_attendance.contractors.forEach(function(el, i) {
@@ -61,9 +54,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
                     $rootScope.currentSD.site_attendance.contractors.splice(i, 1);
                 }
             });
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.contractor = true;
-            sessionStorage.setObject('sd.seen', seen);
         }
         if (vm.visitors) {
             $rootScope.currentSD.site_attendance.visitors.forEach(function(el, i) {
@@ -71,9 +61,6 @@ function SiteAttendanceCtrl($rootScope, $state, SiteDiaryService, $filter, SyncS
                     $rootScope.currentSD.site_attendance.visitors.splice(i, 1);
                 }
             });
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.visitor = true;
-            sessionStorage.setObject('sd.seen', seen);
         }
         SiteDiaryService.update_diary($rootScope.currentSD);
     }

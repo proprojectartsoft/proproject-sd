@@ -14,15 +14,13 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.projectId = sessionStorage.getObject('projectId');
     vm.editMode = sessionStorage.getObject('editMode');
-
-    vm.pictures = [];
     vm.filter = {};
     vm.imgURI = [];
     vm.dataToDelete = [];
     vm.dataToUpdate = [];
     vm.filter.substate = 'gallery';
 
-    vm.populate();
+    populate();
     pullDown();
     goToTop();
     $scope.$watch(function() {
@@ -31,8 +29,8 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
     });
 
     function populate() {
-        vm.pictures = $rootScope.currentSD.attachments && $rootScope.currentSD.attachments.pictures || [];
-        angular.forEach(vm.pictures, function(value) {
+        $rootScope.currentSD.attachments = $rootScope.currentSD.attachments || []; // && $rootScope.currentSD.attachments.pictures || [];
+        angular.forEach($rootScope.currentSD.attachments, function(value) {
             if (!value.url) {
                 value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
             }
@@ -72,12 +70,9 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
                     "title": "",
                     "project_id": vm.projectId
                 }
-                vm.pictures.push(pic);
-                vm.filter.picture = vm.pictures[vm.pictures.length - 1];
+                $rootScope.currentSD.attachments.push(pic);
+                vm.filter.picture = $rootScope.currentSD.attachments[$rootScope.currentSD.attachments.length - 1];
                 vm.filter.state = 'form';
-                var seen = sessionStorage.getObject('sd.seen');
-                seen.attachement = true;
-                sessionStorage.setObject('sd.seen', seen);
                 pullDown();
             });
         }, function(err) {});
@@ -105,12 +100,9 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
                     "title": "",
                     "project_id": vm.projectId
                 }
-                vm.pictures.push(pic);
-                vm.filter.picture = vm.pictures[vm.pictures.length - 1];
+                $rootScope.currentSD.attachments.push(pic);
+                vm.filter.picture = $rootScope.currentSD.attachments[$rootScope.currentSD.attachments.length - 1];
                 vm.filter.state = 'form';
-                var seen = sessionStorage.getObject('sd.seen');
-                seen.attachement = true;
-                sessionStorage.setObject('sd.seen', seen);
                 pullDown();
             });
         }, function(err) {});
@@ -123,10 +115,7 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
             }
             vm.dataToDelete.push(idPic);
         }
-        vm.pictures.splice(index, 1);
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.attachement = true;
-        sessionStorage.setObject('sd.seen', seen);
+        $rootScope.currentSD.attachments.splice(index, 1);
         pullDown();
     }
 
@@ -137,7 +126,7 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
         $('input').removeClass("focus");
         $('textarea').prev().removeClass("focus");
         $('textarea').removeClass("focus");
-        var crtPic = $filter('filter')(vm.pictures, {
+        var crtPic = $filter('filter')($rootScope.currentSD.attachments, {
             id: vm.filter.picture.id
         })[0];
         var upd = '';
@@ -152,8 +141,9 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
     }
 
     function go(predicate, id) {
+      //TODO: there is no more attachments -> pictures
         $rootScope.currentSD.attachments = {
-            pictures: vm.pictures,
+            pictures: $rootScope.currentSD.attachments,
             toBeDeleted: vm.dataToDelete,
             toBeUpdated: vm.dataToUpdate
         };
@@ -196,19 +186,4 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
             $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
         });
     }
-
-    function watchChanges() {
-        $("input").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.attachement = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-        $("textarea").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.attachement = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
-    watchChanges();
 }

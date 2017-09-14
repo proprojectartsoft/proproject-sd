@@ -23,9 +23,6 @@ function VisitorsCtrl($state, SettingService, $scope, $rootScope, SyncService, $
         //Visitor add when index = create; update otherwise
         if (vm.index === 'create') {
             $rootScope.currentSD.site_attendance.visitors.push(member);
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.visitor = true;
-            sessionStorage.setObject('sd.seen', seen);
         } else {
             $rootScope.currentSD.site_attendance.visitors[vm.index] = member;
         }
@@ -40,14 +37,4 @@ function VisitorsCtrl($state, SettingService, $scope, $rootScope, SyncService, $
             id: id
         });
     }
-
-    function watchChanges() {
-        $("input").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.visitor = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
-    watchChanges();
 }

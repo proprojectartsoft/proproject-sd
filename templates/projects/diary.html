@@ -26,52 +26,52 @@
         </ion-item>
         <ion-item ng-click="vm.go('weather')" class="sd-group">
             Weather
-            <span ng-if="vm.seen.weather == true"
+            <span ng-if="indication.weather == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item ng-click="vm.go('siteAttendance')" class="sd-group">
             Site Attendance
-            <span ng-if="vm.seen.staff == true || vm.seen.contractor == true || vm.seen.visitor == true"
+            <span ng-if="indication.site_attendance == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item ng-click="vm.go('materials')" class="sd-group">
             Plant and materials used
-            <span ng-if="vm.seen.material == true"
+            <span ng-if="indication.plant_and_material_used == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item ng-click="vm.go('contractNotes')" class="sd-group">
             Contract notes
-            <span ng-if="vm.seen.contract == true"
+            <span ng-if="indication.contract_notes == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item ng-click="vm.go('sitenotes')" class="sd-group">
             Site notes
-            <span ng-if="vm.seen.site == true"
+            <span ng-if="indication.site_notes == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item class="sd-group" ng-click="vm.go('goods')">
             Goods received/Plant Off-Hired
-            <span ng-if="vm.seen.good == true"
+            <span ng-if="indication.goods_received == true"
                   class="notification-dot">
         </ion-item>
         <ion-item ng-click="vm.go('incidents')" class="sd-group">
             Incidents
-            <span ng-if="vm.seen.incident == true"
+            <span ng-if="indication.incidents == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item ng-click="vm.go('ohs')" class="sd-group">
             OH and S
-            <span ng-if="vm.seen.ohs == true"
+            <span ng-if="indication.oh_and_s == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item class="sd-group sd-comments text-white" ng-click="vm.go('comments')">
             Comments
-            <span ng-if="vm.seen.comment == true"
+            <span ng-if="indication.comments == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item ng-click="vm.go('attachements')" class="sd-group">
             Attachments
-            <span ng-if="vm.seen.attachement == true"
+            <span ng-if="indication.attachements == true"
                   class="notification-dot"></span>
         </ion-item>
         <ion-item ng-if="vm.enableCreate" class="button button-bar pp-formbtn create-btn" ng-click="vm.saveCreate()">

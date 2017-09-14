@@ -20,9 +20,6 @@ function GoodsCtrl($rootScope, $state, SiteDiaryService, SettingService) {
             }
         })
         SiteDiaryService.update_diary($rootScope.currentSD);
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.good = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id) {

@@ -104,14 +104,4 @@ function WeatherCtrl($rootScope, $state, $scope, SettingService, SyncService, $f
             });
         }
     }
-
-    function watchChanges() {
-        $("input").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.weather = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
-    watchChanges();
 }

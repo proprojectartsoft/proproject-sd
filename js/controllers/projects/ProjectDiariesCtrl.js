@@ -29,7 +29,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     sessionStorage.setObject('editMode', null);
     sessionStorage.setObject('diaryId', null);
     sessionStorage.setObject('sd.diary.shares', null);
-    sessionStorage.setObject('sd.seen', {});
     vm.myProfile = localStorage.getObject('my_account');
     vm.projectId = parseInt($stateParams.id);
     vm.filter = {};

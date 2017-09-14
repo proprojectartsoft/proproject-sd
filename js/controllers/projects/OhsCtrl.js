@@ -48,9 +48,6 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             $rootScope.currentSD.oh_and_s[vm.index] = req;
         } else {
             $rootScope.currentSD.oh_and_s.push(req);
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.ohs = true;
-            sessionStorage.setObject('sd.seen', seen);
         }
         vm.tools = $rootScope.currentSD.oh_and_s;
     }
@@ -68,9 +65,6 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
         })
         vm.tools = $rootScope.currentSD.oh_and_s;
         SiteDiaryService.update_diary($rootScope.currentSD);
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.ohs = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function go(predicate, id) {
@@ -88,21 +82,6 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
             });
         }
     }
-
-    function watchChanges() {
-        $("input").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.ohs = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-        $("textarea").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.ohs = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-
-    watchChanges();
 }
 
 //directive for textarea so it can wrap the text and be scaleble

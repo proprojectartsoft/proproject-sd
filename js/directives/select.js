@@ -86,30 +86,7 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
                 vms.selected.splice(index, 1);
             }
             console.log("weather select changed");
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.weather = true;
-            sessionStorage.setObject('sd.seen', seen);
         } else {
-            var seen = sessionStorage.getObject('sd.seen');
-            switch (vms.deTitle) {
-                case 'incident.type':
-                    seen.incident = true;
-                    break;
-                case 'incident.actionReq':
-                    seen.incident = true;
-                    break;
-                case 'absence':
-                    if (sessionStorage.getObject('siteAttTab') == 'staff') {
-                        seen.staff = true;
-                    } else {
-                        seen.contractor = true;
-                    }
-                    break;
-                case 'ohs.type':
-                    seen.ohs = true;
-                    break;
-            }
-            sessionStorage.setObject('sd.seen', seen);
             vms.selected = [];
             vms.selected.push(option);
         }

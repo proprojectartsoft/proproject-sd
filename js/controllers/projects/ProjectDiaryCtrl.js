@@ -21,11 +21,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.diaryId = sessionStorage.getObject('diaryId');
     //store the number of diaries for current projectId
     var diariesLength = 0;
-
-    $timeout(function() {
-        vm.seen = sessionStorage.getObject('sd.seen');
-    });
-
     if (vm.diaryStateId) {
         //enter existing SD
         sessionStorage.setObject('diaryId', vm.diaryStateId);
@@ -40,6 +35,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 var diary = $filter('filter')(proj.value.site_diaries, {
                     id: vm.diaryStateId
                 })[0];
+                indicateInputData(diary);
                 vm.created_for_date = (diary.created_for_date !== 0) && diary.created_for_date || '';
                 vm.summary = diary ? diary.summary : '';
                 //store as temp
@@ -78,6 +74,71 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         }
         vm.created_for_date = $rootScope.currentSD.created_for_date;
         vm.summary = $rootScope.currentSD.summary;
+    }
+
+    $rootScope.indication = {
+        weather: false,
+        incidents: false,
+        attachments: false,
+        comments: false,
+        site_attendance: false,
+        plant_and_material_used: false,
+        contract_notes: false,
+        site_notes: false,
+        goods_received: false,
+        oh_and_s: false
+    }
+
+    function indicateInputData(diary) {
+        for (var key in diary) {
+            //not empty array
+            if ((Array.isArray(diary[key]) && diary[key].length)) {
+                $rootScope.indication[key] = true;
+            }
+
+            switch (key) {
+                case "site_attendance":
+                    var field = diary[key];
+                    //at least one subsection is not empty
+                    for (var subfield in field) {
+                        if (field[subfield].length) {
+                            $rootScope.indication[key] = true;
+                            break;
+                        }
+                    }
+                    break;
+                case "contract_notes":
+                    var field = diary[key];
+                    //at least one subsection is not null
+                    for (var subfield in field) {
+                        if (field[subfield] !== null) {
+                            $rootScope.indication[key] = true;
+                            break;
+                        }
+                    }
+                    break;
+                case "site_notes":
+                    var field = diary[key];
+                    //at least one subsection is not null
+                    for (var subfield in field) {
+                        if (field[subfield] !== null) {
+                            $rootScope.indication[key] = true;
+                            break;
+                        }
+                    }
+                    break;
+                case "weather":
+                    var field = diary[key];
+                    //at least one subsection is not null or is perfect weather
+                    for (var subfield in field) {
+                        if (field[subfield] && field[subfield] !== null) {
+                            $rootScope.indication[key] = true;
+                            break;
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     function addSiteDiaryToDB(syncPopup) {
@@ -131,6 +192,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 //add the new SD to the project's SD list
                 $rootScope.currentSD.id = "off" + diariesLength + 1;
                 $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
+                //add the comments and attachments
+                $rootScope.currentSD.attachments = attachments;
+                $rootScope.currentSD.comments = comments;
                 syncPopup.close();
                 SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
                 $('.create-btn').attr("disabled", false);

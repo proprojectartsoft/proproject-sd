@@ -74,9 +74,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
                 $('.ion-datetime-picker input').each(function() {
                     $(this).change(function() {
                         console.log("change");
-                        var seen = sessionStorage.getObject('sd.seen');
-                        seen.staff = true;
-                        sessionStorage.setObject('sd.seen', seen);
                     });
                     $(this).prop('type', 'tel');
                     $(this).on('input', function() {
@@ -104,9 +101,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         vm.currentStaff.staff_name = vm.newName;
         calcParse();
         vm.searchModal.hide();
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.staff = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addStaff(item) {
@@ -118,9 +112,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         vm.currentStaff.company_name = item.employee_name;
         calcParse();
         vm.searchModal.hide();
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.staff = true;
-        sessionStorage.setObject('sd.seen', seen);
     }
 
     function addStaff1(item) {
@@ -145,9 +136,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         //Staff add when index = create; update otherwise
         if (vm.index === 'create') {
             $rootScope.currentSD.site_attendance.staffs.push(member);
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.staff = true;
-            sessionStorage.setObject('sd.seen', seen);
         } else {
             //if no absence selected on last edit, keep the old value
             member.absence = member.absence || $rootScope.currentSD.site_attendance.staffs[vm.index].absence;
@@ -203,19 +191,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
         });
     }
 
-    function watchChanges() {
-        $("input").change(function() {
-            var seen = sessionStorage.getObject('sd.seen');
-            seen.staff = true;
-            sessionStorage.setObject('sd.seen', seen);
-        });
-    }
-    watchChanges();
-
     function datetimeChanged() {
-        var seen = sessionStorage.getObject('sd.seen');
-        seen.staff = true;
-        sessionStorage.setObject('sd.seen', seen);
         vm.calcParse();
     }
 }
