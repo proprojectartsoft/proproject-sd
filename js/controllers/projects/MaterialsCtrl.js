@@ -24,26 +24,14 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.total_formated = '';
     vm.subtotal_formated = '';
     vm.newGood = '';
-
-    //get necessary settings for company
-    SyncService.getSetting('resources', function(list) {
-        vm.goods = list.value;
-        vm.goods.sort(function(a, b) {
-            var textA = a.name.toUpperCase();
-            var textB = b.name.toUpperCase();
-            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-        });
+    vm.goods = $rootScope.resources;
+    vm.goods.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
-    SyncService.getSetting('units', function(list) {
-        vm.units = list.value;
-    });
-    SyncService.getSetting('currency', function(list) {
-        if (list && list.value) {
-            vm.currency = SettingService.get_currency_symbol(list.value);
-        } else {
-            vm.currency = SettingService.get_currency_symbol("dolar");
-        }
-    });
+    vm.units = $rootScope.units;
+    vm.currency = SettingService.get_currency_symbol($rootScope.currency || "dolar");
     if (!isNaN(vm.index) && (vm.index !== 'create')) {
         vm.material = $rootScope.currentSD.plant_and_material_used[vm.index];
         vm.material.tax_formated = $rootScope.currentSD.plant_and_material_used[vm.index].tax && ($rootScope.currentSD.plant_and_material_used[vm.index].tax + " %") || '';
@@ -51,6 +39,15 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     }
     vm.materials = $rootScope.currentSD.plant_and_material_used;
     compute();
+
+    function getSettingValue(settings, name) {
+        var arr = $filter('filter')(settings, {
+            name: name
+        });
+        if (arr && arr.length)
+            return arr[0].value;
+        return null;
+    }
 
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,

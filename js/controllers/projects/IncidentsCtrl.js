@@ -17,10 +17,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     vm.units = 'incident.units';
     vm.incident = {};
     vm.diaryId = sessionStorage.getObject('diaryId');
-
-    SyncService.getSetting('units', function(list) {
-        vm.units = list.value;
-    });
+    vm.units = $rootScope.units;
 
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
@@ -127,7 +124,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, SiteDiaryServi
     }
 
     function go(predicate, id) {
-        if (predicate == "incidents" && vm.editMode && ($rootScope.selected || vm.incident.type)) {
+        if (predicate == "incidents" && ($rootScope.selected || vm.incident.type)) {
             saveIncident();
         }
         $rootScope.selected = undefined;

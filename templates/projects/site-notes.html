@@ -29,10 +29,10 @@
                     <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.save()"></span>
                 </div>
             </div>
-            <div class="sd-filler" ng-if="currentSD.site_notes.tools.length > 0">
-                <span class="de-item" ng-repeat="option in currentSD.site_notes.tools track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
+            <div class="sd-filler" ng-if="currentSD.site_notes.tools_used.length > 0">
+                <span class="de-item" ng-repeat="option in currentSD.site_notes.tools_used track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
-            <div class="sd-filler" ng-if="!currentSD.site_notes.tools && vm.diaryId">
+            <div class="sd-filler" ng-if="!currentSD.site_notes.tools_used && vm.diaryId">
                 <span class="de-item">There is no tools used information</span>
             </div>
             <div class="sd-label">
@@ -42,10 +42,10 @@
                     <span ng-if="(!vm.diaryId) || (vm.editMode)" class="ion-plus-round" ng-click="vm.save()"></span>
                 </div>
             </div>
-            <div class="sd-filler" ng-if="currentSD.site_notes.materials.length > 0">
-                <span class="de-item" ng-repeat="option in currentSD.site_notes.materials track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
+            <div class="sd-filler" ng-if="currentSD.site_notes.materials_requested.length > 0">
+                <span class="de-item" ng-repeat="option in currentSD.site_notes.materials_requested track by $index" style="display: block; padding-bottom:8px;">{{option}}</span>
             </div>
-            <div class="sd-filler" ng-if="!currentSD.site_notes.materials && vm.diaryId">
+            <div class="sd-filler" ng-if="!currentSD.site_notes.materials_requested && vm.diaryId">
                 <span class="de-item">There is no material information</span>
             </div>
         </div>

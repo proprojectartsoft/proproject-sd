@@ -74,7 +74,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, $filter, SiteDiar
     }
 
     function go(predicate, id) {
-        if (predicate == "ohs" && vm.editMode && ($rootScope.selected || vm.type)) {
+        if (predicate == "ohs" && ($rootScope.selected || vm.type)) {
             save();
         }
         $rootScope.selected = undefined;

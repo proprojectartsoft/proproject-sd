@@ -30,21 +30,20 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService, $filter, $ion
             vm.input1 = '';
         }
         if (vm.input2) {
-            $rootScope.currentSD.site_notes.tools = $rootScope.currentSD.site_notes.tools || [];
-            $rootScope.currentSD.site_notes.tools.push(vm.input2);
+            $rootScope.currentSD.site_notes.tools_used = $rootScope.currentSD.site_notes.tools_used || [];
+            $rootScope.currentSD.site_notes.tools_used.push(vm.input2);
             vm.input2 = '';
         }
         if (vm.input3) {
-            $rootScope.currentSD.site_notes.materials = $rootScope.currentSD.site_notes.materials || [];
-            $rootScope.currentSD.site_notes.materials.push(vm.input3);
+            $rootScope.currentSD.site_notes.materials_requested = $rootScope.currentSD.site_notes.materials_requested || [];
+            $rootScope.currentSD.site_notes.materials_requested.push(vm.input3);
             vm.input3 = '';
         }
         $('textarea').height('initial');
     }
 
     function go(predicate, id) {
-        if (vm.editMode)
-            save();
+        save();
         if (predicate === 'diary') {
             if (vm.diaryId) {
                 $state.go('app.' + predicate, {

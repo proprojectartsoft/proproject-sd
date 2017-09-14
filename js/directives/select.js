@@ -60,6 +60,7 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
         }
     }
     vms.selected = [];
+    //if some values are already selected
     if (vms.deParameter) {
         vms.selected = vms.deParameter;
     }
@@ -78,8 +79,10 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
                 }
             })
             if (index === -1) {
+                //add selected values
                 vms.selected.push(option);
             } else {
+                //remove selected values
                 vms.selected.splice(index, 1);
             }
             console.log("weather select changed");

@@ -15,19 +15,19 @@ function VisitorsCtrl($state, SettingService, $scope, $rootScope, SyncService, $
     });
 
     function save() {
-        vm.member = {
+        var member = {
             first_name: vm.local.data.first_name,
             last_name: vm.local.data.last_name,
             note: vm.local.data.note
         }
         //Visitor add when index = create; update otherwise
         if (vm.index === 'create') {
-            $rootScope.currentSD.site_attendance.visitors.push(vm.member);
+            $rootScope.currentSD.site_attendance.visitors.push(member);
             var seen = sessionStorage.getObject('sd.seen');
             seen.visitor = true;
             sessionStorage.setObject('sd.seen', seen);
         } else {
-            $rootScope.currentSD.site_attendance.visitors[vm.index] = vm.member;
+            $rootScope.currentSD.site_attendance.visitors[vm.index] = member;
         }
     }
 

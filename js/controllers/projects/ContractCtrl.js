@@ -5,7 +5,7 @@ ContractCtrl.$inject = ['$state', '$scope', '$rootScope', 'SettingService', 'Syn
 function ContractCtrl($state, $scope, $rootScope, SettingService, SyncService) {
     var vm = this;
     vm.go = go;
-		vm.save = save;
+    vm.save = save;
     vm.editMode = sessionStorage.getObject('editMode');
     vm.diaryId = sessionStorage.getObject('diaryId');
 
@@ -24,29 +24,37 @@ function ContractCtrl($state, $scope, $rootScope, SettingService, SyncService) {
             sessionStorage.setObject('sd.seen', seen);
         }
         if (vm.input1) {
-            var instr = $rootScope.currentSD.contract_notes.instructions || [];
+            var instr = $rootScope.currentSD.contract_notes.instructions || {};
             instr.comments = instr.comments || [];
             instr.comments.push(vm.input1);
+            instr.select = false;
+            instr.form_instance_id = 0;
             vm.input1 = '';
+            $rootScope.currentSD.contract_notes.instructions = instr;
         }
         if (vm.input2) {
-            var ext = $rootScope.currentSD.contract_notes.extensions_of_time || [];
+            var ext = $rootScope.currentSD.contract_notes.extensions_of_time || {};
             ext.comments = ext.comments || [];
             ext.comments.push(vm.input2);
+            ext.select = false;
+            ext.form_instance_id = 0;
             vm.input2 = '';
+            $rootScope.currentSD.contract_notes.extensions_of_time = ext;
         }
         if (vm.input3) {
-            var vars = $rootScope.currentSD.contract_notes.variations || [];
+            var vars = $rootScope.currentSD.contract_notes.variations || {};
             vars.comments = vars.comments || [];
             vars.comments.push(vm.input3);
+            vars.select = false;
+            vars.form_instance_id = 0;
             vm.input3 = '';
+            $rootScope.currentSD.contract_notes.variations = vars;
         }
         $('textarea').height('initial');
     }
 
     function go(predicate, id) {
-        if (vm.editMode)
-            save();
+        save();
         if (predicate === 'diary') {
             if (vm.diaryId) {
                 $state.go('app.' + predicate, {

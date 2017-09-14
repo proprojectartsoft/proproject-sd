@@ -19,6 +19,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.projectId = sessionStorage.getObject('projectId');
     vm.edit = sessionStorage.getObject('editMode');
     vm.diaryId = sessionStorage.getObject('diaryId');
+
     $timeout(function() {
         vm.seen = sessionStorage.getObject('sd.seen');
     });
@@ -77,41 +78,44 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     }
 
     function addSiteDiaryToDB(syncPopup) {
-        $rootScope.currentSD.date = new Date().getTime();
-        $rootScope.currentSD.project_id = sessionStorage.getObject('projectId');
+        var attachments = [],
+            comments = [];
+        angular.copy($rootScope.currentSD.attachments, attachments);
+        angular.copy($rootScope.currentSD.comments, comments);
+        //add and remove fields to conform to the format required on server
+        prepareSDForServer();
+        console.log($rootScope.currentSD);
         SiteDiaryService.add_diary($rootScope.currentSD)
             .success(function(result) {
-                var attachments = $rootScope.currentSD.attachments;
-                var attToAdd = [],
-                    attToAddAsNew = [];
-                angular.forEach(attachments.pictures, function(value) {
-                    if (!value.path) {
-                        value.site_diary_id = result.id;
-                        attToAdd.push(value);
-                    } else if (!vm.enableCreate && vm.edit) {
-                        delete value.id;
-                        value.base_64_string = '';
-                        value.site_diary_id = result.id;
-                        attToAddAsNew.push(value);
-                    }
-                });
-                var uploadAttachments = AttachmentsService.upload_attachments(attToAdd.push.apply(attToAddAsNew)).then(function(result) {});
-                if (attachments.toBeUpdated && attachments.toBeUpdated.length !== 0) {
-                    angular.forEach(attachments.toBeUpdated, function(att) {
-                        AttachmentsService.update_attachments(att).then(function(result) {})
-                    })
-                }
-                var deleteAttachments;
-                if (attachments.toBeDeleted) {
-                    deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
-                }
-                angular.forEach($rootScope.currentSD.comments, function(value) {
+                //add comments for SD
+                angular.forEach(comments, function(value) {
                     var request = {
                         site_diary_id: result.id,
                         comment: value.comment
                     };
                     SiteDiaryService.add_comments(request).success(function(result) {});
                 });
+                //update attachments
+                angular.forEach(attachments.toBeUpdated, function(att) {
+                    AttachmentsService.update_attachments(att).then(function(result) {})
+                })
+                var deleteAttachments, uploadAttachments;
+                //prepare the attachments array to conform to format required by server
+                angular.forEach(attachments.pictures, function(value) {
+                    if (!value.path) {
+                        value.site_diary_id = result.id;
+                    } else if (!vm.enableCreate && vm.edit) {
+                        delete value.id;
+                        value.base_64_string = '';
+                        value.site_diary_id = result.id;
+                    }
+                });
+                if (attachments.pictures) {
+                    uploadAttachments = AttachmentsService.upload_attachments(attachments.pictures).then(function(result) {});
+                }
+                if (attachments.toBeDeleted) {
+                    deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
+                }
                 Promise.all([uploadAttachments, deleteAttachments]).then(function(res) {
                     SyncService.sync().then(function() {
                         $('.create-btn').attr("disabled", false);
@@ -122,9 +126,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             }).error(function(response) {
                 localStorage.setObject('diariesToSync', true);
                 //add the new SD to the project's SD list
-                SyncService.getProject(vm.projectId, function(proj) {
+                SyncService.getProject(vm.projectId, function(proj) { //TODO:do not call getProject again!!!!!
                     $rootScope.currentSD.id = "off" + proj.value.site_diaries.length + 1;
-                    $rootScope.currentSD.sdNo = $rootScope.currentSD.id;
+                    $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
                     syncPopup.close();
                     SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
                     $('.create-btn').attr("disabled", false);
@@ -209,12 +213,25 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
             }
         }
-
         // run all operations then go back to the page where we come from - there project will be updated
         Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments]).then(function(res) {
             syncPopup.close();
             vm.go('project');
         });
+    }
+
+    function prepareSDForServer() {
+        //set date
+        $rootScope.currentSD.date = new Date().getTime();
+        //set project id
+        $rootScope.currentSD.project_id = sessionStorage.getObject('projectId');
+        //delete fields used for local purpose
+        delete $rootScope.currentSD.backColor;
+        delete $rootScope.currentSD.foreColor;
+        delete $rootScope.currentSD.id;
+        delete $rootScope.currentSD.sd_no;
+        delete $rootScope.currentSD.attachments;
+        delete $rootScope.currentSD.comments;
     }
 
     function setCreatedDateFor() {
@@ -269,7 +286,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             return;
         }
         vm.edit = !vm.edit;
-        SyncService.getProject(vm.projectId, function(proj) {});
         sessionStorage.setObject('editMode', vm.edit);
         //cancel edit
         if (!vm.edit) {
@@ -280,6 +296,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 
     function go(predicate, id) {
         if (predicate === 'project') {
+            $rootScope.currentSD = null;
             $state.go('app.' + predicate, {
                 id: vm.projectId
             });

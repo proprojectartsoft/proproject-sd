@@ -23,20 +23,15 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.data = {};
     vm.settings = '';
     vm.supplier = $stateParams.id;
-
-    SyncService.getSetting('resources', function(list) {
-        vm.goods = list.value;
-        vm.goods.sort(function(a, b) {
-            var textA = a.name.toUpperCase();
-            var textB = b.name.toUpperCase();
-            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-        });
+    vm.goods = $rootScope.resources;
+    vm.goods.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
-
-    SyncService.getSetting('units', function(list) {
-        vm.units = list.value;
-    });
-
+    vm.units = $rootScope.units;
+    initFields();
+    
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -52,7 +47,6 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
         vm.searchUnit = popover;
     });
 
-    initFields();
     $scope.$watch(function() {
         if (vm.editMode)
             SettingService.show_focus();

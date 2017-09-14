@@ -43,17 +43,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     // when saving something in a controller (like projectDiaryController) user will be redirected here
     // so don't update the project in that child controller
     SyncService.getProject(vm.projectId, function(proj) {
-        //order diaries by date
-        vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
-        ColorService.get_colors().then(function(colorList) {
-            var colorsLength = Object.keys(colorList).length;
-            //store colors
-            angular.forEach(vm.diaries, function(diary) {
-                var colorId = (parseInt(vm.myProfile.customer_id + "" + diary.user_id)) % colorsLength;
-                diary.backColor = colorList[colorId].backColor;
-                diary.foreColor = colorList[colorId].foreColor;
-            })
-        })
         // if we have a SD in the current scope
         // store that in the DB
         var deleteTemp = false;
@@ -63,25 +52,34 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 proj.value.site_diaries = proj.value.site_diaries || [];
                 proj.value.site_diaries.push($rootScope.currentSD);
             } else {
-                ColorService.get_colors().then(function(colorList) {
-                    var colorsLength = Object.keys(colorList).length;
-                    //store changes made on $rootScope.currentSD
-                    for (var i = 0; i < proj.value.site_diaries.length; i++) {
-                        var currentSD = proj.value.site_diaries[i];
-                        if (currentSD.id === $rootScope.currentSD.id &&
-                            JSON.stringify(currentSD) !== JSON.stringify($rootScope.currentSD)) {
-                            proj.value.site_diaries[i] = angular.copy($rootScope.currentSD);
-                            deleteTemp = true;
-                        }
+                // ColorService.get_colors().then(function(colorList) {
+                //     var colorsLength = Object.keys(colorList).length;
+                //store changes made on $rootScope.currentSD
+                for (var i = 0; i < proj.value.site_diaries.length; i++) {
+                    var currentSD = proj.value.site_diaries[i];
+                    if (currentSD.id === $rootScope.currentSD.id &&
+                        JSON.stringify(currentSD) !== JSON.stringify($rootScope.currentSD)) {
+                        proj.value.site_diaries[i] = angular.copy($rootScope.currentSD);
+                        deleteTemp = true;
                     }
-                })
+                }
+                // })
             }
         }
-        //update the color for every SD
         SyncService.setProjects([proj], function() {
-            console.log('IndexedDB diaries updated with currentScope content');
             if (deleteTemp)
                 $rootScope.currentSD = false;
+            //order diaries by date
+            vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
+            ColorService.get_colors().then(function(colorList) {
+                var colorsLength = Object.keys(colorList).length;
+                //store colors
+                angular.forEach(vm.diaries, function(diary) {
+                    var colorId = (parseInt(vm.myProfile.customer_id + "" + diary.user_id)) % colorsLength;
+                    diary.backColor = colorList[colorId].backColor;
+                    diary.foreColor = colorList[colorId].foreColor;
+                })
+            })
         });
     }, function(err) {
         SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);

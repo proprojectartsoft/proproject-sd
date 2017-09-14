@@ -35,13 +35,9 @@ function SupplierCtrl($rootScope, $scope, $state, SettingService, $stateParams, 
 
     function go(predicate) {
         initFields();
-        SyncService.getProject(sessionStorage.getObject('projectId'), function(proj) {
-            var test = proj.temp;
-            $state.go('app.' + predicate, {
-                id: suppNo,
-                index: 'create'
-            });
+        $state.go('app.' + predicate, {
+            id: suppNo,
+            index: 'create'
         });
-
     }
 }

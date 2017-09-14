@@ -15,11 +15,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.addStaff1 = addStaff1;
     vm.allowNumbersOnly = allowNumbersOnly;
     vm.datetimeChanged = datetimeChanged;
-    vm.emptyAbsence = [{
-        id: '',
-        reason: '',
-        name: ''
-    }];
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
     vm.local = {};
@@ -30,30 +25,12 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     vm.local.absence = 'absence';
     vm.index = $stateParams.id;
     vm.newName = '';
-    //get necessary settings for company
-    SyncService.getSetting("absence", function(sett) {
-        vm.absence = sett.value;
-    })
-    SyncService.getSetting("staff", function(sett) {
-        vm.staff = sett.value;
-    })
-    SyncService.getSetting("currency", function(sett) {
-        if (sett && sett.value) {
-            vm.currency = SettingService.get_currency_symbol(sett.value);
-        } else {
-            vm.currency = SettingService.get_currency_symbol("dolar");
-        }
-    })
-    SyncService.getSetting("start", function(sett) {
-        vm.start = sett.value;
-    })
-    SyncService.getSetting("finish", function(sett) {
-        vm.finish = sett.value;
-    })
-    SyncService.getSetting("break", function(sett) {
-        vm.break = sett.value;
-    })
-
+    vm.absence = $rootScope.absence;
+    vm.staff = $rootScope.staff;
+    vm.currency = SettingService.get_currency_symbol($rootScope.currency || "dolar");
+    var startT = $rootScope.start || "08:00";
+    var finishT = $rootScope.finish || "12:00";
+    var breakT = $rootScope.break || "00:30";
     initFields();
 
     $scope.$watch(function() {
@@ -69,36 +46,24 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
 
     function initFields() {
         if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
-            vm.currentStaff = $rootScope.currentSD.site_attendance.staffs[vm.index];
+            vm.currentStaff = angular.copy($rootScope.currentSD.site_attendance.staffs[vm.index]);
             vm.currentStaff.staff_name = vm.currentStaff.first_name +
-                (vm.currentStaff.last_name !== null ?
+                (vm.currentStaff.last_name && vm.currentStaff.last_name !== null ?
                     (" " + vm.currentStaff.last_name) :
                     "");
             vm.currentStaff.role = vm.currentStaff.trade;
             vm.currentStaff.model_start = vm.stringToDate(vm.currentStaff.start_time);
             vm.currentStaff.model_finish = vm.stringToDate(vm.currentStaff.finish_time);
             vm.currentStaff.total_time = vm.stringToDate(vm.currentStaff.total_time);
-            vm.currentStaff.model_break = vm.stringToDate(vm.currentStaff.break_time || "00:30");
+            vm.currentStaff.model_break = vm.stringToDate(vm.currentStaff.break_time);
             vm.currentStaff.absence = vm.currentStaff.absence && vm.currentStaff.absence.reason;
             vm.currentStaff.hourly_rate_formated = vm.currentStaff.hourly_rate && (vm.currency + " " + vm.currentStaff.hourly_rate) || '';
             if (!vm.currentStaff.total_time) vm.calcParse();
         } else {
             vm.currentStaff.staff_name = "";
-            vm.currentStaff.model_break = vm.stringToDate("00:30");
-            SyncService.getSetting('start', function(list) {
-                if (list && list.value) {
-                    vm.currentStaff.model_start = list.value;
-                } else {
-                    vm.currentStaff.model_start = "08:00";
-                }
-            });
-            SyncService.getSetting('finish', function(list) {
-                if (list && list.value) {
-                    vm.currentStaff.model_finish = list.value;
-                } else {
-                    vm.currentStaff.model_finish = "12:00";
-                }
-            });
+            vm.currentStaff.model_break = breakT;
+            vm.currentStaff.model_start = vm.stringToDate(startT);
+            vm.currentStaff.model_finish = vm.stringToDate(finishT);
             if (!vm.currentStaff.total_time) vm.calcParse();
         }
     }
@@ -164,8 +129,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
     }
 
     function save() {
-        vm.currentStaff.absence = sessionStorage.getObject('sd.diary.absence');
-        vm.member = {
+        var member = {
             first_name: vm.currentStaff.staff_name.split(" ", 2)[0],
             last_name: vm.currentStaff.staff_name.split(" ", 2)[1],
             company_name: vm.currentStaff.company_name,
@@ -175,17 +139,19 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             break_time: $filter('date')(vm.currentStaff.model_break, "HH:mm"),
             finish_time: $filter('date')(vm.currentStaff.model_finish, "HH:mm"),
             total_time: $filter('date')(vm.currentStaff.total_time, "HH:mm"),
-            absence: vm.currentStaff.absence && vm.currentStaff.absence[0],
+            absence: sessionStorage.getObject('sd.diary.absence') && sessionStorage.getObject('sd.diary.absence')[0],
             note: vm.currentStaff.note
         };
         //Staff add when index = create; update otherwise
         if (vm.index === 'create') {
-            $rootScope.currentSD.site_attendance.staffs.push(vm.member);
+            $rootScope.currentSD.site_attendance.staffs.push(member);
             var seen = sessionStorage.getObject('sd.seen');
             seen.staff = true;
             sessionStorage.setObject('sd.seen', seen);
         } else {
-            $rootScope.currentSD.site_attendance.staffs[vm.index] = vm.member;
+            //if no absence selected on last edit, keep the old value
+            member.absence = member.absence || $rootScope.currentSD.site_attendance.staffs[vm.index].absence;
+            $rootScope.currentSD.site_attendance.staffs[vm.index] = member;
         }
         sessionStorage.setObject('sd.diary.absence', null);
     }
