@@ -133,7 +133,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal, $stat
             first_name: vm.currentStaff.staff_name.split(" ", 2)[0],
             last_name: vm.currentStaff.staff_name.split(" ", 2)[1],
             company_name: vm.currentStaff.company_name,
-            trade: vm.currentStaff.trade,
+            trade: vm.currentStaff.role,
             hourly_rate: vm.currentStaff.hourly_rate,
             start_time: $filter('date')(vm.currentStaff.model_start, "HH:mm"),
             break_time: $filter('date')(vm.currentStaff.model_break, "HH:mm"),

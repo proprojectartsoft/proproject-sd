@@ -76,11 +76,11 @@ function WeatherCtrl($rootScope, $state, $scope, SettingService, SyncService, $f
 
     function save() {
         var weather = {
-            morning: sessionStorage.getObject('sd.diary.weather.morning'),
-            midday: sessionStorage.getObject('sd.diary.weather.midday'),
-            afternoon: sessionStorage.getObject('sd.diary.weather.afternoon'),
-            evening: sessionStorage.getObject('sd.diary.weather.evening'),
-            on_and_off: sessionStorage.getObject('sd.diary.weather.onOff'),
+            morning: sessionStorage.getObject('sd.diary.weather.morning') || $rootScope.currentSD.weather.morning,
+            midday: sessionStorage.getObject('sd.diary.weather.midday') || $rootScope.currentSD.weather.midday,
+            afternoon: sessionStorage.getObject('sd.diary.weather.afternoon') || $rootScope.currentSD.weather.afternoon,
+            evening: sessionStorage.getObject('sd.diary.weather.evening') || $rootScope.currentSD.weather.evening,
+            on_and_off: sessionStorage.getObject('sd.diary.weather.onOff') || $rootScope.currentSD.weather.on_and_off,
             perfect_weather: $rootScope.currentSD.weather.perfect_weather,
             min_temp: $rootScope.currentSD.weather.min_temp,
             max_temp: $rootScope.currentSD.weather.max_temp

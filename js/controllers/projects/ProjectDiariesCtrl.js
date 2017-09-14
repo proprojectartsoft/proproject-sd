@@ -51,9 +51,8 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             if (/^off.*/g.test($rootScope.currentSD.id)) {
                 proj.value.site_diaries = proj.value.site_diaries || [];
                 proj.value.site_diaries.push($rootScope.currentSD);
+                deleteTemp = true;
             } else {
-                // ColorService.get_colors().then(function(colorList) {
-                //     var colorsLength = Object.keys(colorList).length;
                 //store changes made on $rootScope.currentSD
                 for (var i = 0; i < proj.value.site_diaries.length; i++) {
                     var currentSD = proj.value.site_diaries[i];
@@ -63,7 +62,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                         deleteTemp = true;
                     }
                 }
-                // })
             }
         }
         SyncService.setProjects([proj], function() {

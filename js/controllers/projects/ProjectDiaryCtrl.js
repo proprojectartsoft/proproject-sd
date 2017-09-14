@@ -19,6 +19,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.projectId = sessionStorage.getObject('projectId');
     vm.edit = sessionStorage.getObject('editMode');
     vm.diaryId = sessionStorage.getObject('diaryId');
+    //store the number of diaries for current projectId
+    var diariesLength = 0;
 
     $timeout(function() {
         vm.seen = sessionStorage.getObject('sd.seen');
@@ -34,6 +36,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         } else {
             //visualize SD
             SyncService.getProject(vm.projectId, function(proj) {
+                diariesLength = proj.value.site_diaries.length;
                 var diary = $filter('filter')(proj.value.site_diaries, {
                     id: vm.diaryStateId
                 })[0];
@@ -126,16 +129,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             }).error(function(response) {
                 localStorage.setObject('diariesToSync', true);
                 //add the new SD to the project's SD list
-                SyncService.getProject(vm.projectId, function(proj) { //TODO:do not call getProject again!!!!!
-                    $rootScope.currentSD.id = "off" + proj.value.site_diaries.length + 1;
-                    $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
-                    syncPopup.close();
-                    SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
-                    $('.create-btn').attr("disabled", false);
-                    vm.go('project');
-                }, function(err) {
-                    SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
-                });
+                $rootScope.currentSD.id = "off" + diariesLength + 1;
+                $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
+                syncPopup.close();
+                SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
+                $('.create-btn').attr("disabled", false);
+                vm.go('project');
             })
     }
 
@@ -147,8 +146,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             content: "",
             buttons: []
         });
-
         if (navigator.onLine && localStorage.getObject('diariesToSync')) {
+            //if online and there is a SD stored while offline, sync the offline SD then add this new one
             SyncService.addDiariesToSync().then(function() {
                 addSiteDiaryToDB(syncPopup)
             })
@@ -296,7 +295,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 
     function go(predicate, id) {
         if (predicate === 'project') {
-            $rootScope.currentSD = null;
             $state.go('app.' + predicate, {
                 id: vm.projectId
             });
