@@ -21,7 +21,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.diaryId = sessionStorage.getObject('diaryId');
 
     //store the number of diaries for current projectId
-    var diariesLength = 0;
     if (vm.diaryStateId) {
         //enter existing SD
         sessionStorage.setObject('diaryId', vm.diaryStateId);
@@ -35,7 +34,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         } else {
             //visualize SD
             SyncService.getProject(vm.projectId, function(proj) {
-                diariesLength = proj.value.site_diaries.length;
+                $rootScope.diariesLength = proj.value.site_diaries.length;
                 var diary = $filter('filter')(proj.value.site_diaries, {
                     id: vm.diaryStateId
                 })[0];
@@ -195,7 +194,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             }).error(function(response) {
                 localStorage.setObject('diariesToSync', true);
                 //add the new SD to the project's SD list
-                $rootScope.currentSD.id = "off" + diariesLength + 1;
+                $rootScope.currentSD.id = "off" + $rootScope.diariesLength + 1;
                 $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
                 //restore initial format for attachments and comments field
                 $rootScope.currentSD.attachments = attachments.pictures || [];
