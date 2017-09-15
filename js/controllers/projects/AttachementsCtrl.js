@@ -15,11 +15,10 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
     vm.projectId = sessionStorage.getObject('projectId');
     vm.editMode = sessionStorage.getObject('editMode');
     vm.filter = {};
-    vm.imgURI = [];
     vm.dataToDelete = [];
     vm.dataToUpdate = [];
     vm.filter.substate = 'gallery';
-
+    vm.pictures = $rootScope.currentSD.attachments.pictures;
     populate();
     pullDown();
     goToTop();
@@ -29,8 +28,8 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
     });
 
     function populate() {
-        $rootScope.currentSD.attachments = $rootScope.currentSD.attachments || []; // && $rootScope.currentSD.attachments.pictures || [];
-        angular.forEach($rootScope.currentSD.attachments, function(value) {
+
+        angular.forEach(vm.pictures, function(value) {
             if (!value.url) {
                 value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
             }
@@ -70,8 +69,8 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
                     "title": "",
                     "project_id": vm.projectId
                 }
-                $rootScope.currentSD.attachments.push(pic);
-                vm.filter.picture = $rootScope.currentSD.attachments[$rootScope.currentSD.attachments.length - 1];
+                vm.pictures.push(pic);
+                vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
                 pullDown();
             });
@@ -100,8 +99,8 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
                     "title": "",
                     "project_id": vm.projectId
                 }
-                $rootScope.currentSD.attachments.push(pic);
-                vm.filter.picture = $rootScope.currentSD.attachments[$rootScope.currentSD.attachments.length - 1];
+                vm.pictures.push(pic);
+                vm.filter.picture = vm.pictures.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
                 pullDown();
             });
@@ -115,7 +114,7 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
             }
             vm.dataToDelete.push(idPic);
         }
-        $rootScope.currentSD.attachments.splice(index, 1);
+        vm.pictures.splice(index, 1);
         pullDown();
     }
 
@@ -126,7 +125,7 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
         $('input').removeClass("focus");
         $('textarea').prev().removeClass("focus");
         $('textarea').removeClass("focus");
-        var crtPic = $filter('filter')($rootScope.currentSD.attachments, {
+        var crtPic = $filter('filter')(vm.pictures, {
             id: vm.filter.picture.id
         })[0];
         var upd = '';
@@ -141,9 +140,8 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
     }
 
     function go(predicate, id) {
-      //TODO: there is no more attachments -> pictures
         $rootScope.currentSD.attachments = {
-            pictures: $rootScope.currentSD.attachments,
+            pictures: vm.pictures,
             toBeDeleted: vm.dataToDelete,
             toBeUpdated: vm.dataToUpdate
         };

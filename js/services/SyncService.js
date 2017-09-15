@@ -429,11 +429,13 @@ sdApp.service('SyncService', [
 
         service.addDiariesToSync = function() {
             var prm = $q.defer();
+            //if online and there are offline added diaries, add them to server
             if (navigator.onLine && localStorage.getObject('diariesToSync')) {
                 service.login().then(function(res) {
                     if (res === "logged") {
                         var diariesToAdd = [];
                         service.getProjects(function(projects) {
+                            //method to select all diaries added offline (id starts with "off")
                             angular.forEach(projects, function(project) {
                                 angular.forEach($filter('filter')(project.value.diaries, function(d) {
                                     return /^off.*/g.test(d.id);
@@ -442,44 +444,58 @@ sdApp.service('SyncService', [
                                 })
                             });
                             localStorage.removeItem('diariesToSync');
+                            //there are no diaries to be added to server
                             if (diariesToAdd && !diariesToAdd.length) {
                                 prm.resolve();
                             }
+                            var attToAdd = [],
+                                commentsToAdd = [];
                             angular.forEach(diariesToAdd, function(diaryToAdd) {
+                                //keep attachments and comments
+                                var attachments = [],
+                                    comments = [];
+                                angular.copy(diaryToAdd.attachments, attachments);
+                                angular.copy(diaryToAdd.comments, comments);
+                                //prepare the format required by server
                                 diaryToAdd.id = 0;
+                                //delete fields used for local purpose
+                                delete diaryToAdd.backColor;
+                                delete diaryToAdd.foreColor;
+                                delete diaryToAdd.attachments;
+                                delete diaryToAdd.comments;
+                                //add the diaries to server
                                 SiteDiaryService.add_diary(diaryToAdd)
                                     .success(function(result) {
-                                        //TODO: modify according to changes on backend
-                                        var attachments = diaryToAdd.attachments;
-                                        var attToAdd = [];
                                         angular.forEach(attachments.pictures, function(value) {
                                             if (!value.path) {
                                                 value.site_diary_id = result.id;
-                                                attToAdd.push(value);
+                                                attToAdd.push(AttachmentsService.upload_attachment(value).then(function(result) {}));
                                             }
                                         });
-                                        if (attToAdd) {
-                                            AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
-                                        }
-                                        var comments = diaryToAdd.comments;
                                         angular.forEach(comments, function(value) {
                                             var request = {
                                                 site_diary_id: result.id,
                                                 comment: value.comment
                                             };
-                                            SiteDiaryService.add_comments(request).then(function(result) {});
+                                            commentsToAdd.push(SiteDiaryService.add_comments(request).then(function(result) {}));
                                         });
+                                        //last diary added along with its attachments and comments
                                         if (diariesToAdd[diariesToAdd.length - 1] === diaryToAdd) {
-                                            prm.resolve();
+                                            Promise.all([attToAdd, commentsToAdd]).then(function(res) {
+                                                prm.resolve();
+                                            });
                                         }
                                     }).error(function(err) {
                                         if (diariesToAdd[diariesToAdd.length - 1] === diaryToAdd) {
-                                            prm.resolve();
+                                            Promise.all([attToAdd, commentsToAdd]).then(function(res) {
+                                                prm.resolve();
+                                            });
                                         }
                                     })
                             })
                         });
                     } else {
+                        //cannot authenticate on server with the stored credentials
                         prm.resolve();
                         var offlinePopup = $ionicPopup.alert({
                             title: "Error",

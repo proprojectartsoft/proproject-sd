@@ -6,29 +6,29 @@
     </div>
     <ion-content class="has-subheader sd-form sd-form-withfields" delegate-handle="mainScroll">
         <div ng-if="vm.filter.substate === 'gallery'">
-            <div ng-if="currentSD.attachments.length === 0 || !currentSD.attachments" style="text-align: center; padding-top:30vw">
+            <div ng-if="vm.pictures.length === 0 || !vm.pictures" style="text-align: center; padding-top:30vw">
                 <span class="all-ion-text" style="line-height: 15vw;font-size: 15vw; color:#4A6780">No images assigned</span>
             </div>
-            <div ng-if="currentSD.attachments.length !== 1 || currentSD.attachments[0].url || currentSD.attachments[0].base_64_string">
-                <div class="row" ng-repeat="pic in currentSD.attachments" ng-if="$index % 2 === 0">
-                    <div class="col col-50" ng-if="$index < currentSD.attachments.length">
+            <div ng-if="vm.pictures.length !== 1 || vm.pictures[0].url || vm.pictures[0].base_64_string">
+                <div class="row" ng-repeat="pic in vm.pictures" ng-if="$index % 2 === 0">
+                    <div class="col col-50" ng-if="$index < vm.pictures.length">
                         <div class="pull-down" style="max-height: 50vw;overflow: hidden;">
-                            <img ng-src="{{currentSD.attachments[$index].url}}" ng-click="vm.testPicture(currentSD.attachments[$index])" ng-if="currentSD.attachments[$index].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
-                            <img data-ng-src="data:image/png;base64,{{currentSD.attachments[$index].base_64_string}}" ng-click="vm.testPicture(currentSD.attachments[$index])" ng-if="!currentSD.attachments[$index].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);"
+                            <img ng-src="{{vm.pictures[$index].url}}" ng-click="vm.testPicture(vm.pictures[$index])" ng-if="vm.pictures[$index].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                            <img data-ng-src="data:image/png;base64,{{vm.pictures[$index].base_64_string}}" ng-click="vm.testPicture(vm.pictures[$index])" ng-if="!vm.pictures[$index].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);"
                             />
                         </div>
                         <div>
-                            <button class="button button-assertive" ng-if="vm.editMode || !vm.diaryId" ng-click='vm.removePicture(currentSD.attachments[$index],$index)' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px; padding: 0px;">Remove</button>
+                            <button class="button button-assertive" ng-if="vm.editMode || !vm.diaryId" ng-click='vm.removePicture(vm.pictures[$index],$index)' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px; padding: 0px;">Remove</button>
                         </div>
                     </div>
-                    <div class="col col-50" ng-if="$index + 1 < currentSD.attachments.length">
+                    <div class="col col-50" ng-if="$index + 1 < vm.pictures.length">
                         <div class="pull-down" style="max-height: 50vw;overflow: hidden;">
-                            <img ng-src="{{currentSD.attachments[$index+1].url}}" ng-click="vm.testPicture(currentSD.attachments[$index + 1])" ng-if="currentSD.attachments[$index + 1].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
-                            <img data-ng-src="data:image/png;base64,{{currentSD.attachments[$index+1].base_64_string}}" ng-click="vm.testPicture(currentSD.attachments[$index + 1])" ng-if="!currentSD.attachments[$index +1 ].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);"
+                            <img ng-src="{{vm.pictures[$index+1].url}}" ng-click="vm.testPicture(vm.pictures[$index + 1])" ng-if="vm.pictures[$index + 1].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
+                            <img data-ng-src="data:image/png;base64,{{vm.pictures[$index+1].base_64_string}}" ng-click="vm.testPicture(vm.pictures[$index + 1])" ng-if="!vm.pictures[$index +1 ].path" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);"
                             />
                         </div>
                         <div>
-                            <button class="button button-assertive" ng-if="vm.editMode || !vm.diaryId" ng-click='vm.removePicture(currentSD.attachments[$index + 1],$index + 1)' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px; padding: 0px;">Remove</button>
+                            <button class="button button-assertive" ng-if="vm.editMode || !vm.diaryId" ng-click='vm.removePicture(vm.pictures[$index + 1],$index + 1)' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px; padding: 0px;">Remove</button>
                         </div>
                     </div>
                 </div>

@@ -24,6 +24,17 @@ sdApp.factory('AttachmentsService', [
                     }
                 );
             },
+            upload_attachment: function(dataIn) {
+                return $http({
+                    method: 'POST',
+                    url: $APP.server + '/api/sdattachment/uploadfile',
+                    data: dataIn
+                }).then(
+                    function(payload) {
+                        return payload.data;
+                    }
+                );
+            },
             delete_attachments: function(dataIn) {
                 return $http({
                     method: 'POST',

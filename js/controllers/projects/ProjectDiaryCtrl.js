@@ -26,6 +26,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         sessionStorage.setObject('diaryId', vm.diaryStateId);
         vm.enableCreate = false;
         if (vm.edit) {
+            //enter edit mode
             vm.created_for_date = ($rootScope.currentSD.created_for_date !== 0) && $rootScope.currentSD.created_for_date || '';
             vm.summary = $rootScope.currentSD.summary;
         } else {
@@ -35,9 +36,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 var diary = $filter('filter')(proj.value.site_diaries, {
                     id: vm.diaryStateId
                 })[0];
-                indicateInputData(diary);
+                //copy aall attachments into pictures field
+                diary.attachments.pictures = diary.attachments;
                 vm.created_for_date = (diary.created_for_date !== 0) && diary.created_for_date || '';
                 vm.summary = diary ? diary.summary : '';
+                //check the subfields having inputed some data
+                indicateInputData(diary);
                 //store as temp
                 $rootScope.currentSD = diary;
                 $rootScope.backupSD = angular.copy($rootScope.currentSD);
@@ -148,22 +152,19 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         angular.copy($rootScope.currentSD.comments, comments);
         //add and remove fields to conform to the format required on server
         prepareSDForServer();
-        console.log($rootScope.currentSD);
         SiteDiaryService.add_diary($rootScope.currentSD)
             .success(function(result) {
+                var deleteAttachments,
+                    uploadAttachments = [],
+                    addComments = [];
                 //add comments for SD
                 angular.forEach(comments, function(value) {
                     var request = {
                         site_diary_id: result.id,
                         comment: value.comment
                     };
-                    SiteDiaryService.add_comments(request).success(function(result) {});
+                    addComments.push(SiteDiaryService.add_comments(request).success(function(result) {}));
                 });
-                //update attachments
-                angular.forEach(attachments.toBeUpdated, function(att) {
-                    AttachmentsService.update_attachments(att).then(function(result) {})
-                })
-                var deleteAttachments, uploadAttachments;
                 //prepare the attachments array to conform to format required by server
                 angular.forEach(attachments.pictures, function(value) {
                     if (!value.path) {
@@ -173,17 +174,22 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         value.base_64_string = '';
                         value.site_diary_id = result.id;
                     }
+                    uploadAttachments.push(AttachmentsService.upload_attachment(attachments.pictures).then(function(result) {}));
                 });
-                if (attachments.pictures) {
-                    uploadAttachments = AttachmentsService.upload_attachments(attachments.pictures).then(function(result) {});
-                }
-                if (attachments.toBeDeleted) {
-                    deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
-                }
-                Promise.all([uploadAttachments, deleteAttachments]).then(function(res) {
+                //update attachments
+                // angular.forEach(attachments.toBeUpdated, function(att) {
+                //     AttachmentsService.update_attachments(att).then(function(result) {})
+                // })
+                // if (attachments.toBeDeleted) {
+                //     deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
+                // }
+                Promise.all([uploadAttachments, addComments]).then(function(res) {
                     SyncService.sync().then(function() {
                         $('.create-btn').attr("disabled", false);
                         syncPopup.close();
+                        //restore initial format for attachments and comments field
+                        $rootScope.currentSD.attachments = attachments.pictures;
+                        $rootScope.currentSD.comments = comments;
                         vm.go('project');
                     })
                 });
@@ -192,8 +198,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 //add the new SD to the project's SD list
                 $rootScope.currentSD.id = "off" + diariesLength + 1;
                 $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
-                //add the comments and attachments
-                $rootScope.currentSD.attachments = attachments;
+                //restore initial format for attachments and comments field
+                $rootScope.currentSD.attachments = attachments.pictures;
                 $rootScope.currentSD.comments = comments;
                 syncPopup.close();
                 SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
@@ -237,48 +243,55 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         $('.save-btn').attr("disabled", true);
         vm.edit = false;
         sessionStorage.setObject('editMode', vm.edit);
+        //store attachments and comments
+        var attachments = [],
+            comments = [];
+        angular.copy($rootScope.currentSD.attachments, attachments);
+        angular.copy($rootScope.currentSD.comments, comments);
+        //delete fields used for local purpose
+        delete $rootScope.currentSD.backColor;
+        delete $rootScope.currentSD.foreColor;
+        delete $rootScope.currentSD.attachments;
+        delete $rootScope.currentSD.comments;
 
         // method to update the backend
         var updateDiary = SiteDiaryService.update_diary($rootScope.currentSD).success(function(result) {}).error(function(err) {
             SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
         });
 
+        var uploadAttachments = [],
+            updateAttachments = [],
+            deleteAttachments,
+            addComments = [];
         // method to update comments in the backend
-        angular.forEach(sessionStorage.getObject('sd.comments'), function(comment) {
-            SiteDiaryService.add_comments(comment)
-                .success(function(result) {
-                    sessionStorage.setObject('sd.comments', []);
-                }).error(function(err) {
-                    sessionStorage.setObject('sd.comments', []);
-                })
+        angular.forEach(comments, function(comment) { // sessionStorage.getObject('sd.comments')
+            addComments.push(SiteDiaryService.add_comments(comment).success(function(result) {}).error(function(err) {}));
         });
-
-        // method to update the attachments
-        var attachments = $rootScope.currentSD.attachments,
-            attToAdd = [];
+        // method to update attachments in the backend
         if (attachments !== null) {
+            // method to add attachments
             angular.forEach(attachments.pictures, function(value) {
                 if (!value.path) {
-                    attToAdd.push(value);
+                    uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {}));
                 }
             });
-            var uploadAttachments = AttachmentsService.upload_attachments(attToAdd).then(function(result) {});
-            var updateAttachments = [];
-            if (attachments.toBeUpdated && attachments.toBeUpdated.length !== 0) {
+            // method to update attachments
+            if (attachments.toBeUpdated) {
                 angular.forEach(attachments.toBeUpdated, function(att) {
                     updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {}));
                 })
             }
-
             // method to delete attachments
-            var deleteAttachments;
             if (attachments.toBeDeleted) {
                 deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
             }
         }
         // run all operations then go back to the page where we come from - there project will be updated
-        Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments]).then(function(res) {
+        Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments, addComments]).then(function(res) {
             syncPopup.close();
+            //restore initial format for attachments and comments field
+            $rootScope.currentSD.attachments = attachments.pictures;
+            $rootScope.currentSD.comments = comments;
             vm.go('project');
         });
     }
