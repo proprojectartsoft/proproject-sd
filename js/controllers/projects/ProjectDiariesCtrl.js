@@ -45,7 +45,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         // if we have a SD in the current scope
         // store that in the DB
         if ($rootScope.currentSD) {
-            console.log("is crtSD");
             //store new created SD
             if (/^off.*/g.test($rootScope.currentSD.id)) {
                 proj.value.site_diaries = proj.value.site_diaries || [];

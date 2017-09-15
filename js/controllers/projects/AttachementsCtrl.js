@@ -125,10 +125,13 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
         $('input').removeClass("focus");
         $('textarea').prev().removeClass("focus");
         $('textarea').removeClass("focus");
+        //get current picture
         var crtPic = $filter('filter')(vm.pictures, {
             id: vm.filter.picture.id
         })[0];
         var upd = '';
+        //if the current picture was modified previously, store the last version
+        //else add to updatedPhotos
         if (upd = $filter('filter')(vm.dataToUpdate, {
                 id: vm.filter.picture.id
             })[0]) {

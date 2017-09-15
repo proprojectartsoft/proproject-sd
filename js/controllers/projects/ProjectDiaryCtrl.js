@@ -19,6 +19,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.projectId = sessionStorage.getObject('projectId');
     vm.edit = sessionStorage.getObject('editMode');
     vm.diaryId = sessionStorage.getObject('diaryId');
+
     //store the number of diaries for current projectId
     var diariesLength = 0;
     if (vm.diaryStateId) {
@@ -29,6 +30,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             //enter edit mode
             vm.created_for_date = ($rootScope.currentSD.created_for_date !== 0) && $rootScope.currentSD.created_for_date || '';
             vm.summary = $rootScope.currentSD.summary;
+            //check the subfields having inputed some data
+            indicateInputData();
         } else {
             //visualize SD
             SyncService.getProject(vm.projectId, function(proj) {
@@ -36,15 +39,16 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 var diary = $filter('filter')(proj.value.site_diaries, {
                     id: vm.diaryStateId
                 })[0];
-                //copy aall attachments into pictures field
-                diary.attachments.pictures = diary.attachments;
+                //copy all attachments into pictures field
+                var pics = angular.copy(diary.attachments);
+                diary.attachments.pictures = pics;
                 vm.created_for_date = (diary.created_for_date !== 0) && diary.created_for_date || '';
                 vm.summary = diary ? diary.summary : '';
-                //check the subfields having inputed some data
-                indicateInputData(diary);
                 //store as temp
                 $rootScope.currentSD = diary;
                 $rootScope.backupSD = angular.copy($rootScope.currentSD);
+                //check the subfields having inputed some data
+                indicateInputData();
             }, function(err) {
                 SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
             })
@@ -78,22 +82,24 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         }
         vm.created_for_date = $rootScope.currentSD.created_for_date;
         vm.summary = $rootScope.currentSD.summary;
+        //check the subfields having inputed some data
+        indicateInputData();
     }
 
-    $rootScope.indication = {
-        weather: false,
-        incidents: false,
-        attachments: false,
-        comments: false,
-        site_attendance: false,
-        plant_and_material_used: false,
-        contract_notes: false,
-        site_notes: false,
-        goods_received: false,
-        oh_and_s: false
-    }
-
-    function indicateInputData(diary) {
+    function indicateInputData() {
+        diary = $rootScope.currentSD;
+        $rootScope.indication = {
+            weather: false,
+            incidents: false,
+            attachments: false,
+            comments: false,
+            site_attendance: false,
+            plant_and_material_used: false,
+            contract_notes: false,
+            site_notes: false,
+            goods_received: false,
+            oh_and_s: false
+        }
         for (var key in diary) {
             //not empty array
             if ((Array.isArray(diary[key]) && diary[key].length)) {
@@ -192,7 +198,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 $rootScope.currentSD.id = "off" + diariesLength + 1;
                 $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
                 //restore initial format for attachments and comments field
-                $rootScope.currentSD.attachments = attachments.pictures;
+                $rootScope.currentSD.attachments = attachments.pictures || [];
                 $rootScope.currentSD.comments = comments;
                 syncPopup.close();
                 SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
@@ -257,8 +263,15 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             deleteAttachments,
             addComments = [];
         // method to update comments in the backend
-        angular.forEach(comments, function(comment) { // sessionStorage.getObject('sd.comments')
-            addComments.push(SiteDiaryService.add_comments(comment).success(function(result) {}).error(function(err) {}));
+        angular.forEach(comments, function(comment) {
+            //all new comments do not have an id yet; add them to server
+            if (!comment.id) {
+                var request = {
+                    site_diary_id: comment.site_diary_id,
+                    comment: comment.comment
+                };
+                addComments.push(SiteDiaryService.add_comments(request).success(function(result) {}).error(function(err) {}));
+            }
         });
         // method to update attachments in the backend
         if (attachments !== null) {
@@ -283,7 +296,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments, addComments]).then(function(res) {
             syncPopup.close();
             //restore initial format for attachments and comments field
-            $rootScope.currentSD.attachments = attachments.pictures;
+            $rootScope.currentSD.attachments = attachments.pictures || [];
             $rootScope.currentSD.comments = comments;
             vm.go('project');
         });
