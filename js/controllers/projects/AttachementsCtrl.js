@@ -100,7 +100,7 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
                     "project_id": vm.projectId
                 }
                 vm.pictures.push(pic);
-                vm.filter.picture = vm.pictures.pictures[vm.pictures.length - 1];
+                vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
                 pullDown();
             });
@@ -145,7 +145,7 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
             toBeDeleted: vm.dataToDelete,
             toBeUpdated: vm.dataToUpdate
         };
-        if ((vm.diaryId) && (predicate === 'diary')) {
+        if (predicate === 'diary') {
             if (vm.filter.substate === 'pic') {
                 returnToGallery();
             } else {

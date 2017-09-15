@@ -167,29 +167,22 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 });
                 //prepare the attachments array to conform to format required by server
                 angular.forEach(attachments.pictures, function(value) {
-                    if (!value.path) {
+                    //new photo, non existent on server
+                    if (!value.base64String) {
                         value.site_diary_id = result.id;
                     } else if (!vm.enableCreate && vm.edit) {
+                        //when edit a diary and save as new,there may be photos already stored on server
                         delete value.id;
                         value.base_64_string = '';
                         value.site_diary_id = result.id;
                     }
                     uploadAttachments.push(AttachmentsService.upload_attachment(attachments.pictures).then(function(result) {}));
                 });
-                //update attachments
-                // angular.forEach(attachments.toBeUpdated, function(att) {
-                //     AttachmentsService.update_attachments(att).then(function(result) {})
-                // })
-                // if (attachments.toBeDeleted) {
-                //     deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
-                // }
                 Promise.all([uploadAttachments, addComments]).then(function(res) {
                     SyncService.sync().then(function() {
                         $('.create-btn').attr("disabled", false);
                         syncPopup.close();
-                        //restore initial format for attachments and comments field
-                        $rootScope.currentSD.attachments = attachments.pictures;
-                        $rootScope.currentSD.comments = comments;
+                        $rootScope.currentSD = null;
                         vm.go('project');
                     })
                 });
@@ -271,7 +264,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         if (attachments !== null) {
             // method to add attachments
             angular.forEach(attachments.pictures, function(value) {
-                if (!value.path) {
+                if (!value.base64String) {
                     uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {}));
                 }
             });

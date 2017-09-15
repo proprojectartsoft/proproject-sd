@@ -196,15 +196,6 @@ sdApp.service('SyncService', [
             }
             return prm.promise;
         };
-        //
-        // service.update_temp_sd = function (projId, temp) {
-        // 	service.getProject(projId, function (proj) {
-        // 		proj.temp = temp;
-        // 		service.setProjects([proj], function () {
-        // 			console.log('Temp set on project');
-        // 		});
-        // 	});
-        // };
 
         service.sync = function() {
             var deferred = $q.defer();
@@ -213,6 +204,12 @@ sdApp.service('SyncService', [
                     if (res === "logged") {
                         service.getme()
                             .success(function(data) {
+                                service.clearDb(function() {
+                                    buildData().then(function(projects) {
+                                        deferred.resolve('sync_done');
+                                    });
+                                });
+
                                 function setCompanySettings(callback) {
                                     SiteDiaryService.get_company_settings().success(function(sett) {
                                         var lists = [];
@@ -302,65 +299,19 @@ sdApp.service('SyncService', [
                                     setCompanySettings(function(list) {
                                         setCompanyLists(list, function(lists) {
                                             service.setSettings(lists, function() {
-                                                console.log('Setting inserted');
                                                 //get projects then store locally - this can be done in sync
                                                 getProjects().then(function(projects) {
-                                                    console.log('Projects gathered', projects);
                                                     //no projects stored
                                                     if (!projects.length) return def.resolve();
                                                     service.setProjects(projects, function(projects) {
                                                         def.resolve(projects);
                                                     });
-                                                    //store diaries for stored projects
-                                                    /*
-                                                     addDiaries(projects).then(function (projects) {
-                                                     console.log('Diaries added', projects);
-                                                     //store diaries details
-                                                     addDiariesDetails(projects).then(function (projectsArray) {
-                                                     console.log('Diary details added', projectsArray);
-                                                     // store the projects in the DB
-                                                     service.setProjects(projectsArray, function (projects) {
-                                                     def.resolve(projects);
-                                                     });
-                                                     });
-                                                     });
-                                                     */
                                                 });
                                             });
                                         });
                                     });
                                     return def.promise;
                                 }
-
-                                function init() {
-                                    service.clearDb(function() {
-                                        buildData().then(function(projects) {
-                                            if (!projects.length) deferred.resolve('sync_done');
-                                            for (var i = 0; i < projects.length; i++) {
-                                                var project = projects[i];
-                                                if (tempSD !== {} && tempSD.project_id === project.id) {
-                                                    //store the temp SD on indexedDB
-                                                    project.temp = tempSD;
-                                                    service.setProjects([tempSD], function() {
-                                                        deferred.resolve('sync_done');
-                                                    });
-                                                    break;
-                                                }
-                                            }
-                                        });
-                                    });
-                                }
-
-                                var tempSD = {};
-                                if (sessionStorage.getObject('projectId')) {
-                                    service.getProject(sessionStorage.getObject('projectId'), function(project) {
-                                        if (project && project.temp) tempSD = project.temp;
-                                        init();
-                                    });
-                                } else {
-                                    init();
-                                }
-
                             }).error(function(data, status) {
                                 deferred.resolve();
                                 if (!navigator.onLine) {
@@ -427,6 +378,7 @@ sdApp.service('SyncService', [
             return deferred.promise;
         };
 
+        //method to add new diaries storred in indexedDB to server
         service.addDiariesToSync = function() {
             var prm = $q.defer();
             //if online and there are offline added diaries, add them to server

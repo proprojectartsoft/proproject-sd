@@ -44,28 +44,25 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     SyncService.getProject(vm.projectId, function(proj) {
         // if we have a SD in the current scope
         // store that in the DB
-        var deleteTemp = false;
         if ($rootScope.currentSD) {
+            console.log("is crtSD");
             //store new created SD
             if (/^off.*/g.test($rootScope.currentSD.id)) {
                 proj.value.site_diaries = proj.value.site_diaries || [];
                 proj.value.site_diaries.push($rootScope.currentSD);
-                deleteTemp = true;
             } else {
-                //store changes made on $rootScope.currentSD
+                //get the modified diary and store changes
                 for (var i = 0; i < proj.value.site_diaries.length; i++) {
                     var currentSD = proj.value.site_diaries[i];
                     if (currentSD.id === $rootScope.currentSD.id &&
                         JSON.stringify(currentSD) !== JSON.stringify($rootScope.currentSD)) {
                         proj.value.site_diaries[i] = angular.copy($rootScope.currentSD);
-                        deleteTemp = true;
                     }
                 }
             }
         }
         SyncService.setProjects([proj], function() {
-            if (deleteTemp)
-                $rootScope.currentSD = false;
+            $rootScope.currentSD = false;
             //order diaries by date
             vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
             ColorService.get_colors().then(function(colorList) {
