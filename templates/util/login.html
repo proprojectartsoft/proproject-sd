@@ -1,4 +1,4 @@
-<ion-view title="Login" id="login" cache-view="false">
+<!-- <ion-view title="Login" id="login" cache-view="false">
     <ion-content>
         <div class="login-container">
             <div class="welcome-container">
@@ -33,5 +33,35 @@
                 </div>
             </div>
         </div>
+    </ion-content>
+</ion-view> -->
+<ion-view title="Login" id="login-new" cache-view="false">
+    <ion-content>
+      <div class="login-text">
+        WELCOME TO
+      </div>
+      <div class="login-icon">
+        <img src="img/SD_icon.png">
+      </div>
+      <div class="login-text">
+        SITE DIARY
+      </div>
+      <form role="form" name="loginForm" novalidate="">
+        <div>
+          <input type="email" ng-model="user.username" placeholder="Username" required="required">
+          <input type="password" ng-model="user.password" placeholder="Password" required="required">
+        </div>
+        <div class="login-buttons">
+          <button class="forgot-button" type="button" name="forgot-button" ng-click="vm.go('forgot')">
+            FORGOT?
+          </button>
+          <button class="login-button"type="button" name="login-button" ng-click="login()" ng-disabled="loginForm.$invalid">
+            LOGIN
+          </button>
+        </div>
+      </form>
+      <div class="login-remember">
+        <ion-checkbox ng-model="user.remember">REMEMBER ME</ion-checkbox>
+      </div>
     </ion-content>
 </ion-view>

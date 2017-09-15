@@ -959,3 +959,118 @@ input[readonly] {
 .attached-photo {
     width: 100%;
 }
+
+/*new login page css*/
+
+#login-new.pane {
+  background-color: #2A2876;
+}
+
+#login-new .scroll-content {
+  background-color: #2A2876;
+  height: 100%
+}
+
+#login-new .scroll-content .login-text {
+  color: #fff;
+  position: relative;
+  margin-top: 20px;
+  font-size: 22px!important;
+  text-align: center;
+  font-weight: 600;
+  font-family: sans-serif!important;
+}
+
+#login-new .scroll-content .login-icon {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#login-new .scroll-content .login-icon img {
+  height: 180px;
+}
+
+#login-new .scroll-content form {
+  margin-top: 20px;
+  text-align: -webkit-center;
+}
+
+#login-new .scroll-content form div input {
+  width: 80%;
+  height: 48px;
+  border-radius: 7px;
+  margin-bottom: 5px;
+  color: #2A2876!important;
+  font-size: 20px!important;
+  padding-left: 20px;
+  font-weight: 600;
+}
+
+#login-new .scroll-content form div input::-webkit-input-placeholder {
+  color: #2A2876;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#login-new .scroll-content .login-buttons {
+  width: 80%;
+  height: 48px;
+}
+
+#login-new .scroll-content .login-buttons button {
+  height: 48px;
+  width: 49%;
+  color: #fff;
+  font-weight: 600;
+  font-size: 22px!important;
+  border: none;
+  font-family: sans-serif!important;
+}
+
+#login-new .scroll-content .login-buttons .forgot-button {
+  float: left;
+  background-color: #2A2876;
+}
+
+#login-new .scroll-content .login-buttons .login-button {
+  float: right;
+  background-color: #70B5DF;
+  border-radius: 7px;
+}
+
+#login-new .scroll-content .login-remember {
+  margin-top: 20px;
+  margin-left: 6%;
+}
+
+#login-new .scroll-content .login-remember label {
+  background-color: #2A2876;
+  border-color: #2A2876;
+  color: #fff;
+}
+
+#login-new .scroll-content .login-remember label .item-content {
+  padding-top: 6px;
+}
+
+#login-new .scroll-content .login-remember label .checkbox i::before {
+  border-radius: 7px!important;
+  height: 35px;
+  width: 35px;
+  background: #fff;
+  border: 2px #fff solid;
+}
+
+#login-new .scroll-content .login-remember label .checkbox-icon::after {
+  border: 3px solid #70B5DF;
+  border-top: 0;
+  border-right: 0;
+  height: 10px;
+  width: 22px;
+}
+
+#login-new .scroll-content .login-remember label .item-content span {
+  font-weight: 600;
+  font-size: 22px!important;
+  font-family: sans-serif!important;
+}
