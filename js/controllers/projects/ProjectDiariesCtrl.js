@@ -42,8 +42,6 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     // when saving something in a controller (like projectDiaryController) user will be redirected here
     // so don't update the project in that child controller
     SyncService.getProject(vm.projectId, function(proj) {
-        //get the number of SDs
-        $rootScope.diariesLength = proj.value.site_diaries.length;
         // if we have a SD in the current scope
         // store that in the DB
         if ($rootScope.currentSD) {
@@ -72,6 +70,8 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             $rootScope.currentSD = false;
             //order diaries by date
             vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
+            //get the number of SDs
+            $rootScope.diariesLength = vm.diaries.length;
             ColorService.get_colors().then(function(colorList) {
                 var colorsLength = Object.keys(colorList).length;
                 //store colors
