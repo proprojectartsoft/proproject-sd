@@ -415,6 +415,7 @@ sdApp.service('SyncService', [
                                 delete diaryToAdd.foreColor;
                                 delete diaryToAdd.attachments;
                                 delete diaryToAdd.comments;
+                                delete diaryToAdd.sd_no;
                                 //add the diaries to server
                                 SiteDiaryService.add_diary(diaryToAdd)
                                     .success(function(result) {
