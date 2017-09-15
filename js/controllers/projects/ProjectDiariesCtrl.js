@@ -46,15 +46,21 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         // store that in the DB
         if ($rootScope.currentSD) {
             //store new created SD
-            if (/^off.*/g.test($rootScope.currentSD.id)) {
-                proj.value.site_diaries = proj.value.site_diaries || [];
-                proj.value.site_diaries.push($rootScope.currentSD);
+            if (/^off.*/g.test($rootScope.currentSD.id) && ) {
+                var sd = $filter('filter')(proj.value.site_diaries, {
+                    id: $rootScope.currentSD.id
+                });
+                //SD not already in indexedDB
+                if (!sd || sd && !sd.length) {
+                    proj.value.site_diaries = proj.value.site_diaries || [];
+                    proj.value.site_diaries.push($rootScope.currentSD);
+                }
             } else {
                 //get the modified diary and store changes
                 for (var i = 0; i < proj.value.site_diaries.length; i++) {
-                    var currentSD = proj.value.site_diaries[i];
-                    if (currentSD.id === $rootScope.currentSD.id &&
-                        JSON.stringify(currentSD) !== JSON.stringify($rootScope.currentSD)) {
+                    var sd = proj.value.site_diaries[i];
+                    if (sd.id === $rootScope.currentSD.id &&
+                        JSON.stringify(sd) !== JSON.stringify($rootScope.currentSD)) {
                         proj.value.site_diaries[i] = angular.copy($rootScope.currentSD);
                     }
                 }

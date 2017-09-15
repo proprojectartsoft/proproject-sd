@@ -11,11 +11,11 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 	vm.logout = logout;
 	vm.username = localStorage.getObject('dsremember');
 	vm.loggedIn = localStorage.getObject('loggedIn');
-	
+
 	function toggleSidemenu($event) {
 		$ionicSideMenuDelegate.toggleLeft();
 	}
-	
+
 	function sync() {
 		$ionicSideMenuDelegate.toggleLeft();
 		if (navigator.onLine) {
@@ -28,11 +28,11 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 			});
 		})
 	}
-	
+
 	function go(predicate) {
 		$state.go('app.' + predicate);
 	}
-	
+
 	function logout() {
 		if (navigator.onLine) {
 			$state.go('login');
@@ -47,14 +47,14 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 			loadingPopover("Error", errorTemplate, "error");
 		}
 	}
-	
-	$rootScope.$watch(function () {
-		return $ionicSideMenuDelegate.isOpen();
-	}, function (isOpen) {
-		$('#ds-menu-btn')
-			.toggleClass("ion-navicon")
-			.toggleClass("ion-android-arrow-back");
-	});
+
+	// $rootScope.$watch(function () {
+	// 	return $ionicSideMenuDelegate.isOpen();
+	// }, function (isOpen) {
+	// 	$('#ds-menu-btn')
+	// 		.toggleClass("ion-navicon")
+	// 		.toggleClass("ion-android-arrow-back");
+	// });
 	
 	function loadingPopover(title, template, loadingOrError) {
 		var pop = $ionicPopup.show({

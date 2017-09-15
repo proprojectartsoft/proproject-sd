@@ -389,7 +389,7 @@ sdApp.service('SyncService', [
                         service.getProjects(function(projects) {
                             //method to select all diaries added offline (id starts with "off")
                             angular.forEach(projects, function(project) {
-                                angular.forEach($filter('filter')(project.value.diaries, function(d) {
+                                angular.forEach($filter('filter')(project.value.site_diaries, function(d) {
                                     return /^off.*/g.test(d.id);
                                 }), function(sd) {
                                     diariesToAdd.push(sd);
