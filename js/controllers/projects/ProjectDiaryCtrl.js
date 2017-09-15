@@ -33,8 +33,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             indicateInputData();
         } else {
             //visualize SD
-            SyncService.getProject(vm.projectId, function(proj) {
-                $rootScope.diariesLength = proj.value.site_diaries.length;
+            SyncService.getProject(vm.projectId, function(proj) {      
                 var diary = $filter('filter')(proj.value.site_diaries, {
                     id: vm.diaryStateId
                 })[0];
