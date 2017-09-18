@@ -34,19 +34,24 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 		} else {
 			//visualize SD
 			SyncService.getProject(vm.projectId, function (proj) {
-				var diary = $filter('filter')(proj.value.site_diaries, {
-					id: vm.diaryStateId
-				})[0];
-				//copy all attachments into pictures field
-				diary.attachments.pictures = angular.copy(diary.attachments);
-				//store as temp
-				$rootScope.currentSD = diary;
-				$rootScope.backupSD = angular.copy($rootScope.currentSD);
-				// display data will be completed later
-				vm.created_for_date = ($rootScope.currentSD.created_for_date !== 0) && $rootScope.currentSD.created_for_date || '';
-				vm.summary = $rootScope.currentSD.summary;
-				//check the subfields having inputed some data
-				indicateInputData();
+				setTimeout(function () {
+					$scope.$apply(function () {
+						if (!proj) return false;
+						var diary = $filter('filter')(proj.value.site_diaries, {
+							id: vm.diaryStateId
+						})[0];
+						//copy all attachments into pictures field
+						diary.attachments.pictures = angular.copy(diary.attachments);
+						//store as temp
+						$rootScope.currentSD = diary;
+						$rootScope.backupSD = angular.copy($rootScope.currentSD);
+						// display data will be completed later
+						vm.created_for_date = ($rootScope.currentSD.created_for_date !== 0) && $rootScope.currentSD.created_for_date || '';
+						vm.summary = $rootScope.currentSD.summary;
+						//check the subfields having inputed some data
+						indicateInputData();
+					});
+				}, 100);
 			}, function (err) {
 				SettingService.show_message_popup('Error', '<span>Project not found: </span>' + vm.projectId);
 			});

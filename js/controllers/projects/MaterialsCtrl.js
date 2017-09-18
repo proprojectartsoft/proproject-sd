@@ -24,8 +24,8 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
     vm.total_formated = '';
     vm.subtotal_formated = '';
     vm.newGood = '';
-    vm.goods = $rootScope.resources;
-    console.log('ddd', $rootScope);
+	if (!$rootScope.resources) return $state.go('app.home', {}, {reload: true});
+	vm.goods = $rootScope.resources;
     vm.goods.sort(function(a, b) {
         var textA = a.name.toUpperCase();
         var textB = b.name.toUpperCase();
