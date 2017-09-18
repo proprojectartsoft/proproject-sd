@@ -145,15 +145,16 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
             toBeDeleted: vm.dataToDelete,
             toBeUpdated: vm.dataToUpdate
         };
-        if (predicate === 'diary') {
-            if (vm.filter.substate === 'pic') {
-                returnToGallery();
-            } else {
-                $state.go('app.' + predicate, {
-                    id: vm.diaryId
-                });
-            }
+        if (vm.filter.substate === 'pic') {
+            //go back from view full picture
+            returnToGallery();
+        } else if (vm.diaryId) {
+            //go back for existing diary
+            $state.go('app.' + predicate, {
+                id: vm.diaryId
+            });
         } else {
+            //go back for a new diary
             $state.go('app.' + predicate, {
                 id: id
             });
