@@ -22,8 +22,8 @@ sdApp.service('SyncService', [
                 worker = new Worker('js/system/worker.js');
 
                 worker.addEventListener('message', function(ev) {
+	                worker.terminate();
                     if (ev.data.finished === true) {
-                        worker.terminate();
                         callback(ev.data);
                     }
                 });
@@ -43,8 +43,8 @@ sdApp.service('SyncService', [
                 worker = new Worker('js/system/worker.js');
 
                 worker.addEventListener('message', function(ev) {
+	                worker.terminate();
                     if (ev.data.finished === true) {
-                        worker.terminate();
                         callback(ev.data.results);
                     }
                 });
@@ -64,8 +64,8 @@ sdApp.service('SyncService', [
                 worker = new Worker('js/system/worker.js');
 
                 worker.addEventListener('message', function(ev) {
+	                worker.terminate();
                     if (ev.data.finished === true) {
-                        worker.terminate();
                         callback(ev.data.results[0]);
                     }
                 });
@@ -87,8 +87,8 @@ sdApp.service('SyncService', [
                 worker = new Worker('js/system/worker.js');
 
                 worker.addEventListener('message', function(ev) {
+	                worker.terminate();
                     if (ev.data.finished === true) {
-                        worker.terminate();
                         callback(ev.data);
                     }
                 });
@@ -108,8 +108,8 @@ sdApp.service('SyncService', [
                 worker = new Worker('js/system/worker.js');
 
                 worker.addEventListener('message', function(ev) {
+	                worker.terminate();
                     if (ev.data.finished === true) {
-                        worker.terminate();
                         callback(ev.data.results);
                     }
                 });
@@ -129,8 +129,8 @@ sdApp.service('SyncService', [
                 worker = new Worker('js/system/worker.js');
 
                 worker.addEventListener('message', function(ev) {
+	                worker.terminate();
                     if (ev.data.finished === true) {
-                        worker.terminate();
                         callback(ev.data.results[0]);
                     }
                 });
@@ -152,8 +152,8 @@ sdApp.service('SyncService', [
                 worker = new Worker('js/system/worker.js');
 
                 worker.addEventListener('message', function(ev) {
+	                worker.terminate();
                     if (ev.data.finished === true) {
-                        worker.terminate();
                         callback(ev);
                     }
                 });

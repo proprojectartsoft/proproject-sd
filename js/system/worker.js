@@ -280,6 +280,7 @@ self.getSetting = function (param, callback) {
 		.exec()
 		.then(
 			function (res) {
+				console.log('This is the the result of the search', res, param.name);
 				callback(res);
 			});
 };

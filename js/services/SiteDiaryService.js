@@ -113,7 +113,7 @@ sdApp.factory('SiteDiaryService', [
                     method: 'DELETE',
                     url: $APP.server + '/api/sitediary',
                     params: {
-                        id: id,
+                        id: id
                     }
                 }).success(
                     function(payload) {

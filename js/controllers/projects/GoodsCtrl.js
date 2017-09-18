@@ -1,4 +1,4 @@
-sdApp.controller('GoodsCtrl', GoodsCtrl)
+sdApp.controller('GoodsCtrl', GoodsCtrl);
 
 GoodsCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', 'SettingService'];
 
@@ -18,7 +18,7 @@ function GoodsCtrl($rootScope, $state, SiteDiaryService, SettingService) {
             if (el === entry) {
                 $rootScope.currentSD.goods_received.splice(i, 1);
             }
-        })
+        });
         SiteDiaryService.update_diary($rootScope.currentSD);
     }
 

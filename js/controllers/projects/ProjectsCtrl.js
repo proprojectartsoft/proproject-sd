@@ -1,60 +1,53 @@
 sdApp.controller('ProjectsCtrl', [
-    '$rootScope',
-    '$scope',
-    '$state',
-    'SyncService',
-    'SettingService',
-    function($rootScope, $scope, $state, SyncService, SettingService) {
-        var vm = this;
-        vm.go = go;
-        vm.header = 'Select a project';
-        vm.username = localStorage.getObject('dsremember');
-        vm.local = {};
-        $rootScope.projectName = '';
-        vm.local.data = {};
-        $rootScope.currentSD = null;
-        SyncService.getProjects(function(result) {
-            setTimeout(function() {
-                $scope.$apply(function() {
-                    vm.projects = result;
-                })
-            }, 100);
-        }, function(err) {
-            SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
-        });
-
-        //get necessary settings for company
-        SyncService.getSetting('units', function(list) {
-            $rootScope.units = list && list.value;
-        });
-        SyncService.getSetting('absence', function(list) {
-            $rootScope.absence = list && list.value;
-        });
-        SyncService.getSetting('staff', function(list) {
-            $rootScope.staff = list && list.value;
-        });
-        SyncService.getSetting('resources', function(list) {
-            $rootScope.resources = list && list.value;
-        });
-        SyncService.getSetting('currency', function(list) {
-            $rootScope.currency = list && list.value;
-        });
-        SyncService.getSetting('start', function(list) {
-            $rootScope.start = list && list.value;
-        });
-        SyncService.getSetting('finish', function(list) {
-            $rootScope.finish = list && list.value;
-        });
-        SyncService.getSetting('break', function(list) {
-            $rootScope.break = list && list.value;
-        });
-
-        function go(project) {
-            sessionStorage.setObject('projectId', project.id);
-            $rootScope.projectName = project.value.name;
-            $state.go('app.project', {
-                id: project.id
-            });
-        }
-    }
+	'$rootScope',
+	'$scope',
+	'$state',
+	'SyncService',
+	'SettingService',
+	'$filter',
+	function ($rootScope, $scope, $state, SyncService, SettingService, $filter) {
+		var vm = this;
+		vm.go = go;
+		vm.header = 'Select a project';
+		vm.username = localStorage.getObject('dsremember');
+		vm.local = {};
+		$rootScope.projectName = '';
+		vm.local.data = {};
+		$rootScope.currentSD = null;
+		SyncService.getProjects(function (result) {
+			setTimeout(function () {
+				$scope.$apply(function () {
+					vm.projects = result;
+				})
+			}, 100);
+		}, function (err) {
+			SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
+		});
+		
+		//get necessary settings for company
+		SyncService.getSettings(function (lists) {
+			lists = angular.copy(lists.settings);
+			var getFiltered = function (item) {
+				var filtered = $filter('filter')(lists, {name: item}, true)[0];
+				if (filtered) return filtered;
+				return {value: false};
+			};
+			$rootScope.units = getFiltered('units').value;
+			$rootScope.absence = getFiltered('absence').value;
+			$rootScope.staff = getFiltered('staff').value;
+			$rootScope.resources = getFiltered('resources').value;
+			$rootScope.currency = getFiltered('currency').value || 'GBP';
+			$rootScope.start = getFiltered('start').value;
+			$rootScope.finish = getFiltered('finish').value;
+			$rootScope.break = getFiltered('break').value;
+		});
+		
+		function go(project) {
+			sessionStorage.setObject('projectId', project.id);
+			$rootScope.projectName = project.value.name;
+			$state.go('app.project', {
+				id: project.id
+			});
+		}
+	}
 ]);

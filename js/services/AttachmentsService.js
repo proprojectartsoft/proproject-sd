@@ -56,7 +56,7 @@ sdApp.factory('AttachmentsService', [
                         return payload.data;
                     }
                 );
-            },
+            }
         };
     }
 ]);

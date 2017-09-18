@@ -1,4 +1,4 @@
-sdApp.controller('SharedCtrl', SharedCtrl)
+sdApp.controller('SharedCtrl', SharedCtrl);
 
 SharedCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'SharedService'];
 
@@ -12,11 +12,11 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, SharedService) {
 
     SharedService.shared_diary(false).then(function(result) {
         vm.shared = result;
-    })
+    });
 
     SharedService.shared_diary(true).then(function(result) {
         vm.shared = result;
-    })
+    });
 
     function go(predicate, id, project) {
         $rootScope.projectName = project;
@@ -27,6 +27,6 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, SharedService) {
 
     function toggleSidemenu($event) {
         $ionicSideMenuDelegate.toggleLeft();
-    };
+    }
 
 }

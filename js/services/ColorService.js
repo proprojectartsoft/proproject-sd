@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('ColorService', [
+sdApp.factory('ColorService', [
     '$http',
     function($http) {
         return {
@@ -13,4 +13,4 @@ angular.module($APP.name).factory('ColorService', [
             }
         }
     }
-])
+]);
