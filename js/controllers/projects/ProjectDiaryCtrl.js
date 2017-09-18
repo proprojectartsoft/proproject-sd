@@ -3,7 +3,6 @@ sdApp.controller('ProjectDiaryCtrl', ProjectDiaryCtrl);
 ProjectDiaryCtrl.$inject = ['$rootScope', '$ionicPopup', '$timeout', '$state', '$stateParams', '$scope', '$filter', 'SettingService', 'SiteDiaryService', 'AttachmentsService', 'SyncService'];
 
 function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParams, $scope, $filter, SettingService, SiteDiaryService, AttachmentsService, SyncService) {
-
     var vm = this;
     vm.go = go;
     vm.saveCreate = saveCreate;
@@ -33,7 +32,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             indicateInputData();
         } else {
             //visualize SD
-            SyncService.getProject(vm.projectId, function(proj) {      
+            SyncService.getProject(vm.projectId, function(proj) {
                 var diary = $filter('filter')(proj.value.site_diaries, {
                     id: vm.diaryStateId
                 })[0];
@@ -103,7 +102,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             if ((Array.isArray(diary[key]) && diary[key].length)) {
                 $rootScope.indication[key] = true;
             }
-
             switch (key) {
                 case "site_attendance":
                     var field = diary[key];
@@ -156,6 +154,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         angular.copy($rootScope.currentSD.comments, comments);
         //add and remove fields to conform to the format required on server
         prepareSDForServer();
+
+        console.log($rootScope.currentSD);
+
         SiteDiaryService.add_diary($rootScope.currentSD)
             .success(function(result) {
                 var deleteAttachments,
@@ -172,7 +173,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 //prepare the attachments array to conform to format required by server
                 angular.forEach(attachments.pictures, function(value) {
                     //new photo, non existent on server
-                    if (!value.base64String) {
+                    if (value.base_64_string) {
                         value.site_diary_id = result.id;
                     } else if (!vm.enableCreate && vm.edit) {
                         //when edit a diary and save as new,there may be photos already stored on server
@@ -180,6 +181,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         value.base_64_string = '';
                         value.site_diary_id = result.id;
                     }
+                    delete value.url;
                     uploadAttachments.push(AttachmentsService.upload_attachment(attachments.pictures).then(function(result) {}));
                 });
                 Promise.all([uploadAttachments, addComments]).then(function(res) {
@@ -251,11 +253,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         delete $rootScope.currentSD.attachments;
         delete $rootScope.currentSD.comments;
 
+        console.log($rootScope.currentSD);
+
         // method to update the backend
         var updateDiary = SiteDiaryService.update_diary($rootScope.currentSD).success(function(result) {}).error(function(err) {
             SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
         });
-
         var uploadAttachments = [],
             updateAttachments = [],
             deleteAttachments,
@@ -275,7 +278,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         if (attachments !== null) {
             // method to add attachments
             angular.forEach(attachments.pictures, function(value) {
-                if (!value.base64String) {
+                //base_64_string is populated only for new attachments
+                //the attachments on server have null base_64_string, but have path field assigned
+                if (value.base_64_string) {
+                    delete value.url;
+                    delete value.path;
+                    console.log(value);
                     uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {}));
                 }
             });

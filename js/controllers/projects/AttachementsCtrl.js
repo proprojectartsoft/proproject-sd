@@ -28,13 +28,10 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter, Att
     });
 
     function populate() {
-
         angular.forEach(vm.pictures, function(value) {
+            //create the src for the attachment by concatenating the serevr path, the directory and the image path
             if (!value.url) {
                 value.url = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
-            }
-            if (!value.base64String) {
-                value.base64String = $APP.server + '/pub/siteDiaryPhotos/' + value.path;
             }
         });
     }
