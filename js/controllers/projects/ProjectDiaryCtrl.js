@@ -154,9 +154,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         angular.copy($rootScope.currentSD.comments, comments);
         //add and remove fields to conform to the format required on server
         prepareSDForServer();
-
-        console.log($rootScope.currentSD);
-
         SiteDiaryService.add_diary($rootScope.currentSD)
             .success(function(result) {
                 var deleteAttachments,
@@ -182,7 +179,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         value.site_diary_id = result.id;
                     }
                     delete value.url;
-                    uploadAttachments.push(AttachmentsService.upload_attachment(attachments.pictures).then(function(result) {}));
+                    uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {}));
                 });
                 Promise.all([uploadAttachments, addComments]).then(function(res) {
                     SyncService.sync().then(function() {
@@ -283,16 +280,17 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 if (value.base_64_string) {
                     delete value.url;
                     delete value.path;
-                    console.log(value);
+                    delete value.file_name;
+                    // delete value.tags;
+                    // delete value.comment;
+
                     uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {}));
                 }
             });
             // method to update attachments
-            if (attachments.toBeUpdated) {
-                angular.forEach(attachments.toBeUpdated, function(att) {
-                    updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {}));
-                })
-            }
+            angular.forEach(attachments.toBeUpdated, function(att) {
+                updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {}));
+            })
             // method to delete attachments
             if (attachments.toBeDeleted) {
                 deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted).then(function(result) {});
