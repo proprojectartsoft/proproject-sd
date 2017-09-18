@@ -45,7 +45,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
         // if we have a SD in the current scope
         // store that in the DB
         if ($rootScope.currentSD) {
-            //store new created SD
+            //store new offline created SD
             if (/^off.*/g.test($rootScope.currentSD.id)) {
                 var sd = $filter('filter')(proj.value.site_diaries, {
                     id: $rootScope.currentSD.id

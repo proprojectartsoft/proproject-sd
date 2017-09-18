@@ -278,7 +278,8 @@ sdApp.service('SyncService', [
 
                                 function getProjects() {
                                     var def = $q.defer();
-                                    ProjectService.sync_projects().then(function(projects) {
+                                    console.log("CALL SYNC PROJECTS");
+                                    ProjectService.sync_projects().success(function(projects) {
                                         //there are no projects to store
                                         if (!projects.length) def.resolve([]);
                                         var projectsArray = [];
@@ -289,6 +290,8 @@ sdApp.service('SyncService', [
                                             });
                                         });
                                         def.resolve(projectsArray);
+                                    }).error(function(err) {
+                                        console.log(err);
                                     });
                                     return def.promise;
                                 }

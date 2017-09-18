@@ -280,10 +280,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 if (value.base_64_string) {
                     delete value.url;
                     delete value.path;
-                    delete value.file_name;
-                    // delete value.tags;
-                    // delete value.comment;
-
                     uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {}));
                 }
             });

@@ -10,13 +10,15 @@ sdApp.factory('ProjectService', [
                     }
                 );
             },
-            
+
             sync_projects: function() {
-                return $http.get($APP.server + '/api/sync/sd', {}).then(
+                return $http.get($APP.server + '/api/sync/sd', {}).success(
                     function(payload) {
                         return payload.data;
                     }
-                );
+                ).error(function(err) {
+                    return err;
+                });
             },
 
             add_projects: function(dataIn) {
