@@ -39,9 +39,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
             $state.go('login');
             localStorage.removeItem('dsremember');
             SyncService.clearDb(function(e) {
-                AuthService.logout().then(function(result) {
-                    localStorage.setObject('loggedOut', true);
-                });
+                AuthService.logout().then(function(result) {});
             });
         } else {
             var errorTemplate = "<center>Can't log out now. You are offline.</center>";

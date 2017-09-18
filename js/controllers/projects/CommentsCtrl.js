@@ -11,7 +11,6 @@ function CommentsCtrl($rootScope, $state, $stateParams, $filter, SiteDiaryServic
     vm.local = {};
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
-    vm.loggedIn = localStorage.getObject('loggedIn');
     vm.myProfile = localStorage.getObject('my_account');
 
     initFields();

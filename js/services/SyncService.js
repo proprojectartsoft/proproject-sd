@@ -180,7 +180,7 @@ sdApp.service('SyncService', [
 
         service.login = function() {
             var prm = $q.defer();
-            if (localStorage.getObject('isLoggedIn')) {
+            if (sessionStorage.getObject('isLoggedIn')) {
                 prm.resolve("logged");
             } else {
                 var user = {};
@@ -278,7 +278,6 @@ sdApp.service('SyncService', [
 
                                 function getProjects() {
                                     var def = $q.defer();
-                                    console.log("CALL SYNC PROJECTS");
                                     ProjectService.sync_projects().success(function(projects) {
                                         //there are no projects to store
                                         if (!projects.length) def.resolve([]);

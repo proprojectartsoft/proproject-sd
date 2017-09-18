@@ -12,7 +12,6 @@ sdApp.controller('ProjectsCtrl', [
         vm.local = {};
         $rootScope.projectName = '';
         vm.local.data = {};
-        vm.loggedIn = localStorage.getObject('loggedIn');
         $rootScope.currentSD = null;
         SyncService.getProjects(function(result) {
             setTimeout(function() {
