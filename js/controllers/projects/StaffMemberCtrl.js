@@ -34,7 +34,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 	var finishT = $rootScope.finish || "12:00";
 	var breakT = $rootScope.break || "00:30";
 	initFields();
-	
+
 	$scope.$watch(function () {
 		if (vm.editMode)
 			SettingService.show_focus();
@@ -45,7 +45,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 	}).then(function (popover) {
 		vm.searchModal = popover;
 	});
-	
+
 	function initFields() {
 		if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
 			vm.currentStaff = angular.copy($rootScope.currentSD.site_attendance.staffs[vm.index]);
@@ -69,20 +69,21 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 			if (!vm.currentStaff.total_time) vm.calcParse();
 		}
 	}
-	
+
 	function allowNumbersOnly() {
 		var watchOnce = $scope.$watch(function () {
 			$timeout(function () {
 				$('.ion-datetime-picker input').each(function () {
-					$(this).change(function () {
+					var el = $(this);
+					el.change(function () {
 						console.log("change");
 					});
-					$(this).prop('type', 'tel');
-					$(this).on('input', function () {
+					el.prop('type', 'tel');
+					el.on('input', function () {
 						if (!this.value) {
-							$(this).val(0);
-							$(this).blur();
-							$(this).focus();
+							el.val(0);
+							el.blur();
+							el.focus();
 						}
 					})
 				});
@@ -90,21 +91,21 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 			}, 10);
 		})
 	}
-	
+
 	function showSearch() {
 		vm.searchModal.show();
 	}
-	
+
 	function backSearch() {
 		vm.searchModal.hide();
 	}
-	
+
 	function addNewName() {
 		vm.currentStaff.staff_name = vm.newName;
 		calcParse();
 		vm.searchModal.hide();
 	}
-	
+
 	function addStaff(item) {
 		vm.currentStaff.role = item.role;
 		vm.currentStaff.trade = item.role;
@@ -115,12 +116,12 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 		calcParse();
 		vm.searchModal.hide();
 	}
-	
+
 	function addStaff1(item) {
 		vm.currentStaff.staff_name = item;
 		vm.searchModal.hide();
 	}
-	
+
 	function save() {
 		var member = {
 			first_name: vm.currentStaff.staff_name.split(" ", 2)[0],
@@ -145,7 +146,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 		}
 		sessionStorage.setObject('sd.diary.absence', null);
 	}
-	
+
 	function stringToDate(string) {
 		if (string) {
 			var aux = string.split(":");
@@ -157,7 +158,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 		}
 		return date;
 	}
-	
+
 	function calcParse() {
 		if (vm.currentStaff.model_start && vm.currentStaff.model_break && vm.currentStaff.model_finish) {
 			vm.filteredBreak = $filter('date')(vm.currentStaff.model_break, "HH:mm");
@@ -166,7 +167,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 			vm.currentStaff.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
 		}
 	}
-	
+
 	function calcTime(start, finish, breakTime) {
 		var hhmm = '';
 		var stringBreak = breakTime.split(":");
@@ -183,7 +184,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 		}
 		return hhmm;
 	}
-	
+
 	function go(predicate, id) {
 		if (vm.currentStaff.staff_name) {
 			save();
@@ -192,7 +193,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 			id: id
 		});
 	}
-	
+
 	function datetimeChanged() {
 		vm.calcParse();
 	}

@@ -29,7 +29,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 	var finishT = $rootScope.finish || "12:00";
 	var breakT = $rootScope.break || "00:30";
 	initFields();
-	
+
 	function getSettingValue(settings, name) {
 		var arr = $filter('filter')(settings, {
 			name: name
@@ -38,12 +38,12 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 			return arr[0].value;
 		return null;
 	}
-	
+
 	$scope.$watch(function () {
 		if (vm.editMode)
 			SettingService.show_focus();
 	});
-	
+
 	function initFields() {
 		if ((!(vm.diaryId === false) && !(vm.index === 'create')) || !(isNaN(vm.index))) {
 			vm.local.data = {
@@ -69,38 +69,39 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 			if (!vm.local.data.total_time) vm.calcParse();
 		}
 	}
-	
+
 	function allowNumbersOnly() {
 		var watchOnce = $scope.$watch(function () {
 			$timeout(function () {
 				$('.ion-datetime-picker input').each(function () {
-					$(this).prop('type', 'number');
-					$(this).prop('inputmode', 'numeric');
+					var el = $(this);
+					el.prop('type', 'number');
+					el.prop('inputmode', 'numeric');
 				});
 				watchOnce();
 			}, 10);
 		})
 	}
-	
+
 	function showSearch() {
 		vm.searchModal.show();
 	}
-	
+
 	function backSearch() {
 		vm.searchModal.hide();
 	}
-	
+
 	function addStaff(item) {
 		vm.local.data.staff_name = item.name;
 		vm.local.data.staff_id = item.id;
 		vm.searchModal.hide();
 	}
-	
+
 	function addStaff1(item) {
 		vm.local.data.staff_name = item;
 		vm.searchModal.hide();
 	}
-	
+
 	function save() {
 		var member = {
 			first_name: vm.local.data.staff_name,
@@ -125,7 +126,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 		sessionStorage.setObject('siteAttendance.tab', 'contractors');
 		sessionStorage.setObject('sd.diary.absence', null);
 	}
-	
+
 	function calcParse() {
 		if (vm.local.data.model_start && vm.local.data.model_break && vm.local.data.model_finish) {
 			vm.filteredBreak = $filter('date')(vm.local.data.model_break, "HH:mm");
@@ -134,7 +135,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 			vm.local.data.total_time = calcTime(vm.filteredStart, vm.filteredFinish, vm.filteredBreak);
 		}
 	}
-	
+
 	function stringToDate(string) {
 		if (string) {
 			var aux = string.split(":");
@@ -146,7 +147,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 		}
 		return date;
 	}
-	
+
 	function calcTime(start, finish, breakTime) {
 		var stringBreak = breakTime.split(":"),
 			stringStart = start.split(":"),
@@ -154,7 +155,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 			totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1])),
 			hh = Math.floor(totalTime / 60),
 			mm = Math.abs(totalTime % 60);
-		
+
 		var hhmm = hh + ':';
 		if (mm < 10) {
 			hhmm = hhmm + '0' + mm;
@@ -163,7 +164,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 		}
 		return hhmm;
 	}
-	
+
 	function go(predicate, id) {
 		if (vm.local.data.staff_name) {
 			save();
@@ -173,7 +174,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
 			id: id
 		});
 	}
-	
+
 	function datetimeChanged() {
 		vm.calcParse();
 	}
