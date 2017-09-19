@@ -17,7 +17,7 @@ sdApp.factory('SettingService', [
 						return '£';
 				}
 			},
-			
+
 			show_focus: function () {
 				//input fields
 				$("input").on('click', function () {
@@ -30,7 +30,7 @@ sdApp.factory('SettingService', [
 						el.addClass("focus");
 					}
 				});
-				
+
 				//textarea fields
 				$("textarea").on('click', function () {
 					var el = $(this);
@@ -42,7 +42,7 @@ sdApp.factory('SettingService', [
 						el.addClass("focus");
 					}
 				});
-				
+
 				//search popups
 				$(".showSearch").on('click', function () {
 					var el = $(this);
@@ -50,7 +50,7 @@ sdApp.factory('SettingService', [
 					el.prev(".sd-title").addClass("focus");
 					el.children('input').addClass("focus");
 				});
-				
+
 				//time pickers
 				$(".sd-line").on('click', function () {
 					var el = $(this);
@@ -58,7 +58,7 @@ sdApp.factory('SettingService', [
 					el.parent().prev().addClass("focus");
 					el.addClass("focus");
 				});
-				
+
 				//select drop-downs
 				$('.de-select').on('click', function () {
 					var el = $(this);
@@ -66,7 +66,7 @@ sdApp.factory('SettingService', [
 					el.parent().addClass("focus");
 					el.parent().prev(".sd-title").addClass("focus");
 				});
-				
+
 				//checkboxes
 				$(".checkbox-calm").on('click', function () {
 					var el = $(this);
@@ -74,23 +74,28 @@ sdApp.factory('SettingService', [
 					el.prev().addClass("focus");
 					el.addClass("focus");
 				});
-				
+
 				function clearFocus() {
-					$("label.checkbox-calm").removeClass("focus");
-					$("label.checkbox-calm").prev().removeClass("focus");
-					$(".sd-line.focus").parent().prev().removeClass("focus");
-					$(".sd-line.focus").removeClass("focus");
-					$('input').prev().removeClass("focus");
-					$('input').parent().prev(".sd-title").removeClass("focus");
-					$('input').removeClass("focus");
-					$('textarea').prev().removeClass("focus");
-					$('textarea').parent().prev(".sd-title").removeClass("focus");
-					$('textarea').removeClass("focus");
-					$('.de-select').parent().removeClass("focus");
-					$('.de-select').parent().prev(".sd-title").removeClass("focus");
+					var el = $("label.checkbox-calm"),
+							el2 = $(".sd-line.focus"),
+							input = $('input'),
+							textarea = $('textarea'),
+							select = $('.de-select');
+					el.removeClass("focus");
+					el.prev().removeClass("focus");
+					el2.parent().prev().removeClass("focus");
+					el2.removeClass("focus");
+					input.prev().removeClass("focus");
+					input.parent().prev(".sd-title").removeClass("focus");
+					input.removeClass("focus");
+					textarea.prev().removeClass("focus");
+					textarea.parent().prev(".sd-title").removeClass("focus");
+					textarea.removeClass("focus");
+					select.parent().removeClass("focus");
+					select.parent().prev(".sd-title").removeClass("focus");
 				}
 			},
-			
+
 			show_message_popup: function (title, template) {
 				var popup = $ionicPopup.alert({
 					title: title,
