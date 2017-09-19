@@ -6,15 +6,13 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, SharedService) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
     vm.go = go;
+
+    vm.displayDiary  = false;
     vm.username = localStorage.getObject('dsremember');
     vm.loggedIn = localStorage.getObject('loggedIn');
     $rootScope.projectName = '';
 
-    SharedService.shared_diary(false).then(function(result) {
-        vm.shared = result;
-    });
-
-    SharedService.shared_diary(true).then(function(result) {
+    SharedService.shared_diary(vm.displayDiary).then(function(result) {
         vm.shared = result;
     });
 
