@@ -5,20 +5,21 @@ sdApp.controller('LoginCtrl', [
     '$state',
     '$ionicModal',
     '$ionicPopup',
+    '$filter',
     'AuthService',
     'SyncService',
     'ProjectService',
-    function($rootScope, $timeout, $scope, $state, $ionicModal, $ionicPopup, AuthService, SyncService, ProjectService) {
+    function($rootScope, $timeout, $scope, $state, $ionicModal, $ionicPopup, $filter, AuthService, SyncService, ProjectService) {
         $scope.user = {};
         var vm = this;
         vm.go = go;
 
         //if credentials remebered, login automatically
-        if (localStorage.getObject('dsremember')) {
-            $scope.user.username = localStorage.getObject('dsremember').username;
-            $scope.user.password = localStorage.getObject('dsremember').password;
-            $scope.user.remember = localStorage.getObject('dsremember').remember;
-            $scope.user.id = localStorage.getObject('dsremember').id;
+        if (localStorage.getObject('sdremember')) {
+            $scope.user.username = localStorage.getObject('sdremember').username;
+            $scope.user.password = localStorage.getObject('sdremember').password;
+            $scope.user.remember = localStorage.getObject('sdremember').remember;
+            $scope.user.id = localStorage.getObject('sdremember').id;
             var loginPopup = $ionicPopup.show({
                 title: "Sync",
                 template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -31,9 +32,10 @@ sdApp.controller('LoginCtrl', [
                         ProjectService.my_account(result.data.id).then(function(result) {
                             localStorage.setObject('my_account', result);
                         });
-                        sessionStorage.setObject('isLoggedIn', true);
-                        loginPopup.close();
-                        $state.go('app.home');
+                        populate(function(res) {
+                            loginPopup.close();
+                            $state.go('app.home');
+                        });
                     });
                 })
             }).error(function(result, status) {
@@ -41,14 +43,18 @@ sdApp.controller('LoginCtrl', [
                     case 0:
                         SyncService.addDiariesToSync().then(function() {
                             SyncService.sync().then(function(projects) {
-                                loginPopup.close();
+                                populate(function(res) {
+                                    loginPopup.close();
+                                });
                             })
                         });
                         break;
                     case -1:
                         SyncService.addDiariesToSync().then(function() {
                             SyncService.sync().then(function(projects) {
-                                loginPopup.close();
+                                populate(function(res) {
+                                    loginPopup.close();
+                                });
                             })
                         });
                         break;
@@ -84,6 +90,38 @@ sdApp.controller('LoginCtrl', [
             $state.go(predicate);
         }
 
+        function populate(callback) {
+            SyncService.getProjects(function(result) {
+                $rootScope.projects = result;
+                callback();
+            }, function(err) {
+                SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
+                callback();
+            });
+            //get necessary settings for company
+            SyncService.getSettings(function(lists) {
+                console.log(lists);
+                lists = angular.copy(lists.settings);
+                var getFiltered = function(item) {
+                    var filtered = $filter('filter')(lists, {
+                        name: item
+                    }, true)[0];
+                    if (filtered) return filtered;
+                    return {
+                        value: false
+                    };
+                };
+                $rootScope.units = getFiltered('units').value;
+                $rootScope.absence = getFiltered('absence').value;
+                $rootScope.staff = getFiltered('staff').value;
+                $rootScope.resources = getFiltered('resources').value;
+                $rootScope.currency = getFiltered('currency').value || 'GBP';
+                $rootScope.start = getFiltered('start').value;
+                $rootScope.finish = getFiltered('finish').value;
+                $rootScope.break = getFiltered('break').value;
+            });
+        }
+
         $scope.submit = function() {
             $scope.syncPopup = $ionicPopup.alert({
                 title: "Sending request",
@@ -107,7 +145,6 @@ sdApp.controller('LoginCtrl', [
             });
             if ($scope.user.username && $scope.user.password) {
                 AuthService.login($scope.user).success(function(result) {
-                    sessionStorage.setObject('isLoggedIn', true);
                     if (result.data) {
                         if (result.data.role.id === 4) {
                             loginPopup.close();
@@ -116,8 +153,10 @@ sdApp.controller('LoginCtrl', [
                             SyncService.addDiariesToSync().then(function() {
                                 SyncService.sync().then(function(projects) {
                                     loginPopup.close();
-                                    $state.go('app.home', {}, {
-                                        'reload': true
+                                    populate(function(res) {
+                                        $state.go('app.home', {}, {
+                                            'reload': true
+                                        });
                                     });
                                 })
                             })
@@ -128,13 +167,12 @@ sdApp.controller('LoginCtrl', [
                             localStorage.setObject('my_account', result);
                         });
                         if ($scope.user.remember) {
-                            localStorage.setObject('dsremember', $scope.user);
+                            localStorage.setObject('sdremember', $scope.user);
                         } else {
-                            localStorage.removeItem('dsremember');
+                            localStorage.removeItem('sdremember');
                         }
                     } else {
                         loginPopup.close();
-                        $scope.userRemember = localStorage.getObject('dsremember');
                     }
                 }).error(function(response, status) {
                     loginPopup.close();

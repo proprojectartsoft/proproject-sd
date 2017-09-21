@@ -9,7 +9,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     vm.sync = sync;
     vm.go = go;
     vm.logout = logout;
-    vm.username = localStorage.getObject('dsremember');
+    vm.username = localStorage.getObject('sdremember');
     vm.loggedIn = localStorage.getObject('loggedIn');
 
     function toggleSidemenu($event) {
@@ -23,11 +23,45 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
         }
         SyncService.addDiariesToSync().then(function() {
             SyncService.sync().then(function() {
-                if (syncPopup)
-                    syncPopup.close();
-                $state.go('app.home');
+                populate(function(res) {
+                    if (syncPopup)
+                        syncPopup.close();
+                    $state.go('app.home');
+                })
             });
         })
+    }
+
+    function populate(callback) {
+        SyncService.getProjects(function(result) {
+            $rootScope.projects = result;
+            callback();
+        }, function(err) {
+            SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
+            callback();
+        });
+        //get necessary settings for company
+        SyncService.getSettings(function(lists) {
+            console.log(lists);
+            lists = angular.copy(lists.settings);
+            var getFiltered = function(item) {
+                var filtered = $filter('filter')(lists, {
+                    name: item
+                }, true)[0];
+                if (filtered) return filtered;
+                return {
+                    value: false
+                };
+            };
+            $rootScope.units = getFiltered('units').value;
+            $rootScope.absence = getFiltered('absence').value;
+            $rootScope.staff = getFiltered('staff').value;
+            $rootScope.resources = getFiltered('resources').value;
+            $rootScope.currency = getFiltered('currency').value || 'GBP';
+            $rootScope.start = getFiltered('start').value;
+            $rootScope.finish = getFiltered('finish').value;
+            $rootScope.break = getFiltered('break').value;
+        });
     }
 
     function go(predicate) {
@@ -37,7 +71,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     function logout() {
         if (navigator.onLine) {
             $state.go('login');
-            localStorage.removeItem('dsremember');
+            localStorage.removeItem('sdremember');
             SyncService.clearDb(function(e) {
                 AuthService.logout().then(function(result) {});
             });

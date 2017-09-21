@@ -8,7 +8,7 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, SharedService) {
     vm.go = go;
 
     vm.displayDiary  = false;
-    vm.username = localStorage.getObject('dsremember');
+    vm.username = localStorage.getObject('sdremember');
     vm.loggedIn = localStorage.getObject('loggedIn');
     $rootScope.projectName = '';
 

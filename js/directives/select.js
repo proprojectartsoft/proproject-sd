@@ -40,7 +40,7 @@ function ExampleController($ionicScrollDelegate, $timeout, $rootScope) {
     }
 
     function getHeight() {
-        if (vms.settings.show) {
+        if (vms.settings.show && vms.deOptions) {
             vms.settings.containerHeight = vms.deOptions.length * 40 + 'px';
         } else {
             vms.settings.containerHeight = '0px';

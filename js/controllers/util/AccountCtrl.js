@@ -7,7 +7,7 @@ function AccountCtrl($ionicSideMenuDelegate, $rootScope, $state, ProjectService,
     vm.toggleSidemenu = toggleSidemenu;
     vm.editCurrentUser = editCurrentUser;
     vm.update = update;
-    vm.username = localStorage.getObject('dsremember')
+    vm.username = localStorage.getObject('sdremember')
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.editAccount = false;
     vm.account = localStorage.getObject('my_account');
