@@ -240,8 +240,17 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
 					vm.diaries.splice(jQuery.inArray($filter('filter')(vm.diaries, {
 						id: id
 					})[0], vm.diaries), 1);
+				}, function (reason) {
+					var alertPopup = $ionicPopup.alert({
+						title: 'Error',
+						template: "<center>" + reason + "</center>"
+					});
+					alertPopup.then(function (res) {
+						syncPopup.close();
+						return false;
+					});
 				})
-			})
+			});
 		}).error(function (res) {
 			syncPopup.close();
 			var errPopup = $ionicPopup.show({

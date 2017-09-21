@@ -200,7 +200,16 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 						syncPopup.close();
 						$rootScope.currentSD = null;
 						vm.go('project');
-					})
+					}, function (reason) {
+						var alertPopup = $ionicPopup.alert({
+							title: 'Error',
+							template: "<center>" + reason + "</center>"
+						});
+						alertPopup.then(function (res) {
+							syncPopup.close();
+							return false;
+						});
+					});
 				});
 			}).error(function (response) {
 			localStorage.setObject('diariesToSync', true);
