@@ -168,33 +168,45 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 		prepareSDForServer();
 		SiteDiaryService.add_diary($rootScope.currentSD)
 			.success(function (result) {
-				var uploadAttachments = [],
-					addComments = [];
 				//add comments for SD
-				angular.forEach(comments, function (value) {
-					var request = {
-						site_diary_id: result.id,
-						comment: value.comment
-					};
-					addComments.push(SiteDiaryService.add_comments(request).success(function (result) {
-					}));
-				});
+				var addComments = function () {
+					var def = $q.defer(),
+						comLength = comments.length;
+					angular.forEach(comments, function (value) {
+						var request = {
+							site_diary_id: result.id,
+							comment: value.comment
+						};
+						SiteDiaryService.add_comments(request).success(function (result) {
+							if (comLength >= comments.length) return def.resolve();
+							comLength++;
+						});
+					});
+					return def.promise;
+				};
 				//prepare the attachments array to conform to format required by server
-				angular.forEach(attachments.pictures, function (value) {
-					//new photo, non existent on server
-					if (value.base_64_string) {
-						value.site_diary_id = result.id;
-					} else if (!vm.enableCreate && vm.edit) {
-						//when edit a diary and save as new,there may be photos already stored on server
-						delete value.id;
-						value.base_64_string = '';
-						value.site_diary_id = result.id;
-					}
-					delete value.url;
-					uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function (result) {
-					}));
-				});
-				Promise.all([uploadAttachments, addComments]).then(function (res) {
+				var addAttachments = function () {
+					var def = $q.defer(),
+						attLength = attachments.pictures.length;
+					angular.forEach(attachments.pictures, function (value) {
+						//new photo, non existent on server
+						if (value.base_64_string) {
+							value.site_diary_id = result.id;
+						} else if (!vm.enableCreate && vm.edit) {
+							//when edit a diary and save as new,there may be photos already stored on server
+							delete value.id;
+							value.base_64_string = '';
+							value.site_diary_id = result.id;
+						}
+						delete value.url;
+						AttachmentsService.upload_attachment(value).then(function (result) {
+							if (attLength >= attachments.pictures.length) return def.resolve();
+							attLength++;
+						});
+					});
+					return def.promise;
+				};
+				Promise.all([addComments, addAttachments]).then(function (res) {
 					SyncService.sync().then(function () {
 						$('.create-btn').attr("disabled", false);
 						syncPopup.close();
@@ -211,19 +223,20 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 						});
 					});
 				});
-			}).error(function (response) {
-			localStorage.setObject('diariesToSync', true);
-			//add the new SD to the project's SD list
-			$rootScope.currentSD.id = "off" + $rootScope.diariesLength + 1;
-			$rootScope.currentSD.sd_no = $rootScope.currentSD.id;
-			//restore initial format for attachments and comments field
-			$rootScope.currentSD.attachments = attachments.pictures || [];
-			$rootScope.currentSD.comments = comments;
-			syncPopup.close();
-			SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
-			$('.create-btn').attr("disabled", false);
-			vm.go('project');
-		})
+			})
+			.error(function (err) {
+				localStorage.setObject('diariesToSync', true);
+				//add the new SD to the project's SD list
+				$rootScope.currentSD.id = "off" + $rootScope.diariesLength + 1;
+				$rootScope.currentSD.sd_no = $rootScope.currentSD.id;
+				//restore initial format for attachments and comments field
+				$rootScope.currentSD.attachments = attachments.pictures || [];
+				$rootScope.currentSD.comments = comments;
+				syncPopup.close();
+				SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
+				$('.create-btn').attr("disabled", false);
+				vm.go('project');
+			});
 	}
 	
 	function saveCreate() {
