@@ -65,15 +65,12 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
         $cordovaCamera.getPicture(options).then(function(imageData) {
             $timeout(function() {
                 var pic = {
-                    "path": "",
-                    "base_64_string": imageData,
-                    "comment": "",
-                    "tags": "",
-                    "site_diary_id": vm.diaryId,
-                    "file_name": "",
-                    "title": "",
-                    "project_id": vm.projectId
-                }
+                    base_64_string: imageData,
+                    site_diary_id: vm.diaryId,
+                    file_name: "",
+                    title: "",
+                    project_id: vm.projectId
+                };
                 vm.pictures.push(pic);
                 // vm.filter.picture = vm.pictures[vm.pictures.length - 1];
                 vm.filter.state = 'form';
@@ -96,14 +93,11 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
         $cordovaCamera.getPicture(options).then(function(imageData) {
             $timeout(function() {
                 var pic = {
-                    "path": "",
-                    "base_64_string": imageData,
-                    "comment": "",
-                    "tags": "",
-                    "site_diary_id": vm.diaryId,
-                    "file_name": "",
-                    "title": "",
-                    "project_id": vm.projectId
+                    base_64_string: imageData,
+                    site_diary_id: vm.diaryId,
+                    file_name: "",
+                    title: "",
+                    project_id: vm.projectId
                 };
                 vm.pictures.push(pic);
                 // vm.filter.picture = vm.pictures[vm.pictures.length - 1];
