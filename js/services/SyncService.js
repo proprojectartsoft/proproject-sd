@@ -11,166 +11,114 @@ sdApp.service('SyncService', [
 	'SettingService',
 	'AuthService',
 	'SharedService',
+	'IndexedService',
 	function ($q, $http, $timeout, $ionicPopup, $state, $filter,
-	          ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService, SharedService) {
-
-		var service = this,
-			worker = false;
-
+	          ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService, SharedService, IndexedService) {
+		
+		var service = this;
+		
+		IndexedService.createDB(function () {
+			console.log('DB creation done');
+		});
+		
 		service.setSettings = function (data, callback) {
 			try {
-				worker = new Worker('js/system/worker.js');
-
-				worker.addEventListener('message', function (ev) {
-					worker.terminate();
-					if (ev.data.finished === true) {
-						callback(ev.data);
-					}
-				});
-
-				worker.postMessage({
+				IndexedService.runCommands({
 					data: data,
 					operation: 'setSettings'
+				}, function (result) {
+					callback(result);
 				});
-
 			} catch (e) {
 				throw ('Error setting data: ' + e);
 			}
 		};
-
+		
 		service.getSettings = function (callback) {
 			try {
-				worker = new Worker('js/system/worker.js');
-
-				worker.addEventListener('message', function (ev) {
-					worker.terminate();
-					if (ev.data.finished === true) {
-						callback(ev.data.results);
-					}
-				});
-
-				worker.postMessage({
+				IndexedService.runCommands({
 					data: {},
 					operation: 'getSettings'
+				}, function (result) {
+					callback(result.results);
 				});
-
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
-
+		
 		service.getSetting = function (name, callback) {
 			try {
-				worker = new Worker('js/system/worker.js');
-
-				worker.addEventListener('message', function (ev) {
-					worker.terminate();
-					if (ev.data.finished === true) {
-						callback(ev.data.results[0]);
-					}
-				});
-
-				worker.postMessage({
+				IndexedService.runCommands({
 					data: {
 						name: name
 					},
 					operation: 'getSetting'
+				}, function (result) {
+					callback(result.results[0]);
 				});
-
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
-
+		
 		service.setProjects = function (data, callback) {
 			try {
-				worker = new Worker('js/system/worker.js');
-
-				worker.addEventListener('message', function (ev) {
-					worker.terminate();
-					if (ev.data.finished === true) {
-						callback(ev.data);
-					}
-				});
-
-				worker.postMessage({
+				IndexedService.runCommands({
 					data: data,
 					operation: 'setProjects'
+				}, function (result) {
+					callback(result);
 				});
-
-			} catch (e) {
-				throw ('Error setting data: ' + e);
-			}
-		};
-
-		service.getProjects = function (callback) {
-			try {
-				worker = new Worker('js/system/worker.js');
-
-				worker.addEventListener('message', function (ev) {
-					worker.terminate();
-					if (ev.data.finished === true) {
-						callback(ev.data.results);
-					}
-				});
-
-				worker.postMessage({
-					data: {},
-					operation: 'getProjects'
-				});
-
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
-
+		
+		service.getProjects = function (callback) {
+			try {
+				IndexedService.runCommands({
+					data: {},
+					operation: 'getProjects'
+				}, function (result) {
+					callback(result.results);
+				});
+			} catch (e) {
+				throw ('Error getting data: ' + e);
+			}
+		};
+		
 		service.getProject = function (id, callback) {
 			if (!id) {
 				return false;
 			}
 			try {
-				worker = new Worker('js/system/worker.js');
-
-				worker.addEventListener('message', function (ev) {
-					worker.terminate();
-					if (ev.data.finished === true) {
-						callback(ev.data.results[0]);
-					}
-				});
-
-				worker.postMessage({
+				IndexedService.runCommands({
 					data: {
 						id: id
 					},
 					operation: 'getProject'
+				}, function (result) {
+					callback(result.results[0]);
 				});
-
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
-
+		
 		service.clearDb = function (callback) {
 			try {
-				worker = new Worker('js/system/worker.js');
-
-				worker.addEventListener('message', function (ev) {
-					worker.terminate();
-					if (ev.data.finished === true) {
-						callback(ev);
-					}
-				});
-
-				worker.postMessage({
+				IndexedService.runCommands({
 					data: {},
 					operation: 'eraseDb'
+				}, function (result) {
+					callback(result);
 				});
-
 			} catch (e) {
 				throw ('Error getting data: ' + e);
 			}
 		};
-
+		
 		service.getme = function () {
 			return $http.get($APP.server + '/api/me')
 				.success(function (user) {
@@ -180,7 +128,7 @@ sdApp.service('SyncService', [
 					return status;
 				})
 		};
-
+		
 		service.login = function () {
 			var prm = $q.defer();
 			if (sessionStorage.getObject('isLoggedIn')) {
@@ -199,7 +147,7 @@ sdApp.service('SyncService', [
 			}
 			return prm.promise;
 		};
-
+		
 		service.sync = function () {
 			var deferred = $q.defer();
 			if (navigator.onLine) {
@@ -216,7 +164,7 @@ sdApp.service('SyncService', [
 										}
 									);
 								});
-
+								
 								function setCompanySettings(callback) {
 									SiteDiaryService.get_company_settings().success(function (sett) {
 										var lists = [];
@@ -229,7 +177,7 @@ sdApp.service('SyncService', [
 										callback(lists);
 									})
 								}
-
+								
 								function setCompanyLists(lists, callback) {
 									var absenceReq = SiteDiaryService.absence_list().success(function (result) {
 											angular.forEach(result, function (value) {
@@ -282,7 +230,7 @@ sdApp.service('SyncService', [
 										callback(lists);
 									})
 								}
-
+								
 								function getProjects() {
 									var def = $q.defer();
 									ProjectService.sync_projects().success(function (projects) {
@@ -302,7 +250,7 @@ sdApp.service('SyncService', [
 									});
 									return def.promise;
 								}
-
+								
 								function buildData() {
 									var def = $q.defer();
 									// get all the settings then insert them - this can be done in sync
@@ -346,7 +294,7 @@ sdApp.service('SyncService', [
 					$state.go('app.home');
 				}
 			}
-
+			
 			if (sessionStorage.getObject('sd.diary.shares')) {
 				var shares = sessionStorage.getObject('sd.diary.shares');
 				for (var a = 0; a < shares.length; a++) {
@@ -356,7 +304,7 @@ sdApp.service('SyncService', [
 			}
 			return deferred.promise;
 		};
-
+		
 		//method to add new diaries storred in indexedDB to server
 		service.addDiariesToSync = function () {
 			var prm = $q.defer();

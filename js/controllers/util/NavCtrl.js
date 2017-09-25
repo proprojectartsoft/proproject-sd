@@ -42,7 +42,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
         });
         //get necessary settings for company
         SyncService.getSettings(function(lists) {
-            console.log(lists);
+            //console.log('Settings', lists);
             lists = angular.copy(lists.settings);
             var getFiltered = function(item) {
                 var filtered = $filter('filter')(lists, {
