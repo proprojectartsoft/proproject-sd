@@ -210,7 +210,6 @@ sdApp.service('SyncService', [
 								service.clearDb(function () {
 									buildData().then(
 										function () {
-											console.log("sync done");
 											deferred.resolve('sync_done');
 										}, function (reason) {
 											deferred.reject(reason);
@@ -291,6 +290,7 @@ sdApp.service('SyncService', [
 										if (!projects.length) def.resolve([]);
 										var projectsArray = [];
 										angular.forEach(projects, function (value) {
+											console.log("push");
 											projectsArray.push({
 												"id": value.id,
 												"value": value
