@@ -21,7 +21,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>
-                <input type="number" ng-change="vm.compute()" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add quantity' ||''}}" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.quantity">
+                <input type="tel" ng-change="vm.compute()" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add quantity' ||''}}" ng-readonly="(vm.diaryId) && (!vm.editMode)" ng-model="vm.material.quantity">
             </label>
             <label class="sd-label">
                 <div class="sd-title">Unit</div>

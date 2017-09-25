@@ -19,7 +19,7 @@
             <label class="sd-label">
                 <div class="sd-title">Maximum temperature</div>
                 <input ng-change="vm.datetimeChanged()"
-                       type='tel' pattern="\d+(\.\d*)?"
+                       type="number"
                        ng-readonly="(vm.diaryId && !vm.editMode) || currentSD.weather.prefect_weather"
                        placeholder="{{(!vm.diaryId || (vm.editMode && !currentSD.weather.prefect_weather)) && 'Tap to add temperature' || ''}}"
                        ng-model="currentSD.weather.max_temp">
@@ -27,7 +27,7 @@
             <label class="sd-label">
                 <div class="sd-title">Minimum temperature</div>
                 <input ng-change="vm.datetimeChanged()"
-                       type="number" pattern="\d+(\.\d*)?"
+                       type="number"
                        ng-readonly="(vm.diaryId && !vm.editMode) || currentSD.weather.prefect_weather"
                        placeholder="{{(!vm.diaryId || (vm.editMode && !currentSD.weather.prefect_weather)) && 'Tap to add temperature' || ''}}"
                        ng-model="currentSD.weather.min_temp">
