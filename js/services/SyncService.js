@@ -290,13 +290,11 @@ sdApp.service('SyncService', [
 										if (!projects.length) def.resolve([]);
 										var projectsArray = [];
 										angular.forEach(projects, function (value) {
-											console.log("push");
 											projectsArray.push({
 												"id": value.id,
 												"value": value
 											});
 										});
-										console.log(projectsArray);
 										def.resolve(projectsArray);
 									}).error(function (err) {
 										console.log('Server error getting projects', err);
@@ -314,7 +312,6 @@ sdApp.service('SyncService', [
 												getProjects().then(function (projects) {
 													//no projects stored
 													if (!projects || !projects.length) return def.resolve();
-													console.log(projects);
 													service.setProjects(projects, function (projects) {
 														def.resolve(projects);
 													});
