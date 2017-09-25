@@ -169,7 +169,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         SiteDiaryService.add_diary($rootScope.currentSD)
             .success(function(result) {
                 //add comments for SD
-                var addComments = function() {
+                function addComments() {
                     var def = $q.defer(),
                         comLength = 0;
                     if (!comments || comments && !comments.length) {
@@ -181,14 +181,14 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             comment: value.comment
                         };
                         SiteDiaryService.add_comments(request).success(function(result) {
-                            if (comLength >= comments.length) return def.resolve();
                             comLength++;
+                            if (comLength >= comments.length) return def.resolve();
                         });
                     });
                     return def.promise;
                 };
                 //prepare the attachments array to conform to format required by server
-                var addAttachments = function() {
+                function addAttachments() {
                     var def = $q.defer(),
                         attLength = 0;
                     if (!attachments.pictures || attachments.pictures && !attachments.pictures.length) {
@@ -206,14 +206,17 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         }
                         delete value.url;
                         AttachmentsService.upload_attachment(value).then(function(result) {
-                            if (attLength >= attachments.pictures.length) return def.resolve();
                             attLength++;
+                            if (attLength >= attachments.pictures.length) return def.resolve();
                         });
                     });
                     return def.promise;
                 };
 
-                Promise.all([addComments, addAttachments]).then(function(res) {
+                var comm = addComments();
+                var attachm = addAttachments();
+
+                Promise.all([comm, attachm]).then(function(res) {
                     SyncService.sync().then(function() {
                         $('.create-btn').attr("disabled", false);
                         syncPopup.close();
