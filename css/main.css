@@ -778,10 +778,12 @@ input[readonly] {
   padding-left: 20px;
   font-weight: 600; }
 
-#login-new .scroll-content form div input::-webkit-input-placeholder {
-  color: #2A2876;
-  font-size: 20px;
-  font-weight: 600; }
+  #login-new .scroll-content form div input::-webkit-input-placeholder {
+    color: #2A2876;
+    font-size: 20px;
+    font-weight: 600!important;
+    vertical-align: middle;
+  }
 
 #login-new .scroll-content .login-buttons {
   width: 80%;
@@ -792,7 +794,7 @@ input[readonly] {
   width: 49%;
   color: #fff;
   font-weight: 600;
-  font-size: 20px !important;
+  font-size: 16px !important;
   border: none;
   font-family: sans-serif !important; }
 
