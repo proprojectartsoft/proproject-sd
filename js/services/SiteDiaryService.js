@@ -2,44 +2,6 @@ sdApp.factory('SiteDiaryService', [
 	'$http',
 	function ($http) {
 		return {
-			list_diary: function (id) {
-				return $http.get($APP.server + '/api/sitediary', {
-					params: {
-						id: id
-					}
-				}).then(
-					function (payload) {
-						return payload.data;
-					}
-				).catch(function (e) {
-					console.log(e)
-				});
-			},
-			
-			list_diaries: function (projectId) {
-				return $http.get($APP.server + '/api/sitediary', {
-					params: {
-						projectId: projectId
-					}
-				}).then(
-					function (payload) {
-						return payload.data;
-					}
-				);
-			},
-			
-			list_comments: function (id) {
-				return $http.get($APP.server + '/api/sitediary/comment', {
-					params: {
-						siteDiaryId: id
-					}
-				}).then(
-					function (payload) {
-						return payload.data;
-					}
-				);
-			},
-			
 			add_comments: function (dataIn) {
 				return $http({
 					method: 'POST',

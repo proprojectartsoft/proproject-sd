@@ -8,8 +8,10 @@ sdApp.controller('LoginCtrl', [
 	'$filter',
 	'AuthService',
 	'SyncService',
+	'PostService',
 	'ProjectService',
-	function ($rootScope, $timeout, $scope, $state, $ionicModal, $ionicPopup, $filter, AuthService, SyncService, ProjectService) {
+	function ($rootScope, $timeout, $scope, $state, $ionicModal, $ionicPopup,
+	          $filter, AuthService, SyncService, PostService, ProjectService) {
 		$scope.user = {};
 		var vm = this;
 		vm.go = go;
@@ -20,17 +22,26 @@ sdApp.controller('LoginCtrl', [
 			$scope.user.password = localStorage.getObject('sdremember').password;
 			$scope.user.remember = localStorage.getObject('sdremember').remember;
 			$scope.user.id = localStorage.getObject('sdremember').id;
+			
 			var loginPopup = $ionicPopup.show({
 				title: "Sync",
 				template: "<center><ion-spinner icon='android'></ion-spinner></center>",
 				content: "",
 				buttons: []
 			});
-			AuthService.login($scope.user).success(function (result) {
+			
+			
+			AuthService.login($scope.user, function (result) {
 				SyncService.addDiariesToSync().then(function () {
 					SyncService.sync().then(function (projects) {
-						ProjectService.my_account(result.data.id).then(function (result) {
-							localStorage.setObject('my_account', result);
+						PostService.post({
+							url: 'user/profile',
+							method: 'GET',
+							data: {'id': result.data.id}
+						}, function (result) {
+							localStorage.setObject('my_account', result.data);
+						}, function (error) {
+							console.log('Error getting my account data', error);
 						});
 						populate(function (res) {
 							loginPopup.close();
@@ -48,8 +59,8 @@ sdApp.controller('LoginCtrl', [
 						});
 					});
 				})
-			}).error(function (result, status) {
-				switch (status) {
+			}, function (rejection) {
+				switch (rejection.status) {
 					case 0:
 						SyncService.addDiariesToSync().then(function () {
 							SyncService.sync().then(function (projects) {
@@ -116,24 +127,61 @@ sdApp.controller('LoginCtrl', [
 						});
 						break;
 				}
-			})
+			});
 		}
 		
-		function go(predicate, id) {
-			$state.go(predicate);
+		
+		/**
+		 * Method to go somewhere
+		 * @param {String} where - app state to go to
+		 * @param {Object} [params] - object with params to send
+		 * @param {Boolean} [reload] - boolean to force reload of the page
+		 */
+		function go(where, params, reload) {
+			// this would be the forced reload of a profile page
+			if (where === 'reload') {
+				return $state.reload();
+			}
+			
+			if (!reload) reload = false;
+			if (!params) params = {};
+			
+			if (where === $state.current.name) {
+				// This could bite us later, need it to reload the URLs with parameters included
+				// params = {}
+				reload = true;
+			}
+			
+			var reloadParam = {
+				'reload': reload
+			};
+			
+			if (reload) {
+				reloadParam.location = 'replace';
+				reloadParam.inherit = false;
+			}
+			
+			$state.go(where, params, reloadParam);
 		}
 		
+		/**
+		 * Method to populate the main page
+		 * @param {Function} callback - callback function
+		 */
 		function populate(callback) {
+			// get projects then callback
 			SyncService.getProjects(function (result) {
 				$rootScope.projects = result;
-				callback();
+				callback(result);
 			}, function (err) {
 				SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
-				callback();
+				callback(err);
 			});
-			//get necessary settings for company
+			
+			//get necessary settings for company and put them on the $rootScope
 			SyncService.getSettings(function (lists) {
-				console.log(lists);
+				console.log('Settings retreived: ', lists);
+				
 				lists = angular.copy(lists.settings);
 				var getFiltered = function (item) {
 					var filtered = $filter('filter')(lists, {
@@ -144,6 +192,7 @@ sdApp.controller('LoginCtrl', [
 						value: false
 					};
 				};
+				
 				$rootScope.units = getFiltered('units').value;
 				$rootScope.absence = getFiltered('absence').value;
 				$rootScope.staff = getFiltered('staff').value;
@@ -177,7 +226,8 @@ sdApp.controller('LoginCtrl', [
 				buttons: []
 			});
 			if ($scope.user.username && $scope.user.password) {
-				AuthService.login($scope.user).success(function (result) {
+				
+				AuthService.login($scope.user, function (result) {
 					if (result.data) {
 						if (result.data.role.id === 4) {
 							loginPopup.close();
@@ -204,10 +254,15 @@ sdApp.controller('LoginCtrl', [
 								});
 							})
 						}
-						localStorage.setObject('loggedIn', result.data);
 						//get account for logged in user
-						ProjectService.my_account(result.data.id).then(function (result) {
-							localStorage.setObject('my_account', result);
+						PostService.post({
+							url: 'user/profile',
+							method: 'GET',
+							data: {'id': result.data.id}
+						}, function (result) {
+							localStorage.setObject('my_account', result.data);
+						}, function (error) {
+							console.log('Error getting my account data', error);
 						});
 						if ($scope.user.remember) {
 							localStorage.setObject('sdremember', $scope.user);
@@ -217,51 +272,46 @@ sdApp.controller('LoginCtrl', [
 					} else {
 						loginPopup.close();
 					}
-				}).error(function (response, status) {
+				}, function (response, status) {
 					loginPopup.close();
+					var alertMessage = {};
 					switch (status) {
 						case 0:
-							var alertPopup = $ionicPopup.alert({
+							alertMessage = {
 								title: 'Offline',
-								template: "<center>You are offline. Please check your internet connection and try again.</center>",
-							});
-							alertPopup.then(function (res) {
-							});
+								template: "<center>You are offline. Please check your internet connection and try again.</center>"
+							};
 							break;
 						case -1:
-							var alertPopup = $ionicPopup.alert({
+							alertMessage = {
 								title: 'Offline',
-								template: "<center>You are offline. Please check your internet connection and try again.</center>",
-							});
-							alertPopup.then(function (res) {
-							});
+								template: "<center>You are offline. Please check your internet connection and try again.</center>"
+							};
 							break;
 						case 502:
-							var alertPopup = $ionicPopup.alert({
+							alertMessage = {
 								title: 'Offline',
-								template: "<center>Server offline</center>",
-							});
-							alertPopup.then(function (res) {
-							});
+								template: "<center>Server offline</center>"
+							};
 							break;
 						case 400:
-							var alertPopup = $ionicPopup.alert({
+							alertMessage = {
 								title: 'Error',
-								template: "<center>Incorrect user data.</center>",
-							});
-							alertPopup.then(function (res) {
-							});
+								template: "<center>Incorrect user data.</center>"
+							};
 							break;
 						case 401:
-							var alertPopup = $ionicPopup.alert({
+							alertMessage = {
 								title: 'Error',
-								template: 'Your account has been de-activated. Contact your supervisor for further information.',
-							});
-							alertPopup.then(function (res) {
-							});
+								template: 'Your account has been de-activated. Contact your supervisor for further information.'
+							};
 							break;
 					}
-				})
+					var alertPopup = $ionicPopup.alert(alertMessage);
+					alertPopup.then(function () {
+						console.log('Alert closed');
+					});
+				});
 			}
 		};
 	}

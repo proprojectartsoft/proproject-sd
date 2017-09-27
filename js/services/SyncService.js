@@ -5,6 +5,7 @@ sdApp.service('SyncService', [
 	'$ionicPopup',
 	'$state',
 	'$filter',
+	'pendingRequests',
 	'ProjectService',
 	'SiteDiaryService',
 	'AttachmentsService',
@@ -12,7 +13,7 @@ sdApp.service('SyncService', [
 	'AuthService',
 	'SharedService',
 	'IndexedService',
-	function ($q, $http, $timeout, $ionicPopup, $state, $filter,
+	function ($q, $http, $timeout, $ionicPopup, $state, $filter, pendingRequests,
 	          ProjectService, SiteDiaryService, AttachmentsService, SettingService, AuthService, SharedService, IndexedService) {
 		
 		var service = this;
@@ -139,11 +140,11 @@ sdApp.service('SyncService', [
 				user.password = localStorage.getObject('sdremember').password;
 				user.remember = localStorage.getObject('sdremember').remember;
 				user.id = localStorage.getObject('sdremember').id;
-				AuthService.login(user).success(function () {
+				AuthService.login(user, function () {
 					prm.resolve("logged");
-				}).error(function () {
+				}, function () {
 					prm.resolve("error");
-				})
+				});
 			}
 			return prm.promise;
 		};
