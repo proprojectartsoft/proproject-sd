@@ -343,6 +343,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             $rootScope.currentSD.attachments = attachments.pictures || [];
             $rootScope.currentSD.comments = comments;
             vm.go('project');
+        }, function(err) {
+            syncPopup.close();
+            vm.go('project');
         });
     }
 
