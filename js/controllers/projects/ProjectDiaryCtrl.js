@@ -294,15 +294,20 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         delete $rootScope.currentSD.foreColor;
         delete $rootScope.currentSD.attachments;
         delete $rootScope.currentSD.comments;
-
+        console.log("ProjectDiaryCtrl - saveEdit() - update diary ", $rootScope.currentSD);
         // method to update the backend
-        var updateDiary = SiteDiaryService.update_diary($rootScope.currentSD).success(function(result) {}).error(function(err) {
+        var updateDiary = SiteDiaryService.update_diary($rootScope.currentSD).success(function(result) {
+            console.log("ProjectDiaryCtrl - saveEdit() - success updateDiary");
+        }).error(function(err) {
+            console.log("ProjectDiaryCtrl - saveEdit() - error updateDiary");
             SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
         });
         var uploadAttachments = [],
             updateAttachments = [],
             deleteAttachments,
             addComments = [];
+        console.log("ProjectDiaryCtrl - saveEdit() - comments ", comments);
+
         // method to update comments in the backend
         angular.forEach(comments, function(comment) {
             //all new comments do not have an id yet; add them to server
@@ -311,9 +316,16 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     site_diary_id: comment.site_diary_id,
                     comment: comment.comment
                 };
-                addComments.push(SiteDiaryService.add_comments(request).success(function(result) {}).error(function(err) {}));
+                addComments.push(SiteDiaryService.add_comments(request).success(function(result) {
+                    console.log("ProjectDiaryCtrl - saveEdit() - success addComments");
+
+                }).error(function(err) {
+                    console.log("ProjectDiaryCtrl - saveEdit() - error addComments");
+
+                }));
             }
         });
+        console.log("ProjectDiaryCtrl - saveEdit() - attachments ", attachments);
         // method to update attachments in the backend
         if (attachments !== null) {
             // method to add attachments
@@ -323,27 +335,38 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 if (value.base_64_string) {
                     delete value.url;
                     delete value.path;
-                    uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {}));
+                    uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {
+                        console.log("ProjectDiaryCtrl - saveEdit() - then uploadAttachments");
+
+                    }));
                 }
             });
             // method to update attachments
             angular.forEach(attachments.toBeUpdated, function(att) {
-                updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {}));
+                updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {
+                    console.log("ProjectDiaryCtrl - saveEdit() - then updateAttachments");
+
+                }));
             });
             // method to delete attachments
             if (attachments.toBeDeleted) {
                 deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted)
-                    .then(function(result) {});
+                    .then(function(result) {
+                        console.log("ProjectDiaryCtrl - saveEdit() - then deleteAttachments");
+
+                    });
             }
         }
         // run all operations then go back to the page where we come from - there project will be updated
         Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments, addComments]).then(function(res) {
+            console.log("ProjectDiaryCtrl - saveEdit() - then success promise all");
             syncPopup.close();
             //restore initial format for attachments and comments field
             $rootScope.currentSD.attachments = attachments.pictures || [];
             $rootScope.currentSD.comments = comments;
             vm.go('project');
         }, function(err) {
+            console.log("ProjectDiaryCtrl - saveEdit() - then error promise all");
             syncPopup.close();
             vm.go('project');
         });
