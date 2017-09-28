@@ -13,6 +13,10 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 	vm.go = $rootScope.go;
 	
 	function toggleSidemenu($event) {
+		if ($event) {
+			$event.stopPropagation();
+			$event.preventDefault();
+		}
 		$ionicSideMenuDelegate.toggleLeft();
 	}
 	

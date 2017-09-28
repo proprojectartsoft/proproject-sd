@@ -17,7 +17,8 @@ sdApp.service('PostService', [
          *      url: 'login',
          *      endPoint: 'pub/',
          *      method: 'POST',
-         *      data: {},
+         *      params: {}, - for params of the URL
+         *      data: {},   - for data to be posted
          *      headers: {},
          *      extraParams: {},
          *      transformRequest: {Function},
@@ -126,11 +127,13 @@ sdApp.service('PostService', [
                 url: baseQueryTo + params.url
             };
 
-            if (requestObject.method === 'POST') {
-                requestObject.data = params.data;
-            } else {
-                requestObject.params = params.data;
-            }
+	        if (params.params && typeof params.params === 'object') {
+		        requestObject.params = params.params;
+	        }
+         
+	        if (params.data && typeof params.data === 'object') {
+		        requestObject.data = params.data;
+	        }
 
             if (params.transformRequest && typeof params.transformRequest === 'object') {
                 requestObject.transformRequest = params.transformRequest;

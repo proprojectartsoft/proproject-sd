@@ -273,12 +273,12 @@ sdApp.config(['$ionicConfigProvider', '$stateProvider', '$urlRouterProvider',
 					}
 				}
 			})
-			.state('app.attachements', {
-				url: "/attachements/",
+			.state('app.attachments', {
+				url: "/attachments/",
 				views: {
 					'menuContent': {
-						templateUrl: 'templates/projects/attachements.html',
-						controller: 'AttachementsCtrl as vm'
+						templateUrl: 'templates/projects/attachments.html',
+						controller: 'AttachmentsCtrl as vm'
 					}
 				}
 			});

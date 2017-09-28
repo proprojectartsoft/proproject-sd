@@ -1,8 +1,8 @@
-sdApp.controller('AccountCtrl', AccountCtrl)
+sdApp.controller('AccountCtrl', AccountCtrl);
 
-AccountCtrl.$inject = ['$ionicSideMenuDelegate', 'ProjectService'];
+AccountCtrl.$inject = ['$ionicSideMenuDelegate'];
 
-function AccountCtrl($ionicSideMenuDelegate, ProjectService) {
+function AccountCtrl($ionicSideMenuDelegate) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
     vm.editCurrentUser = editCurrentUser;
