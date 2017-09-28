@@ -21,10 +21,8 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, PostService,
     vm.units = 'incident.units';
     vm.incident = {};
     vm.units = $rootScope.units;
-    if (!$rootScope.currentSD) return $state.go('app.home', {}, {
-        reload: true
-    });
-    vm.incidents = $rootScope.currentSD.incidents;
+	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
+	vm.incidents = $rootScope.currentSD.incidents;
 
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
@@ -132,11 +130,11 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, PostService,
         }
         $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: vm.diaryId
             });
         } else {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: id
             });
         }

@@ -9,7 +9,7 @@ function CommentsCtrl($rootScope, $state, SettingService) {
 	vm.addComentAtEnter = addComentAtEnter;
 	vm.addComment = addComment;
 	vm.local = {};
-	if (!$rootScope.currentSD) return $state.go('app.home', {}, {reload: true});
+	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
 	vm.diaryId = sessionStorage.getObject('diaryId');
 	vm.editMode = sessionStorage.getObject('editMode');
 	vm.myProfile = localStorage.getObject('my_account');
@@ -88,11 +88,11 @@ function CommentsCtrl($rootScope, $state, SettingService) {
 	function go(predicate, id) {
 		//id is undefined and it's an offline SD
 		if ((predicate === 'diary') && (vm.diaryId)) {
-			$state.go('app.' + predicate, {
+			$rootScope.go('app.' + predicate, {
 				id: vm.diaryId
 			});
 		} else {
-			$state.go('app.' + predicate, {
+			$rootScope.go('app.' + predicate, {
 				id: id
 			});
 		}

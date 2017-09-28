@@ -12,9 +12,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, PostService, $roo
     vm.editMode = sessionStorage.getObject('editMode');
     vm.index = $stateParams.id;
     vm.currentOhs = {};
-    if (!$rootScope.currentSD) return $state.go('app.home', {}, {
-        reload: true
-    });
+	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
     vm.tools = $rootScope.currentSD.oh_and_s;
 
     if (!isNaN(vm.index) && !(vm.index === null)) {
@@ -82,11 +80,11 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, PostService, $roo
         }
         $rootScope.selected = undefined;
         if ((predicate === 'diary') && (vm.diaryId)) {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: vm.diaryId
             });
         } else {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: id
             });
         }

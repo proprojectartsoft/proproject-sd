@@ -22,10 +22,8 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
     vm.dataToUpdate = [];
     vm.filter.substate = 'gallery';
     var backupPic = null;
-    if (!$rootScope.currentSD) return $state.go('app.home', {}, {
-        reload: true
-    });
-    vm.pictures = $rootScope.currentSD.attachments.pictures;
+	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
+	vm.pictures = $rootScope.currentSD.attachments.pictures;
     populate();
     pullDown();
     goToTop();
@@ -163,12 +161,12 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
             returnToGallery();
         } else if (vm.diaryId) {
             //go back for existing diary
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: vm.diaryId
             });
         } else {
             //go back for a new diary
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: id
             });
         }

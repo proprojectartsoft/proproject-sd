@@ -28,7 +28,7 @@
                 <div>
                     <span>Remember me</span><ion-checkbox ng-model="user.remember"></ion-checkbox>
                 </div>
-                <div class="login-footer" ng-click="vm.go('forgot')">
+                <div class="login-footer" ng-click="$root.go('forgot')">
                     Forgot password?
                 </div>
             </div>
@@ -52,7 +52,7 @@
           <input type="password" ng-model="user.password" placeholder="Password" required="required">
         </div>
         <div class="login-buttons">
-          <button class="forgot-button" type="button" name="forgot-button" ng-click="vm.go('forgot')">
+          <button class="forgot-button" type="button" name="forgot-button" ng-click="$root.go('forgot')">
             FORGOT?
           </button>
           <button class="login-button"type="button" name="login-button" ng-click="login()" ng-disabled="loginForm.$invalid">

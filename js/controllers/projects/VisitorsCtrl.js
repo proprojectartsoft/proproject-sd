@@ -33,7 +33,7 @@ function VisitorsCtrl($state, SettingService, $scope, $rootScope, $stateParams) 
 			save();
 		}
 		sessionStorage.setObject('siteAttendance.tab', 'visitors');
-		$state.go('app.' + predicate, {
+		$rootScope.go('app.' + predicate, {
 			id: id
 		});
 	}

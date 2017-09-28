@@ -30,11 +30,11 @@ function GoodsCtrl($rootScope, $state, SettingService, PostService) {
 
     function go(predicate, id) {
         if ((predicate === 'diary') && (vm.diaryId)) {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: vm.diaryId
             });
         } else {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: id
             });
         }

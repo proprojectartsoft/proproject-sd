@@ -14,7 +14,7 @@ sdApp.controller('LoginCtrl', [
         $filter, AuthService, SyncService, PostService, SettingService) {
         $scope.user = {};
         var vm = this;
-        vm.go = go;
+        vm.go = $rootScope.go;
 
         //if credentials remebered, login automatically
         if (localStorage.getObject('sdremember')) {
@@ -46,7 +46,7 @@ sdApp.controller('LoginCtrl', [
                         });
                         populate(function(res) {
                             loginPopup.close();
-                            $state.go('app.home');
+                            $rootScope.go('app.home');
                         });
                     }, function(reason) {
                         var alertPopup = $ionicPopup.alert({
@@ -128,41 +128,7 @@ sdApp.controller('LoginCtrl', [
                 }
             });
         }
-
-
-        /**
-         * Method to go somewhere
-         * @param {String} where - app state to go to
-         * @param {Object} [params] - object with params to send
-         * @param {Boolean} [reload] - boolean to force reload of the page
-         */
-        function go(where, params, reload) {
-            // this would be the forced reload of a profile page
-            if (where === 'reload') {
-                return $state.reload();
-            }
-
-            if (!reload) reload = false;
-            if (!params) params = {};
-
-            if (where === $state.current.name) {
-                // This could bite us later, need it to reload the URLs with parameters included
-                // params = {}
-                reload = true;
-            }
-
-            var reloadParam = {
-                'reload': reload
-            };
-
-            if (reload) {
-                reloadParam.location = 'replace';
-                reloadParam.inherit = false;
-            }
-
-            $state.go(where, params, reloadParam);
-        }
-
+        
         /**
          * Method to populate the main page
          * @param {Function} callback - callback function
@@ -229,13 +195,13 @@ sdApp.controller('LoginCtrl', [
                     if (result.data) {
                         if (result.data.role.id === 4) {
                             loginPopup.close();
-                            $state.go('app.shared');
+                            $rootScope.go('app.shared');
                         } else {
                             SyncService.addDiariesToSync().then(function() {
                                 SyncService.sync().then(function(projects) {
                                     loginPopup.close();
                                     populate(function(res) {
-                                        $state.go('app.home', {}, {
+                                        $rootScope.go('app.home', {}, {
                                             'reload': true
                                         });
                                     });

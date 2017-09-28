@@ -33,7 +33,7 @@ function SupplierCtrl($rootScope, $scope, $state, SettingService, $stateParams) 
 
 	function go(predicate) {
 		initFields();
-		$state.go('app.' + predicate, {
+		$rootScope.go('app.' + predicate, {
 			id: suppNo,
 			index: 'create'
 		});

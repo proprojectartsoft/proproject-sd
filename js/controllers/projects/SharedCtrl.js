@@ -29,7 +29,7 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, PostService) {
 
     function go(predicate, id, project) {
         $rootScope.projectName = project;
-        $state.go('app.' + predicate, {
+        $rootScope.go('app.' + predicate, {
             id: id
         });
     }

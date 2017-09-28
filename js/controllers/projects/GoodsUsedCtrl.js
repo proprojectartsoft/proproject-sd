@@ -9,9 +9,7 @@ function GoodsUsedCtrl($state, $rootScope, $stateParams, PostService, SettingSer
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
     vm.index = $stateParams.id;
-    if (!$rootScope.currentSD) return $state.go('app.home', {}, {
-        reload: true
-    });
+	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
     vm.goods = $rootScope.currentSD.goods_received[vm.index].goods_details;
 
     function deleteEntry(entry) {
@@ -34,7 +32,7 @@ function GoodsUsedCtrl($state, $rootScope, $stateParams, PostService, SettingSer
     }
 
     function go(predicate, id, index) {
-        $state.go('app.' + predicate, {
+        $rootScope.go('app.' + predicate, {
             id: id,
             index: index
         });
