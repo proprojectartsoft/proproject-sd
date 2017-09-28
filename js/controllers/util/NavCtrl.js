@@ -13,15 +13,10 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 	vm.go = $rootScope.go;
 	
 	function toggleSidemenu($event) {
-		if ($event) {
-			$event.stopPropagation();
-			$event.preventDefault();
-		}
-		$ionicSideMenuDelegate.toggleLeft();
+		$ionicSideMenuDelegate.toggleLeft(true);
 	}
 	
 	function sync() {
-		$ionicSideMenuDelegate.toggleLeft();
 		if (navigator.onLine) {
 			var syncPopup = loadingPopover("Sync", loadingTemplate, "loading");
 		}
