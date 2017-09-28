@@ -1,8 +1,8 @@
 sdApp.controller('CommentsCtrl', CommentsCtrl);
 
-CommentsCtrl.$inject = ['$rootScope', '$state', 'ColorService'];
+CommentsCtrl.$inject = ['$rootScope', '$state', 'SettingService'];
 
-function CommentsCtrl($rootScope, $state, ColorService) {
+function CommentsCtrl($rootScope, $state, SettingService) {
 	var vm = this;
 	vm.go = go;
 	vm.getInitials = getInitials;
@@ -13,12 +13,12 @@ function CommentsCtrl($rootScope, $state, ColorService) {
 	vm.diaryId = sessionStorage.getObject('diaryId');
 	vm.editMode = sessionStorage.getObject('editMode');
 	vm.myProfile = localStorage.getObject('my_account');
-	
+
 	initFields();
-	
+
 	function initFields() {
 		vm.local.list = $rootScope.currentSD.comments || [];
-		ColorService.get_colors().then(function (colorList) {
+		SettingService.get_colors().then(function (colorList) {
 			var colorsLength = Object.keys(colorList).length;
 			//adding background colors by user and customer id
 			angular.forEach(vm.local.list, function (value, key) {
@@ -28,9 +28,9 @@ function CommentsCtrl($rootScope, $state, ColorService) {
 			});
 		})
 	}
-	
+
 	function addComment() {
-		ColorService.get_colors().then(function (colorList) {
+		SettingService.get_colors().then(function (colorList) {
 			var colorsLength = Object.keys(colorList).length;
 			//adding background colors by user and customer id
 			var colorId = (parseInt(vm.myProfile.customer_id + "" + vm.myProfile.id)) % colorsLength;
@@ -73,18 +73,18 @@ function CommentsCtrl($rootScope, $state, ColorService) {
 			});
 		})
 	}
-	
+
 	function addComentAtEnter(event) {
 		if (event.keyCode === 13) {
 			vm.addComment();
 		}
 	}
-	
+
 	function getInitials(str) {
 		var aux = str.split(" ");
 		return (aux[0][0] + aux[1][0]).toUpperCase();
 	}
-	
+
 	function go(predicate, id) {
 		//id is undefined and it's an offline SD
 		if ((predicate === 'diary') && (vm.diaryId)) {

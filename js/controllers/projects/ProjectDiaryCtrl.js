@@ -1,9 +1,9 @@
 sdApp.controller('ProjectDiaryCtrl', ProjectDiaryCtrl);
 
-ProjectDiaryCtrl.$inject = ['$rootScope', '$ionicPopup', '$timeout', '$state', '$stateParams', '$scope', '$filter', 'SettingService', 'SiteDiaryService', 'AttachmentsService', 'SyncService', '$q'];
+ProjectDiaryCtrl.$inject = ['$rootScope', '$ionicPopup', '$timeout', '$state', '$stateParams', '$scope', '$filter', 'SettingService', 'SyncService', 'PostService', '$q'];
 
 function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParams, $scope, $filter,
-    SettingService, SiteDiaryService, AttachmentsService, SyncService, $q) {
+    SettingService, SyncService, PostService, $q) {
     var vm = this;
     vm.go = go;
     vm.saveCreate = saveCreate;
@@ -19,6 +19,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
     vm.projectId = sessionStorage.getObject('projectId');
     vm.edit = sessionStorage.getObject('editMode');
     vm.diaryId = sessionStorage.getObject('diaryId');
+    var loadingTemplate = "<center><ion-spinner icon='android'></ion-spinner></center>";
 
     //store the number of diaries for current projectId
     if (vm.diaryStateId) {
@@ -166,94 +167,108 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         angular.copy($rootScope.currentSD.comments, comments);
         //add and remove fields to conform to the format required on server
         prepareSDForServer();
-        SiteDiaryService.add_diary($rootScope.currentSD)
-            .success(function(result) {
-                //add comments for SD
-                function addComments() {
-                    var def = $q.defer(),
-                        comLength = 0;
-                    if (!comments || comments && !comments.length) {
-                        def.resolve();
-                    }
-                    angular.forEach(comments, function(value) {
-                        var request = {
+        PostService.post({
+            url: 'sitediary',
+            method: 'POST',
+            data: $rootScope.currentSD
+        }, function(result) {
+            //add comments for SD
+            function addComments() {
+                var def = $q.defer(),
+                    comLength = 0;
+                if (!comments || comments && !comments.length) {
+                    def.resolve();
+                }
+                angular.forEach(comments, function(value) {
+                    comLength++;
+                    PostService.post({
+                        url: 'sitediary/comment',
+                        method: 'POST',
+                        data: {
                             site_diary_id: result.id,
                             comment: value.comment
-                        };
-                        SiteDiaryService.add_comments(request).success(function(result) {
-                            comLength++;
-                            if (comLength >= comments.length) return def.resolve();
-                        });
-                    });
-                    return def.promise;
-                };
-                //prepare the attachments array to conform to format required by server
-                function addAttachments() {
-                    var def = $q.defer(),
-                        attLength = 0;
-                    if (!attachments.pictures || attachments.pictures && !attachments.pictures.length) {
-                        def.resolve();
-                    }
-                    angular.forEach(attachments.pictures, function(value) {
-                        //new photo, non existent on server
-                        if (value.base_64_string) {
-                            value.site_diary_id = result.id;
-                        } else if (!vm.enableCreate && vm.edit) {
-                            //when edit a diary and save as new,there may be photos already stored on server
-                            delete value.id;
-                            value.base_64_string = '';
-                            value.site_diary_id = result.id;
                         }
-                        delete value.url;
-                        AttachmentsService.upload_attachment(value).then(function(result) {
-                            attLength++;
-                            if (attLength >= attachments.pictures.length) return def.resolve();
-                        });
+                    }, function(result) {
+                        if (comLength >= comments.length) return def.resolve();
+                    }, function(error) {
+                        if (comLength >= comments.length) return def.resolve();
+                    })
+                });
+                return def.promise;
+            };
+            //prepare the attachments array to conform to format required by server
+            function addAttachments() {
+                var def = $q.defer(),
+                    attLength = 0;
+                if (!attachments.pictures || attachments.pictures && !attachments.pictures.length) {
+                    def.resolve();
+                }
+                angular.forEach(attachments.pictures, function(value) {
+                    attLength++;
+                    //new photo, non existent on server
+                    if (value.base_64_string) {
+                        value.site_diary_id = result.id;
+                    } else if (!vm.enableCreate && vm.edit) {
+                        //when edit a diary and save as new,there may be photos already stored on server
+                        delete value.id;
+                        value.base_64_string = '';
+                        value.site_diary_id = result.id;
+                    }
+                    delete value.url;
+                    PostService.post({
+                        url: 'sdattachment/uploadfile',
+                        method: 'POST',
+                        data: value
+                    }, function(result) {
+                        if (attLength >= attachments.pictures.length) return def.resolve();
+                    }, function(error) {
+                        if (attLength >= attachments.pictures.length) return def.resolve();
+                    })
+                });
+                return def.promise;
+            };
+
+            var comm = addComments();
+            var attachm = addAttachments();
+
+            Promise.all([comm, attachm]).then(function(res) {
+                SyncService.sync().then(function() {
+                    $('.create-btn').attr("disabled", false);
+                    syncPopup.close();
+                    $rootScope.currentSD = null;
+                    vm.go('project');
+                }, function(reason) {
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Error',
+                        template: "<center>" + reason + "</center>"
                     });
-                    return def.promise;
-                };
-
-                var comm = addComments();
-                var attachm = addAttachments();
-
-                Promise.all([comm, attachm]).then(function(res) {
-                    SyncService.sync().then(function() {
-                        $('.create-btn').attr("disabled", false);
+                    alertPopup.then(function(res) {
                         syncPopup.close();
-                        $rootScope.currentSD = null;
-                        vm.go('project');
-                    }, function(reason) {
-                        var alertPopup = $ionicPopup.alert({
-                            title: 'Error',
-                            template: "<center>" + reason + "</center>"
-                        });
-                        alertPopup.then(function(res) {
-                            syncPopup.close();
-                            return false;
-                        });
+                        return false;
                     });
                 });
-            })
-            .error(function(err) {
-                localStorage.setObject('diariesToSync', true);
-                //add the new SD to the project's SD list
-                $rootScope.currentSD.id = "off" + $rootScope.diariesLength + 1;
-                $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
-                //restore initial format for attachments and comments field
-                $rootScope.currentSD.attachments = attachments.pictures || [];
-                $rootScope.currentSD.comments = comments;
-                syncPopup.close();
-                SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
-                $('.create-btn').attr("disabled", false);
-                vm.go('project');
             });
+        }, function(error) {
+            localStorage.setObject('diariesToSync', true);
+            //add the new SD to the project's SD list
+            $rootScope.currentSD.id = "off" + $rootScope.diariesLength + 1;
+            $rootScope.currentSD.sd_no = $rootScope.currentSD.id;
+            //restore initial format for attachments and comments field
+            $rootScope.currentSD.attachments = attachments.pictures || [];
+            $rootScope.currentSD.comments = comments;
+            SettingService.close_all_popups();
+            // syncPopup.close(); TODO:
+            SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
+            $('.create-btn').attr("disabled", false);
+            vm.go('project');
+        })
     }
 
     function saveCreate() {
         $('.create-btn').attr("disabled", true);
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
-            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            template: loadingTemplate,
             content: "",
             buttons: []
         });
@@ -275,7 +290,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         // show the spinner
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
-            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            template: loadingTemplate,
             content: "",
             buttons: []
         });
@@ -296,69 +311,142 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         delete $rootScope.currentSD.comments;
         console.log("ProjectDiaryCtrl - saveEdit() - update diary ", $rootScope.currentSD);
         // method to update the backend
-        var updateDiary = SiteDiaryService.update_diary($rootScope.currentSD).success(function(result) {
-            console.log("ProjectDiaryCtrl - saveEdit() - success updateDiary");
-        }).error(function(err) {
-            console.log("ProjectDiaryCtrl - saveEdit() - error updateDiary");
-            SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
-        });
-        var uploadAttachments = [],
-            updateAttachments = [],
-            deleteAttachments,
-            addComments = [];
-        console.log("ProjectDiaryCtrl - saveEdit() - comments ", comments);
+        function updateDiary() {
+            var def = $q.defer();
+            PostService.post({
+                url: 'sitediary',
+                method: 'PUT',
+                data: $rootScope.currentSD
+            }, function(result) {
+                console.log("ProjectDiaryCtrl - saveEdit() - success updateDiary");
+                def.resolve();
+            }, function(error) {
+                console.log("ProjectDiaryCtrl - saveEdit() - error updateDiary");
+                SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
+                def.resolve();
+            })
+            return def.promise;
+        }
+
+        // method to upload attachments
+        function uploadAttachments() {
+            var def = $q.defer(),
+                count = 0;
+            if (attachments !== null && attachments.pictures && attachments.pictures.length) {
+                // method to add attachments
+                angular.forEach(attachments.pictures, function(value) {
+                    count++;
+                    //base_64_string is populated only for new attachments
+                    //the attachments on server have null base_64_string, but have path field assigned
+                    if (value.base_64_string) {
+                        delete value.url;
+                        delete value.path;
+                        PostService.post({
+                            url: 'sdattachment/uploadfile',
+                            method: 'POST',
+                            data: value
+                        }, function(result) {
+                            if (count >= attachments.pictures.length)
+                                def.resolve();
+                        }, function(error) {
+                            if (count >= attachments.pictures.length)
+                                def.resolve();
+                        })
+                    } else {
+                        if (count >= attachments.pictures.length)
+                            def.resolve();
+                    }
+                });
+            } else {
+                def.resolve();
+            }
+            return def.promise;
+        }
+
+        // method to update attachments in the backend
+        function updateAttachments() {
+            var def = $q.defer(),
+                count = 0;
+            if (attachments !== null && attachments.toBeUpdated && attachments.toBeUpdated.length) {
+                angular.forEach(attachments.toBeUpdated, function(value) {
+                    count++;
+                    PostService.post({
+                        url: 'sdattachment/update',
+                        method: 'POST',
+                        data: value
+                    }, function(result) {
+                        if (count >= attachments.pictures.length)
+                            def.resolve();
+                    }, function(error) {
+                        if (count >= attachments.pictures.length)
+                            def.resolve();
+                    })
+                });
+            } else {
+                def.resolve();
+            }
+            return def.promise;
+        }
+
+        // method to delete attachments
+        function deleteAttachments() {
+            var def = $q.defer();
+            if (attachments !== null && attachments.toBeDeleted) {
+                PostService.post({
+                    url: 'sdattachment',
+                    method: 'POST',
+                    data: attachments.toBeDeleted
+                }, function(result) {
+                    def.resolve();
+                }, function(error) {
+                    def.resolve();
+                })
+            } else {
+                def.resolve();
+            }
+            return def.promise;
+        }
 
         // method to update comments in the backend
-        angular.forEach(comments, function(comment) {
-            //all new comments do not have an id yet; add them to server
-            if (!comment.id) {
-                var request = {
-                    site_diary_id: comment.site_diary_id,
-                    comment: comment.comment
-                };
-                addComments.push(SiteDiaryService.add_comments(request).success(function(result) {
-                    console.log("ProjectDiaryCtrl - saveEdit() - success addComments");
-
-                }).error(function(err) {
-                    console.log("ProjectDiaryCtrl - saveEdit() - error addComments");
-
-                }));
-            }
-        });
-        console.log("ProjectDiaryCtrl - saveEdit() - attachments ", attachments);
-        // method to update attachments in the backend
-        if (attachments !== null) {
-            // method to add attachments
-            angular.forEach(attachments.pictures, function(value) {
-                //base_64_string is populated only for new attachments
-                //the attachments on server have null base_64_string, but have path field assigned
-                if (value.base_64_string) {
-                    delete value.url;
-                    delete value.path;
-                    uploadAttachments.push(AttachmentsService.upload_attachment(value).then(function(result) {
-                        console.log("ProjectDiaryCtrl - saveEdit() - then uploadAttachments");
-
-                    }));
+        function addComments() {
+            var def = $q.defer(),
+                count = 0;
+            if (!comments || comments && !comments.length)
+                def.resolve();
+            angular.forEach(comments, function(comment) {
+                count++;
+                //all new comments do not have an id yet; add them to server
+                if (comment.id) {
+                    if (count >= comments.length)
+                        def.resolve();
+                } else {
+                    PostService.post({
+                        url: 'sitediary/comment',
+                        method: 'POST',
+                        data: {
+                            site_diary_id: comment.site_diary_id,
+                            comment: comment.comment
+                        }
+                    }, function(result) {
+                        if (count >= comments.length)
+                            def.resolve();
+                    }, function(error) {
+                        if (count >= comments.length)
+                            def.resolve();
+                    })
                 }
-            });
-            // method to update attachments
-            angular.forEach(attachments.toBeUpdated, function(att) {
-                updateAttachments.push(AttachmentsService.update_attachments(att).then(function(result) {
-                    console.log("ProjectDiaryCtrl - saveEdit() - then updateAttachments");
-
-                }));
-            });
-            // method to delete attachments
-            if (attachments.toBeDeleted) {
-                deleteAttachments = AttachmentsService.delete_attachments(attachments.toBeDeleted)
-                    .then(function(result) {
-                        console.log("ProjectDiaryCtrl - saveEdit() - then deleteAttachments");
-
-                    });
-            }
+            })
+            return def.promise;
         }
+
+        var updateSd = updateDiary(),
+            uploadAtt = uploadAttachments(),
+            updateAtt = updateAttachments(),
+            deleteAtt = deleteAttachments(),
+            addComm = addComments();
+
         // run all operations then go back to the page where we come from - there project will be updated
-        Promise.all([updateDiary, uploadAttachments, updateAttachments, deleteAttachments, addComments]).then(function(res) {
+        Promise.all([updateSd, uploadAtt, updateAtt, deleteAtt, addComm]).then(function(res) {
             console.log("ProjectDiaryCtrl - saveEdit() - then success promise all");
             syncPopup.close();
             //restore initial format for attachments and comments field
@@ -367,7 +455,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             vm.go('project');
         }, function(err) {
             console.log("ProjectDiaryCtrl - saveEdit() - then error promise all");
-            syncPopup.close();
+            SettingService.close_all_popups();
+            // syncPopup.close(); TODO:
             vm.go('project');
         });
     }
@@ -420,16 +509,19 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         }
         var syncPopup = $ionicPopup.show({
             title: 'Submitting',
-            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+            template: loadingTemplate,
             content: "",
             buttons: []
         });
 
-        SiteDiaryService.update_diary(create).success(function(result) {
-            syncPopup.close();
-        }).error(function(err) {
+        PostService.post({
+            url: 'sitediary',
+            method: 'PUT',
+            data: create
+        }, function(result) {}, function(error) {
+            SettingService.close_all_popups(); //TODO:
             SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
-        })
+        }, syncPopup);
     }
 
     function toggle() {

@@ -1,19 +1,19 @@
 sdApp.controller('VisitorsCtrl', VisitorsCtrl);
 
-VisitorsCtrl.$inject = ['$state', 'SettingService', '$scope', '$rootScope', 'SyncService', '$stateParams'];
+VisitorsCtrl.$inject = ['$state', 'SettingService', '$scope', '$rootScope', '$stateParams'];
 
-function VisitorsCtrl($state, SettingService, $scope, $rootScope, SyncService, $stateParams) {
+function VisitorsCtrl($state, SettingService, $scope, $rootScope, $stateParams) {
 	var vm = this;
 	vm.go = go;
 	vm.local = {};
 	vm.local.data = {};
 	vm.data = {};
 	vm.index = $stateParams.id;
-	
+
 	$scope.$watch(function () {
 		SettingService.show_focus();
 	});
-	
+
 	function save() {
 		var member = {
 			first_name: vm.local.data.first_name,
@@ -27,7 +27,7 @@ function VisitorsCtrl($state, SettingService, $scope, $rootScope, SyncService, $
 			$rootScope.currentSD.site_attendance.visitors[vm.index] = member;
 		}
 	}
-	
+
 	function go(predicate, id) {
 		if (vm.local.data.first_name) {
 			save();

@@ -15,7 +15,7 @@ sdApp.controller('ProjectsCtrl', [
 		vm.local.data = {};
 		$rootScope.currentSD = null;
 		vm.projects = $rootScope.projects;
-		
+
 		// running only on REFRESH
 		if (!vm.projects) {
 			SyncService.getProjects(function (result) {
@@ -33,8 +33,8 @@ sdApp.controller('ProjectsCtrl', [
 				var getFiltered = function (item) {
 					var filtered = $filter('filter')(lists, {
 						name: item
-					}, true)[0];
-					if (filtered) return filtered;
+					}, true);
+					if (filtered && filtered.length) return filtered[0];
 					return {
 						value: false
 					};
@@ -49,7 +49,7 @@ sdApp.controller('ProjectsCtrl', [
 				$rootScope.break = getFiltered('break').value;
 			});
 		}
-		
+
 		function go(project) {
 			sessionStorage.setObject('projectId', project.id);
 			$rootScope.projectName = project.value.name;

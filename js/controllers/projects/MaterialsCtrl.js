@@ -1,8 +1,8 @@
 sdApp.controller('MaterialsCtrl', MaterialsCtrl)
 
-MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'SiteDiaryService', 'SettingService', '$filter', 'SyncService', '$rootScope', '$ionicPopup'];
+MaterialsCtrl.$inject = ['$state', '$scope', '$ionicModal', '$stateParams', 'PostService', 'SettingService', '$filter', '$rootScope'];
 
-function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryService, SettingService, $filter, SyncService, $rootScope, $ionicPopup) {
+function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, PostService, SettingService, $filter, $rootScope) {
     var vm = this;
     vm.go = go;
     vm.unit = "materials.unit";
@@ -142,7 +142,13 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, SiteDiaryServi
                 $rootScope.currentSD.plant_and_material_used.splice(i, 1);
             }
         })
-        SiteDiaryService.update_diary($rootScope.currentSD);
+        PostService.post({
+            url: 'sitediary',
+            method: 'PUT',
+            data: $rootScope.currentSD
+        }, function(result) {}, function(error) {
+            SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
+        })
     }
 
     function go(predicate, id) {

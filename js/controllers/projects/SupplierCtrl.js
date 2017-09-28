@@ -1,18 +1,18 @@
 sdApp.controller('SupplierCtrl', SupplierCtrl);
 
-SupplierCtrl.$inject = ['$rootScope', '$scope', '$state', 'SettingService', '$stateParams', 'SyncService'];
+SupplierCtrl.$inject = ['$rootScope', '$scope', '$state', 'SettingService', '$stateParams'];
 
-function SupplierCtrl($rootScope, $scope, $state, SettingService, $stateParams, SyncService) {
+function SupplierCtrl($rootScope, $scope, $state, SettingService, $stateParams) {
 	var vm = this;
 	vm.go = go;
 	vm.local = {};
 	vm.index = $stateParams.id;
 	var suppNo = 0;
-	
+
 	$scope.$watch(function () {
 		SettingService.show_focus();
 	});
-	
+
 	function initFields() {
 		//initialize the data for a new supplier
 		var supplier = {
@@ -30,7 +30,7 @@ function SupplierCtrl($rootScope, $scope, $state, SettingService, $stateParams, 
 			$rootScope.currentSD.goods_received[suppNo] = supplier;
 		}
 	}
-	
+
 	function go(predicate) {
 		initFields();
 		$state.go('app.' + predicate, {

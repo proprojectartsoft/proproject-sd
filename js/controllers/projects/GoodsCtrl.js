@@ -1,8 +1,8 @@
 sdApp.controller('GoodsCtrl', GoodsCtrl);
 
-GoodsCtrl.$inject = ['$rootScope', '$state', 'SiteDiaryService', 'SettingService'];
+GoodsCtrl.$inject = ['$rootScope', '$state', 'SettingService', 'PostService'];
 
-function GoodsCtrl($rootScope, $state, SiteDiaryService, SettingService) {
+function GoodsCtrl($rootScope, $state, SettingService, PostService) {
     var vm = this;
     vm.go = go;
     vm.deleteEntry = deleteEntry;
@@ -19,7 +19,13 @@ function GoodsCtrl($rootScope, $state, SiteDiaryService, SettingService) {
                 $rootScope.currentSD.goods_received.splice(i, 1);
             }
         });
-        SiteDiaryService.update_diary($rootScope.currentSD);
+        PostService.post({
+            url: 'sitediary',
+            method: 'PUT',
+            data: $rootScope.currentSD
+        }, function(result) {}, function(error) {
+            SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
+        })
     }
 
     function go(predicate, id) {

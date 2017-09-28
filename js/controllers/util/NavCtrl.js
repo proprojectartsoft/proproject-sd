@@ -47,8 +47,8 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
             var getFiltered = function(item) {
                 var filtered = $filter('filter')(lists, {
                     name: item
-                }, true)[0];
-                if (filtered) return filtered;
+                }, true);
+                if (filtered && filtered.length) return filtered[0];
                 return {
                     value: false
                 };

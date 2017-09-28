@@ -1,8 +1,8 @@
 sdApp.controller('AccountCtrl', AccountCtrl)
 
-AccountCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'ProjectService', 'AuthService'];
+AccountCtrl.$inject = ['$ionicSideMenuDelegate', 'ProjectService'];
 
-function AccountCtrl($ionicSideMenuDelegate, $rootScope, $state, ProjectService, AuthService) {
+function AccountCtrl($ionicSideMenuDelegate, ProjectService) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
     vm.editCurrentUser = editCurrentUser;
@@ -26,10 +26,15 @@ function AccountCtrl($ionicSideMenuDelegate, $rootScope, $state, ProjectService,
             job_title: vm.account.job_title,
             active: true
         }
-        ProjectService.update_account(aux).then(function(result) {
+        PostService.post({
+            url: 'user',
+            method: 'PUT',
+            data: aux
+        }, function(result) {
             vm.account = localStorage.getObject('my_account');
-        });
-
+        }, function(error) {
+            SettingService.show_message_popup("Error", '<span>An unexpected error occured and your account could not be updated.</span>');
+        })
         vm.editCurrentUser();
     }
 
