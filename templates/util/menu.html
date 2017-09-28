@@ -19,7 +19,7 @@
                 <button class="button button-block button-calm bold">Log out</button>
             </ion-item>
 
-            <ion-item nav-clear menu-close ng-click="vm.sync()">
+            <ion-item nav-clear menu-close ng-click="vm.toggleSidemenu($event); vm.sync()">
                 <img src="img/menu/synchronize.png">
                 <span>Synchronize</span>
             </ion-item>
