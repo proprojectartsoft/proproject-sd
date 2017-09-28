@@ -1,11 +1,11 @@
 sdApp.controller('AttachementsCtrl', AttachementsCtrl);
 
 AttachementsCtrl.$inject = ['$scope', '$state', '$cordovaCamera', '$timeout', '$filter',
-    '$rootScope', 'SettingService', '$ionicScrollDelegate'
+    '$rootScope', 'SettingService', '$ionicScrollDelegate', '$ionicPopup'
 ];
 
 function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
-    $rootScope, SettingService, $ionicScrollDelegate) {
+    $rootScope, SettingService, $ionicScrollDelegate, $ionicPopup) {
     var vm = this;
     vm.go = go;
     vm.takePicture = takePicture;
@@ -108,14 +108,33 @@ function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
     }
 
     function removePicture(pic, index) {
-        if (pic.id) {
-            var idPic = {
-                id: pic.id
-            };
-            vm.dataToDelete.push(idPic);
-        }
-        vm.pictures.splice(index, 1);
-        pullDown();
+      var popup = $ionicPopup.alert({
+					title: "Are you sure",
+					template: "<center>you want to delete it?</center>",
+					content: "",
+					buttons: [{
+						text: 'Ok',
+						type: 'button-positive',
+						onTap: function (e) {
+              if (pic.id) {
+                  var idPic = {
+                      id: pic.id
+                  };
+                  vm.dataToDelete.push(idPic);
+              }
+              vm.pictures.splice(index, 1);
+              pullDown();
+							popup.close();
+						}
+					},
+          {
+          text: 'Cancel',
+          onTap: function (e) {
+            popup.close();
+          }
+          }]
+				});
+
     }
 
     function returnToGallery() {
