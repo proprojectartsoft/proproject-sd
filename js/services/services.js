@@ -123,14 +123,15 @@ sdApp.service('PostService', [
             // classic request object
             var requestObject = {
                 method: params.method,
-                url: baseQueryTo + params.url
+                url: baseQueryTo + params.url,
+                data: params.data
             };
 
-            if (requestObject.method === 'POST') {
-                requestObject.data = params.data;
-            } else {
-                requestObject.params = params.data;
-            }
+            // if (requestObject.method === 'POST') {
+            //     requestObject.data = params.data;
+            // } else {
+            //     requestObject.params = params.data;
+            // }
 
             if (params.transformRequest && typeof params.transformRequest === 'object') {
                 requestObject.transformRequest = params.transformRequest;

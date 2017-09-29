@@ -150,7 +150,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                 method: 'POST',
                 data: {}
             }, function(result) {
-                if (response.message === "Site diary Shared!") {
+                if (result.message === "Site diary Shared!") {
                     res = "";
                     var alertPopup = $ionicPopup.alert({
                         title: 'Share',
@@ -235,11 +235,9 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             buttons: []
         });
         PostService.post({
-            url: 'sitediary',
+            url: 'sitediary?id=' + id,
             method: 'DELETE',
-            data: { //TODO:params not data
-                id: id
-            }
+            data: {}
         }, function(result) {
             SyncService.addDiariesToSync().then(function() {
                 SyncService.sync().then(function() {

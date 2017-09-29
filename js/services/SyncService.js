@@ -167,7 +167,7 @@ sdApp.service('SyncService', [
                                 function getAllSettings(callback) {
                                     var lists = [];
 
-                                    function getFromServer(url, name, optionalFunc, isCompany) {
+                                    var getFromServer = function(url, name, optionalFunc, isCompany) {
                                         var sdef = $q.defer();
                                         PostService.post({
                                             url: url,
@@ -235,7 +235,7 @@ sdApp.service('SyncService', [
                                     }, function(error) {
                                         SettingService.close_all_popups(); //TODO: check where close all popups is needed
                                         console.log("Could not get projects from server: ", error);
-                                        def.reject(err);
+                                        def.reject(error);
                                     })
                                     return def.promise;
                                 }
@@ -377,7 +377,7 @@ sdApp.service('SyncService', [
                             });
                             localStorage.removeItem('diariesToSync');
                             //there are no diaries to be added to server
-                            if (diariesToAdd && !diariesToAdd.length) {
+                            if (!diariesToAdd.length) {
                                 prm.resolve();
                             }
 
@@ -405,8 +405,8 @@ sdApp.service('SyncService', [
                                     method: 'POST',
                                     data: sd
                                 }, function(result) {
-                                    var attToAdd = addAttachmentsForSd(attachments, result.id);
-                                    var commentsToAdd = addCommentsForSd(comments, result.id);
+                                    var attToAdd = addAttachmentsForSd(attachments, result.data.id);
+                                    var commentsToAdd = addCommentsForSd(comments, result.data.id);
                                     count++;
                                     Promise.all([attToAdd, commentsToAdd]).then(function(res) { //TODO: check if not needed also in error clause
                                         console.log("syncService addDiariesToSync all diaries added (Promise all)");

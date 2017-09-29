@@ -173,7 +173,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             data: $rootScope.currentSD
         }, function(result) {
             //add comments for SD
-            function addComments() {
+            var addComments = function() {
                 var def = $q.defer(),
                     comLength = 0;
                 if (!comments || comments && !comments.length) {
@@ -185,7 +185,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         url: 'sitediary/comment',
                         method: 'POST',
                         data: {
-                            site_diary_id: result.id,
+                            site_diary_id: result.data.id,
                             comment: value.comment
                         }
                     }, function(result) {
@@ -197,7 +197,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 return def.promise;
             };
             //prepare the attachments array to conform to format required by server
-            function addAttachments() {
+            var addAttachments = function() {
                 var def = $q.defer(),
                     attLength = 0;
                 if (!attachments.pictures || attachments.pictures && !attachments.pictures.length) {
@@ -207,12 +207,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     attLength++;
                     //new photo, non existent on server
                     if (value.base_64_string) {
-                        value.site_diary_id = result.id;
+                        value.site_diary_id = result.data.id;
                     } else if (!vm.enableCreate && vm.edit) {
                         //when edit a diary and save as new,there may be photos already stored on server
                         delete value.id;
                         value.base_64_string = '';
-                        value.site_diary_id = result.id;
+                        value.site_diary_id = result.data.id;
                     }
                     delete value.url;
                     PostService.post({
@@ -311,7 +311,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         delete $rootScope.currentSD.comments;
         console.log("ProjectDiaryCtrl - saveEdit() - update diary ", $rootScope.currentSD);
         // method to update the backend
-        function updateDiary() {
+        var updateDiary = function() {
             var def = $q.defer();
             PostService.post({
                 url: 'sitediary',
@@ -329,7 +329,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         }
 
         // method to upload attachments
-        function uploadAttachments() {
+        var uploadAttachments = function() {
             var def = $q.defer(),
                 count = 0;
             if (attachments !== null && attachments.pictures && attachments.pictures.length) {
@@ -364,7 +364,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         }
 
         // method to update attachments in the backend
-        function updateAttachments() {
+        var updateAttachments = function() {
             var def = $q.defer(),
                 count = 0;
             if (attachments !== null && attachments.toBeUpdated && attachments.toBeUpdated.length) {
@@ -389,7 +389,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         }
 
         // method to delete attachments
-        function deleteAttachments() {
+        var deleteAttachments = function() {
             var def = $q.defer();
             if (attachments !== null && attachments.toBeDeleted) {
                 PostService.post({
@@ -408,7 +408,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         }
 
         // method to update comments in the backend
-        function addComments() {
+        var addComments = function() {
             var def = $q.defer(),
                 count = 0;
             if (!comments || comments && !comments.length)
