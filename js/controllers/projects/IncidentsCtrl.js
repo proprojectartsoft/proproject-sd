@@ -41,7 +41,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, PostService,
             SettingService.show_focus();
     });
 
-    vm.local.type = [{ //TODO: retrieve from DB/localStorage
+    vm.local.type = [{ 
         id: 0,
         name: 'Incident'
     }, {

@@ -11,7 +11,7 @@ function AccountCtrl($ionicSideMenuDelegate) {
 	vm.loggedIn = localStorage.getObject('loggedIn');
 	vm.editAccount = false;
 	vm.account = localStorage.getObject('my_account');
-	
+
 	function update() {
 		var aux = {
 			first_name: vm.account.first_name,
@@ -37,13 +37,13 @@ function AccountCtrl($ionicSideMenuDelegate) {
 		});
 		vm.editCurrentUser();
 	}
-	
+
 	function editCurrentUser() {
 		vm.editAccount = !vm.editAccount;
 	}
-	
+
 	function toggleSidemenu($event) {
 		$ionicSideMenuDelegate.toggleLeft();
 	}
-	
+
 }
