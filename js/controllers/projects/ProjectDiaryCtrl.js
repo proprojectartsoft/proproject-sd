@@ -269,7 +269,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             $rootScope.currentSD.attachments = attachments.pictures || [];
             $rootScope.currentSD.comments = comments;
             SettingService.close_all_popups();
-            // syncPopup.close(); TODO:
+            syncPopup.close(); 
             SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
             $('.create-btn').attr("disabled", false);
             vm.go('project');

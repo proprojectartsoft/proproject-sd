@@ -174,8 +174,4 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
             id: id
         });
     }
-
-    function datetimeChanged() {
-        vm.calcParse();
-    }
 }

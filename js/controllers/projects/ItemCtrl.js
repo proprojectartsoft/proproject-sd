@@ -127,8 +127,4 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
             id: id
         });
     }
-
-    function datetimeChanged() {
-        //TODO: remove
-    }
 }

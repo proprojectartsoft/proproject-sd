@@ -193,8 +193,4 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 			id: id
 		});
 	}
-
-	function datetimeChanged() {
-		vm.calcParse();
-	}
 }
