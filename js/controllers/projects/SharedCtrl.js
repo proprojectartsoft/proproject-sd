@@ -19,7 +19,7 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, PostService, $io
             'shared': vm.displayDiary
         }
     }, function(result) {
-        vm.shared = result;
+        vm.shared = result.data;
     }, function(error) {
         $ionicPopup.alert({
             title: 'Share',

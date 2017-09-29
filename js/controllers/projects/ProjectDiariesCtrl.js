@@ -146,8 +146,12 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             });
 
             PostService.post({
-                url: 'sharesitediary?siteDiaryId=' + id + '&email=' + res,
+                url: 'sharesitediary',
                 method: 'POST',
+                params: {
+                    siteDiaryId: id,
+                    email: res
+                },
                 data: {}
             }, function(result) {
                 if (response.message === "Site diary Shared!") {

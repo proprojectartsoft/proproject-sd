@@ -36,7 +36,7 @@ sdApp.controller('LoginCtrl', [
                         PostService.post({
                             url: 'user/profile',
                             method: 'GET',
-                            data: {
+                            params: {
                                 'id': result.data.id
                             }
                         }, function(result) {
@@ -222,7 +222,7 @@ sdApp.controller('LoginCtrl', [
                         PostService.post({
                             url: 'user/profile',
                             method: 'GET',
-                            data: {
+                            params: {
                                 'id': result.data.id
                             }
                         }, function(result) {
