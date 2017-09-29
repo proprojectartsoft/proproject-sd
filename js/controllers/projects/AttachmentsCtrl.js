@@ -1,10 +1,10 @@
-sdApp.controller('AttachementsCtrl', AttachementsCtrl);
+sdApp.controller('AttachmentsCtrl', AttachmentsCtrl);
 
-AttachementsCtrl.$inject = ['$scope', '$state', '$cordovaCamera', '$timeout', '$filter',
+AttachmentsCtrl.$inject = ['$scope', '$state', '$cordovaCamera', '$timeout', '$filter',
     '$rootScope', 'SettingService', '$ionicScrollDelegate', '$ionicPopup'
 ];
 
-function AttachementsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
+function AttachmentsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
     $rootScope, SettingService, $ionicScrollDelegate, $ionicPopup) {
     var vm = this;
     vm.go = go;

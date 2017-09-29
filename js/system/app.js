@@ -15,9 +15,9 @@ var sdApp = angular.module($APP.name, [
 sdApp.config(['$ionicConfigProvider', '$stateProvider', '$urlRouterProvider',
 	function ($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
 		$ionicConfigProvider.views.swipeBackEnabled(false);
-		
+
 		$urlRouterProvider.otherwise('/login/'); //hardcoded for start
-		
+
 		$stateProvider
 			.state('app', {
 				url: "/app",
