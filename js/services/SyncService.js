@@ -295,7 +295,7 @@ sdApp.service('SyncService', [
 							function addAttachmentsForSd(attachments, sd_id) {
 								var def = $q.defer(),
 									cnt = 0;
-								angular.forEach(attachments.pictures, function (value) {
+								angular.forEach(attachments, function (value) {
 									cnt++;
 									//if attachment not already on server, add it
 									if (!value.path) {
@@ -307,11 +307,11 @@ sdApp.service('SyncService', [
 											data: value
 										}, function (result) {
 											//last attachment uploaded
-											if (cnt >= attachments.pictures.length) return def.resolve();
+											if (cnt >= attachments.length) return def.resolve();
 										}, function (error) {
 											console.log("Could not upload attachment: ", error);
 											//last attachment uploaded
-											if (cnt >= attachments.pictures.length) return def.resolve();
+											if (cnt >= attachments.length) return def.resolve();
 										})
 									}
 								});
