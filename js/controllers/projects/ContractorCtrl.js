@@ -170,7 +170,7 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
             save();
         }
         sessionStorage.setObject('siteAttendance.tab', 'contractors');
-        $state.go('app.' + predicate, {
+        $rootScope.go('app.' + predicate, {
             id: id
         });
     }

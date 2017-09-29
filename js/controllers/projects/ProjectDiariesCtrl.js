@@ -295,7 +295,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     }
 
     function go(predicate, id) {
-        $state.go('app.' + predicate, {
+        $rootScope.go('app.' + predicate, {
             id: id
         });
         vm.diaryModal.hide();

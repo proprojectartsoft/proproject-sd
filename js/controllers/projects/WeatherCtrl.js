@@ -86,14 +86,14 @@ function WeatherCtrl($rootScope, $state, $scope, SettingService) {
         save();
         if (predicate === 'diary') {
             if (vm.diaryId) {
-                $state.go('app.' + predicate, {
+                $rootScope.go('app.' + predicate, {
                     id: vm.diaryId
                 });
             } else {
-                $state.go('app.' + predicate);
+                $rootScope.go('app.' + predicate);
             }
         } else {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: id
             });
         }

@@ -24,9 +24,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, PostService, S
     vm.total_formated = '';
     vm.subtotal_formated = '';
     vm.newGood = '';
-    if (!$rootScope.currentSD) return $state.go('app.home', {}, {
-        reload: true
-    });
+    if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
     vm.goods = $rootScope.resources;
     vm.goods.sort(function(a, b) {
         var textA = a.name.toUpperCase();
@@ -141,7 +139,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, PostService, S
             if (el === entry) {
                 $rootScope.currentSD.plant_and_material_used.splice(i, 1);
             }
-        })
+        });
         PostService.post({
             url: 'sitediary',
             method: 'PUT',
@@ -152,15 +150,15 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, PostService, S
     }
 
     function go(predicate, id) {
-        if (predicate == "materials" && vm.material.name) {
+        if (predicate === "materials" && vm.material.name) {
             save();
         }
         if ((predicate === 'diary') && (vm.diaryId)) {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: vm.diaryId
             });
         } else {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: id
             });
         }

@@ -12,9 +12,7 @@ function SiteAttendanceCtrl($rootScope, $state, PostService, SettingService) {
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.editMode = sessionStorage.getObject('editMode');
     //store the lists of site attendance
-    if (!$rootScope.currentSD) return $state.go('app.home', {}, {
-        reload: true
-    });
+	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
     vm.staffList = $rootScope.currentSD.site_attendance.staffs;
     vm.companyList = $rootScope.currentSD.site_attendance.contractors;
     vm.visitorList = $rootScope.currentSD.site_attendance.visitors;
@@ -76,11 +74,11 @@ function SiteAttendanceCtrl($rootScope, $state, PostService, SettingService) {
 
     function go(predicate, id) {
         if ((vm.diaryId) && (predicate === 'diary')) {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: vm.diaryId
             });
         } else {
-            $state.go('app.' + predicate, {
+            $rootScope.go('app.' + predicate, {
                 id: id
             });
         }

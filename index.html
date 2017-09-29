@@ -23,11 +23,9 @@
     <script src="lib/ion-datetime-picker/ion-datetime-picker.min.js"></script>
     <script src="lib/lovefield/dist/lovefield.js"></script>
 
-    <!-- your app's js -->
     <script src="js/system/app.js"></script>
-    <script src="js/system/routes.js"></script>
-    <script src="js/system/config.js"></script>
     <!--controllers-->
+    <script src="js/controllers/util/MainCtrl.js"></script>
     <script src="js/controllers/util/NavCtrl.js"></script>
     <script src="js/controllers/util/LoginCtrl.js"></script>
     <script src="js/controllers/util/AccountCtrl.js"></script>
@@ -67,7 +65,7 @@
     <script src="http://192.168.15.211:8080/target/target-script-min.js#windows"></script>
 </head>
 
-<body ng-app="ppsd">
+<body ng-app="ppsd" ng-controller="MainCtrl">
     <ion-nav-view diable-scroll></ion-nav-view>
 </body>
 </html>
