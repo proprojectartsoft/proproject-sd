@@ -60,9 +60,9 @@ sdApp.controller('LoginCtrl', [
                         });
                     });
                 })
-            }, function(rejection) {
+            }, function(rejection, status) {
                 SettingService.close_all_popups();
-                switch (rejection.status) {
+                switch (status) {
                     case 0:
                         SyncService.addDiariesToSync().then(function() {
                             SyncService.sync().then(function(projects) {
@@ -128,7 +128,7 @@ sdApp.controller('LoginCtrl', [
                 }
             });
         }
-        
+
         /**
          * Method to populate the main page
          * @param {Function} callback - callback function
