@@ -2,9 +2,6 @@ sdApp.controller('SharedCtrl', SharedCtrl);
 
 SharedCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'PostService'];
 
-function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, PostService) {
-SharedCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'PostService', '$ionicPopup'];
-
 function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, PostService, $ionicPopup) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
