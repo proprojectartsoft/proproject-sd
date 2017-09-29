@@ -60,9 +60,9 @@ sdApp.controller('LoginCtrl', [
                         });
                     });
                 })
-            }, function(rejection, status) {
+            }, function(rejection) {
                 SettingService.close_all_popups();
-                switch (status) {
+                switch (rejection) {
                     case 0:
                         SyncService.addDiariesToSync().then(function() {
                             SyncService.sync().then(function(projects) {
@@ -238,10 +238,10 @@ sdApp.controller('LoginCtrl', [
                     } else {
                         loginPopup.close();
                     }
-                }, function(response, status) {
+                }, function(response) {
                     loginPopup.close();
                     var alertMessage = {};
-                    switch (status || response) {
+                    switch (response) {
                         case 0:
                             alertMessage = {
                                 title: 'Offline',

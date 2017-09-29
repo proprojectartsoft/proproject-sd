@@ -35,7 +35,7 @@ sdApp.factory('AuthService', [
                     sessionStorage.setObject('isLoggedIn', true);
                     success(data);
                 }).error(function errorCallback(response, status) {
-                    error(response);
+                    error(status);
                 });
             },
             logout: function() {
