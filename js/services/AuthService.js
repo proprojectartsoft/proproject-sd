@@ -11,7 +11,6 @@ sdApp.factory('AuthService', [
 					return 'error';
 				});
 			},
-			
 			forgotpassword: function (email, thisBoolean) {
 				var url = $APP.server + '/pub/forgetpassword?email=' + email + '&ds=' + thisBoolean;
 				return $http.post(url).then(function (payload) {
@@ -39,7 +38,6 @@ sdApp.factory('AuthService', [
 					error(response);
 				});
 			},
-			
 			logout: function () {
 				return $http.post($APP.server + '/pub/logout', {
 					withCredentials: true

@@ -405,9 +405,10 @@ sdApp.service('SyncService', [
 									method: 'POST',
 									data: sd
 								}, function (result) {
-									var attToAdd = addAttachmentsForSd(attachments, result.id);
-									var commentsToAdd = addCommentsForSd(comments, result.id);
+									var attToAdd = addAttachmentsForSd(attachments, result.id),
+										commentsToAdd = addCommentsForSd(comments, result.id);
 									count++;
+									
 									Promise.all([attToAdd, commentsToAdd]).then(function (res) { //TODO: check if not needed also in error clause
 										console.log("syncService addDiariesToSync all diaries added (Promise all)");
 										//last diary added along with its attachments and comments

@@ -361,7 +361,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 def.resolve();
             }
             return def.promise;
-        }
+        };
 
         // method to update attachments in the backend
         var updateAttachments = function() {
@@ -386,7 +386,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 def.resolve();
             }
             return def.promise;
-        }
+        };
 
         // method to delete attachments
         var deleteAttachments = function() {
@@ -405,7 +405,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 def.resolve();
             }
             return def.promise;
-        }
+        };
 
         // method to update comments in the backend
         var addComments = function() {
@@ -435,9 +435,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             def.resolve();
                     })
                 }
-            })
+            });
             return def.promise;
-        }
+        };
 
         var updateSd = updateDiary(),
             uploadAtt = uploadAttachments(),
