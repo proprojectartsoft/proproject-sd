@@ -241,7 +241,7 @@ sdApp.controller('LoginCtrl', [
                 }, function(response, status) {
                     loginPopup.close();
                     var alertMessage = {};
-                    switch (status) {
+                    switch (status || response) {
                         case 0:
                             alertMessage = {
                                 title: 'Offline',
