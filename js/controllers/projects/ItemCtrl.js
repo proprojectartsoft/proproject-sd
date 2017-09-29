@@ -11,7 +11,6 @@ function ItemCtrl($rootScope, $scope, $ionicModal, $filter, $state, $stateParams
     vm.addGood = addGood;
     vm.addNewGood = addNewGood;
     vm.addUnit = addUnit;
-    vm.datetimeChanged = datetimeChanged;
     vm.editMode = sessionStorage.getObject('editMode');
     vm.diaryId = sessionStorage.getObject('diaryId');
     vm.local = {};

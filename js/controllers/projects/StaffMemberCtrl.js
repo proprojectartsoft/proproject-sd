@@ -16,7 +16,6 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 	vm.addNewName = addNewName;
 	vm.addStaff1 = addStaff1;
 	vm.allowNumbersOnly = allowNumbersOnly;
-	vm.datetimeChanged = datetimeChanged;
 	vm.diaryId = sessionStorage.getObject('diaryId');
 	vm.editMode = sessionStorage.getObject('editMode');
 	vm.local = {};

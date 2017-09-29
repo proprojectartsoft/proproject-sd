@@ -13,7 +13,6 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
     vm.stringToDate = stringToDate;
     vm.addStaff1 = addStaff1;
     vm.allowNumbersOnly = allowNumbersOnly;
-    vm.datetimeChanged = datetimeChanged;
     vm.local = {};
     vm.local.data = {};
     vm.local.search = '';
