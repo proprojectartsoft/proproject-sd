@@ -42,7 +42,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             id: vm.diaryStateId
                         })[0];
                         //copy all attachments into pictures field
-                        diary.attachments.pictures = angular.copy(diary.attachments);
+                        if (!diary.attachments.pictures)
+                            diary.attachments.pictures = angular.copy(diary.attachments);
                         //store as temp
                         $rootScope.currentSD = diary;
                         $rootScope.backupSD = angular.copy($rootScope.currentSD);
@@ -151,6 +152,17 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                     for (var subfield4 in field) {
                         if (!field.hasOwnProperty(subfield4)) continue;
                         if (field[subfield4] && field[subfield4] !== null) {
+                            $rootScope.indication[key] = true;
+                            break;
+                        }
+                    }
+                    break;
+                case "attachments":
+                    field = diary[key];
+                    //at least one subsection is not empty (pictures, attToUpdate, attToDelete)
+                    for (var subfield in field) {
+                        if (!field.hasOwnProperty(subfield)) continue;
+                        if (field[subfield].length) {
                             $rootScope.indication[key] = true;
                             break;
                         }
