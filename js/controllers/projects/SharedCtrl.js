@@ -3,6 +3,9 @@ sdApp.controller('SharedCtrl', SharedCtrl);
 SharedCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopup', 'PostService'];
 
 function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, PostService) {
+SharedCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', 'PostService', '$ionicPopup'];
+
+function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, PostService, $ionicPopup) {
     var vm = this;
     vm.toggleSidemenu = toggleSidemenu;
     vm.go = go;
@@ -26,15 +29,30 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, Pos
         })
     }
 
+	PostService.post({
+        url: 'sharesitediary',
+        method: 'GET',
+        params: {
+            'shared': vm.displayDiary
+        }
+    }, function(result) {
+        vm.shared = result;
+    }, function(error) {
+        $ionicPopup.alert({
+            title: 'Share',
+            template: 'An unexpected error occured and shared diaries could not be displayed.'
+        });
+    });
+
     function go(predicate, id, project) {
         $rootScope.projectName = project;
-        $state.go('app.' + predicate, {
+        $rootScope.go('app.' + predicate, {
             id: id
         });
     }
 
     function toggleSidemenu($event) {
-        $ionicSideMenuDelegate.toggleLeft();
+	    $ionicSideMenuDelegate.toggleLeft();
     }
 
 }
