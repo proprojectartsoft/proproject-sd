@@ -24,7 +24,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, PostService, $roo
             SettingService.show_focus();
     });
 
-    vm.types = [{ //TODO:retrieve from DB
+    vm.types = [{ 
         id: 0,
         name: 'Toolbox Talk'
     }, {

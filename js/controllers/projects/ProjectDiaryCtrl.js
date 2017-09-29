@@ -269,7 +269,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             $rootScope.currentSD.attachments = attachments.pictures || [];
             $rootScope.currentSD.comments = comments;
             SettingService.close_all_popups();
-            syncPopup.close(); 
+            syncPopup.close();
             SettingService.show_message_popup("You are offline", "<center>You can sync your data when online</center>");
             $('.create-btn').attr("disabled", false);
             vm.go('project');
@@ -468,7 +468,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         }, function(err) {
             console.log("ProjectDiaryCtrl - saveEdit() - then error promise all");
             SettingService.close_all_popups();
-            // syncPopup.close(); TODO:
+            syncPopup.close();
             vm.go('project');
         });
     }
@@ -531,7 +531,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             method: 'PUT',
             data: create
         }, function(result) {}, function(error) {
-            SettingService.close_all_popups(); //TODO:
+            SettingService.close_all_popups(); 
             SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
         }, syncPopup);
     }

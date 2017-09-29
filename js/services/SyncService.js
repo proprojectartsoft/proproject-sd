@@ -12,13 +12,13 @@ sdApp.service('SyncService', [
 	'PostService',
 	function ($q, $http, $timeout, $ionicPopup, $state, $filter, pendingRequests,
 	          SettingService, AuthService, IndexedService, PostService) {
-		
+
 		var service = this;
-		
+
 		IndexedService.createDB(function () {
 			console.log('DB creation done');
 		});
-		
+
 		service.setSettings = function (data, callback) {
 			try {
 				IndexedService.runCommands({
@@ -31,7 +31,7 @@ sdApp.service('SyncService', [
 				throw ('Error setting data: ' + e);
 			}
 		};
-		
+
 		service.getSettings = function (callback) {
 			try {
 				IndexedService.runCommands({
@@ -44,7 +44,7 @@ sdApp.service('SyncService', [
 				throw ('Error getting data: ' + e);
 			}
 		};
-		
+
 		service.getSetting = function (name, callback) {
 			try {
 				IndexedService.runCommands({
@@ -59,7 +59,7 @@ sdApp.service('SyncService', [
 				throw ('Error getting data: ' + e);
 			}
 		};
-		
+
 		service.setProjects = function (data, callback) {
 			try {
 				IndexedService.runCommands({
@@ -72,7 +72,7 @@ sdApp.service('SyncService', [
 				throw ('Error getting data: ' + e);
 			}
 		};
-		
+
 		service.getProjects = function (callback) {
 			try {
 				IndexedService.runCommands({
@@ -85,7 +85,7 @@ sdApp.service('SyncService', [
 				throw ('Error getting data: ' + e);
 			}
 		};
-		
+
 		service.getProject = function (id, callback) {
 			if (!id) {
 				return false;
@@ -103,7 +103,7 @@ sdApp.service('SyncService', [
 				throw ('Error getting data: ' + e);
 			}
 		};
-		
+
 		service.clearDb = function (callback) {
 			try {
 				IndexedService.runCommands({
@@ -116,7 +116,7 @@ sdApp.service('SyncService', [
 				throw ('Error getting data: ' + e);
 			}
 		};
-		
+
 		service.login = function () {
 			var prm = $q.defer();
 			if (sessionStorage.getObject('isLoggedIn')) {
@@ -135,7 +135,7 @@ sdApp.service('SyncService', [
 			}
 			return prm.promise;
 		};
-		
+
 		service.sync = function () {
 			var deferred = $q.defer();
 			if (navigator.onLine) {
@@ -156,10 +156,10 @@ sdApp.service('SyncService', [
 									}
 								);
 							});
-							
+
 							function getAllSettings(callback) {
 								var lists = [];
-								
+
 								var getFromServer = function (url, name, optionalFunc, isCompany) {
 									var sdef = $q.defer();
 									PostService.post({
@@ -187,7 +187,7 @@ sdApp.service('SyncService', [
 									});
 									return sdef.promise;
 								};
-								
+
 								var resourceReq = getFromServer('resource', 'resources'),
 									staffReq = getFromServer('staff', 'staff'),
 									unitReq = getFromServer('unit', 'units'),
@@ -199,7 +199,7 @@ sdApp.service('SyncService', [
 											});
 										});
 									}, true);
-								
+
 								var absenceReq = getFromServer('absenteeismreasons/list', 'absence', function (data) {
 									angular.forEach(data, function (value) {
 										value.name = value.reason;
@@ -209,7 +209,7 @@ sdApp.service('SyncService', [
 									callback(lists);
 								})
 							}
-							
+
 							function getProjectsFromServer() {
 								var def = $q.defer();
 								PostService.post({
@@ -234,7 +234,7 @@ sdApp.service('SyncService', [
 								});
 								return def.promise;
 							}
-							
+
 							function buildData() {
 								var def = $q.defer();
 								// get all the settings then insert them - this can be done in sync
@@ -277,10 +277,10 @@ sdApp.service('SyncService', [
 					$state.go('app.home');
 				}
 			}
-			
+
 			return deferred.promise;
 		};
-		
+
 		//method to add new diaries storred in indexedDB to server
 		service.addDiariesToSync = function () {
 			var prm = $q.defer();
@@ -290,12 +290,13 @@ sdApp.service('SyncService', [
 					if (res === "logged") {
 						service.getProjects(function (projects) {
 							var diariesToAdd = [];
-							
+
 							//method to add the attachments for a sd to server
 							function addAttachmentsForSd(attachments, sd_id) {
 								var def = $q.defer(),
-									count = 0;
+									cnt = 0;
 								angular.forEach(attachments.pictures, function (value) {
+									cnt++;
 									//if attachment not already on server, add it
 									if (!value.path) {
 										value.site_diary_id = sd_id;
@@ -305,25 +306,24 @@ sdApp.service('SyncService', [
 											method: 'POST',
 											data: value
 										}, function (result) {
-											count++;
 											//last attachment uploaded
-											if (count >= attachments.pictures.length) return def.resolve();
+											if (cnt >= attachments.pictures.length) return def.resolve();
 										}, function (error) {
 											console.log("Could not upload attachment: ", error);
-											count++;
 											//last attachment uploaded
-											if (count >= attachments.pictures.length) return def.resolve();
+											if (cnt >= attachments.pictures.length) return def.resolve();
 										})
 									}
 								});
 								return def.promise;
 							}
-							
+
 							//method to add the comments for a sd to server
 							function addCommentsForSd(comments, id) {
 								var def = $q.defer(),
-									count = 0;
+									cnt = 0;
 								angular.forEach(comments, function (value) {
+									cnt++;
 									var request = {
 										site_diary_id: id,
 										comment: value.comment
@@ -334,20 +334,19 @@ sdApp.service('SyncService', [
 										method: 'POST',
 										data: request
 									}, function (result) {
-										count++;
-										//last attachment uploaded
-										if (count >= comments.length) return def.resolve();
+
+										//last comment added
+										if (cnt >= comments.length) return def.resolve();
 									}, function (error) {
-										console.log("Could not upload attachment: ", error);
-										count++;
-										//last attachment uploaded
-										if (count >= comments.length) return def.resolve();
+										console.log("Could not add comment: ", error);
+										//last comment added
+										if (cnt >= comments.length) return def.resolve();
 									})
-									
+
 								});
 								return def.promise;
 							}
-							
+
 							//store shared diaries to server
 							if (sessionStorage.getObject('sd.diary.shares')) {
 								var shares = sessionStorage.getObject('sd.diary.shares');
@@ -366,7 +365,7 @@ sdApp.service('SyncService', [
 									})
 								}
 							}
-							
+
 							//method to select all diaries added offline (id starts with "off")
 							angular.forEach(projects, function (project) {
 								angular.forEach($filter('filter')(project.value.site_diaries, function (d) {
@@ -380,7 +379,7 @@ sdApp.service('SyncService', [
 							if (diariesToAdd && !diariesToAdd.length) {
 								prm.resolve();
 							}
-							
+
 							//if there are diaries to be synced with the server, add them
 							var count = 0;
 							angular.forEach(diariesToAdd, function (sd) {
@@ -390,7 +389,7 @@ sdApp.service('SyncService', [
 									comments = [];
 								angular.copy(sd.attachments, attachments);
 								angular.copy(sd.comments, comments);
-								
+
 								//prepare the format required by server and delete all fields used for local purpose
 								sd.id = 0;
 								delete sd.backColor;
@@ -398,17 +397,17 @@ sdApp.service('SyncService', [
 								delete sd.attachments;
 								delete sd.comments;
 								delete sd.sd_no;
-								
+
 								//add the diaries to server
 								PostService.post({
 									url: 'sitediary',
 									method: 'POST',
 									data: sd
 								}, function (result) {
-									var attToAdd = addAttachmentsForSd(attachments, result.id),
-										commentsToAdd = addCommentsForSd(comments, result.id);
+									var attToAdd = addAttachmentsForSd(attachments, result.data.id),
+										commentsToAdd = addCommentsForSd(comments, result.data.id);
 									count++;
-									
+
 									Promise.all([attToAdd, commentsToAdd]).then(function (res) { //TODO: check if not needed also in error clause
 										console.log("syncService addDiariesToSync all diaries added (Promise all)");
 										//last diary added along with its attachments and comments
