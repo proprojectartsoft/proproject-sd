@@ -212,31 +212,53 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             var addAttachments = function() {
                 var def = $q.defer(),
                     attLength = 0;
-                if (!attachments.pictures || attachments.pictures && !attachments.pictures.length) {
-                    def.resolve();
-                }
-                angular.forEach(attachments.pictures, function(value) {
-                    attLength++;
-                    //new photo, non existent on server
-                    if (value.base_64_string) {
-                        value.site_diary_id = result.data.id;
-                    } else if (!vm.enableCreate && vm.edit) {
+
+                if (!vm.enableCreate && vm.edit) {
+                    //save as new mode
+                    angular.forEach(attachments, function(value) {
+                        attLength++;
                         //when edit a diary and save as new,there may be photos already stored on server
-                        delete value.id;
-                        value.base_64_string = '';
-                        value.site_diary_id = result.data.id;
+                        if (value.base_64_string) {
+                            value.site_diary_id = result.data.id;
+                        } else {
+                            //new photo, non existent on server
+                            delete value.id;
+                            value.base_64_string = '';
+                            value.site_diary_id = result.data.id;
+                        }
+                        delete value.url;
+                        PostService.post({
+                            url: 'sdattachment/uploadfile',
+                            method: 'POST',
+                            data: value
+                        }, function(result) {
+                            if (attLength >= attachments.length) return def.resolve();
+                        }, function(error) {
+                            if (attLength >= attachments.length) return def.resolve();
+                        })
+                    });
+                } else {
+                    //create mode
+                    if (!attachments.pictures || attachments.pictures && !attachments.pictures.length) {
+                        def.resolve();
                     }
-                    delete value.url;
-                    PostService.post({
-                        url: 'sdattachment/uploadfile',
-                        method: 'POST',
-                        data: value
-                    }, function(result) {
-                        if (attLength >= attachments.pictures.length) return def.resolve();
-                    }, function(error) {
-                        if (attLength >= attachments.pictures.length) return def.resolve();
-                    })
-                });
+                    angular.forEach(attachments.pictures, function(value) {
+                        attLength++;
+                        if (value.base_64_string) {
+                            value.site_diary_id = result.data.id;
+                        }
+                        delete value.url;
+                        PostService.post({
+                            url: 'sdattachment/uploadfile',
+                            method: 'POST',
+                            data: value
+                        }, function(result) {
+                            if (attLength >= attachments.pictures.length) return def.resolve();
+                        }, function(error) {
+                            if (attLength >= attachments.pictures.length) return def.resolve();
+                        })
+                    });
+                }
                 return def.promise;
             };
 
