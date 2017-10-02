@@ -27,6 +27,12 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 						syncPopup.close();
 					$rootScope.go('app.home');
 				})
+			}, function(err) {
+				populate(function (res) {
+					if (syncPopup)
+						syncPopup.close();
+					$rootScope.go('app.home');
+				})
 			});
 		})
 	}
