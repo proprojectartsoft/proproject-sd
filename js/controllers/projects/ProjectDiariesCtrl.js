@@ -72,6 +72,10 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
             //get the number of SDs
             $rootScope.diariesLength = vm.diaries.length;
+            $rootScope.projectSettings = {};
+            angular.forEach(proj.value.project_settings, function(sett) {
+              $rootScope.projectSettings[sett.name] = sett.value;
+            })
             SettingService.get_colors().then(function(colorList) {
                 var colorsLength = Object.keys(colorList).length;
                 //store colors

@@ -23,10 +23,10 @@ function ContractorCtrl($scope, $rootScope, $state, $filter, $stateParams, $time
     vm.index = $stateParams.id;
     vm.local.absence = 'absence';
     vm.absence = $rootScope.absence;
-    vm.currency = SettingService.get_currency_symbol($rootScope.currency || "dolar");
-    var startT = $rootScope.start || "08:00";
-    var finishT = $rootScope.finish || "12:00";
-    var breakT = $rootScope.break || "00:30";
+    vm.currency = $rootScope.projectSettings.currency || SettingService.get_currency_symbol($rootScope.currency || "dolar");
+    var startT = $rootScope.projectSettings.start || $rootScope.start || "08:00";
+    var finishT = $rootScope.projectSettings.finish || $rootScope.finish || "12:00";
+    var breakT = $rootScope.projectSettings.break || $rootScope.break || "00:30";
     initFields();
 
     function getSettingValue(settings, name) {
