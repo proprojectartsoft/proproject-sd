@@ -74,9 +74,7 @@ function StaffMemberCtrl($rootScope, $scope, $state, $filter, $ionicModal,
 			$timeout(function () {
 				$('.ion-datetime-picker input').each(function () {
 					var el = $(this);
-					el.change(function () {
-						console.log("change");
-					});
+					el.change(function () {});
 					el.prop('type', 'tel');
 					el.on('input', function () {
 						if (!this.value) {

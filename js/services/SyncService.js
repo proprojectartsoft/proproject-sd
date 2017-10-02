@@ -15,9 +15,7 @@ sdApp.service('SyncService', [
 
 		var service = this;
 
-		IndexedService.createDB(function () {
-			console.log('DB creation done');
-		});
+		IndexedService.createDB(function () {});
 
 		service.setSettings = function (data, callback) {
 			try {
@@ -182,7 +180,6 @@ sdApp.service('SyncService', [
 												value: []
 											});
 										// SettingService.close_all_popups();
-										console.log("Could not get setting from server: ", error);
 										sdef.resolve();
 									});
 									return sdef.promise;
@@ -229,7 +226,6 @@ sdApp.service('SyncService', [
 									def.resolve(projectsArray);
 								}, function (error) {
 									SettingService.close_all_popups(); //TODO: check where close all popups is needed
-									console.log("Could not get projects from server: ", error);
 									def.reject(err);
 								});
 								return def.promise;
@@ -241,7 +237,6 @@ sdApp.service('SyncService', [
 								getAllSettings(function (lists) {
 									service.setSettings(lists, function () {
 										getProjectsFromServer().then(function (projects) {
-											console.log(projects);
 											//no projects stored
 											if (!projects || !projects.length) return def.resolve();
 											service.setProjects(projects, function (projects) {
@@ -309,7 +304,6 @@ sdApp.service('SyncService', [
 											//last attachment uploaded
 											if (cnt >= attachments.length) return def.resolve();
 										}, function (error) {
-											console.log("Could not upload attachment: ", error);
 											//last attachment uploaded
 											if (cnt >= attachments.length) return def.resolve();
 										})
@@ -338,7 +332,6 @@ sdApp.service('SyncService', [
 										//last comment added
 										if (cnt >= comments.length) return def.resolve();
 									}, function (error) {
-										console.log("Could not add comment: ", error);
 										//last comment added
 										if (cnt >= comments.length) return def.resolve();
 									})
@@ -361,7 +354,6 @@ sdApp.service('SyncService', [
 										data: {}
 									}, function (result) {
 									}, function (error) {
-										console.log("Could not share diaries: ", error);
 									})
 								}
 							}
@@ -383,7 +375,6 @@ sdApp.service('SyncService', [
 							//if there are diaries to be synced with the server, add them
 							var count = 0;
 							angular.forEach(diariesToAdd, function (sd) {
-								console.log("foreach ", sd);
 								//keep attachments and comments
 								var attachments = [],
 									comments = [];
@@ -409,14 +400,12 @@ sdApp.service('SyncService', [
 									count++;
 
 									Promise.all([attToAdd, commentsToAdd]).then(function (res) { //TODO: check if not needed also in error clause
-										console.log("syncService addDiariesToSync all diaries added (Promise all)");
 										//last diary added along with its attachments and comments
 										if (count >= diariesToAdd.length) {
 											prm.resolve();
 										}
 									});
 								}, function (error) {
-									console.log("Could not add diary to server: ", error);
 									count++;
 									if (count >= diariesToAdd.length) {
 										prm.resolve();

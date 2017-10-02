@@ -321,7 +321,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         delete $rootScope.currentSD.foreColor;
         delete $rootScope.currentSD.attachments;
         delete $rootScope.currentSD.comments;
-        console.log("ProjectDiaryCtrl - saveEdit() - update diary ", $rootScope.currentSD);
         // method to update the backend
         var updateDiary = function() {
             var def = $q.defer();
@@ -330,10 +329,8 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 method: 'PUT',
                 data: $rootScope.currentSD
             }, function(result) {
-                console.log("ProjectDiaryCtrl - saveEdit() - success updateDiary");
                 def.resolve();
             }, function(error) {
-                console.log("ProjectDiaryCtrl - saveEdit() - error updateDiary");
                 SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
                 def.resolve();
             })
@@ -459,14 +456,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
 
         // run all operations then go back to the page where we come from - there project will be updated
         Promise.all([updateSd, uploadAtt, updateAtt, deleteAtt, addComm]).then(function(res) {
-            console.log("ProjectDiaryCtrl - saveEdit() - then success promise all");
             syncPopup.close();
             //restore initial format for attachments and comments field
             $rootScope.currentSD.attachments = attachments.pictures || [];
             $rootScope.currentSD.comments = comments;
             vm.go('project');
         }, function(err) {
-            console.log("ProjectDiaryCtrl - saveEdit() - then error promise all");
             SettingService.close_all_popups();
             syncPopup.close();
             vm.go('project');
@@ -531,7 +526,7 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             method: 'PUT',
             data: create
         }, function(result) {}, function(error) {
-            SettingService.close_all_popups(); 
+            SettingService.close_all_popups();
             SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
         }, syncPopup);
     }

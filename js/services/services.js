@@ -29,8 +29,6 @@ sdApp.service('PostService', [
          * @param {Object} [popup] - optional popup object to be closed
          */
         service.post = function(params, success, error, popup) {
-            console.log('Post parameters', params, success, error, popup);
-
             if (['POST', 'PUT', 'GET', 'DELETE'].indexOf(params.method) < 0) {
                 return error({
                     error: 500,
@@ -46,8 +44,6 @@ sdApp.service('PostService', [
             self.errorId = 0;
             self.errorStatus = "Unrecognized error";
 
-            console.log('Post params - this holds whatever we\'ll send to the server:', params);
-
             /**
              * Method to run on success
              *
@@ -55,14 +51,11 @@ sdApp.service('PostService', [
              * @returns {Object} - error | success object
              */
             self.successCallback = function(response) {
-                console.log('This is the server response: ', response);
-
                 if (popup) popup.close();
 
                 // This is the success (200)
                 // It might be throwing weird or expected errors so we better deal with them at this level
                 if (!response) {
-                    //console.log('Unknown Server error');
                     dt = {
                         error: 'Something went wrong. The server did not return a proper response!',
                         status: 299 // custom error status
@@ -81,8 +74,6 @@ sdApp.service('PostService', [
              * @returns {Object} - error object
              */
             self.errorCallback = function(response) {
-                console.log('Server responded with an error: ', response);
-
                 if (popup) popup.close();
 
                 // forced stop querying
@@ -98,8 +89,6 @@ sdApp.service('PostService', [
                 }
 
                 if ([401, 403].indexOf(response.status) > -1) {
-                    console.log("Got 'Not authorized'");
-
                     $rootScope.stopQuerying = true;
                     pendingRequests.cancelAll();
                     sessionStorage.removeItem('isLoggedIn');
@@ -185,7 +174,6 @@ sdApp.service('PostService', [
                         self.errorCallback
                     );
                 } catch (err) {
-                    console.log('Error firing request: ', err);
                     return self.errorCallback({
                         statusText: 'Unknown server error: ' + err,
                         status: 500
@@ -339,9 +327,7 @@ sdApp.service('SettingService', ['$http', '$ionicPopup', '$ionicBackdrop', '$ion
                 function onSuccess(colors) {
                     return colors.data;
                 }).catch(
-                function onError(error) {
-                    console.log('There is no color-names.json file or there was another error', error);
-                });
+                function onError(error) {});
         };
 
         self.close_all_popups = function() {

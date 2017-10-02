@@ -137,6 +137,7 @@ sdApp.controller('LoginCtrl', [
             // get projects then callback
             SyncService.getProjects(function(result) {
                 $rootScope.projects = result;
+                //TODO: set start, break, finish from porject settings
                 callback(result);
             }, function(err) {
                 SettingService.show_message_popup('Error', '<span>Could not get the projects from store!</span>');
@@ -145,7 +146,6 @@ sdApp.controller('LoginCtrl', [
 
             //get necessary settings for company and put them on the $rootScope
             SyncService.getSettings(function(lists) {
-                console.log('Settings retreived: ', lists);
                 lists = angular.copy(lists.settings);
                 var getFiltered = function(item) {
                     var filtered = $filter('filter')(lists, {
@@ -162,6 +162,7 @@ sdApp.controller('LoginCtrl', [
                 $rootScope.staff = getFiltered('staff').value;
                 $rootScope.resources = getFiltered('resources').value;
                 $rootScope.currency = getFiltered('currency').value || 'GBP';
+                //TODO: set start, break, finish from company settings only if not set from project settings
                 $rootScope.start = getFiltered('start').value;
                 $rootScope.finish = getFiltered('finish').value;
                 $rootScope.break = getFiltered('break').value;
@@ -274,9 +275,7 @@ sdApp.controller('LoginCtrl', [
                             break;
                     }
                     var alertPopup = $ionicPopup.alert(alertMessage);
-                    alertPopup.then(function() {
-                        console.log('Alert closed');
-                    });
+                    alertPopup.then(function() {});
                 });
             }
         };

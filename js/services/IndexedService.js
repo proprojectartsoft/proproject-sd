@@ -5,7 +5,7 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 		settings,
 		connectionReady,
 		service = this;
-	
+
 	service.createDB = function (callback) {
 		// SQL equivalent: CREATE DATABASE IF NOT EXISTS projects
 		// This schema definition (or data definition commands in SQL, DDL) is not
@@ -14,14 +14,13 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 		try {
 			schemaBuilder = lf.schema.create('SD', 24);
 		} catch (e) {
-			console.log('Error creating new DB: ', e);
 			callback({
 				error: e,
 				finished: true
 			});
 			return false;
 		}
-		
+
 		// SQL equivalent:
 		// CREATE TABLE IF NOT EXISTS projects (
 		//   version AS STRING,
@@ -37,7 +36,6 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 				.addPrimaryKey(['id'])
 				.addIndex('idxValue', ['value'], false, lf.Order.ASC);
 		} catch (e) {
-			console.log('Error creating table projects: ', e);
 			callback({
 				finished: true,
 				error: e
@@ -51,7 +49,6 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 				.addPrimaryKey(['name'])
 				.addIndex('idxValue', ['value'], false, lf.Order.ASC);
 		} catch (e) {
-			console.log('Error creating table settings: ', e);
 			callback({
 				finished: true,
 				error: e
@@ -59,13 +56,11 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 			return false;
 		}
 	};
-	//console.log('Launching service');
-	
-	
+
 	service.runCommands = function (e, callback) {
 		var params = e.data,
 			operation = e.operation;
-		
+
 		if (!connectionReady) {
 			// Start of the Promise chaining
 			connectionReady = schemaBuilder.connect({
@@ -73,12 +68,12 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 				"storeType": lf.schema.DataStoreType.INDEXED_DB
 			})
 		}
-		
+
 		connectionReady.then(function (db) {
 			sdDb = db;
 			projects = db.getSchema().table('projects');
 			settings = db.getSchema().table('settings');
-			
+
 			switch (operation) {
 				case 'getSettings':
 					try {
@@ -169,9 +164,8 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 			}
 		});
 	};
-	
+
 	service.getSettings = function (callback) {
-		//console.log('Getting settings');
 		sdDb
 			.select()
 			.from(settings)
@@ -188,9 +182,8 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 					callback(respObj, res.length);
 				});
 	};
-	
+
 	service.setSettings = function (data, callback) {
-		//console.log('Setting settings', data);
 		var insertData = function (data) {
 				// now try to insert
 				try {
@@ -204,7 +197,6 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 								callback(resp);
 							});
 				} catch (e) {
-					console.log('Error :', e);
 					callback(false);
 				}
 			},
@@ -225,12 +217,10 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 			};
 		parseData(data);
 	};
-	
+
 	service.setProjects = function (data, callback) {
-		//console.log('Setting projects', data);
 		var insertData = function (data) {
 				// now try to insert
-				//console.log('Data to be inserted', data);
 				try {
 					// insert or update the db
 					sdDb.insertOrReplace()
@@ -242,7 +232,6 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 								callback(resp);
 							});
 				} catch (e) {
-					console.log('Error :', e);
 					callback(false);
 				}
 			},
@@ -263,22 +252,19 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 			};
 		parseData(data);
 	};
-	
+
 	service.getProjects = function (callback) {
-		//console.log('Getting projects');
 		sdDb
 			.select()
 			.from(projects)
 			.exec()
 			.then(
 				function (res) {
-					console.log('Result of getting projects', res);
 					callback(res);
 				});
 	};
-	
+
 	service.getProject = function (param, callback) {
-		//console.log('Getting project', param);
 		sdDb
 			.select()
 			.from(projects)
@@ -289,9 +275,8 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 					callback(res);
 				});
 	};
-	
+
 	service.getSetting = function (param, callback) {
-		//console.log('Getting setting', param);
 		sdDb
 			.select()
 			.from(settings)
@@ -299,7 +284,6 @@ sdApp.service('IndexedService', ['$q', function ($q) {
 			.exec()
 			.then(
 				function (res) {
-					//console.log('This is the the result of the search', res, param.name);
 					callback(res);
 				});
 	};

@@ -11,11 +11,11 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 	vm.username = localStorage.getObject('sdremember');
 	vm.loggedIn = localStorage.getObject('loggedIn');
 	vm.go = $rootScope.go;
-	
+
 	function toggleSidemenu($event) {
 		$ionicSideMenuDelegate.toggleLeft(true);
 	}
-	
+
 	function sync() {
 		if (navigator.onLine) {
 			var syncPopup = loadingPopover("Sync", loadingTemplate, "loading");
@@ -30,7 +30,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 			});
 		})
 	}
-	
+
 	function populate(callback) {
 		SyncService.getProjects(function (result) {
 			$rootScope.projects = result;
@@ -41,7 +41,6 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 		});
 		//get necessary settings for company
 		SyncService.getSettings(function (lists) {
-			//console.log('Settings', lists);
 			lists = angular.copy(lists.settings);
 			var getFiltered = function (item) {
 				var filtered = $filter('filter')(lists, {
@@ -62,7 +61,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 			$rootScope.break = getFiltered('break').value;
 		});
 	}
-	
+
 	function logout() {
 		if (navigator.onLine) {
 			$rootScope.go('login');
@@ -76,7 +75,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 			loadingPopover("Error", errorTemplate, "error");
 		}
 	}
-	
+
 	function loadingPopover(title, template, loadingOrError) {
 		var pop = $ionicPopup.show({
 			title: title,

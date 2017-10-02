@@ -23,7 +23,7 @@
             </label>
             <label class="sd-label">
                 <div class="sd-title">Quantity</div>
-                <input ng-readonly="(vm.diaryId) && !(vm.editMode)" type="tel" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add quantity' || ''}}" ng-model="vm.local.data.qty">
+                <input ng-readonly="(vm.diaryId) && !(vm.editMode)" type="number" placeholder="{{(!vm.diaryId || vm.editMode) && 'Tap to add quantity' || ''}}" ng-model="vm.local.data.qty">
             </label>
             <div ng-if="(!vm.diaryId) || (vm.editMode)" class="sd-label">
                 <div class="sd-title">On hire</div>
