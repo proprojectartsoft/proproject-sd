@@ -12,11 +12,12 @@ var sdApp = angular.module($APP.name, [
 	'ngCordova'
 ]);
 
-sdApp.config(['$ionicConfigProvider', '$stateProvider', '$urlRouterProvider',
-	function ($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
+sdApp.config(['$ionicConfigProvider', '$stateProvider', '$urlRouterProvider', '$locationProvider',
+	function ($ionicConfigProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
 		$ionicConfigProvider.views.swipeBackEnabled(false);
 
 		$urlRouterProvider.otherwise('/login/'); //hardcoded for start
+		$locationProvider.html5Mode(true);
 
 		$stateProvider
 			.state('app', {
