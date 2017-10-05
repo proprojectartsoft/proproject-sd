@@ -376,8 +376,8 @@ sdApp.service('SyncService', [
 
                             //if there are diaries to be synced with the server, add them
                             var count = 0;
+                            //TODO: order diariesToAdd by id if not sent in order
                             angular.forEach(diariesToAdd, function(sd) {
-                                count++;
                                 //keep attachments and comments
                                 var attachments = [],
                                     comments = [];
@@ -398,6 +398,7 @@ sdApp.service('SyncService', [
                                     method: 'POST',
                                     data: sd
                                 }, function(result) {
+                                    count++;
                                     var attToAdd = addAttachmentsForSd(attachments, result.data.id),
                                         commentsToAdd = addCommentsForSd(comments, result.data.id);
 
@@ -408,6 +409,7 @@ sdApp.service('SyncService', [
                                         }
                                     });
                                 }, function(error) {
+                                    count++;
                                     if (count >= diariesToAdd.length) {
                                         prm.resolve();
                                     }

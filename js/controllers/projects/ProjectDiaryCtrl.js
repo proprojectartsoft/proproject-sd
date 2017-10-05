@@ -346,7 +346,6 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             if (attachments !== null && attachments.pictures && attachments.pictures.length) {
                 // method to add attachments
                 angular.forEach(attachments.pictures, function(value) {
-                    count++;
                     //base_64_string is populated only for new attachments
                     //the attachments on server have null base_64_string, but have path field assigned
                     if (value.base_64_string) {
@@ -357,13 +356,16 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             method: 'POST',
                             data: value
                         }, function(result) {
+                            count++;
                             if (count >= attachments.pictures.length)
                                 def.resolve();
                         }, function(error) {
+                            count++;
                             if (count >= attachments.pictures.length)
                                 def.resolve();
                         })
                     } else {
+                        count++;
                         if (count >= attachments.pictures.length)
                             def.resolve();
                     }
@@ -380,15 +382,16 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 count = 0;
             if (attachments !== null && attachments.toBeUpdated && attachments.toBeUpdated.length) {
                 angular.forEach(attachments.toBeUpdated, function(value) {
-                    count++;
                     PostService.post({
                         url: 'sdattachment/update',
                         method: 'POST',
                         data: value
                     }, function(result) {
+                        count++;
                         if (count >= attachments.pictures.length)
                             def.resolve();
                     }, function(error) {
+                        count++;
                         if (count >= attachments.pictures.length)
                             def.resolve();
                     })
@@ -425,9 +428,9 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             if (!comments || comments && !comments.length)
                 def.resolve();
             angular.forEach(comments, function(comment) {
-                count++;
                 //all new comments do not have an id yet; add them to server
                 if (comment.id) {
+                    count++;
                     if (count >= comments.length)
                         def.resolve();
                 } else {
@@ -439,9 +442,11 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                             comment: comment.comment
                         }
                     }, function(result) {
+                        count++;
                         if (count >= comments.length)
                             def.resolve();
                     }, function(error) {
+                        count++;
                         if (count >= comments.length)
                             def.resolve();
                     })
