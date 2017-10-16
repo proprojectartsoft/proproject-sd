@@ -1,7 +1,6 @@
 sdApp.service('SyncService', [
     '$q',
     '$http',
-		'$rootScope',
     '$timeout',
     '$ionicPopup',
     '$state',
@@ -11,7 +10,7 @@ sdApp.service('SyncService', [
     'AuthService',
     'IndexedService',
     'PostService',
-    function($q, $http, $rootScope, $timeout, $ionicPopup, $state, $filter, pendingRequests,
+    function($q, $http, $timeout, $ionicPopup, $state, $filter, pendingRequests,
         SettingService, AuthService, IndexedService, PostService) {
 
         var service = this;
@@ -376,8 +375,7 @@ sdApp.service('SyncService', [
                             }
 
                             //if there are diaries to be synced with the server, add them
-                            $rootScope.count = 0;
-														$rootScope.diariesCount = diariesToAdd;
+                            var count = 0;
                             //TODO: order diariesToAdd by id if not sent in order
                             angular.forEach(diariesToAdd, function(sd) {
                                 //keep attachments and comments
@@ -401,20 +399,20 @@ sdApp.service('SyncService', [
                                     data: sd
                                 }, function(result) {
 																	if(result.status === 200) {
-																		$rootScope.count++;
+																		count++;
                                     var attToAdd = addAttachmentsForSd(attachments, result.data.id),
                                         commentsToAdd = addCommentsForSd(comments, result.data.id);
 
                                     Promise.all([attToAdd, commentsToAdd]).then(function(res) { //TODO: check if not needed also in error clause
                                         //last diary added along with its attachments and comments
-																					if ($rootScope.count >= diariesToAdd.length) {
+																					if (count >= diariesToAdd.length) {
 	                                            prm.resolve();
 	                                        }
                                     });
 																	}
                                 }, function(error) {
-                                    $rootScope.count++;
-                                    if ($rootScope.count >= diariesToAdd.length) {
+                                    count++;
+                                    if (count >= diariesToAdd.length) {
                                         prm.resolve();
                                     }
                                 })
