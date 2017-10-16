@@ -375,8 +375,8 @@ sdApp.service('SyncService', [
                             }
 
                             //if there are diaries to be synced with the server, add them
-                            $scope.count = 0;
-														$scope.diariesCount = diariesToAdd;
+                            $rootScope.count = 0;
+														$rootScope.diariesCount = diariesToAdd;
                             //TODO: order diariesToAdd by id if not sent in order
                             angular.forEach(diariesToAdd, function(sd) {
                                 //keep attachments and comments
@@ -400,20 +400,20 @@ sdApp.service('SyncService', [
                                     data: sd
                                 }, function(result) {
 																	if(result.status === 200) {
-																		$scope.count++;
+																		$rootScope.count++;
                                     var attToAdd = addAttachmentsForSd(attachments, result.data.id),
                                         commentsToAdd = addCommentsForSd(comments, result.data.id);
 
                                     Promise.all([attToAdd, commentsToAdd]).then(function(res) { //TODO: check if not needed also in error clause
                                         //last diary added along with its attachments and comments
-																					if ($scope.count >= diariesToAdd.length) {
+																					if ($rootScope.count >= diariesToAdd.length) {
 	                                            prm.resolve();
 	                                        }
                                     });
 																	}
                                 }, function(error) {
-                                    $scope.count++;
-                                    if ($scope.count >= diariesToAdd.length) {
+                                    $rootScope.count++;
+                                    if ($rootScope.count >= diariesToAdd.length) {
                                         prm.resolve();
                                     }
                                 })
