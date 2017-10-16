@@ -375,7 +375,8 @@ sdApp.service('SyncService', [
                             }
 
                             //if there are diaries to be synced with the server, add them
-                            var count = 0;
+                            $scope.count = 0;
+														$scope.diariesCount = diariesToAdd;
                             //TODO: order diariesToAdd by id if not sent in order
                             angular.forEach(diariesToAdd, function(sd) {
                                 //keep attachments and comments
@@ -398,19 +399,21 @@ sdApp.service('SyncService', [
                                     method: 'POST',
                                     data: sd
                                 }, function(result) {
-                                    count++;
+																	if(result.status === 200) {
+																		$scope.count++;
                                     var attToAdd = addAttachmentsForSd(attachments, result.data.id),
                                         commentsToAdd = addCommentsForSd(comments, result.data.id);
 
                                     Promise.all([attToAdd, commentsToAdd]).then(function(res) { //TODO: check if not needed also in error clause
                                         //last diary added along with its attachments and comments
-                                        if (count >= diariesToAdd.length) {
-                                            prm.resolve();
-                                        }
+																					if ($scope.count >= diariesToAdd.length) {
+	                                            prm.resolve();
+	                                        }
                                     });
+																	}
                                 }, function(error) {
-                                    count++;
-                                    if (count >= diariesToAdd.length) {
+                                    $scope.count++;
+                                    if ($scope.count >= diariesToAdd.length) {
                                         prm.resolve();
                                     }
                                 })
