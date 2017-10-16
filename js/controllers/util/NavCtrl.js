@@ -18,8 +18,7 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
 
 	function sync() {
 		if (navigator.onLine) {
-			var syncPopup = $scope.count > 0 ? loadingPopover("Sync", "<center>{{count}} / {{diariesCount}}</center>";, "loading") 
-			: loadingPopover("Sync", loadingTemplate, "loading");
+			var syncPopup = $scope.count > 0 ? loadingPopover("Sync", "<center>{{count}} / {{diariesCount}}</center>", "loading") : loadingPopover("Sync", loadingTemplate, "loading");
 		}
 		SyncService.addDiariesToSync().then(function () {
 			SyncService.sync().then(function () {
