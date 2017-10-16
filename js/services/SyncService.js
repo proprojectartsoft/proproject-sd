@@ -1,6 +1,7 @@
 sdApp.service('SyncService', [
     '$q',
     '$http',
+		'$rootScope',
     '$timeout',
     '$ionicPopup',
     '$state',
@@ -10,7 +11,7 @@ sdApp.service('SyncService', [
     'AuthService',
     'IndexedService',
     'PostService',
-    function($q, $http, $timeout, $ionicPopup, $state, $filter, pendingRequests,
+    function($q, $http, $rootScope, $timeout, $ionicPopup, $state, $filter, pendingRequests,
         SettingService, AuthService, IndexedService, PostService) {
 
         var service = this;
