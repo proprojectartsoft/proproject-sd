@@ -17,7 +17,7 @@ sdApp.config(['$ionicConfigProvider', '$stateProvider', '$urlRouterProvider', '$
 		$ionicConfigProvider.views.swipeBackEnabled(false);
 
 		$urlRouterProvider.otherwise('/login/'); //hardcoded for start
-		$locationProvider.html5Mode(true);
+		// $locationProvider.html5Mode(true);
 
 		$stateProvider
 			.state('app', {
