@@ -378,20 +378,21 @@ sdApp.service('SyncService', [
                             var count = 0;
                             //TODO: order diariesToAdd by id if not sent in order
                             // angular.forEach(diariesToAdd, function(sd) {
-                            for( var i = 0; i <diariesToAdd.length; ) {
+                            diariesAddInSync(0);
+                            function diariesAddInSync (index) {
                                 //keep attachments and comments
                                 var attachments = [],
                                     comments = [];
-                                angular.copy(diariesToAdd[i].attachments, attachments);
-                                angular.copy(diariesToAdd[i].comments, comments);
+                                angular.copy(diariesToAdd[index].attachments, attachments);
+                                angular.copy(diariesToAdd[index].comments, comments);
 
                                 //prepare the format required by server and delete all fields used for local purpose
-                                diariesToAdd[i].id = 0;
-                                delete diariesToAdd[i].backColor;
-                                delete diariesToAdd[i].foreColor;
-                                delete diariesToAdd[i].attachments;
-                                delete diariesToAdd[i].comments;
-                                delete diariesToAdd[i].sd_no;
+                                diariesToAdd[index].id = 0;
+                                delete diariesToAdd[index].backColor;
+                                delete diariesToAdd[index].foreColor;
+                                delete diariesToAdd[index].attachments;
+                                delete diariesToAdd[index].comments;
+                                delete diariesToAdd[index].sd_no;
 
                                 //add the diaries to server
                                 PostService.post({
@@ -408,7 +409,8 @@ sdApp.service('SyncService', [
 																					if (count >= diariesToAdd.length) {
 	                                            prm.resolve();
 	                                        } else {
-                                            i++;
+                                            index++;
+                                            diariesAddInSync(index);
                                           }
                                     });
                                 }, function(error) {
