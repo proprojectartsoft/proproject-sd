@@ -378,7 +378,7 @@ sdApp.service('SyncService', [
                             var count = 0;
                             //TODO: order diariesToAdd by id if not sent in order
                             // angular.forEach(diariesToAdd, function(sd) {
-                            for(var i = 0; i <diariesToAdd.length) {
+                            for( var i = 0; i <diariesToAdd.length; ) {
                                 //keep attachments and comments
                                 var attachments = [],
                                     comments = [];
