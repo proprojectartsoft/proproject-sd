@@ -4,7 +4,8 @@ NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopu
 
 function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService, $timeout, $filter) {
 	var vm = this,
-		loadingTemplate = "<center><ion-spinner icon='android'></ion-spinner></center>";
+		loadingTemplate = "<center><ion-spinner icon='android'></ion-spinner></center>" +
+		"<center>{{$root.diaryCounter}}</center>";
 	vm.toggleSidemenu = toggleSidemenu;
 	vm.sync = sync;
 	vm.logout = logout;
