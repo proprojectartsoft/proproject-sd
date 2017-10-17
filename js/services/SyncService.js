@@ -378,13 +378,12 @@ sdApp.service('SyncService', [
                             //if there are diaries to be synced with the server, add them
                             var count = 0;
                             //TODO: order diariesToAdd by id if not sent in order
-                            // angular.forEach(diariesToAdd, function(sd) {
                             //diary sync requests are made one by one
                             diariesAddInSync(0);
                             function diariesAddInSync (index) {
                                 if(index === 0) {
                                   $rootScope.diaryCounter = 1;
-                                  $rootScope.diaryCounterTotal = diariesToAdd.length + 1;
+                                  $rootScope.diaryCounterTotal = diariesToAdd.length;
                                 }
                                 //keep attachments and comments
                                 var attachments = [],
@@ -430,7 +429,6 @@ sdApp.service('SyncService', [
                                         // delete $rootScope.diaryCounterTotal;
                                     }
                                 })
-                            // })
                           }
                         }, function(err) {
                             prm.resolve();

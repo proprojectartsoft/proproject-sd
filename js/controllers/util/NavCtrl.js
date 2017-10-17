@@ -5,7 +5,7 @@ NavCtrl.$inject = ['$ionicSideMenuDelegate', '$rootScope', '$state', '$ionicPopu
 function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthService, SyncService, $timeout, $filter) {
 	var vm = this,
 		loadingTemplate = "<center><ion-spinner icon='android'></ion-spinner></center>" +
-		"<center>{{$root.diaryCounter}} / {{$root.diaryCounterTotal}}</center>";
+		"<center ng-if="/'$root.diaryCounter'/">{{$root.diaryCounter}} / {{$root.diaryCounterTotal}}</center>";
 	vm.toggleSidemenu = toggleSidemenu;
 	vm.sync = sync;
 	vm.logout = logout;
