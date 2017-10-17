@@ -425,28 +425,28 @@ sdApp.service('SyncService', [
                                     count++;
                                     if (count >= diariesToAdd.length) {
                                         prm.resolve();
-                                        // delete $rootScope.diaryCounter;
-                                        // delete $rootScope.diaryCounterTotal;
+                                        $rootScope.diaryCounter = null;
+                                        $rootScope.diaryCounterTotal = null;
                                     }
                                 })
                           }
                         }, function(err) {
                             prm.resolve();
-                            // delete $rootScope.diaryCounter;
-                            // delete $rootScope.diaryCounterTotal;
+                            $rootScope.diaryCounter = null;
+                            $rootScope.diaryCounterTotal = null;
                         });
                     } else {
                         //cannot authenticate on server with the stored credentials
                         prm.resolve();
-                        // delete $rootScope.diaryCounter;
-                        // delete $rootScope.diaryCounterTotal;
+                        $rootScope.diaryCounter = null;
+                        $rootScope.diaryCounterTotal = null;
                         SettingService.show_message_popup("Error", "An unexpected error occured during authentication and sync could not be done. Please try again.");
                     }
                 });
             } else {
                 prm.resolve();
-                // delete $rootScope.diaryCounter;
-                // delete $rootScope.diaryCounterTotal;
+                $rootScope.diaryCounter = null;
+                $rootScope.diaryCounterTotal = null;
             }
             return prm.promise;
         };
