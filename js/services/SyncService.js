@@ -377,28 +377,28 @@ sdApp.service('SyncService', [
                             //if there are diaries to be synced with the server, add them
                             var count = 0;
                             //TODO: order diariesToAdd by id if not sent in order
-                            angular.forEach(diariesToAdd, function(sd) {
+                            // angular.forEach(diariesToAdd, function(sd) {
+                            for(var i = 0; i <diariesToAdd.length) {
                                 //keep attachments and comments
                                 var attachments = [],
                                     comments = [];
-                                angular.copy(sd.attachments, attachments);
-                                angular.copy(sd.comments, comments);
+                                angular.copy(diariesToAdd[i].attachments, attachments);
+                                angular.copy(diariesToAdd[i].comments, comments);
 
                                 //prepare the format required by server and delete all fields used for local purpose
-                                sd.id = 0;
-                                delete sd.backColor;
-                                delete sd.foreColor;
-                                delete sd.attachments;
-                                delete sd.comments;
-                                delete sd.sd_no;
+                                diariesToAdd[i].id = 0;
+                                delete diariesToAdd[i].backColor;
+                                delete diariesToAdd[i].foreColor;
+                                delete diariesToAdd[i].attachments;
+                                delete diariesToAdd[i].comments;
+                                delete diariesToAdd[i].sd_no;
 
                                 //add the diaries to server
                                 PostService.post({
                                     url: 'sitediary',
                                     method: 'POST',
-                                    data: sd
+                                    data: diariesToAdd[i]
                                 }, function(result) {
-																	if(result.status === 200) {
 																		count++;
                                     var attToAdd = addAttachmentsForSd(attachments, result.data.id),
                                         commentsToAdd = addCommentsForSd(comments, result.data.id);
@@ -407,16 +407,18 @@ sdApp.service('SyncService', [
                                         //last diary added along with its attachments and comments
 																					if (count >= diariesToAdd.length) {
 	                                            prm.resolve();
-	                                        }
+	                                        } else {
+                                            i++;
+                                          }
                                     });
-																	}
                                 }, function(error) {
                                     count++;
                                     if (count >= diariesToAdd.length) {
                                         prm.resolve();
                                     }
                                 })
-                            })
+                            // })
+                          }
                         }, function(err) {
                             prm.resolve();
                         });
