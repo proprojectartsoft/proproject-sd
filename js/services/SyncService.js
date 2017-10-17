@@ -398,7 +398,7 @@ sdApp.service('SyncService', [
                                 PostService.post({
                                     url: 'sitediary',
                                     method: 'POST',
-                                    data: diariesToAdd[i]
+                                    data: diariesToAdd[index]
                                 }, function(result) {
 																		count++;
                                     var attToAdd = addAttachmentsForSd(attachments, result.data.id),
