@@ -414,11 +414,11 @@ sdApp.service('SyncService', [
                                         //last diary added along with its attachments and comments
 																					if (count >= diariesToAdd.length) {
 	                                            prm.resolve();
-                                              delete $rootScope.diaryCounter;
-                                              delete $rootScope.diaryCounterTotal;
+                                              $rootScope.diaryCounter = null;
+                                              $rootScope.diaryCounterTotal = null;
 	                                        } else {
                                             index++;
-                                            $rootScope.diaryCounter = index;
+                                            $rootScope.diaryCounter = index + 1;
                                             diariesAddInSync(index);
                                           }
                                     });
@@ -426,29 +426,29 @@ sdApp.service('SyncService', [
                                     count++;
                                     if (count >= diariesToAdd.length) {
                                         prm.resolve();
-                                        delete $rootScope.diaryCounter;
-                                        delete $rootScope.diaryCounterTotal;
+                                        // delete $rootScope.diaryCounter;
+                                        // delete $rootScope.diaryCounterTotal;
                                     }
                                 })
                             // })
                           }
                         }, function(err) {
                             prm.resolve();
-                            delete $rootScope.diaryCounter;
-                            delete $rootScope.diaryCounterTotal;
+                            // delete $rootScope.diaryCounter;
+                            // delete $rootScope.diaryCounterTotal;
                         });
                     } else {
                         //cannot authenticate on server with the stored credentials
                         prm.resolve();
-                        delete $rootScope.diaryCounter;
-                        delete $rootScope.diaryCounterTotal;
+                        // delete $rootScope.diaryCounter;
+                        // delete $rootScope.diaryCounterTotal;
                         SettingService.show_message_popup("Error", "An unexpected error occured during authentication and sync could not be done. Please try again.");
                     }
                 });
             } else {
                 prm.resolve();
-                delete $rootScope.diaryCounter;
-                delete $rootScope.diaryCounterTotal;
+                // delete $rootScope.diaryCounter;
+                // delete $rootScope.diaryCounterTotal;
             }
             return prm.promise;
         };
