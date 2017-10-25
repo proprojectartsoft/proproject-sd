@@ -123,13 +123,13 @@ sdApp.service('PostService', [
             //     requestObject.params = params.data;
             // }
 
-	        if (params.data && typeof params.data === 'object') {
-		        requestObject.data = params.data;
-	        }
+            if (params.data && typeof params.data === 'object') {
+                requestObject.data = params.data;
+            }
 
-	        if (params.params && typeof params.params === 'object') {
-		        requestObject.params = params.params;
-	        }
+            if (params.params && typeof params.params === 'object') {
+                requestObject.params = params.params;
+            }
             if (params.transformRequest && typeof params.transformRequest === 'object') {
                 requestObject.transformRequest = params.transformRequest;
             }
@@ -304,6 +304,14 @@ sdApp.service('SettingService', ['$http', '$ionicPopup', '$ionicBackdrop', '$ion
                 select.parent().removeClass("focus");
                 select.parent().prev(".sd-title").removeClass("focus");
             }
+        };
+
+        self.clear_weather = function() {
+            sessionStorage.removeItem('sd.diary.weather.morning');
+            sessionStorage.removeItem('sd.diary.weather.afternoon');
+            sessionStorage.removeItem('sd.diary.weather.evening');
+            sessionStorage.removeItem('sd.diary.weather.on_and_off');
+            sessionStorage.removeItem('sd.diary.weather.midday');
         };
 
         self.show_message_popup = function(title, template) {

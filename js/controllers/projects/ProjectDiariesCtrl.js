@@ -67,6 +67,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             }
         }
         SyncService.setProjects([proj], function() {
+            SettingService.clear_weather();
             $rootScope.currentSD = false;
             //order diaries by date
             vm.diaries = orderBy(proj.value.site_diaries, 'date', true);
@@ -74,7 +75,7 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
             $rootScope.diariesLength = vm.diaries.length;
             $rootScope.projectSettings = {};
             angular.forEach(proj.value.project_settings, function(sett) {
-              $rootScope.projectSettings[sett.name] = sett.value;
+                $rootScope.projectSettings[sett.name] = sett.value;
             })
             SettingService.get_colors().then(function(colorList) {
                 var colorsLength = Object.keys(colorList).length;

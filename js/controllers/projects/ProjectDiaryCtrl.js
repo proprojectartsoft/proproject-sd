@@ -289,10 +289,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
         if (navigator.onLine && localStorage.getObject('diariesToSync')) {
             //if online and there is a SD stored while offline, sync the offline SD then add this new one
             SyncService.addDiariesToSync().then(function() {
-                addSiteDiaryToDB(syncPopup)
+                addSiteDiaryToDB(syncPopup);
+                SettingService.clear_weather();
             })
         } else {
             addSiteDiaryToDB(syncPopup);
+            SettingService.clear_weather();
         }
     }
 
@@ -331,8 +333,10 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                 method: 'PUT',
                 data: $rootScope.currentSD
             }, function(result) {
+                SettingService.clear_weather();
                 def.resolve();
             }, function(error) {
+                SettingService.clear_weather();
                 SettingService.show_message_popup("Error", '<span>An unexpected error occured and Site Diary could not be updated.</span>');
                 def.resolve();
             })
