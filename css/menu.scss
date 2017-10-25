@@ -11,6 +11,13 @@ $lightblue: #11c1f3;
 }
 
 #ds-menu {
+    .bar-dark,
+    .dark-bg {
+        background-color: #31475A;
+        color: #fff;
+        background-image: none;
+    }
+
     .item {
         background-color: $darkblue;
         border-color: $dark;
