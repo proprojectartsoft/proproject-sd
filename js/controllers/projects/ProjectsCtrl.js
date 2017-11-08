@@ -47,6 +47,7 @@ sdApp.controller('ProjectsCtrl', [
 				$rootScope.start = getFiltered('start').value;
 				$rootScope.finish = getFiltered('finish').value;
 				$rootScope.break = getFiltered('break').value;
+                $rootScope.vat = getFiltered('vat').value;
 			});
 		}
 

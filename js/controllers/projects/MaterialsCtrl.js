@@ -102,7 +102,7 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, PostService, S
         vm.material.name = item.name;
         vm.material.unit_name = item.unit_name;
         vm.material.cost_per_unit = item.direct_cost;
-        vm.material.tax = item.vat;
+        vm.material.tax = item.vat || $rootScope.vat || 0;
         vm.material.tax_formated = vm.material.tax + " %";
         vm.searchModal.hide();
     }
