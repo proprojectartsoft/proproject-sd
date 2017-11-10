@@ -32,9 +32,14 @@
                 <img src="img/menu/sharedDocs.png">
                 <span>My shared docs</span>
             </ion-item>
-            <ion-item nav-clear menu-close ng-click="vm.goOnWeb()" class="ds-invert">
+            <ion-item nav-clear menu-close class="ds-invert">
                 <img src="img/web4.png">
-                <span>Visit our website</span>
+                <a class="item" href="#" onclick="window.open('http://app.proproject.io/', '_system', 'location=yes'); return false;">
+                     <!-- ng-click="vm.goOnWeb()" -->
+                  Visit our website
+                </a>
+
+                <!-- <span>Visit our website</span> -->
             </ion-item>
         </ion-content>
     </ion-side-menu>
