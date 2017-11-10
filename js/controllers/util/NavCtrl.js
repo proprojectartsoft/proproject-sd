@@ -9,7 +9,6 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     vm.toggleSidemenu = toggleSidemenu;
     vm.sync = sync;
     vm.logout = logout;
-    vm.goOnWeb = goOnWeb;
     vm.username = localStorage.getObject('sdremember');
     vm.loggedIn = localStorage.getObject('loggedIn');
     vm.go = $rootScope.go;
@@ -81,11 +80,6 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
             var errorTemplate = "<center>Can't log out now. You are offline.</center>";
             loadingPopover("Error", errorTemplate, "error");
         }
-    }
-
-    function goOnWeb() {
-        var win = window.open('http://app.proproject.io/', "_blank");
-        win.focus();
     }
 
     function loadingPopover(title, template, loadingOrError) {
