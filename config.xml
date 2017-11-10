@@ -29,6 +29,7 @@
     <plugin name="cordova-plugin-file" spec="~4.3.0"/>
     <plugin name="cordova-plugin-file-transfer"/>
     <plugin name="cordova-plugin-network-information"/>
+    <plugin name="cordova-plugin-inappbrowser" source="npm"/>
     <plugin name="cordova-plugin-keyboard"/>
 
     <access origin="*"/>
