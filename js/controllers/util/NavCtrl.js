@@ -84,7 +84,8 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
     }
 
     function goOnWeb() {
-        window.open('http://app.preprod.proproject.io/', "_system");
+        var win = window.open('http://app.proproject.io/', "_blank");
+        win.focus();
     }
 
     function loadingPopover(title, template, loadingOrError) {
