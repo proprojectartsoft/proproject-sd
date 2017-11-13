@@ -23,11 +23,17 @@
     <gap:plugin name="cordova-plugin-splashscreen" source="npm"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0"/>
     <plugin name="cordova-plugin-imagepicker" source="npm"/>
+
+
+    <plugin name="cordova-plugin-file" source="npm"/>
+    <plugin name="cordova-plugin-file-transfer" source="npm"/>
+    <!-- <plugin name="cordova-plugin-file" source="npm" version="5.0.0"/> -->
+    <!-- <plugin name="cordova-plugin-file-transfer" source="npm"/> -->
+
+
     <gap:plugin name="cordova-plugin-camera" source="npm"/>
     <gap:plugin name="cordova-plugin-contacts" source="npm"/>
     <plugin name="cordova-sqlite-storage" spec="~0.8.5"/>
-    <plugin name="cordova-plugin-file" source="npm" version="5.0.0"/>
-    <plugin name="cordova-plugin-file-transfer" source="npm"/>
     <plugin name="cordova-plugin-network-information"/>
     <plugin name="cordova-plugin-inappbrowser" source="npm"/>
     <plugin name="cordova-plugin-keyboard"/>
