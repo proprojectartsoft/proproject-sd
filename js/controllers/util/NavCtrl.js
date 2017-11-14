@@ -17,6 +17,11 @@ function NavCtrl($ionicSideMenuDelegate, $rootScope, $state, $ionicPopup, AuthSe
         $ionicSideMenuDelegate.toggleLeft(true);
     }
 
+    vm.goOnline = function () {
+          window.open('http://proproject.io/', '_system', 'location=yes');
+          return false;
+    }
+
     function sync() {
         if (navigator.onLine) {
             var syncPopup = loadingPopover("Sync", loadingTemplate, "loading");
