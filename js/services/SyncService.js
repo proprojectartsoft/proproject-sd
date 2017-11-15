@@ -159,53 +159,56 @@ sdApp.service('SyncService', [
                             function getAllSettings(callback) {
                                 var lists = [];
 
-                                var getFromServer = function(url, name, optionalFunc, isCompany) {
+                                var getFromServer = function(url, name, optionalFunc, params) {
                                     var sdef = $q.defer();
                                     PostService.post({
                                         url: url,
                                         method: 'GET',
-                                        data: {}
+                                        params: params
                                     }, function(result) {
                                         if (optionalFunc)
                                             optionalFunc(result.data);
-                                        if (!isCompany)
-                                            lists.push({
-                                                name: name,
-                                                value: result.data
-                                            });
+                                        lists.push({
+                                            name: name,
+                                            value: result.data
+                                        });
                                         sdef.resolve();
                                     }, function(error) {
-                                        if (!isCompany)
-                                            lists.push({
-                                                name: name,
-                                                value: []
-                                            });
-                                        // SettingService.close_all_popups();
+                                        lists.push({
+                                            name: name,
+                                            value: []
+                                        });
                                         sdef.resolve();
                                     });
                                     return sdef.promise;
                                 };
 
-                                var resourceReq = getFromServer('resource', 'resources'),
-                                    staffReq = getFromServer('staff', 'staff'),
-                                    unitReq = getFromServer('unit', 'units'),
-                                    settingsReq = getFromServer('companysettings', null, function(data) {
-                                        angular.forEach(data, function(res) {
-                                            lists.push({
-                                                name: res.name,
-                                                value: res.value
-                                            });
+                                PostService.post({
+                                    url: 'companysettings',
+                                    method: 'GET'
+                                }, function(result) {
+                                    var customerId = result.data[0].customer_id;
+                                    angular.forEach(result.data, function(res) {
+                                        lists.push({
+                                            name: res.name,
+                                            value: res.value
                                         });
-                                    }, true);
-
-                                var absenceReq = getFromServer('absenteeismreasons/list', 'absence', function(data) {
-                                    angular.forEach(data, function(value) {
-                                        value.name = value.reason;
                                     });
-                                });
-                                Promise.all([settingsReq, absenceReq, resourceReq, unitReq, staffReq]).then(function() {
-                                    callback(lists);
-                                })
+
+                                    var resourceReq = getFromServer('resource', 'resources'),
+                                        staffReq = getFromServer('staff', 'staff'),
+                                        unitReq = getFromServer('unit', 'units'),
+                                        absenceReq = getFromServer('absenteeismreasons/list', 'absence', function(data) {
+                                            angular.forEach(data, function(value) {
+                                                value.name = value.reason;
+                                            });
+                                        }, {
+                                            customerId: customerId
+                                        });
+                                    Promise.all([absenceReq, resourceReq, unitReq, staffReq]).then(function() {
+                                        callback(lists);
+                                    })
+                                }, function(error) {});
                             }
 
                             function getProjectsFromServer() {
@@ -380,10 +383,11 @@ sdApp.service('SyncService', [
                             //TODO: order diariesToAdd by id if not sent in order
                             //diary sync requests are made one by one
                             diariesAddInSync(0);
-                            function diariesAddInSync (index) {
-                                if(index === 0) {
-                                  $rootScope.diaryCounter = 1;
-                                  $rootScope.diaryCounterTotal = diariesToAdd.length;
+
+                            function diariesAddInSync(index) {
+                                if (index === 0) {
+                                    $rootScope.diaryCounter = 1;
+                                    $rootScope.diaryCounterTotal = diariesToAdd.length;
                                 }
                                 //keep attachments and comments
                                 var attachments = [],
@@ -405,21 +409,21 @@ sdApp.service('SyncService', [
                                     method: 'POST',
                                     data: diariesToAdd[index]
                                 }, function(result) {
-																		count++;
+                                    count++;
                                     var attToAdd = addAttachmentsForSd(attachments, result.data.id),
                                         commentsToAdd = addCommentsForSd(comments, result.data.id);
 
                                     Promise.all([attToAdd, commentsToAdd]).then(function(res) { //TODO: check if not needed also in error clause
                                         //last diary added along with its attachments and comments
-																					if (count >= diariesToAdd.length) {
-	                                            prm.resolve();
-                                              $rootScope.diaryCounter = null;
-                                              $rootScope.diaryCounterTotal = null;
-	                                        } else {
+                                        if (count >= diariesToAdd.length) {
+                                            prm.resolve();
+                                            $rootScope.diaryCounter = null;
+                                            $rootScope.diaryCounterTotal = null;
+                                        } else {
                                             index++;
                                             $rootScope.diaryCounter = index + 1;
                                             diariesAddInSync(index);
-                                          }
+                                        }
                                     });
                                 }, function(error) {
                                     count++;
@@ -429,7 +433,7 @@ sdApp.service('SyncService', [
                                         $rootScope.diaryCounterTotal = null;
                                     }
                                 })
-                          }
+                            }
                         }, function(err) {
                             prm.resolve();
                             $rootScope.diaryCounter = null;
