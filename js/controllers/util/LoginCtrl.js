@@ -22,6 +22,7 @@ sdApp.controller('LoginCtrl', [
             $scope.user.password = localStorage.getObject('sdremember').password;
             $scope.user.remember = localStorage.getObject('sdremember').remember;
             $scope.user.id = localStorage.getObject('sdremember').id;
+            $scope.user.gmt = -(new Date().getTimezoneOffset() / 60);
 
             var loginPopup = $ionicPopup.show({
                 title: "Sync",
@@ -191,7 +192,7 @@ sdApp.controller('LoginCtrl', [
                 buttons: []
             });
             if ($scope.user.username && $scope.user.password) {
-
+                $scope.user.gmt = -(new Date().getTimezoneOffset() / 60);
                 AuthService.login($scope.user, function(result) {
                     if (result.data) {
                         if (result.data.role.id === 4) {
