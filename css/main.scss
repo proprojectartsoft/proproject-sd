@@ -1082,6 +1082,10 @@ input[readonly] {
     margin-top: 10px;
   }
 
+  #login-new ion-content .scroll-bar {
+    width: 0px;
+  }
+
   .item-checkbox .checkbox {
     top: 9%;
   }
