@@ -1073,3 +1073,16 @@ input[readonly] {
         font-family: sans-serif!important;
     }
 }
+
+/*dimensions for tablets*/
+@media (min-width : 415px) {
+  #login-new ion-content div {
+    width: 414px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+
+  .item-checkbox .checkbox {
+    top: 9%;
+  }
+}
