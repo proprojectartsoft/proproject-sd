@@ -235,8 +235,10 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         data: value
                     }, function(result) {
                         if (attLength >= attachments.pictures.length) {
-                          //mixpanel people proprieties
-                          mixpanel.people.increment('Images uploaded: SD app', 1);
+                          if(navigator.onLine) {
+                            //mixpanel people proprieties
+                            mixpanel.people.increment('Images uploaded: SD app', 1);
+                          }
                           return def.resolve();
                         };
                     }, function(error) {
@@ -295,12 +297,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             SyncService.addDiariesToSync().then(function() {
                 addSiteDiaryToDB(syncPopup);
                 SettingService.clear_weather();
-                //mixpanel people proprieties
-                mixpanel.people.increment('SDs completed: SD app', 1);
             })
         } else {
-            //mixpanel people proprieties
-            mixpanel.people.increment('SDs completed: SD app', 1);
+            if(navigator.onLine) {
+              //mixpanel people proprieties
+              mixpanel.people.increment('SDs completed: SD app', 1);
+            }
             addSiteDiaryToDB(syncPopup);
             SettingService.clear_weather();
         }

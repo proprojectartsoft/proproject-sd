@@ -170,8 +170,10 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                         title: 'Share',
                         template: 'Email sent.'
                     });
-                    //mixpanel people proprieties
-                    mixpanel.people.increment('SD shares: SD app', 1);
+                    if(navigator.onLine) {
+                      //mixpanel people proprieties
+                      mixpanel.people.increment('SD shares: SD app', 1);
+                    }
                     alertPopup.then(function(res) {});
                 }
                 sessionStorage.setObject('sd.diary.shares', null);
