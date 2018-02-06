@@ -21,8 +21,13 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, PostService,
     vm.units = 'incident.units';
     vm.incident = {};
     vm.units = $rootScope.units;
-	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
-	vm.incidents = $rootScope.currentSD.incidents;
+	  if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
+	  vm.incidents = $rootScope.currentSD.incidents;
+
+    // mixpanel track events
+    if (navigator.onLine) {
+      mixpanel.track("Page view: SD app", {'Page name:': 'SD - Incidents'});
+    }
 
     $ionicModal.fromTemplateUrl('templates/projects/_popover.html', {
         scope: $scope,
@@ -41,7 +46,7 @@ function IncidentsCtrl($scope, $state, $ionicModal, $stateParams, PostService,
             SettingService.show_focus();
     });
 
-    vm.local.type = [{ 
+    vm.local.type = [{
         id: 0,
         name: 'Incident'
     }, {

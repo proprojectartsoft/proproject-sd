@@ -308,7 +308,11 @@ sdApp.service('SyncService', [
                                             data: value
                                         }, function(result) {
                                             //last attachment uploaded
-                                            if (cnt >= attachments.length) return def.resolve();
+                                            if (cnt >= attachments.length) {
+                                              //mixpanel people proprieties
+                                              mixpanel.people.increment('Images uploaded: SD app', 1);
+                                              return def.resolve();
+                                            };
                                         }, function(error) {
                                             //last attachment uploaded
                                             if (cnt >= attachments.length) return def.resolve();
@@ -360,7 +364,10 @@ sdApp.service('SyncService', [
                                             email: shares[a].res
                                         },
                                         data: {}
-                                    }, function(result) {}, function(error) {})
+                                    }, function(result) {
+                                      //mixpanel people proprieties
+                                      mixpanel.people.increment('SD shares: SD app', 1);
+                                    }, function(error) {})
                                 }
                             }
 
@@ -416,6 +423,8 @@ sdApp.service('SyncService', [
                                     Promise.all([attToAdd, commentsToAdd]).then(function(res) { //TODO: check if not needed also in error clause
                                         //last diary added along with its attachments and comments
                                         if (count >= diariesToAdd.length) {
+                                            //mixpanel people proprieties
+                                            mixpanel.people.increment('SDs completed: SD app', 1);
                                             prm.resolve();
                                             $rootScope.diaryCounter = null;
                                             $rootScope.diaryCounterTotal = null;

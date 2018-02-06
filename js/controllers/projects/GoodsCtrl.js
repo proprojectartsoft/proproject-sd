@@ -9,6 +9,11 @@ function GoodsCtrl($rootScope, $state, SettingService, PostService) {
     vm.editMode = sessionStorage.getObject('editMode');
     vm.diaryId = sessionStorage.getObject('diaryId');
 
+    // mixpanel track events
+    if (navigator.onLine) {
+      mixpanel.track("Page view: SD app", {'Page name:': 'SD - Goods received & Plant on/off Hire Records'});
+    }
+
     function deleteEntry(entry) {
         if (!navigator.onLine) {
             SettingService.show_message_popup('You are offline', "<center>You can remove goods while online.</center>");

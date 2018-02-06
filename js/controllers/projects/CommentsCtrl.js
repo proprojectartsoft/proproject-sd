@@ -14,6 +14,11 @@ function CommentsCtrl($rootScope, $state, SettingService) {
 	vm.editMode = sessionStorage.getObject('editMode');
 	vm.myProfile = localStorage.getObject('my_account');
 
+	// mixpanel track events
+	if (navigator.onLine) {
+		mixpanel.track("Page view: SD app", {'Page name:': 'SD - Comments'});
+	}
+
 	initFields();
 
 	function initFields() {

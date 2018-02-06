@@ -23,15 +23,27 @@ function SiteAttendanceCtrl($rootScope, $state, PostService, SettingService) {
             vm.contractors = false;
             vm.staff = true;
             sessionStorage.setObject('siteAttTab', 'staff');
+            // mixpanel track events
+            if (navigator.onLine) {
+              mixpanel.track("Page view: SD app", {'Page name:': 'SD - Attendance: Staff members'});
+            }
         } else {
             vm.staff = false;
             if (predicate === "contractors") {
                 vm.visitors = false;
                 vm.contractors = true;
                 sessionStorage.setObject('siteAttTab', 'contractors');
+                // mixpanel track events
+                if (navigator.onLine) {
+                  mixpanel.track("Page view: SD app", {'Page name:': 'SD - Attendance: Contractors members'});
+                }
             } else {
                 vm.contractors = false;
                 vm.visitors = true;
+                // mixpanel track events
+                if (navigator.onLine) {
+                  mixpanel.track("Page view: SD app", {'Page name:': 'SD - Attendance: Visitors members'});
+                }
             }
         }
     }

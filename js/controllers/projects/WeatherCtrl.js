@@ -55,6 +55,11 @@ function WeatherCtrl($rootScope, $state, $scope, SettingService) {
         name: 'Extreme Cold'
     }];
 
+    // mixpanel track events
+    if (navigator.onLine) {
+      mixpanel.track("Page view: SD app", {'Page name:': 'SD - Weather'});
+    }
+
     function initFields() {
         //compose the strings to be displayed in visualize mode (readonly)
         angular.forEach($rootScope.currentSD.weather.morning, function(value) {

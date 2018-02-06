@@ -12,8 +12,13 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, PostService, $roo
     vm.editMode = sessionStorage.getObject('editMode');
     vm.index = $stateParams.id;
     vm.currentOhs = {};
-	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
+	  if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
     vm.tools = $rootScope.currentSD.oh_and_s;
+
+    // mixpanel track events
+    if (navigator.onLine) {
+      mixpanel.track("Page view: SD app", {'Page name:': 'SD - Ocupational health and safety'});
+    }
 
     if (!isNaN(vm.index) && !(vm.index === null)) {
         vm.currentOhs = $rootScope.currentSD.oh_and_s[vm.index];
@@ -24,7 +29,7 @@ function OhsCtrl($state, $stateParams, $scope, SettingService, PostService, $roo
             SettingService.show_focus();
     });
 
-    vm.types = [{ 
+    vm.types = [{
         id: 0,
         name: 'Toolbox Talk'
     }, {

@@ -8,15 +8,20 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService) {
 	vm.save = save;
 	vm.editMode = sessionStorage.getObject('editMode');
 	vm.diaryId = sessionStorage.getObject('diaryId');
-	
+
+	// mixpanel track events
+	if (navigator.onLine) {
+		mixpanel.track("Page view: SD app", {'Page name:': 'SD - Site notes'});
+	}
+
 	$scope.$watch(function () {
 		if (vm.editMode) SettingService.show_focus();
 	});
-	
+
 	$scope.autoExpand = function (e) {
 		$(e.target).height(e.target.scrollHeight - 30);
 	};
-	
+
 	function save() {
 		if (vm.input1) {
 			$rootScope.currentSD.site_notes.delays = $rootScope.currentSD.site_notes.delays || [];
@@ -35,7 +40,7 @@ function SiteNotesCtrl($rootScope, $state, $scope, SettingService) {
 		}
 		$('textarea').height('initial');
 	}
-	
+
 	function go(predicate, id) {
 		save();
 		if (predicate === 'diary') {

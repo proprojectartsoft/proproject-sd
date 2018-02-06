@@ -11,6 +11,12 @@ function SharedCtrl($ionicSideMenuDelegate, $rootScope, $state, PostService, $io
     vm.username = localStorage.getObject('sdremember');
     vm.loggedIn = localStorage.getObject('loggedIn');
     $rootScope.projectName = '';
+
+    // mixpanel track events
+    if (navigator.onLine) {
+      mixpanel.track("Page view: SD app", {'Page name:': 'SD - Shared Library'});
+    }
+
     if (vm.displayDiary) {
         PostService.post({
             url: 'sharesitediary?shared=' + vm.displayDiary,

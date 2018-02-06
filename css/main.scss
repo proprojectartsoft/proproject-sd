@@ -1086,7 +1086,9 @@ input[readonly] {
     width: 0px;
   }
 
-  .item-checkbox .checkbox {
-    top: 9%;
+  .login-remember{
+    .item-checkbox .checkbox {
+      top: 9%;
+    }
   }
 }

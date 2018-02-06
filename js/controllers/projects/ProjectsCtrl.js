@@ -16,6 +16,11 @@ sdApp.controller('ProjectsCtrl', [
 		$rootScope.currentSD = null;
 		vm.projects = $rootScope.projects;
 
+		// mixpanel track events
+		if (navigator.onLine) {
+			mixpanel.track("Page view: SD app", {'Page name:': 'Projects list'});
+		}
+
 		// running only on REFRESH
 		if (!vm.projects) {
 			SyncService.getProjects(function (result) {

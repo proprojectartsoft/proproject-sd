@@ -32,6 +32,28 @@ sdApp.controller('LoginCtrl', [
             });
 
             AuthService.login($scope.user, function(result) {
+              //mixpanel login info by user
+              mixpanel.identify($scope.user.username);
+
+              // mixpanel.time_event("Total time spent on platform");
+
+              mixpanel.register_once({
+              'Images uploaded: SD app': 0,
+              'SDs completed: SD app': 0,
+              'SD shares: SD app': 0
+              });
+
+              mixpanel.people.set_once({
+              'First Login Date: SD app': new Date(),
+              'No. of logins: SD app': 0
+              });
+
+              mixpanel.people.set({
+                "$last_login": new Date(),         // properties can be dates...
+              });
+
+              //mixpanel people proprieties
+              mixpanel.people.increment('No. of logins: SD app', 1);
                 SyncService.addDiariesToSync().then(function() {
                     SyncService.sync().then(function(projects) {
                         PostService.post({
@@ -194,6 +216,28 @@ sdApp.controller('LoginCtrl', [
             if ($scope.user.username && $scope.user.password) {
                 $scope.user.gmt = -(new Date().getTimezoneOffset() / 60);
                 AuthService.login($scope.user, function(result) {
+                    //mixpanel login info by user
+                    mixpanel.identify($scope.user.username);
+
+                    // mixpanel.time_event("Total time spent on platform");
+
+                    mixpanel.register_once({
+                    'Images uploaded: SD app': 0,
+                    'SDs completed: SD app': 0,
+                    'SD shares: SD app': 0
+                    });
+
+                    mixpanel.people.set_once({
+                    'First Login Date: SD app': new Date(),
+                    'No. of logins: SD app': 0
+                    });
+
+                    mixpanel.people.set({
+                      "$last_login": new Date(),         // properties can be dates...
+                    });
+
+                    //mixpanel people proprieties
+                    mixpanel.people.increment('No. of logins: SD app', 1);
                     if (result.data) {
                         if (result.data.role.id === 4) {
                             loginPopup.close();

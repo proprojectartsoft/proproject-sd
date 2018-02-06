@@ -234,7 +234,11 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
                         method: 'POST',
                         data: value
                     }, function(result) {
-                        if (attLength >= attachments.pictures.length) return def.resolve();
+                        if (attLength >= attachments.pictures.length) {
+                          //mixpanel people proprieties
+                          mixpanel.people.increment('Images uploaded: SD app', 1);
+                          return def.resolve();
+                        };
                     }, function(error) {
                         if (attLength >= attachments.pictures.length) return def.resolve();
                     })
@@ -291,8 +295,12 @@ function ProjectDiaryCtrl($rootScope, $ionicPopup, $timeout, $state, $stateParam
             SyncService.addDiariesToSync().then(function() {
                 addSiteDiaryToDB(syncPopup);
                 SettingService.clear_weather();
+                //mixpanel people proprieties
+                mixpanel.people.increment('SDs completed: SD app', 1);
             })
         } else {
+            //mixpanel people proprieties
+            mixpanel.people.increment('SDs completed: SD app', 1);
             addSiteDiaryToDB(syncPopup);
             SettingService.clear_weather();
         }

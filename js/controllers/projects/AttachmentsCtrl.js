@@ -22,8 +22,14 @@ function AttachmentsCtrl($scope, $state, $cordovaCamera, $timeout, $filter,
     vm.dataToUpdate = [];
     vm.filter.substate = 'gallery';
     var backupPic = null;
-	if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
-	vm.pictures = $rootScope.currentSD.attachments.pictures;
+	  if (!$rootScope.currentSD) return $rootScope.go('app.home', {}, true);
+	  vm.pictures = $rootScope.currentSD.attachments.pictures;
+
+    // mixpanel track events
+    if (navigator.onLine) {
+      mixpanel.track("Page view: SD app", {'Page name:': 'SD - Attachments'});
+    }
+
     populate();
     pullDown();
     goToTop();

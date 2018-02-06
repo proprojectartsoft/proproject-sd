@@ -33,6 +33,12 @@ function MaterialsCtrl($state, $scope, $ionicModal, $stateParams, PostService, S
     });
     vm.units = $rootScope.units;
     vm.currency = $rootScope.projectSettings.currency || SettingService.get_currency_symbol($rootScope.currency || "dolar");
+
+    // mixpanel track events
+    if (navigator.onLine) {
+      mixpanel.track("Page view: SD app", {'Page name:': 'SD - Plant and resources used'});
+    }
+
     if (!isNaN(vm.index) && (vm.index !== 'create')) {
         vm.material = $rootScope.currentSD.plant_and_material_used[vm.index];
         vm.material.tax_formated = $rootScope.currentSD.plant_and_material_used[vm.index].tax && ($rootScope.currentSD.plant_and_material_used[vm.index].tax + " %") || '';

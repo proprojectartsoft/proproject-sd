@@ -38,6 +38,11 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
     vm.local.search = '';
     vm.diaries = [];
 
+    // mixpanel track events
+    if (navigator.onLine) {
+      mixpanel.track("Page view: SD app", {'Page name:': 'Site diaries list'});
+    }
+
     // when saving something in a controller (like projectDiaryController) user will be redirected here
     // so don't update the project in that child controller
     SyncService.getProject(vm.projectId, function(proj) {
@@ -165,6 +170,8 @@ function ProjectDiariesCtrl($scope, $timeout, $ionicModal, $ionicPopup, $state, 
                         title: 'Share',
                         template: 'Email sent.'
                     });
+                    //mixpanel people proprieties
+                    mixpanel.people.increment('SD shares: SD app', 1);
                     alertPopup.then(function(res) {});
                 }
                 sessionStorage.setObject('sd.diary.shares', null);
