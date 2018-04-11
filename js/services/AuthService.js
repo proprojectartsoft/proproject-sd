@@ -33,6 +33,9 @@ sdApp.factory('AuthService', [
                     data: user
                 }).success(function(data) {
                     sessionStorage.setObject('isLoggedIn', true);
+                    // track the elapsed time between a Log In and Log Out event
+                    //call time_event at Log In
+                    mixpanel.time_event("total time spent on SD app");
                     success(data);
                 }).error(function errorCallback(response, status) {
                     error(status);
@@ -43,6 +46,8 @@ sdApp.factory('AuthService', [
                     withCredentials: true
                 }).then(function(result) {
                     sessionStorage.removeItem('isLoggedIn');
+                    //call time_event again at Log Out to send an event with the session time
+                    mixpanel.track("total time spent on SD app");
                     return result;
                 });
             }
